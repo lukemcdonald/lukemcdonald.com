@@ -1,4 +1,10 @@
-import { Listbox, Transition } from '@headlessui/react'
+import {
+  Listbox,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
+  Transition,
+} from '@headlessui/react'
 import { SwatchIcon } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
 
@@ -20,9 +26,12 @@ export function ThemeSelect() {
   return (
     <Listbox value={data.theme} onChange={handleThemeChange}>
       <div className="theme-select relative" data-theme={data.theme.label.toLocaleLowerCase()}>
-        <Listbox.Button className="py-2 px-2 transition" onClick={handleButtonToggle}>
+        <ListboxButton
+          className="py-2 px-2 transition focus:outline-none"
+          onClick={handleButtonToggle}
+        >
           <SwatchIcon className="h-6 w-6 text-primary-400" style={{ color: getThemeColor(data) }} />
-        </Listbox.Button>
+        </ListboxButton>
 
         <Transition
           as={Fragment}
@@ -30,27 +39,25 @@ export function ThemeSelect() {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Listbox.Options className="no-scrollbar absolute max-h-60 w-full overflow-auto outline-none">
+          <ListboxOptions className="no-scrollbar absolute max-h-60 w-full overflow-auto outline-none">
             {THEMES.filter((option) => option.label !== data.theme.label).map((option) => (
-              <Listbox.Option
+              <ListboxOption
                 className="relative select-none transition hover:scale-125"
                 key={option.label.toLowerCase()}
                 value={option}
               >
-                {({ active, selected }) => (
+                {({ focus, selected }) => (
                   <button className="block w-full py-1 px-2" onClick={handleButtonToggle}>
                     <span
                       className="inline-block h-4 w-4 rounded-full"
-                      style={{
-                        background: getThemeColor({ ...data, theme: option }),
-                      }}
+                      style={{ background: getThemeColor({ ...data, theme: option }) }}
                     />
                     <span className="sr-only text-primary-400">{option.label}</span>
                   </button>
                 )}
-              </Listbox.Option>
+              </ListboxOption>
             ))}
-          </Listbox.Options>
+          </ListboxOptions>
         </Transition>
       </div>
     </Listbox>

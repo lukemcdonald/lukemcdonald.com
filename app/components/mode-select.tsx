@@ -1,4 +1,10 @@
-import { Listbox, Transition } from '@headlessui/react'
+import {
+  Listbox,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
+  Transition,
+} from '@headlessui/react'
 import { MoonIcon, SunIcon, ComputerDesktopIcon as SystemIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 import { Fragment, useEffect, useState } from 'react'
@@ -12,17 +18,11 @@ type ModeIcon = (props: ModeIconProps) => JSX.Element
 function getModeIcon(mode: ThemeMode) {
   switch (mode.label) {
     case 'dark':
-      return {
-        icon: (props: ModeIconProps) => <MoonIcon {...props} />,
-      }
+      return { icon: (props: ModeIconProps) => <MoonIcon {...props} /> }
     case 'light':
-      return {
-        icon: (props: ModeIconProps) => <SunIcon {...props} />,
-      }
+      return { icon: (props: ModeIconProps) => <SunIcon {...props} /> }
     default:
-      return {
-        icon: (props: ModeIconProps) => <SystemIcon {...props} />,
-      }
+      return { icon: (props: ModeIconProps) => <SystemIcon {...props} /> }
   }
 }
 
@@ -52,7 +52,10 @@ export function ModeSelect() {
   return (
     <Listbox value={selectedMode} onChange={handleModeChange}>
       <div className="mode-select relative" data-mode={selectedMode.label}>
-        <Listbox.Button className="py-2 px-2 transition" onClick={handleButtonToggle}>
+        <ListboxButton
+          className="py-2 px-2 transition focus:outline-none"
+          onClick={handleButtonToggle}
+        >
           <SelectedIcon
             className={clsx(
               'h-6 w-6',
@@ -60,7 +63,7 @@ export function ModeSelect() {
             )}
           />
           <span className="sr-only capitalize text-primary-400">{selectedMode.label}</span>
-        </Listbox.Button>
+        </ListboxButton>
 
         <Transition
           as={Fragment}
@@ -68,17 +71,17 @@ export function ModeSelect() {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Listbox.Options className="no-scrollbar absolute right-0 w-28 overflow-auto rounded-lg bg-primary-300 py-1 outline-none">
+          <ListboxOptions className="no-scrollbar absolute right-0 w-28 overflow-auto rounded-lg bg-primary-300 py-1 outline-none">
             {MODES.map((option) => {
               return (
-                <Listbox.Option as={Fragment} key={option.label} value={option}>
-                  {({ active, selected }) => {
+                <ListboxOption as={Fragment} key={option.label} value={option}>
+                  {({ focus, selected }) => {
                     const { icon: OptionIcon } = getModeIcon(option)
                     return (
                       <li
                         className={clsx(
                           'relative select-none transition',
-                          active && !selected ? 'opacity-60' : 'opacity-100',
+                          focus && !selected ? 'opacity-60' : 'opacity-100',
                           selected ? 'font-bold' : 'font-normal'
                         )}
                       >
@@ -92,10 +95,10 @@ export function ModeSelect() {
                       </li>
                     )
                   }}
-                </Listbox.Option>
+                </ListboxOption>
               )
             })}
-          </Listbox.Options>
+          </ListboxOptions>
         </Transition>
       </div>
     </Listbox>

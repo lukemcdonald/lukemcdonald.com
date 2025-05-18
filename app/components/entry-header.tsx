@@ -13,9 +13,7 @@ export function EntryHeader({ description, subtitle, title }: EntryHeaderProps) 
         'lg:flex-grow-0 lg:pb-10',
         'xl:py-20'
       )}
-      style={{
-        backgroundSize: '120%',
-      }}
+      style={{ backgroundSize: '120%' }}
     >
       <div className="relative z-10">
         {subtitle && (

@@ -2,6 +2,7 @@ import clsx from 'clsx'
 
 import { Link } from '~/components/link'
 import { Logo } from '~/components/logo'
+import { NavMenu } from '~/components/nav-menu'
 import { Nav } from '~/components/nav'
 import type { MenuLink } from '~/types'
 
@@ -16,16 +17,7 @@ const menuLinks: MenuLink[] = [
       { name: 'Resume', to: '/resume' },
     ],
   },
-  {
-    name: 'Play',
-    to: '#',
-    links: [
-      {
-        name: 'TREAD Talks',
-        to: 'https://gettreadtalks.com/',
-      },
-    ],
-  },
+  { name: 'Play', to: '#', links: [{ name: 'TREAD Talks', to: 'https://gettreadtalks.com/' }] },
   {
     name: 'Live',
     to: '#',
@@ -59,7 +51,7 @@ export function Header() {
 
       <Nav className="px-4 duration-200 peer-hover:opacity-0 peer-hover:delay-0 peer-hover:duration-0">
         {menuLinks.map((menuLink) => (
-          <Nav.Menu key={menuLink.name} link={menuLink} />
+          <NavMenu key={menuLink.name} link={menuLink} />
         ))}
       </Nav>
     </header>
