@@ -68,13 +68,10 @@ function useTheme() {
   const [data, setData] = useState<ThemeData>(DEFAULT_THEME_DATA)
 
   // Memoized callback to handle system theme changes
-  const handleSystemThemeChange = useCallback(
-    (e: MediaQueryListEvent) => {
-      const systemMode = e.matches ? 'dark' : 'light'
-      setData((current) => ({ ...current, mode: { ...mode, value: systemMode } }))
-    },
-    [mode]
-  )
+  const handleSystemThemeChange = useCallback((e: MediaQueryListEvent) => {
+    const systemMode = e.matches ? 'dark' : 'light'
+    setData((current) => ({ ...current, mode: { ...current.mode, value: systemMode } }))
+  }, [])
 
   useEffect(() => {
     if (mode.label === 'system') {
