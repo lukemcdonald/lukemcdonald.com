@@ -847,6 +847,22 @@ html:has(div[data-theme='orange']) {
   top: 1.25rem;
 }
 
+.right-4 {
+  right: 1rem;
+}
+
+.top-4 {
+  top: 1rem;
+}
+
+.top-2 {
+  top: 0.5rem;
+}
+
+.right-2 {
+  right: 0.5rem;
+}
+
 .z-0 {
   z-index: 0;
 }
@@ -1378,6 +1394,10 @@ html:has(div[data-theme='orange']) {
   opacity: 0.6;
 }
 
+.opacity-70 {
+  opacity: 0.7;
+}
+
 .mix-blend-lighten {
   mix-blend-mode: lighten;
 }
@@ -1574,6 +1594,10 @@ html:has(div[data-theme='orange']) {
   .md\:items-center {
     align-items: center;
   }
+
+  .md\:text-primary-400 {
+    color: var(--color-primary-400);
+  }
 }
 
 @media (min-width: 1080px) {
@@ -1641,6 +1665,10 @@ html:has(div[data-theme='orange']) {
 
   .lg\:pb-10 {
     padding-bottom: 2.5rem;
+  }
+
+  .lg\:text-primary-400 {
+    color: var(--color-primary-400);
   }
 
   .lg\:shadow-2xl {
