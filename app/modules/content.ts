@@ -15,6 +15,9 @@ const __dirname = dirname(__filename)
 
 const contentPath = path.join(__dirname, '..', 'content')
 
+// Simple in-memory cache to prevent repeated file reads and markdown processing
+const contentCache = new Map<string, Content>()
+
 function isValidContentAttributes(attributes: any): attributes is ContentMarkdownAttributes {
   const required = ['draft', 'image', 'description', 'title']
   return required.every((key) => Object.keys(attributes).includes(key))
@@ -28,6 +31,12 @@ export async function getContent({
   slug: string
 }) {
   const filename = [contentDir, slug].filter(Boolean).join('/')
+
+  // Check cache first
+  if (contentCache.has(filename)) {
+    return contentCache.get(filename)
+  }
+
   const filepath = path.join(contentPath, `${filename}.md`)
 
   try {
@@ -38,12 +47,17 @@ export async function getContent({
 
     const html = marked(body)
 
-    return {
+    const content = {
       ...attributes,
       filename,
       html,
       markdown: body,
     }
+
+    // Cache the processed content
+    contentCache.set(filename, content)
+
+    return content
   } catch (error) {
     console.error(error)
     throw pageNotFound(filename)
