@@ -79,7 +79,8 @@ function useTheme() {
       const abortController = new AbortController()
 
       // Set initial value and add listener with AbortController
-      handleSystemThemeChange({ matches: mediaQuery.matches } as MediaQueryListEvent)
+      const systemMode = mediaQuery.matches ? 'dark' : 'light'
+      setData((current) => ({ ...current, mode: { ...current.mode, value: systemMode } }))
       mediaQuery.addEventListener('change', handleSystemThemeChange, {
         signal: abortController.signal,
       })
