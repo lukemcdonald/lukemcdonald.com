@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import useLocalStorageState from 'use-local-storage-state'
 
 const themeColors = {
@@ -67,15 +67,34 @@ function useTheme() {
   })
   const [data, setData] = useState<ThemeData>(DEFAULT_THEME_DATA)
 
+  // Memoized callback to handle system theme changes
+  const handleSystemThemeChange = useCallback(
+    (e: MediaQueryListEvent) => {
+      const systemMode = e.matches ? 'dark' : 'light'
+      setData((current) => ({ ...current, mode: { ...mode, value: systemMode } }))
+    },
+    [mode]
+  )
+
   useEffect(() => {
     if (mode.label === 'system') {
-      const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
-      const systemMode = isDarkMode ? 'dark' : 'light'
-      setData((current) => ({ ...current, mode: { ...mode, value: systemMode } }))
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+      const abortController = new AbortController()
+
+      // Set initial value and add listener with AbortController
+      handleSystemThemeChange({ matches: mediaQuery.matches } as MediaQueryListEvent)
+      mediaQuery.addEventListener('change', handleSystemThemeChange, {
+        signal: abortController.signal,
+      })
+
+      // Cleanup function to prevent memory leaks
+      return () => {
+        abortController.abort()
+      }
     } else {
       setData((current) => ({ ...current, mode }))
     }
-  }, [mode])
+  }, [mode, handleSystemThemeChange])
 
   useEffect(() => {
     setData((current) => ({ ...current, theme }))
