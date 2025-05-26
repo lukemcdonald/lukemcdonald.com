@@ -831,8 +831,8 @@ html:has(div[data-theme='orange']) {
   right: 0px;
 }
 
-.right-5 {
-  right: 1.25rem;
+.right-3 {
+  right: 0.75rem;
 }
 
 .top-0 {
@@ -843,8 +843,8 @@ html:has(div[data-theme='orange']) {
   top: 50%;
 }
 
-.top-5 {
-  top: 1.25rem;
+.top-3 {
+  top: 0.75rem;
 }
 
 .z-0 {
@@ -1374,8 +1374,8 @@ html:has(div[data-theme='orange']) {
   opacity: 0.4;
 }
 
-.opacity-60 {
-  opacity: 0.6;
+.opacity-70 {
+  opacity: 0.7;
 }
 
 .mix-blend-lighten {
@@ -1641,6 +1641,10 @@ html:has(div[data-theme='orange']) {
 
   .lg\:pb-10 {
     padding-bottom: 2.5rem;
+  }
+
+  .lg\:text-primary-400 {
+    color: var(--color-primary-400);
   }
 
   .lg\:shadow-2xl {

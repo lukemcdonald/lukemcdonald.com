@@ -39,7 +39,7 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
         style={{ gridArea: '1/1' }}
       />
 
-      <div className="fixed top-5 right-5 z-[100] hidden md:flex md:items-center">
+      <div className="fixed top-3 right-3 z-[100] hidden md:flex md:items-center">
         <ModeSelect />
         <ThemeSelect />
       </div>
