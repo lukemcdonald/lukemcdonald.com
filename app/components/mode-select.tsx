@@ -59,7 +59,7 @@ export function ModeSelect() {
           <SelectedIcon
             className={clsx(
               'h-6 w-6',
-              selectedMode.value === 'light' ? 'text-primary-700' : 'text-primary-400'
+              selectedMode.value === 'light' ? 'text-primary-700' : 'lg:text-primary-400'
             )}
           />
           <span className="sr-only capitalize text-primary-400">{selectedMode.label}</span>
@@ -71,28 +71,27 @@ export function ModeSelect() {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <ListboxOptions className="no-scrollbar absolute right-0 w-28 overflow-auto rounded-lg bg-primary-300 py-1 outline-none">
+          <ListboxOptions
+            as="ul"
+            className="no-scrollbar absolute right-0 w-28 overflow-auto rounded-lg bg-primary-300 py-1 outline-none"
+          >
             {MODES.map((option) => {
               return (
-                <ListboxOption as={Fragment} key={option.label} value={option}>
+                <ListboxOption as="li" key={option.label} value={option}>
                   {({ focus, selected }) => {
                     const { icon: OptionIcon } = getModeIcon(option)
                     return (
-                      <li
+                      <button
                         className={clsx(
-                          'relative select-none transition',
-                          focus && !selected ? 'opacity-60' : 'opacity-100',
+                          'flex w-full items-center gap-2 py-2 px-3',
+                          focus && !selected ? 'opacity-70' : 'opacity-100',
                           selected ? 'font-bold' : 'font-normal'
                         )}
+                        onClick={handleButtonToggle}
                       >
-                        <button
-                          className="flex w-full items-center gap-2 py-2 px-3"
-                          onClick={handleButtonToggle}
-                        >
-                          <OptionIcon className="h-5 w-5" />
-                          <span className="text-sm capitalize">{option.label}</span>
-                        </button>
-                      </li>
+                        <OptionIcon className="h-5 w-5" />
+                        <span className="text-sm capitalize">{option.label}</span>
+                      </button>
                     )
                   }}
                 </ListboxOption>

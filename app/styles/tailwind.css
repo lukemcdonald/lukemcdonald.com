@@ -831,8 +831,8 @@ html:has(div[data-theme='orange']) {
   right: 0px;
 }
 
-.right-5 {
-  right: 1.25rem;
+.right-3 {
+  right: 0.75rem;
 }
 
 .top-0 {
@@ -843,24 +843,8 @@ html:has(div[data-theme='orange']) {
   top: 50%;
 }
 
-.top-5 {
-  top: 1.25rem;
-}
-
-.right-4 {
-  right: 1rem;
-}
-
-.top-4 {
-  top: 1rem;
-}
-
-.top-2 {
-  top: 0.5rem;
-}
-
-.right-2 {
-  right: 0.5rem;
+.top-3 {
+  top: 0.75rem;
 }
 
 .z-0 {
@@ -1390,10 +1374,6 @@ html:has(div[data-theme='orange']) {
   opacity: 0.4;
 }
 
-.opacity-60 {
-  opacity: 0.6;
-}
-
 .opacity-70 {
   opacity: 0.7;
 }
@@ -1593,10 +1573,6 @@ html:has(div[data-theme='orange']) {
 
   .md\:items-center {
     align-items: center;
-  }
-
-  .md\:text-primary-400 {
-    color: var(--color-primary-400);
   }
 }
 
