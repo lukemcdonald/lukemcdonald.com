@@ -10,12 +10,7 @@ const menuLinks: MenuLink[] = [
   {
     name: 'Work',
     to: '#',
-    links: [
-      { name: 'AudioTheme', to: '/work/audiotheme' },
-      { name: 'Blazer Six', to: '/work/blazer-six' },
-      { name: 'Cedaro', to: '/work/cedaro' },
-      { name: 'Resume', to: '/resume' },
-    ],
+    links: [{ name: 'Resume', to: '/resume' }],
   },
   { name: 'Play', to: '#', links: [{ name: 'TREAD Talks', to: 'https://gettreadtalks.com/' }] },
   {
