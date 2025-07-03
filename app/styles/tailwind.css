@@ -799,10 +799,6 @@ html:has(div[data-theme='orange']) {
   border-width: 0;
 }
 
-.visible {
-  visibility: visible;
-}
-
 .fixed {
   position: fixed;
 }
