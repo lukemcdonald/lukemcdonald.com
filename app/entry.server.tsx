@@ -1,6 +1,11 @@
+import * as Sentry from '@sentry/remix'
 import type { EntryContext } from '@remix-run/node'
 import { RemixServer } from '@remix-run/react'
 import { renderToString } from 'react-dom/server'
+
+export const handleError = Sentry.wrapHandleErrorWithSentry((error, { request }) => {
+  // Custom handleError implementation
+})
 
 export default function handleRequest(
   request: Request,

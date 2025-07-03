@@ -40,5 +40,6 @@ export function notFound(data?: string, statusText?: string): Response {
 }
 
 export function pageNotFound(path?: string) {
-  return notFound(`"/${path}" is not a page on lukemcdonald.com.`)
+  const cleanPath = path?.startsWith('/') ? path : `/${path}`
+  return notFound(`"${cleanPath}" is not a page on lukemcdonald.com.`)
 }

@@ -4,7 +4,7 @@
   "description": "",
   "license": "",
   "scripts": {
-    "build": "npm run build:css && remix build",
+    "build": "npm run build:css && remix build --sourcemap && sentry-upload-sourcemaps --org $SENTRY_ORG --project $SENTRY_PROJECT",
     "build:css": "postcss styles/tailwind.css -o ./app/styles/tailwind.css",
     "deploy": "fly --app lukemcdonald deploy .",
     "deploy:local": "fly deploy --local-only",
@@ -15,7 +15,7 @@
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "predeploy": "npm run build",
     "prepare": "husky install",
-    "start": "remix-serve build/index.js"
+    "start": "NODE_OPTIONS='--import ./instrumentation.server.mjs' remix-serve build/index.js"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.3",
@@ -23,6 +23,7 @@
     "@remix-run/node": "2.16.7",
     "@remix-run/react": "2.16.7",
     "@remix-run/serve": "2.16.7",
+    "@sentry/remix": "^9.34.0",
     "@tailwindcss/typography": "^0.5.16",
     "cloudinary": "^1.41.3",
     "cloudinary-build-url": "^0.2.4",

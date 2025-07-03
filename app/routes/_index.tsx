@@ -36,8 +36,8 @@ export const meta: MetaFunction<typeof loader> = ({ matches }) => {
 export const loader: LoaderFunction = async ({ params }) => {
   const page = await getContent({ slug: 'index' })
 
-  if (page?.draft) {
-    throw pageNotFound(page.filename)
+  if (!page || page.draft) {
+    throw pageNotFound('index')
   }
 
   return json<LoaderData>({ page })

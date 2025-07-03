@@ -1,3 +1,4 @@
+import { captureRemixErrorBoundaryError, withSentry } from '@sentry/remix'
 import type { LinksFunction, LoaderFunction, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import {
@@ -120,7 +121,7 @@ function Document({ children, title }: { children: React.ReactNode; title?: stri
   )
 }
 
-export default function App() {
+function App() {
   return (
     <Document>
       <Layout>
@@ -129,6 +130,8 @@ export default function App() {
     </Document>
   )
 }
+
+export default withSentry(App)
 
 export function ErrorBoundary() {
   const error = useRouteError()
@@ -195,6 +198,8 @@ export function ErrorBoundary() {
       </Document>
     )
   }
+
+  captureRemixErrorBoundaryError(error)
 
   return (
     <Document title={entryData.title}>
