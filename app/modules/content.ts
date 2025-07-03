@@ -23,6 +23,24 @@ function isValidContentAttributes(attributes: any): attributes is ContentMarkdow
   return required.every((key) => Object.keys(attributes).includes(key))
 }
 
+export async function contentExists({
+  contentDir = '',
+  slug = '',
+}: {
+  contentDir?: string
+  slug: string
+}): Promise<boolean> {
+  const filename = [contentDir, slug].filter(Boolean).join('/')
+  const filepath = path.join(contentPath, `${filename}.md`)
+
+  try {
+    await fs.access(filepath)
+    return true
+  } catch {
+    return false
+  }
+}
+
 export async function getContent({
   contentDir = '',
   slug = '',
@@ -45,7 +63,7 @@ export async function getContent({
 
     invariant(isValidContentAttributes(attributes), `Content ${filepath} is missing attributes.`)
 
-    const html = marked(body)
+    const html = await marked(body)
 
     const content = {
       ...attributes,

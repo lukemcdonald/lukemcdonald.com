@@ -799,6 +799,10 @@ html:has(div[data-theme='orange']) {
   border-width: 0;
 }
 
+.visible {
+  visibility: visible;
+}
+
 .fixed {
   position: fixed;
 }
@@ -1348,10 +1352,6 @@ html:has(div[data-theme='orange']) {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
-}
-
-.underline {
-  text-decoration-line: underline;
 }
 
 .no-underline {
