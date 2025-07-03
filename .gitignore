@@ -8,7 +8,17 @@ node_modules
 # Tailwind
 /app/styles/tailwind.css
 
-# Misc
+# Environment variables
 .env
+.env.local
+.env.*.local
+
+# Allow example files
+!.env.example
+
+# Misc
 .vscode
 .DS_Store
+
+# Sentry Config File
+.sentryclirc

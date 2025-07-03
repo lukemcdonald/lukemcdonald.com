@@ -11,6 +11,13 @@ Files for personal website. Moved from [Gatsby](https://www.gatsbyjs.com/) to
 
 ## Development
 
+### Environment Setup
+
+1. Copy the example environment file:
+2. Update `.env` with actual values:
+
+### Running the Development Server
+
 From your terminal:
 
 ```sh
