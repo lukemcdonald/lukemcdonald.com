@@ -1,6 +1,5 @@
-import type { LoaderFunction, MetaFunction } from '@remix-run/node'
-import { json } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
+import type { LoaderFunction, MetaFunction } from 'react-router'
+import { useLoaderData } from 'react-router'
 
 import { Entry } from '~/components/entry'
 import { getContent } from '~/modules/content'
@@ -40,7 +39,7 @@ export const loader: LoaderFunction = async ({ params }) => {
     throw pageNotFound('index')
   }
 
-  return json<LoaderData>({ page })
+  return { page }
 }
 
 export default function Index() {

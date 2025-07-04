@@ -1,6 +1,6 @@
-import * as Sentry from '@sentry/remix'
+import * as Sentry from '@sentry/react-router'
 import { useState, useEffect } from 'react'
-import type { LoaderFunction } from '@remix-run/node'
+import type { LoaderFunction } from 'react-router'
 
 class SentryTestError extends Error {
   constructor(message: string | undefined) {

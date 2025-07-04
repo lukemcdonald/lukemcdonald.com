@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/remix'
+import * as Sentry from '@sentry/react-router'
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,

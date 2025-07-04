@@ -1,6 +1,5 @@
-import type { LoaderFunction, MetaFunction } from '@remix-run/node'
-import { json } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
+import type { LoaderFunction, MetaFunction } from 'react-router'
+import { useLoaderData } from 'react-router'
 import invariant from 'tiny-invariant'
 
 import { Entry } from '~/components/entry'
@@ -17,13 +16,14 @@ export const meta: MetaFunction<typeof loader> = ({ data, matches }) => {
   const parentsData = matches.flatMap((match: Record<string, any>) => match.data)
   const parentRequest = parentsData.find((data) => data.requestInfo) satisfies RequestInfo
 
+  const loaderData = data as LoaderData | undefined
   const meta = [
     {
-      title: data?.page?.title,
+      title: loaderData?.page?.title,
     },
     {
       name: 'description',
-      content: data?.page?.description,
+      content: loaderData?.page?.description,
     },
   ]
 
@@ -35,7 +35,7 @@ export const meta: MetaFunction<typeof loader> = ({ data, matches }) => {
   return enhanceMeta(meta, options)
 }
 
-export const loader: LoaderFunction = async ({ params, request }) => {
+export const loader: LoaderFunction = async ({ params, request }): Promise<LoaderData> => {
   invariant(params.content, 'Expected params.content')
   invariant(params.slug, 'Expected params.slug')
 
@@ -59,7 +59,7 @@ export const loader: LoaderFunction = async ({ params, request }) => {
     throw pageNotFound(currentPath)
   }
 
-  return json<LoaderData>({ page })
+  return { page }
 }
 
 export default function ContentSlug() {

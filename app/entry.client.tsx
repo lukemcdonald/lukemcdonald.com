@@ -1,20 +1,16 @@
 import { useEffect } from 'react'
-import { init, replayIntegration, browserTracingIntegration } from '@sentry/remix'
-import { RemixBrowser, useLocation, useMatches } from '@remix-run/react'
+import * as Sentry from '@sentry/react-router'
+import { HydratedRouter } from 'react-router/dom'
 import { hydrateRoot } from 'react-dom/client'
 
-init({
+Sentry.init({
   dsn: 'https://e1570a664722c4f007649ad14461ef4a@o4509604435722240.ingest.us.sentry.io/4509604435984392',
   environment: process.env.NODE_ENV,
   tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1,
 
   integrations: [
-    browserTracingIntegration({
-      useEffect,
-      useLocation,
-      useMatches,
-    }),
-    replayIntegration({
+    Sentry.reactRouterTracingIntegration(),
+    Sentry.replayIntegration({
       maskAllText: true,
       blockAllMedia: true,
     }),
@@ -24,4 +20,4 @@ init({
   replaysOnErrorSampleRate: 1,
 })
 
-hydrateRoot(document, <RemixBrowser />)
+hydrateRoot(document, <HydratedRouter />)

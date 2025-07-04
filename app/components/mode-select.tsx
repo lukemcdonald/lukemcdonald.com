@@ -13,7 +13,7 @@ import type { ThemeMode } from '~/hooks/use-theme'
 import { MODES, useTheme } from '~/hooks/use-theme'
 
 type ModeIconProps = React.RefAttributes<SVGSVGElement> & { className?: string }
-type ModeIcon = (props: ModeIconProps) => JSX.Element
+type ModeIcon = (props: ModeIconProps) => React.ReactElement
 
 function getModeIcon(mode: ThemeMode) {
   switch (mode.label) {

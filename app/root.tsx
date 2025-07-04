@@ -1,16 +1,16 @@
-import { captureRemixErrorBoundaryError, withSentry } from '@sentry/remix'
-import type { LinksFunction, LoaderFunction, MetaFunction } from '@remix-run/node'
-import { json, redirect } from '@remix-run/node'
+import * as Sentry from '@sentry/react-router'
+import type { LinksFunction, LoaderFunction, MetaFunction } from 'react-router'
+import { redirect } from 'react-router'
+import React from 'react'
 import {
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
   isRouteErrorResponse,
   useRouteError,
-} from '@remix-run/react'
+} from 'react-router'
 
 import { Entry } from '~/components/entry'
 import { Layout } from '~/components/layout'
@@ -18,7 +18,7 @@ import type { EntryProps, RequestInfo } from '~/types'
 import { enhanceMeta } from '~/utils/meta'
 import { getErrorMessage, getRequestInfo } from '~/utils/misc'
 
-import styles from '~/styles/tailwind.css'
+import '~/styles/tailwind.css'
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   const requestInfo = (data as RequestInfo | undefined)?.requestInfo
@@ -39,16 +39,12 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   ]
 
   return enhanceMeta(meta, {
-    baseUrl: requestInfo?.origin,
+    origin: requestInfo?.origin,
     pathname: requestInfo?.pathname,
   })
 }
 
 export const links: LinksFunction = () => [
-  {
-    rel: 'stylesheet',
-    href: styles,
-  },
   {
     rel: 'apple-touch-icon',
     sizes: '180x180',
@@ -73,7 +69,7 @@ export const links: LinksFunction = () => [
 
 export const loader: LoaderFunction = async ({ request }) => {
   // Force https
-  let url = new URL(request.url)
+  const url = new URL(request.url)
   const hostname = url.hostname
   const proto = request.headers.get('X-Forwarded-Proto') ?? url.protocol
 
@@ -96,9 +92,9 @@ export const loader: LoaderFunction = async ({ request }) => {
     })
   }
 
-  return json<RequestInfo>({
+  return {
     ...getRequestInfo(request),
-  })
+  }
 }
 
 function Document({ children, title }: { children: React.ReactNode; title?: string }) {
@@ -115,7 +111,6 @@ function Document({ children, title }: { children: React.ReactNode; title?: stri
         {children}
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
       </body>
     </html>
   )
@@ -131,7 +126,7 @@ function App() {
   )
 }
 
-export default withSentry(App)
+export default App
 
 export function ErrorBoundary() {
   const error = useRouteError()
@@ -199,7 +194,7 @@ export function ErrorBoundary() {
     )
   }
 
-  captureRemixErrorBoundaryError(error)
+  Sentry.captureException(error)
 
   return (
     <Document title={entryData.title}>
