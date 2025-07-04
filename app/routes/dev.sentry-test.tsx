@@ -10,7 +10,7 @@ class SentryTestError extends Error {
 }
 
 export const loader: LoaderFunction = async () => {
-  if (process.env.NODE_ENV === 'production' || !process.env.ENABLE_DEV_ROUTES) {
+  if (!process.env.ENABLE_DEV_ROUTES) {
     throw new Response('Not Found', { status: 404 })
   }
   return null
