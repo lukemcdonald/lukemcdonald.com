@@ -1,9 +1,10 @@
 import clsx from 'clsx'
 
-import { ContactInfo } from '~/components/contact-info'
-import { EntryBody } from '~/components/entry-body'
-import { EntryHeader } from '~/components/entry-header'
-import type { EntryProps } from '~/types'
+import { ContactInfo } from '#app/components/contact-info'
+import { EntryBody } from '#app/components/entry-body'
+import { EntryHeader } from '#app/components/entry-header'
+
+import type { EntryProps } from '#app/types'
 
 export function Entry({ data }: { data: EntryProps }) {
   return (

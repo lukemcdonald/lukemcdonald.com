@@ -1,11 +1,13 @@
-import type { LoaderFunction, MetaFunction } from 'react-router'
 import { useLoaderData } from 'react-router'
 
-import { Entry } from '~/components/entry'
-import { getContent } from '~/modules/content'
-import type { Content, RequestInfo } from '~/types'
-import { enhanceMeta } from '~/utils/meta'
-import { pageNotFound } from '~/utils/misc'
+import { Entry } from '#app/components/entry'
+import { getContent } from '#app/modules/content'
+import { enhanceMeta } from '#app/utils/meta'
+import { pageNotFound } from '#app/utils/misc'
+
+import type { LoaderFunction, MetaFunction } from 'react-router'
+
+import type { Content, RequestInfo } from '#app/types'
 
 interface LoaderData {
   page: Content
@@ -17,12 +19,12 @@ export const meta: MetaFunction<typeof loader> = ({ matches }) => {
 
   const meta = [
     {
-      name: 'description',
       content: `I'm Luke, a christian, husband, father and wrestling coach living in beautiful Eastern Iowa. My tent making is as a full-stack developer with an eye for design.`,
+      name: 'description',
     },
     {
-      name: 'keywords',
       content: ['christian', 'coach', 'web', 'engineer', 'developer', 'react'].join(', '),
+      name: 'keywords',
     },
   ]
 

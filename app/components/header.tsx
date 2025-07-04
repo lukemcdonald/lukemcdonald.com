@@ -1,27 +1,28 @@
 import clsx from 'clsx'
 
-import { Link } from '~/components/link'
-import { Logo } from '~/components/logo'
-import { NavMenu } from '~/components/nav-menu'
-import { Nav } from '~/components/nav'
-import type { MenuLink } from '~/types'
+import { Link } from '#app/components/link'
+import { Logo } from '#app/components/logo'
+import { Nav } from '#app/components/nav'
+import { NavMenu } from '#app/components/nav-menu'
+
+import type { MenuLink } from '#app/types'
 
 const menuLinks: MenuLink[] = [
   {
+    links: [{ name: 'Resume', to: '/resume' }],
     name: 'Work',
     to: '#',
-    links: [{ name: 'Resume', to: '/resume' }],
   },
-  { name: 'Play', to: '#', links: [{ name: 'TREAD Talks', to: 'https://gettreadtalks.com/' }] },
+  { links: [{ name: 'TREAD Talks', to: 'https://gettreadtalks.com/' }], name: 'Play', to: '#' },
   {
-    name: 'Live',
-    to: '#',
     links: [
       { name: 'Faith', to: '/i-am-a/christian' },
       { name: 'Marriage', to: '/i-am-a/husband' },
       { name: 'Kids', to: '/i-am-a/father' },
       { name: 'Coaching', to: '/i-am-a/coach' },
     ],
+    name: 'Live',
+    to: '#',
   },
 ]
 

@@ -45,7 +45,8 @@ export default {
       transitionDuration: {
         0: '0ms',
       },
-      typography: (theme) => ({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      typography: (theme: any) => ({
         DEFAULT: {
           css: {
             a: {

@@ -1,3 +1,5 @@
+import { Fragment, useState } from 'react'
+
 import {
   Listbox,
   ListboxButton,
@@ -6,11 +8,11 @@ import {
   Transition,
 } from '@headlessui/react'
 import { SwatchIcon } from '@heroicons/react/24/outline'
-import { Fragment, useState } from 'react'
 import clsx from 'clsx'
 
-import type { ThemeColor } from '~/hooks/use-theme'
-import { getThemeColor, THEMES, useTheme } from '~/hooks/use-theme'
+import { getThemeColor, THEMES, useTheme } from '#app/hooks/use-theme'
+
+import type { ThemeColor } from '#app/hooks/use-theme'
 
 export function ThemeSelect() {
   const [open, setOpen] = useState(false)

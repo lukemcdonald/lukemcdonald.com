@@ -5,8 +5,9 @@ import path, { dirname } from 'path'
 import invariant from 'tiny-invariant'
 import { fileURLToPath } from 'url'
 
-import type { Content } from '~/types'
-import { pageNotFound } from '~/utils/misc'
+import { pageNotFound } from '#app/utils/misc'
+
+import type { Content } from '#app/types'
 
 type ContentMarkdownAttributes = Omit<Content, 'html' | 'markdown'>
 

@@ -1,3 +1,5 @@
+import { Fragment, useEffect, useState } from 'react'
+
 import {
   Listbox,
   ListboxButton,
@@ -7,10 +9,10 @@ import {
 } from '@headlessui/react'
 import { MoonIcon, SunIcon, ComputerDesktopIcon as SystemIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
-import { Fragment, useEffect, useState } from 'react'
 
-import type { ThemeMode } from '~/hooks/use-theme'
-import { MODES, useTheme } from '~/hooks/use-theme'
+import { MODES, useTheme } from '#app/hooks/use-theme'
+
+import type { ThemeMode } from '#app/hooks/use-theme'
 
 type ModeIconProps = React.RefAttributes<SVGSVGElement> & { className?: string }
 type ModeIcon = (props: ModeIconProps) => React.ReactElement

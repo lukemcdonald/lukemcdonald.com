@@ -729,8 +729,8 @@ html:has(div[data-theme='orange']) {
   display: flex;
   align-items: center;
   border-radius: 0.25rem;
-  background-color: transparent;
   background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
+  background-color: transparent;
   --tw-bg-opacity: 0;
   padding: 0.375rem;
   padding-right: 0.75rem;

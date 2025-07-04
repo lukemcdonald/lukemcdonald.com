@@ -1,5 +1,5 @@
-import type { NavLinkProps as ReactRouterNavLinkProps } from 'react-router'
 import type { ReactNode, ElementType } from 'react'
+import type { NavLinkProps as ReactRouterNavLinkProps } from 'react-router'
 
 export interface RequestInfo {
   requestInfo: {

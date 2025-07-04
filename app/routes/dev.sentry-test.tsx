@@ -1,5 +1,7 @@
-import * as Sentry from '@sentry/react-router'
 import { useState, useEffect } from 'react'
+
+import * as Sentry from '@sentry/react-router'
+
 import type { LoaderFunction } from 'react-router'
 
 class SentryTestError extends Error {
@@ -19,8 +21,8 @@ export const loader: LoaderFunction = async () => {
 export const meta = () => {
   return [
     { title: 'sentry-test-dev-page' },
-    { name: 'robots', content: 'noindex, nofollow, noarchive, nosnippet' },
-    { name: 'googlebot', content: 'noindex, nofollow, noarchive, nosnippet' },
+    { content: 'noindex, nofollow, noarchive, nosnippet', name: 'robots' },
+    { content: 'noindex, nofollow, noarchive, nosnippet', name: 'googlebot' },
   ]
 }
 
@@ -51,12 +53,12 @@ export default function SentryExamplePage() {
     <div>
       <main
         style={{
-          display: 'flex',
-          minHeight: '100vh',
-          flexDirection: 'column',
-          justifyContent: 'center',
           alignItems: 'center',
+          display: 'flex',
+          flexDirection: 'column',
           gap: '16px',
+          justifyContent: 'center',
+          minHeight: '100vh',
           padding: '16px',
         }}
       >

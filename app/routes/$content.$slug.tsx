@@ -1,12 +1,15 @@
-import type { LoaderFunction, MetaFunction } from 'react-router'
 import { useLoaderData } from 'react-router'
+
 import invariant from 'tiny-invariant'
 
-import { Entry } from '~/components/entry'
-import { getContent, contentExists } from '~/modules/content'
-import type { Content, RequestInfo } from '~/types'
-import { enhanceMeta } from '~/utils/meta'
-import { pageNotFound } from '~/utils/misc'
+import { Entry } from '#app/components/entry'
+import { getContent, contentExists } from '#app/modules/content'
+import { enhanceMeta } from '#app/utils/meta'
+import { pageNotFound } from '#app/utils/misc'
+
+import type { LoaderFunction, MetaFunction } from 'react-router'
+
+import type { Content, RequestInfo } from '#app/types'
 
 interface LoaderData {
   page: Content
@@ -22,8 +25,8 @@ export const meta: MetaFunction<typeof loader> = ({ data, matches }) => {
       title: loaderData?.page?.title,
     },
     {
-      name: 'description',
       content: loaderData?.page?.description,
+      name: 'description',
     },
   ]
 

@@ -1,8 +1,9 @@
-import { ArrowTopRightOnSquareIcon as ExternalLinkIcon } from '@heroicons/react/20/solid'
 import { NavLink } from 'react-router'
+
+import { ArrowTopRightOnSquareIcon as ExternalLinkIcon } from '@heroicons/react/20/solid'
 import clsx from 'clsx'
 
-import type { NavLinkProps } from '~/types'
+import type { NavLinkProps } from '#app/types'
 
 function Link({ children, className, showExternalIcon, to, ...delegated }: NavLinkProps) {
   // This example assumes that any internal link will start with exactly
