@@ -8,4 +8,9 @@ export default {
     await sentryOnBuildEnd({ buildManifest, reactRouterConfig, viteConfig })
   },
   ssr: true,
+  // Optimize bundle for production
+  future: {
+    // Enable future optimizations
+    unstable_optimizeDeps: true,
+  },
 } satisfies Config

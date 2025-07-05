@@ -4,7 +4,8 @@
   "description": "",
   "license": "",
   "scripts": {
-    "build": "npm run build:css && react-router build --sourcemapClient",
+    "build": "npm run build:css && react-router build",
+    "build:analyze": "npm run build:css && react-router build --analyze",
     "build:css": "postcss styles/tailwind.css -o ./app/styles/tailwind.css",
     "deploy": "fly --app lukemcdonald deploy .",
     "deploy:local": "fly deploy --local-only",
