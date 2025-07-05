@@ -1,7 +1,9 @@
 import * as Sentry from '@sentry/react-router'
 
+const IS_PROD = process.env.NODE_ENV === 'production'
+
 Sentry.init({
-  dsn: process.env.SENTRY_DSN,
+  dsn: 'https://e1570a664722c4f007649ad14461ef4a@o4509604435722240.ingest.us.sentry.io/4509604435984392',
   environment: process.env.NODE_ENV,
 
   // Adds request headers and IP for users
@@ -15,7 +17,7 @@ Sentry.init({
     // nodeProfilingIntegration(),
   ],
 
-  tracesSampleRate: parseFloat(process.env.SENTRY_TRACES_SAMPLE_RATE ?? '0.1'),
+  tracesSampleRate: IS_PROD ? 0.1 : 1.0,
 
   // Profiling sample rate commented out since profiling is disabled
   // profilesSampleRate: parseFloat(process.env.SENTRY_TRACES_SAMPLE_RATE ?? '0.1'),

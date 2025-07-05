@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm run build:css && react-router build --sourcemapClient",
     "build:css": "postcss styles/tailwind.css -o ./app/styles/tailwind.css",
-    "build:sentry": "npm run build && npx sentry-cli sourcemaps upload --org $SENTRY_ORG --project $SENTRY_PROJECT ./build",
+    "build:sentry": "npm run build && npx sentry-cli sourcemaps upload --release=$(date +%Y%m%d-%H%M%S) ./build",
     "deploy": "fly --app lukemcdonald deploy .",
     "deploy:local": "fly deploy --local-only",
     "deploy:remote": "fly deploy --remote-only",
