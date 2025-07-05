@@ -4,10 +4,19 @@ import { HydratedRouter } from 'react-router/dom'
 
 import * as Sentry from '@sentry/react-router'
 
+const IS_PROD = process.env.NODE_ENV === 'production'
+
 Sentry.init({
   dsn: 'https://e1570a664722c4f007649ad14461ef4a@o4509604435722240.ingest.us.sentry.io/4509604435984392',
   environment: process.env.NODE_ENV,
-  tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1,
+
+  // Adds request headers and IP for users
+  sendDefaultPii: true,
+
+  // Set trace propagation targets
+  tracePropagationTargets: [/^\//, /^https:\/\/lukemcdonald\.fly\.dev\/api/],
+
+  tracesSampleRate: IS_PROD ? 0.1 : 1,
 
   integrations: [
     Sentry.reactRouterTracingIntegration(),
@@ -18,7 +27,7 @@ Sentry.init({
   ],
 
   replaysOnErrorSampleRate: 1,
-  replaysSessionSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 0.5,
+  replaysSessionSampleRate: IS_PROD ? 0.1 : 0.5,
 })
 
 hydrateRoot(

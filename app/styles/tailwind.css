@@ -1130,6 +1130,11 @@ html:has(div[data-theme='orange']) {
   background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
 }
 
+.bg-error-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(220 38 38 / var(--tw-bg-opacity, 1));
+}
+
 .bg-primary-200 {
   background-color: var(--color-primary-200);
 }
@@ -1157,15 +1162,6 @@ html:has(div[data-theme='orange']) {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
-}
-
-.bg-error-600 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(220 38 38 / var(--tw-bg-opacity, 1));
-}
-
-.bg-primary-600 {
-  background-color: var(--color-primary-600);
 }
 
 .bg-opacity-0 {
@@ -1255,11 +1251,6 @@ html:has(div[data-theme='orange']) {
 .py-2 {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-}
-
-.py-3 {
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
 }
 
 .py-px {
