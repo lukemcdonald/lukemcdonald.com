@@ -27,7 +27,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   const meta = [
     {
       content: '4jMDBbKyVQPMqqE3YYqw2vabnA3CR_uU9l2sOtRRmjM',
-      property: 'google-site-verfication',
+      property: 'google-site-verification',
     },
     {
       content: '#122023',
