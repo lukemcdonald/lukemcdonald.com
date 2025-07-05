@@ -1,9 +1,8 @@
-import clsx from 'clsx'
-
 import { Link } from '#app/components/link'
 import { Logo } from '#app/components/logo'
 import { Nav } from '#app/components/nav'
 import { NavMenu } from '#app/components/nav-menu'
+import clsx from 'clsx'
 
 import type { MenuLink } from '#app/types'
 

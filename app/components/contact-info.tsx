@@ -1,8 +1,7 @@
 import React from 'react'
 
-import clsx from 'clsx'
-
 import { Link } from '#app/components/link'
+import clsx from 'clsx'
 
 const contactLinks = [
   { name: 'GitHub', to: 'https://github.com/lukemcdonald' },

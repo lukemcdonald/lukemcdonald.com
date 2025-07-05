@@ -1,6 +1,5 @@
-import clsx from 'clsx'
-
 import { useTheme } from '#app/hooks/use-theme'
+import clsx from 'clsx'
 
 import { Header } from './header'
 import { Image } from './image'

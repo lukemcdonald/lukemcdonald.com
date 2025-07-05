@@ -1,15 +1,13 @@
 import { useLoaderData } from 'react-router'
 
-import invariant from 'tiny-invariant'
-
 import { Entry } from '#app/components/entry'
 import { getContent, contentExists } from '#app/modules/content'
 import { enhanceMeta } from '#app/utils/meta'
 import { pageNotFound } from '#app/utils/misc'
-
-import type { LoaderFunction, MetaFunction } from 'react-router'
+import invariant from 'tiny-invariant'
 
 import type { Content, RequestInfo } from '#app/types'
+import type { LoaderFunction, MetaFunction } from 'react-router'
 
 interface LoaderData {
   page: Content

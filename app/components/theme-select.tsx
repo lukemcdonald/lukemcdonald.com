@@ -1,5 +1,6 @@
 import { Fragment, useState } from 'react'
 
+import { getThemeColor, THEMES, useTheme } from '#app/hooks/use-theme'
 import {
   Listbox,
   ListboxButton,
@@ -9,8 +10,6 @@ import {
 } from '@headlessui/react'
 import { SwatchIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
-
-import { getThemeColor, THEMES, useTheme } from '#app/hooks/use-theme'
 
 import type { ThemeColor } from '#app/hooks/use-theme'
 

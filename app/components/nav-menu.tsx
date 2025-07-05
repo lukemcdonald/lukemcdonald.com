@@ -1,8 +1,7 @@
+import { Link } from '#app/components/link'
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import clsx from 'clsx'
-
-import { Link } from '#app/components/link'
 
 import type { NavMenuProps } from '#app/types'
 

@@ -1,6 +1,5 @@
-import clsx from 'clsx'
-
 import { Mountains } from '#app/components/mountains'
+import clsx from 'clsx'
 
 import type { EntryHeaderProps } from '#app/types'
 

@@ -1,11 +1,10 @@
+import { pageNotFound } from '#app/utils/misc'
 import parseFrontMatter from 'front-matter'
 import fs from 'fs/promises'
 import { marked } from 'marked'
 import path, { dirname } from 'path'
 import invariant from 'tiny-invariant'
 import { fileURLToPath } from 'url'
-
-import { pageNotFound } from '#app/utils/misc'
 
 import type { Content } from '#app/types'
 
