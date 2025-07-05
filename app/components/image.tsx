@@ -11,7 +11,6 @@ export function Image({
   ...rest
 }: ImageProps) {
   return (
-    /* eslint-disable jsx-a11y/alt-text */
     <img
       className={className}
       decoding="async"

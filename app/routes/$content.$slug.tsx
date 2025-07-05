@@ -14,6 +14,7 @@ interface LoaderData {
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data, matches }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const parentsData = matches.flatMap((match: Record<string, any>) => match.data)
   const parentRequest = parentsData.find((data) => data.requestInfo) satisfies RequestInfo
 

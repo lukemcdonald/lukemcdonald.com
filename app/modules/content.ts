@@ -18,6 +18,7 @@ const contentPath = path.join(__dirname, '..', '..', 'content')
 // Simple in-memory cache to prevent repeated file reads and markdown processing
 const contentCache = new Map<string, Content>()
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isValidContentAttributes(attributes: any): attributes is ContentMarkdownAttributes {
   const required = ['draft', 'image', 'description', 'title']
   return required.every((key) => Object.keys(attributes).includes(key))
