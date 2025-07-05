@@ -26,6 +26,7 @@
   "dependencies": {
     "@headlessui/react": "^2.2.4",
     "@heroicons/react": "^2.2.0",
+    "@sentry/profiling-node": "^9.35.0",
     "@sentry/react": "^9.34.0",
     "@tailwindcss/typography": "^0.5.16",
     "cloudinary": "^1.41.3",

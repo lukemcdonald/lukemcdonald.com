@@ -183,6 +183,9 @@ export function ErrorBoundary() {
   }
 
   if (error instanceof Error) {
+    // Capture the error with Sentry
+    Sentry.captureException(error)
+
     const entryErrorData = {
       ...entryData,
       description:
@@ -200,6 +203,7 @@ export function ErrorBoundary() {
     )
   }
 
+  // Capture any other unknown errors
   Sentry.captureException(error)
 
   return (
