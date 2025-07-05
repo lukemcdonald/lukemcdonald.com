@@ -35,7 +35,6 @@ COPY --from=deps /app/node_modules /app/node_modules
 
 ADD . .
 RUN npm run build
-RUN ls -la /app/build/
 
 # Finally, build the production image with minimal footprint
 FROM base
@@ -50,7 +49,5 @@ COPY --from=production-deps /app/node_modules /app/node_modules
 COPY --from=build /app/build /app/build
 COPY --from=build /app/public /app/public
 ADD . .
-RUN ls -la /app/
-RUN ls -la /app/build/
 
 CMD ["npm", "run", "start"]
