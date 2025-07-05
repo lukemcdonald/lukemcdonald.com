@@ -1,3 +1,4 @@
+import { StrictMode } from 'react'
 import { hydrateRoot } from 'react-dom/client'
 import { HydratedRouter } from 'react-router/dom'
 
@@ -20,4 +21,9 @@ Sentry.init({
   replaysSessionSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 0.5,
 })
 
-hydrateRoot(document, <HydratedRouter />)
+hydrateRoot(
+  document,
+  <StrictMode>
+    <HydratedRouter />
+  </StrictMode>,
+)

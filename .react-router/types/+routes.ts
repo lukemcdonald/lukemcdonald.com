@@ -22,7 +22,7 @@ type Pages = {
       "slug": string;
     };
   };
-  "/dev/sentry-test": {
+  "/dev/error": {
     params: {};
   };
 };
@@ -30,7 +30,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/resume" | "/:content/:slug" | "/dev/sentry-test";
+    page: "/" | "/resume" | "/:content/:slug" | "/dev/error";
   };
   "./routes/_index.tsx": {
     id: "routes/_index";
@@ -44,8 +44,8 @@ type RouteFiles = {
     id: "routes/$content.$slug";
     page: "/:content/:slug";
   };
-  "./routes/dev.sentry-test.tsx": {
-    id: "routes/dev.sentry-test";
-    page: "/dev/sentry-test";
+  "./routes/dev.error.tsx": {
+    id: "routes/dev.error";
+    page: "/dev/error";
   };
 };
