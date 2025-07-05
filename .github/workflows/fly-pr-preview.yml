@@ -26,5 +26,6 @@ jobs:
         id: deploy
         uses: superfly/fly-pr-review-apps@1.5.0
         with:
+          name: pr-${{ github.event.number }}-lukemcdonald-com
           region: iad
           org: personal
