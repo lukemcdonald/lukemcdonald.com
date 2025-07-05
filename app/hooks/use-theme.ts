@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+
 import useLocalStorageState from 'use-local-storage-state'
 
 const themeColors = {
@@ -35,12 +36,12 @@ export const MODES: ThemeMode[] = [
 ]
 
 export const THEMES: ThemeColor[] = [
-  { label: themeColors.gray, colors: { light: '#abab9d', dark: '#3e504f' } },
-  { label: themeColors.green, colors: { light: '#9cd075', dark: '#15824e' } },
-  { label: themeColors.blue, colors: { light: '#38bdf8', dark: '#0369a1' } },
-  { label: themeColors.purple, colors: { light: '#818cf8', dark: '#4338ca' } },
-  { label: themeColors.yellow, colors: { light: '#fde047', dark: '#facc15' } },
-  { label: themeColors.orange, colors: { light: '#fb923c', dark: '#ea580c' } },
+  { colors: { dark: '#3e504f', light: '#abab9d' }, label: themeColors.gray },
+  { colors: { dark: '#15824e', light: '#9cd075' }, label: themeColors.green },
+  { colors: { dark: '#0369a1', light: '#38bdf8' }, label: themeColors.blue },
+  { colors: { dark: '#4338ca', light: '#818cf8' }, label: themeColors.purple },
+  { colors: { dark: '#facc15', light: '#fde047' }, label: themeColors.yellow },
+  { colors: { dark: '#ea580c', light: '#fb923c' }, label: themeColors.orange },
 ]
 
 export const DEFAULT_THEME_DATA: ThemeData = {
@@ -98,7 +99,7 @@ function useTheme() {
     setData((current) => ({ ...current, theme }))
   }, [theme])
 
-  return { data, setTheme, setMode }
+  return { data, setMode, setTheme }
 }
 
 export { useTheme }

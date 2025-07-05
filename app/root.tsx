@@ -1,79 +1,76 @@
-import { captureRemixErrorBoundaryError, withSentry } from '@sentry/remix'
-import type { LinksFunction, LoaderFunction, MetaFunction } from '@remix-run/node'
-import { json, redirect } from '@remix-run/node'
+import React from 'react'
+import { redirect } from 'react-router'
 import {
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
   isRouteErrorResponse,
   useRouteError,
-} from '@remix-run/react'
+} from 'react-router'
 
-import { Entry } from '~/components/entry'
-import { Layout } from '~/components/layout'
-import type { EntryProps, RequestInfo } from '~/types'
-import { enhanceMeta } from '~/utils/meta'
-import { getErrorMessage, getRequestInfo } from '~/utils/misc'
+import { Entry } from '#app/components/entry'
+import { Layout } from '#app/components/layout'
+import { enhanceMeta } from '#app/utils/meta'
+import { getErrorMessage, getRequestInfo } from '#app/utils/misc'
+import * as Sentry from '@sentry/react-router'
 
-import styles from '~/styles/tailwind.css'
+import type { EntryProps, RequestInfo } from '#app/types'
+import type { LinksFunction, LoaderFunction, MetaFunction } from 'react-router'
+
+import '../styles/tailwind.css'
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   const requestInfo = (data as RequestInfo | undefined)?.requestInfo
 
   const meta = [
     {
-      property: 'google-site-verfication',
       content: '4jMDBbKyVQPMqqE3YYqw2vabnA3CR_uU9l2sOtRRmjM',
+      property: 'google-site-verification',
     },
     {
-      property: 'theme-color',
       content: '#122023',
+      property: 'theme-color',
     },
     {
-      property: 'image',
       content: `${requestInfo?.origin}/images/seo-banner.png`,
+      property: 'image',
     },
   ]
 
   return enhanceMeta(meta, {
-    baseUrl: requestInfo?.origin,
+    origin: requestInfo?.origin,
     pathname: requestInfo?.pathname,
   })
 }
 
 export const links: LinksFunction = () => [
   {
-    rel: 'stylesheet',
-    href: styles,
-  },
-  {
+    href: '/favicons/apple-touch-icon.png',
     rel: 'apple-touch-icon',
     sizes: '180x180',
-    href: '/favicons/apple-touch-icon.png',
   },
   {
+    href: '/favicons/favicon.svg',
     rel: 'icon',
     type: 'image/svg+xml',
-    href: '/favicons/favicon.svg',
   },
   {
+    href: '/favicons/favicon.svg',
     rel: 'alternate icon',
     type: 'image/svg+xml',
-    href: '/favicons/favicon.svg',
   },
   {
-    rel: 'mask-icon',
-    href: '/favicons/favicon.svg',
     color: '#122023',
+    href: '/favicons/favicon.svg',
+    rel: 'mask-icon',
   },
 ]
 
 export const loader: LoaderFunction = async ({ request }) => {
   // Force https
-  let url = new URL(request.url)
+  const url = new URL(request.url)
   const hostname = url.hostname
   const proto = request.headers.get('X-Forwarded-Proto') ?? url.protocol
 
@@ -96,9 +93,9 @@ export const loader: LoaderFunction = async ({ request }) => {
     })
   }
 
-  return json<RequestInfo>({
+  return {
     ...getRequestInfo(request),
-  })
+  }
 }
 
 function Document({ children, title }: { children: React.ReactNode; title?: string }) {
@@ -106,8 +103,13 @@ function Document({ children, title }: { children: React.ReactNode; title?: stri
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-        {title ? <title>{title}</title> : null}
+        <meta
+          name="viewport"
+          content="width=device-width,initial-scale=1"
+        />
+        {title ?
+          <title>{title}</title>
+        : null}
         <Meta />
         <Links />
       </head>
@@ -115,7 +117,6 @@ function Document({ children, title }: { children: React.ReactNode; title?: stri
         {children}
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
       </body>
     </html>
   )
@@ -131,18 +132,18 @@ function App() {
   )
 }
 
-export default withSentry(App)
+export default App
 
 export function ErrorBoundary() {
   const error = useRouteError()
 
   const entryData: EntryProps = {
-    title: 'Error',
     description: `Unknown error.`,
     html: '',
     image:
       'https://res.cloudinary.com/lukemcdonald/image/upload/v1642448418/lukemcdonald-com/not-found_y5jbrf.jpg',
     imageAlt: 'Little Carly coding.',
+    title: 'Error',
   }
 
   function buildErrorHtml(errorMessage: string) {
@@ -156,9 +157,9 @@ export function ErrorBoundary() {
   if (isRouteErrorResponse(error)) {
     const entryErrorData = {
       ...entryData,
-      title: error.status.toString(),
-      subtitle: error.statusText,
       html: buildErrorHtml(error.data),
+      subtitle: error.statusText,
+      title: error.status.toString(),
     }
 
     switch (error.status) {
@@ -182,12 +183,15 @@ export function ErrorBoundary() {
   }
 
   if (error instanceof Error) {
+    // Capture the error with Sentry
+    Sentry.captureException(error)
+
     const entryErrorData = {
       ...entryData,
-      title: 'Error',
       description:
         'There was an uncaught exception in your application. Check the browser or server console to inspect the error.',
       html: buildErrorHtml(getErrorMessage(error)),
+      title: 'Error',
     }
 
     return (
@@ -199,7 +203,8 @@ export function ErrorBoundary() {
     )
   }
 
-  captureRemixErrorBoundaryError(error)
+  // Capture any other unknown errors
+  Sentry.captureException(error)
 
   return (
     <Document title={entryData.title}>

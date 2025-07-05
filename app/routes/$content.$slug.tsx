@@ -1,13 +1,15 @@
-import type { LoaderFunction, MetaFunction } from '@remix-run/node'
-import { json } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
+import { useLoaderData } from 'react-router'
+
 import invariant from 'tiny-invariant'
 
-import { Entry } from '~/components/entry'
-import { getContent, contentExists } from '~/modules/content'
-import type { Content, RequestInfo } from '~/types'
-import { enhanceMeta } from '~/utils/meta'
-import { pageNotFound } from '~/utils/misc'
+import { Entry } from '#app/components/entry'
+import { getContent, contentExists } from '#app/modules/content'
+import { enhanceMeta } from '#app/utils/meta'
+import { pageNotFound } from '#app/utils/misc'
+
+import type { LoaderFunction, MetaFunction } from 'react-router'
+
+import type { Content, RequestInfo } from '#app/types'
 
 interface LoaderData {
   page: Content
@@ -17,13 +19,14 @@ export const meta: MetaFunction<typeof loader> = ({ data, matches }) => {
   const parentsData = matches.flatMap((match: Record<string, any>) => match.data)
   const parentRequest = parentsData.find((data) => data.requestInfo) satisfies RequestInfo
 
+  const loaderData = data as LoaderData | undefined
   const meta = [
     {
-      title: data?.page?.title,
+      title: loaderData?.page?.title,
     },
     {
+      content: loaderData?.page?.description,
       name: 'description',
-      content: data?.page?.description,
     },
   ]
 
@@ -35,7 +38,7 @@ export const meta: MetaFunction<typeof loader> = ({ data, matches }) => {
   return enhanceMeta(meta, options)
 }
 
-export const loader: LoaderFunction = async ({ params, request }) => {
+export const loader: LoaderFunction = async ({ params, request }): Promise<LoaderData> => {
   invariant(params.content, 'Expected params.content')
   invariant(params.slug, 'Expected params.slug')
 
@@ -59,7 +62,7 @@ export const loader: LoaderFunction = async ({ params, request }) => {
     throw pageNotFound(currentPath)
   }
 
-  return json<LoaderData>({ page })
+  return { page }
 }
 
 export default function ContentSlug() {

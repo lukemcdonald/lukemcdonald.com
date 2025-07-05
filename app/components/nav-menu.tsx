@@ -2,8 +2,9 @@ import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/r
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import clsx from 'clsx'
 
-import { Link } from '~/components/link'
-import type { NavMenuProps } from '~/types'
+import { Link } from '#app/components/link'
+
+import type { NavMenuProps } from '#app/types'
 
 export function NavMenu({ as = 'div', children, className, link }: NavMenuProps) {
   return (

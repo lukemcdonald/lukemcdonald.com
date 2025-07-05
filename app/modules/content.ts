@@ -5,15 +5,16 @@ import path, { dirname } from 'path'
 import invariant from 'tiny-invariant'
 import { fileURLToPath } from 'url'
 
-import type { Content } from '~/types'
-import { pageNotFound } from '~/utils/misc'
+import { pageNotFound } from '#app/utils/misc'
+
+import type { Content } from '#app/types'
 
 type ContentMarkdownAttributes = Omit<Content, 'html' | 'markdown'>
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-const contentPath = path.join(__dirname, '..', 'content')
+const contentPath = path.join(__dirname, '..', '..', 'content')
 
 // Simple in-memory cache to prevent repeated file reads and markdown processing
 const contentCache = new Map<string, Content>()

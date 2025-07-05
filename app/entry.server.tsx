@@ -1,24 +1,23 @@
-import * as Sentry from '@sentry/remix'
-import type { EntryContext } from '@remix-run/node'
-import { RemixServer } from '@remix-run/react'
-import { renderToString } from 'react-dom/server'
+import { renderToPipeableStream } from 'react-dom/server'
+import { ServerRouter } from 'react-router'
+import { type HandleErrorFunction } from 'react-router'
 
-export const handleError = Sentry.wrapHandleErrorWithSentry((error, { request }) => {
-  // Custom handleError implementation
+import { createReadableStreamFromReadable } from '@react-router/node'
+import * as Sentry from '@sentry/react-router'
+
+const handleRequest = Sentry.createSentryHandleRequest({
+  createReadableStreamFromReadable,
+  renderToPipeableStream,
+  ServerRouter,
 })
 
-export default function handleRequest(
-  request: Request,
-  responseStatusCode: number,
-  responseHeaders: Headers,
-  remixContext: EntryContext
-) {
-  const markup = renderToString(<RemixServer context={remixContext} url={request.url} />)
+export default handleRequest
 
-  responseHeaders.set('Content-Type', 'text/html')
-
-  return new Response('<!DOCTYPE html>' + markup, {
-    status: responseStatusCode,
-    headers: responseHeaders,
-  })
+export const handleError: HandleErrorFunction = (error, { request }) => {
+  // React Router may abort some interrupted requests, don't log those
+  if (!request.signal.aborted) {
+    Sentry.captureException(error)
+    // optionally log the error so you can see it
+    console.error(error)
+  }
 }

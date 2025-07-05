@@ -3,44 +3,14 @@ import colors from 'tailwindcss/colors'
 
 export default {
   content: ['./content/**/*.md', './app/**/*.{ts,tsx}'],
+  plugins: [typography],
   theme: {
-    extend: {
-      maxHeight: {
-        site: '720px',
-      },
-      screens: {
-        xs: '420px',
-        sm: '576px',
-        md: '768px',
-        lg: '1080px',
-      },
-      spacing: {
-        '30vw': '30vw',
-      },
-      transitionDelay: {
-        0: '0ms',
-      },
-      transitionDuration: {
-        0: '0ms',
-      },
-      typography: (theme) => ({
-        DEFAULT: {
-          css: {
-            a: {
-              color: theme('colors.current'),
-            },
-          },
-        },
-      }),
-    },
     colors: {
-      inherit: 'inherit',
-      transparent: 'transparent',
-      current: 'currentColor',
       black: colors.black,
-      white: colors.white,
-      gray: colors.neutral,
+      current: 'currentColor',
       error: colors.red,
+      gray: colors.neutral,
+      inherit: 'inherit',
       primary: {
         50: 'var(--color-primary-50)',
         100: 'var(--color-primary-100)',
@@ -53,6 +23,38 @@ export default {
         800: 'var(--color-primary-800)',
         900: 'var(--color-primary-900)',
       },
+      transparent: 'transparent',
+      white: colors.white,
+    },
+    extend: {
+      maxHeight: {
+        site: '720px',
+      },
+      screens: {
+        lg: '1080px',
+        md: '768px',
+        sm: '576px',
+        xs: '420px',
+      },
+      spacing: {
+        '30vw': '30vw',
+      },
+      transitionDelay: {
+        0: '0ms',
+      },
+      transitionDuration: {
+        0: '0ms',
+      },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      typography: (theme: any) => ({
+        DEFAULT: {
+          css: {
+            a: {
+              color: theme('colors.current'),
+            },
+          },
+        },
+      }),
     },
   },
   variants: {
@@ -67,5 +69,4 @@ export default {
       visibility: ['responsive', 'group-hover'],
     },
   },
-  plugins: [typography],
 }

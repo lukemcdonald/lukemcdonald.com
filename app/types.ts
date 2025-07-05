@@ -1,4 +1,5 @@
-import type { NavLinkProps as RemixNavLinkProps } from '@remix-run/react'
+import type { ReactNode, ElementType } from 'react'
+import type { NavLinkProps as ReactRouterNavLinkProps } from 'react-router'
 
 export interface RequestInfo {
   requestInfo: {
@@ -33,16 +34,18 @@ export interface ImageProps {
   widths?: number[]
 }
 
-export interface NavLinkProps extends RemixNavLinkProps {
+export interface NavLinkProps extends ReactRouterNavLinkProps {
   activeClassName?: string
+  children?: ReactNode
   className?: string
   inactiveClassName?: string
   showExternalIcon?: boolean
+  to: string
 }
 
 export interface NavMenuProps {
-  as?: React.ElementType
-  children?: React.ReactNode
+  as?: ElementType
+  children?: ReactNode
   className?: string
   link: MenuLink
 }

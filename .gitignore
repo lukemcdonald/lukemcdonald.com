@@ -1,9 +1,10 @@
 node_modules
 
-# Remix
+# React Router
 /.cache
 /build
 /public/build
+.react-router/
 
 # Tailwind
 /app/styles/tailwind.css

@@ -1,6 +1,7 @@
-import type { TransformerOption } from '@cld-apis/types'
 import { buildImageUrl, extractPublicId, setConfig } from 'cloudinary-build-url'
 import invariant from 'tiny-invariant'
+
+import type { TransformerOption } from '@cld-apis/types'
 
 setConfig({
   cloudName: 'lukemcdonald',
@@ -12,7 +13,7 @@ type ImageBuilder = {
   id: string
 }
 
-function getImageBuilder({ id, alt = '' }: { id: string; alt: string }): ImageBuilder {
+function getImageBuilder({ alt = '', id }: { alt: string; id: string; }): ImageBuilder {
   invariant(id, `Expected typeof id of string but instead got ${id}`)
 
   const cloudinaryId =
@@ -30,23 +31,24 @@ function getImageBuilder({ id, alt = '' }: { id: string; alt: string }): ImageBu
 function getImgProps(
   imageBuilder: ImageBuilder,
   {
-    widths,
     sizes,
     transformations,
+    widths,
   }: {
-    widths: number[]
     sizes: string[]
     transformations?: TransformerOption
+    widths: number[]
   }
 ) {
   const averageSize = Math.ceil(widths.reduce((a, s) => a + s) / widths.length)
 
   return {
     alt: imageBuilder.alt,
+    sizes: sizes.join(', '),
     src: imageBuilder({
-      quality: 'auto',
-      format: 'auto',
       fetchFormat: 'auto',
+      format: 'auto',
+      quality: 'auto',
       ...transformations,
       resize: { width: averageSize, ...transformations?.resize },
     }),
@@ -54,8 +56,8 @@ function getImgProps(
       .map((width) =>
         [
           imageBuilder({
-            quality: 'auto',
             format: 'auto',
+            quality: 'auto',
             ...transformations,
             resize: { width, ...transformations?.resize },
           }),
@@ -63,7 +65,6 @@ function getImgProps(
         ].join(' ')
       )
       .join(', '),
-    sizes: sizes.join(', '),
   }
 }
 

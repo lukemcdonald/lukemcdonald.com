@@ -11,10 +11,10 @@ function cleanMeta(meta: Array<Metadata>): Array<Metadata> {
 
 export function deriveMetaFromMetadata(metadata: Metadata): Array<Metadata> {
   return cleanMeta([
-    { name: 'author', content: metadata.author },
-    { name: 'description', content: metadata.description },
-    { name: 'image', content: metadata.image },
-    { name: 'keywords', content: metadata.tags?.join(', ') },
+    { content: metadata.author, name: 'author' },
+    { content: metadata.description, name: 'description' },
+    { content: metadata.image, name: 'image' },
+    { content: metadata.tags?.join(', '), name: 'keywords' },
     { title: metadata.title },
   ])
 }
@@ -44,20 +44,20 @@ export function createMetaEnhancer(defaultOptions: Omit<EnhanceMetaOptions, 'pat
 
     return cleanMeta([
       { title: title },
-      { property: 'author', content: metaAuthor ?? author },
+      { content: metaAuthor ?? author, property: 'author' },
 
-      { property: 'og:description', content: metaDescription },
-      { property: 'og:image', content: metaImage },
-      { property: 'og:site_name', content: siteName },
-      { property: 'og:title', content: title },
-      { property: 'og:type', content: type },
-      { property: 'og:url', content: url },
+      { content: metaDescription, property: 'og:description' },
+      { content: metaImage, property: 'og:image' },
+      { content: siteName, property: 'og:site_name' },
+      { content: title, property: 'og:title' },
+      { content: type, property: 'og:type' },
+      { content: url, property: 'og:url' },
 
-      { property: 'twitter:card', content: twitterCard },
-      { property: 'twitter:description', content: metaDescription },
-      { property: 'twitter:image', content: metaImage },
-      { property: 'twitter:site', content: twitterSite },
-      { property: 'twitter:title', content: title },
+      { content: twitterCard, property: 'twitter:card' },
+      { content: metaDescription, property: 'twitter:description' },
+      { content: metaImage, property: 'twitter:image' },
+      { content: twitterSite, property: 'twitter:site' },
+      { content: title, property: 'twitter:title' },
     ])
   }
 }

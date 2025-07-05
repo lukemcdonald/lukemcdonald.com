@@ -1,12 +1,13 @@
-import type { ImageProps } from '~/types'
-import { getImageBuilder, getImgProps } from '~/utils/images'
+import { getImageBuilder, getImgProps } from '#app/utils/images'
+
+import type { ImageProps } from '#app/types'
 
 export function Image({
-  className,
-  src: id,
   alt,
-  widths = [],
+  className,
   sizes = ['100vw'],
+  src: id,
+  widths = [],
   ...rest
 }: ImageProps) {
   return (
@@ -14,9 +15,9 @@ export function Image({
     <img
       className={className}
       decoding="async"
-      {...getImgProps(getImageBuilder({ id, alt }), {
-        widths,
+      {...getImgProps(getImageBuilder({ alt, id }), {
         sizes,
+        widths,
       })}
       {...rest}
     />

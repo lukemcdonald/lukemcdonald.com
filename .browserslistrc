@@ -1,0 +1,13 @@
+# Browserslist configuration for consistent browser targeting
+# Used by build tools like Vite, PostCSS autoprefixer, etc.
+
+# Modern browsers with ES2022 support
+last 2 Chrome versions
+last 2 Firefox versions
+Safari >= 14
+Edge >= 92
+
+# Exclude very old browsers
+not IE 11
+not dead
+not < 0.25%
