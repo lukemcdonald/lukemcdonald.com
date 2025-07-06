@@ -13,7 +13,7 @@ type ImageBuilder = {
   id: string
 }
 
-function getImageBuilder({ alt = '', id }: { alt: string; id: string; }): ImageBuilder {
+function getImageBuilder({ alt = '', id }: { alt: string; id: string }): ImageBuilder {
   invariant(id, `Expected typeof id of string but instead got ${id}`)
 
   const cloudinaryId =
@@ -38,7 +38,7 @@ function getImgProps(
     sizes: string[]
     transformations?: TransformerOption
     widths: number[]
-  }
+  },
 ) {
   const averageSize = Math.ceil(widths.reduce((a, s) => a + s) / widths.length)
 
@@ -62,7 +62,7 @@ function getImgProps(
             resize: { width, ...transformations?.resize },
           }),
           `${width}w`,
-        ].join(' ')
+        ].join(' '),
       )
       .join(', '),
   }

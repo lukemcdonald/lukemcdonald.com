@@ -25,23 +25,24 @@ function getOverlayColor({ mode, theme }: ThemeData) {
   }
 }
 
+// eslint-disable-next-line react/prop-types
 const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { data } = useTheme()
 
   return (
     <div className={clsx('lg:grid', getOverlayColor(data))}>
       <Image
+        alt="Tree fog background"
         className={clsx(
           'absolute left-1/2 top-1/2 hidden h-full max-h-screen w-full -translate-x-1/2 -translate-y-1/2 transform overflow-hidden object-cover blur-sm grayscale lg:block',
-          data.mode.value === 'dark' ? 'opacity-30 mix-blend-hard-light' : 'opacity-20'
+          data.mode.value === 'dark' ? 'opacity-30 mix-blend-hard-light' : 'opacity-20',
         )}
         src="https://res.cloudinary.com/lukemcdonald/image/upload/v1642448417/lukemcdonald-com/landscape-tree-fog_jz6tjg.jpg"
-        alt="Tree fog background"
-        widths={[750, 1080, 1600]}
         style={{ gridArea: '1/1' }}
+        widths={[750, 1080, 1600]}
       />
 
-      <div className="fixed top-3 right-3 z-[100] hidden md:flex md:items-center">
+      <div className="fixed right-3 top-3 z-[100] hidden md:flex md:items-center">
         <ModeSelect />
         <ThemeSelect />
       </div>
@@ -53,7 +54,7 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
         <div
           className={clsx(
             'site',
-            'relative m-auto bg-white lg:max-h-site lg:w-11/12 lg:max-w-screen-xl lg:shadow-2xl'
+            'relative m-auto bg-white lg:max-h-site lg:w-11/12 lg:max-w-screen-xl lg:shadow-2xl',
           )}
         >
           <Header />

@@ -36,8 +36,14 @@ export default tseslint.config(
       // React Hooks rules
       ...pluginReactHooks.configs.recommended.rules,
 
-      // React Refresh rules
-      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      // React Refresh rules - allow route exports (loader, action, meta)
+      'react-refresh/only-export-components': [
+        'warn',
+        {
+          allowConstantExport: true,
+          allowExportNames: ['loader', 'action', 'meta', 'links', 'handle', 'shouldRevalidate']
+        }
+      ],
 
       // Turn off rules that conflict with Perfectionist
       'import/order': 'off',
@@ -51,7 +57,7 @@ export default tseslint.config(
         {
           customGroups: {
             value: {
-              internal: ['^~/.*'],
+              internal: ['^#app/.*'],
               react: ['^react$', '^react-.+', '^prop-types$'],
             },
           },
@@ -86,6 +92,12 @@ export default tseslint.config(
         {
           partitionByComment: true,
           partitionByNewLine: true,
+        },
+      ],
+      'perfectionist/sort-jsx-props': [
+        'warn',
+        {
+          type: 'alphabetical',
         },
       ],
     },

@@ -30,13 +30,13 @@ export function Header() {
   return (
     <header
       className={clsx(
-        'absolute top-0 left-0 z-50 flex w-full items-center p-5 lg:w-1/2 ',
-        'site-header'
+        'absolute left-0 top-0 z-50 flex w-full items-center p-5 lg:w-1/2 ',
+        'site-header',
       )}
     >
       <Link
-        to="/"
         className="group peer relative z-10 inline-flex items-center whitespace-nowrap bg-white text-white no-underline hover:shadow-lg"
+        to="/"
       >
         <Logo className="h-16 w-16 bg-primary-900 fill-current p-4" />
 
@@ -47,7 +47,10 @@ export function Header() {
 
       <Nav className="px-4 duration-200 peer-hover:opacity-0 peer-hover:delay-0 peer-hover:duration-0">
         {menuLinks.map((menuLink) => (
-          <NavMenu key={menuLink.name} link={menuLink} />
+          <NavMenu
+            key={menuLink.name}
+            link={menuLink}
+          />
         ))}
       </Nav>
     </header>

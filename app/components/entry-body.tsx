@@ -10,9 +10,9 @@ export function EntryBody({ html = '', image, imageAlt = 'Content image' }: Entr
       {image && (
         <figure className={clsx('entry__media', 'relative bg-primary-500 mix-blend-lighten')}>
           <Image
+            alt={imageAlt}
             className="block h-full w-full grayscale xs:object-cover"
             src={image}
-            alt={imageAlt}
             widths={[750, 1024]}
           />
         </figure>
@@ -22,7 +22,7 @@ export function EntryBody({ html = '', image, imageAlt = 'Content image' }: Entr
         <div
           className={clsx(
             'entry__content',
-            'relative flex flex-col justify-center bg-primary-900 px-5 py-10 text-lg leading-normal text-white break-words z-10 xs:px-10'
+            'relative z-10 flex flex-col justify-center break-words bg-primary-900 px-5 py-10 text-lg leading-normal text-white xs:px-10',
           )}
           dangerouslySetInnerHTML={{ __html: html }}
         />

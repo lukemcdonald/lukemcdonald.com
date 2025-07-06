@@ -14,7 +14,7 @@ export function ContactInfo({ title }: { title?: string }) {
     <div
       className={clsx(
         'entry__nav',
-        `bg-white px-5 py-10 text-primary-900 sm:px-10 lg:py-8 xl:py-12`
+        `bg-white px-5 py-10 text-primary-900 sm:px-10 lg:py-8 xl:py-12`,
       )}
     >
       <h1 className="mb-6 text-3xl font-normal">{title || 'Connect.'}</h1>
@@ -23,8 +23,8 @@ export function ContactInfo({ title }: { title?: string }) {
         {contactLinks.map((link) => (
           <React.Fragment key={link.name}>
             <Link
-              to={link.to}
               className="block border-b-2 border-transparent uppercase tracking-wide text-inherit no-underline hover:border-primary-500"
+              to={link.to}
             >
               {link.name}
             </Link>

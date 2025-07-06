@@ -13,12 +13,12 @@ function Link({ children, className, showExternalIcon, to, ...delegated }: NavLi
   if (internal) {
     return (
       <NavLink
-        to={to}
-        rel="canonical"
-        prefetch="intent"
         className={({ isActive }) =>
           clsx({ activeClassName: isActive, inactiveClassName: !isActive }, className)
         }
+        prefetch="intent"
+        rel="canonical"
+        to={to}
         {...delegated}
       >
         {children}
@@ -27,10 +27,15 @@ function Link({ children, className, showExternalIcon, to, ...delegated }: NavLi
   }
 
   // Extract only the props that are valid for anchor tags
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { caseSensitive, end, style, ...anchorProps } = delegated
 
   return (
-    <a href={to.toString()} className={className} {...anchorProps}>
+    <a
+      className={className}
+      href={to.toString()}
+      {...anchorProps}
+    >
       {children}
       {showExternalIcon && <ExternalLinkIcon className="float-right ml-2 h-4 w-4 opacity-40" />}
     </a>

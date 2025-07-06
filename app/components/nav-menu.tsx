@@ -6,12 +6,18 @@ import { Link } from '#app/components/link'
 
 import type { NavMenuProps } from '#app/types'
 
-export function NavMenu({ as = 'div', children, className, link }: NavMenuProps) {
+export function NavMenu({ as = 'div', className, link }: NavMenuProps) {
   return (
-    <Menu as={as} className={clsx('relative inline-block text-left', className)}>
+    <Menu
+      as={as}
+      className={clsx('relative inline-block text-left', className)}
+    >
       <MenuButton className="inline-flex justify-center rounded-md bg-black bg-opacity-0 px-3 py-2 text-base uppercase tracking-wide text-primary-900 hover:bg-opacity-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
         <span>{link.name}</span>
-        <ChevronDownIcon className="mt-px h-6 w-6 text-primary-900" aria-hidden="true" />
+        <ChevronDownIcon
+          aria-hidden="true"
+          className="mt-px h-6 w-6 text-primary-900"
+        />
       </MenuButton>
 
       {link?.links && (
@@ -31,10 +37,10 @@ export function NavMenu({ as = 'div', children, className, link }: NavMenuProps)
                     <Link
                       className={clsx(
                         focus ? 'bg-primary-200' : 'text-primary-900',
-                        'group flex w-full items-center rounded px-3 py-2 text-base'
+                        'group flex w-full items-center rounded px-3 py-2 text-base',
                       )}
-                      to={item.to}
                       showExternalIcon={true}
+                      to={item.to}
                     >
                       {item.name}
                     </Link>

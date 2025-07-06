@@ -1,5 +1,6 @@
 // Alternate solution: https://github.com/edmundhung/remix-guide/blob/main/app/helpers.ts#L7
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Metadata = Record<string, any>
 
 function cleanMeta(meta: Array<Metadata>): Array<Metadata> {

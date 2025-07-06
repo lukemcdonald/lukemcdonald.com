@@ -33,7 +33,7 @@ export function ModeSelect() {
   const [open, setOpen] = useState(false)
   const [selectedMode, setSelectedMode] = useState<ThemeMode>(data.mode)
   const [{ icon: SelectedIcon }, setSelectedIcon] = useState<Record<'icon', ModeIcon>>(
-    getModeIcon(data.mode)
+    getModeIcon(data.mode),
   )
 
   useEffect(() => {
@@ -52,16 +52,22 @@ export function ModeSelect() {
   }
 
   return (
-    <Listbox value={selectedMode} onChange={handleModeChange}>
-      <div className="mode-select relative" data-mode={selectedMode.label}>
+    <Listbox
+      onChange={handleModeChange}
+      value={selectedMode}
+    >
+      <div
+        className="mode-select relative"
+        data-mode={selectedMode.label}
+      >
         <ListboxButton
-          className="py-2 px-2 transition focus:outline-none"
+          className="px-2 py-2 transition focus:outline-none"
           onClick={handleButtonToggle}
         >
           <SelectedIcon
             className={clsx(
               'h-6 w-6',
-              selectedMode.value === 'light' ? 'text-primary-700' : 'lg:text-primary-400'
+              selectedMode.value === 'light' ? 'text-primary-700' : 'lg:text-primary-400',
             )}
           />
           <span className="sr-only capitalize text-primary-400">{selectedMode.label}</span>
@@ -79,15 +85,19 @@ export function ModeSelect() {
           >
             {MODES.map((option) => {
               return (
-                <ListboxOption as="li" key={option.label} value={option}>
+                <ListboxOption
+                  as="li"
+                  key={option.label}
+                  value={option}
+                >
                   {({ focus, selected }) => {
                     const { icon: OptionIcon } = getModeIcon(option)
                     return (
                       <button
                         className={clsx(
-                          'flex w-full items-center gap-2 py-2 px-3',
+                          'flex w-full items-center gap-2 px-3 py-2',
                           focus && !selected ? 'opacity-70' : 'opacity-100',
-                          selected ? 'font-bold' : 'font-normal'
+                          selected ? 'font-bold' : 'font-normal',
                         )}
                         onClick={handleButtonToggle}
                       >

@@ -30,7 +30,7 @@ export interface ImageProps {
   className?: string
   sizes?: string[]
   src: string
-  style?: any
+  style?: React.CSSProperties
   widths?: number[]
 }
 

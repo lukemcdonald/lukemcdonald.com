@@ -5,15 +5,15 @@ import { getContent } from '#app/modules/content'
 import { enhanceMeta } from '#app/utils/meta'
 import { pageNotFound } from '#app/utils/misc'
 
-import type { LoaderFunction, MetaFunction } from 'react-router'
-
 import type { Content, RequestInfo } from '#app/types'
+import type { LoaderFunction, MetaFunction } from 'react-router'
 
 interface LoaderData {
   page: Content
 }
 
 export const meta: MetaFunction<typeof loader> = ({ matches }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const parentsData = matches.flatMap((match: Record<string, any>) => match.data)
   const parentRequest = parentsData.find((data) => data.requestInfo) satisfies RequestInfo
 
@@ -34,7 +34,7 @@ export const meta: MetaFunction<typeof loader> = ({ matches }) => {
   })
 }
 
-export const loader: LoaderFunction = async ({ params }) => {
+export const loader: LoaderFunction = async () => {
   const page = await getContent({ slug: 'index' })
 
   if (!page || page.draft) {
