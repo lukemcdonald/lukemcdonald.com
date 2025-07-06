@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router'
 
-import { ArrowTopRightOnSquareIcon as ExternalLinkIcon } from '@heroicons/react/20/solid'
 import clsx from 'clsx'
+import { ExternalLink as ExternalLinkIcon } from 'lucide-react'
 
 import type { NavLinkProps } from '#app/types'
 

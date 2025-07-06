@@ -7,24 +7,24 @@ import {
   ListboxOptions,
   Transition,
 } from '@headlessui/react'
-import { MoonIcon, SunIcon, ComputerDesktopIcon as SystemIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
+import { Moon as MoonIcon, Sun as SunIcon, Monitor as SystemIcon } from 'lucide-react'
 
 import { MODES, useTheme } from '#app/hooks/use-theme'
 
 import type { ThemeMode } from '#app/hooks/use-theme'
 
-type ModeIconProps = React.RefAttributes<SVGSVGElement> & { className?: string }
-type ModeIcon = (props: ModeIconProps) => React.ReactElement
+type ModeIconProps = { className?: string }
+type ModeIcon = React.ComponentType<ModeIconProps>
 
 function getModeIcon(mode: ThemeMode) {
   switch (mode.label) {
     case 'dark':
-      return { icon: (props: ModeIconProps) => <MoonIcon {...props} /> }
+      return { icon: MoonIcon }
     case 'light':
-      return { icon: (props: ModeIconProps) => <SunIcon {...props} /> }
+      return { icon: SunIcon }
     default:
-      return { icon: (props: ModeIconProps) => <SystemIcon {...props} /> }
+      return { icon: SystemIcon }
   }
 }
 

@@ -7,8 +7,8 @@ import {
   ListboxOptions,
   Transition,
 } from '@headlessui/react'
-import { SwatchIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
+import { Palette as SwatchIcon } from 'lucide-react'
 
 import { getThemeColor, THEMES, useTheme } from '#app/hooks/use-theme'
 
