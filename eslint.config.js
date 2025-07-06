@@ -51,7 +51,7 @@ export default tseslint.config(
         {
           customGroups: {
             value: {
-              internal: ['^~/.*'],
+              internal: ['^#app/.*'],
               react: ['^react$', '^react-.+', '^prop-types$'],
             },
           },
