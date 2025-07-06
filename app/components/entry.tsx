@@ -11,11 +11,19 @@ export function Entry({ data }: { data: EntryProps }) {
     <article
       className={clsx('entry', 'min-h-screen w-full overflow-hidden bg-primary-800', 'lg:min-h-0')}
     >
-      <EntryHeader title={data.title} subtitle={data.subtitle} description={data.description} />
+      <EntryHeader
+        description={data.description}
+        subtitle={data.subtitle}
+        title={data.title}
+      />
 
       <ContactInfo />
 
-      <EntryBody html={data.html} image={data.image} imageAlt={data.imageAlt || data.title} />
+      <EntryBody
+        html={data.html}
+        image={data.image}
+        imageAlt={data.imageAlt || data.title}
+      />
     </article>
   )
 }

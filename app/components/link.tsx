@@ -13,12 +13,12 @@ function Link({ children, className, showExternalIcon, to, ...delegated }: NavLi
   if (internal) {
     return (
       <NavLink
-        to={to}
-        rel="canonical"
-        prefetch="intent"
         className={({ isActive }) =>
           clsx({ activeClassName: isActive, inactiveClassName: !isActive }, className)
         }
+        prefetch="intent"
+        rel="canonical"
+        to={to}
         {...delegated}
       >
         {children}
@@ -32,8 +32,8 @@ function Link({ children, className, showExternalIcon, to, ...delegated }: NavLi
 
   return (
     <a
-      href={to.toString()}
       className={className}
+      href={to.toString()}
       {...anchorProps}
     >
       {children}

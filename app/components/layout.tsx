@@ -32,14 +32,14 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
     <div className={clsx('lg:grid', getOverlayColor(data))}>
       <Image
+        alt="Tree fog background"
         className={clsx(
           'absolute left-1/2 top-1/2 hidden h-full max-h-screen w-full -translate-x-1/2 -translate-y-1/2 transform overflow-hidden object-cover blur-sm grayscale lg:block',
           data.mode.value === 'dark' ? 'opacity-30 mix-blend-hard-light' : 'opacity-20',
         )}
         src="https://res.cloudinary.com/lukemcdonald/image/upload/v1642448417/lukemcdonald-com/landscape-tree-fog_jz6tjg.jpg"
-        alt="Tree fog background"
-        widths={[750, 1080, 1600]}
         style={{ gridArea: '1/1' }}
+        widths={[750, 1080, 1600]}
       />
 
       <div className="fixed right-3 top-3 z-[100] hidden md:flex md:items-center">
@@ -48,13 +48,13 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
       </div>
 
       <div
-        className="text-primary-900 place-items-center lg:relative lg:flex lg:min-h-screen lg:items-center lg:justify-center "
+        className="place-items-center text-primary-900 lg:relative lg:flex lg:min-h-screen lg:items-center lg:justify-center "
         style={{ gridArea: '1/1' }}
       >
         <div
           className={clsx(
             'site',
-            'lg:max-h-site relative m-auto bg-white lg:w-11/12 lg:max-w-screen-xl lg:shadow-2xl',
+            'relative m-auto bg-white lg:max-h-site lg:w-11/12 lg:max-w-screen-xl lg:shadow-2xl',
           )}
         >
           <Header />

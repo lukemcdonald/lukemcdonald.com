@@ -76,8 +76,8 @@ export default function DevErrorPage() {
         <div>
           <p>Creates a performance span and throws an error</p>
           <button
-            onClick={handleErrorWithTrace}
             className={buttonClasses}
+            onClick={handleErrorWithTrace}
           >
             Test Error with Performance Trace
           </button>
@@ -86,8 +86,8 @@ export default function DevErrorPage() {
         <div>
           <p>Demonstrates manual error capture with context</p>
           <button
-            onClick={handleManualException}
             className={buttonClasses}
+            onClick={handleManualException}
           >
             Test Manual Exception Capture
           </button>
@@ -96,8 +96,8 @@ export default function DevErrorPage() {
         <div>
           <p>Sends a custom message with breadcrumbs and metadata</p>
           <button
-            onClick={handleCustomMessage}
             className={buttonClasses}
+            onClick={handleCustomMessage}
           >
             Test Custom Message with Context
           </button>

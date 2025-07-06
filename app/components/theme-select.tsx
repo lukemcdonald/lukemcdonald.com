@@ -29,8 +29,8 @@ export function ThemeSelect() {
 
   return (
     <Listbox
-      value={theme}
       onChange={handleThemeChange}
+      value={theme}
     >
       <div
         className="theme-select relative"
@@ -46,7 +46,7 @@ export function ThemeSelect() {
               data.mode.value === 'light' ? 'text-primary-700' : 'lg:text-primary-400',
             )}
           />
-          <span className="text-primary-400 sr-only capitalize">{mode.label}</span>
+          <span className="sr-only capitalize text-primary-400">{mode.label}</span>
         </ListboxButton>
 
         <Transition
@@ -75,7 +75,7 @@ export function ThemeSelect() {
                       className="inline-block h-4 w-4 rounded-full"
                       style={{ background: getThemeColor({ mode, theme: option }) }}
                     />
-                    <span className="text-primary-400 sr-only">{option.label}</span>
+                    <span className="sr-only text-primary-400">{option.label}</span>
                   </button>
                 )}
               </ListboxOption>
