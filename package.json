@@ -1,7 +1,7 @@
 {
-  "name": "luke-mcdonald-remix",
+  "name": "luke-mcdonald",
   "private": true,
-  "description": "",
+  "description": "Luke McDonald's personal website",
   "license": "",
   "scripts": {
     "build": "npm run build:css && react-router build",

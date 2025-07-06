@@ -1,12 +1,9 @@
 # Readme
 
-Files for personal website. Moved from [Gatsby](https://www.gatsbyjs.com/) to
-[Remix](https://remix.run/).
-
 ## Tech:
 
-- [Remix](https://remix.run/)
-- [Fly](https://fly.io/)
+- [Fly.io](https://fly.io/)
+- [React Router v7](https://reactrouter.com/)
 - [Tailwind CSS](https://tailwindcss.com/)
 
 ## Development
