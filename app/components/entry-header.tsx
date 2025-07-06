@@ -1,5 +1,6 @@
 import clsx from 'clsx'
 
+import { DynamicContent } from '#app/components/dynamic-content'
 import { Mountains } from '#app/components/mountains'
 
 import type { EntryHeaderProps } from '#app/types'
@@ -26,9 +27,9 @@ export function EntryHeader({ description, subtitle, title }: EntryHeaderProps) 
         <h1 className="mb-6 text-5xl font-semibold">{title}.</h1>
 
         {description && (
-          <div
+          <DynamicContent
             className="text-lg leading-normal"
-            dangerouslySetInnerHTML={{ __html: description }}
+            content={description}
           />
         )}
       </div>
