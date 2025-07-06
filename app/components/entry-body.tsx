@@ -1,5 +1,6 @@
-import { Image } from '#app/components/image'
 import clsx from 'clsx'
+
+import { Image } from '#app/components/image'
 
 import type { EntryProps } from '#app/types'
 

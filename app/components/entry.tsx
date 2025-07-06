@@ -1,7 +1,8 @@
+import clsx from 'clsx'
+
 import { ContactInfo } from '#app/components/contact-info'
 import { EntryBody } from '#app/components/entry-body'
 import { EntryHeader } from '#app/components/entry-header'
-import clsx from 'clsx'
 
 import type { EntryProps } from '#app/types'
 

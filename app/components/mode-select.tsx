@@ -1,6 +1,5 @@
 import { Fragment, useEffect, useState } from 'react'
 
-import { MODES, useTheme } from '#app/hooks/use-theme'
 import {
   Listbox,
   ListboxButton,
@@ -10,6 +9,8 @@ import {
 } from '@headlessui/react'
 import { MoonIcon, SunIcon, ComputerDesktopIcon as SystemIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
+
+import { MODES, useTheme } from '#app/hooks/use-theme'
 
 import type { ThemeMode } from '#app/hooks/use-theme'
 

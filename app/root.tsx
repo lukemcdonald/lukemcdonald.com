@@ -10,11 +10,12 @@ import {
   useRouteError,
 } from 'react-router'
 
+import * as Sentry from '@sentry/react-router'
+
 import { Entry } from '#app/components/entry'
 import { Layout } from '#app/components/layout'
 import { enhanceMeta } from '#app/utils/meta'
 import { getErrorMessage, getRequestInfo } from '#app/utils/misc'
-import * as Sentry from '@sentry/react-router'
 
 import type { EntryProps, RequestInfo } from '#app/types'
 import type { LinksFunction, LoaderFunction, MetaFunction } from 'react-router'
