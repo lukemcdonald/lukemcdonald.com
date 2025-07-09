@@ -35,10 +35,9 @@ export interface ImageProps {
 }
 
 export interface NavLinkProps extends ReactRouterNavLinkProps {
-  activeClassName?: string
   children?: ReactNode
   className?: string
-  inactiveClassName?: string
+  prefetch?: 'intent' | 'render' | 'none' | 'viewport'
   showExternalIcon?: boolean
   to: string
 }

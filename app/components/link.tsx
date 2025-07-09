@@ -5,7 +5,14 @@ import { ExternalLink as ExternalLinkIcon } from 'lucide-react'
 
 import type { NavLinkProps } from '#app/types'
 
-function Link({ children, className, showExternalIcon, to, ...delegated }: NavLinkProps) {
+function Link({
+  children,
+  className,
+  prefetch = 'intent',
+  showExternalIcon,
+  to,
+  ...delegated
+}: NavLinkProps) {
   // This example assumes that any internal link will start with exactly
   // one slash, and that anything else is external.
   const internal = /^\/(?!\/)/.test(to.toString())
@@ -16,7 +23,7 @@ function Link({ children, className, showExternalIcon, to, ...delegated }: NavLi
         className={({ isActive }) =>
           clsx({ activeClassName: isActive, inactiveClassName: !isActive }, className)
         }
-        prefetch="intent"
+        prefetch={prefetch}
         rel="canonical"
         to={to}
         {...delegated}
