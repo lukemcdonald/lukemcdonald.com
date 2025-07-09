@@ -25,22 +25,7 @@ import '../styles/tailwind.css'
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   const requestInfo = (data as RequestInfo | undefined)?.requestInfo
 
-  const meta = [
-    {
-      content: '4jMDBbKyVQPMqqE3YYqw2vabnA3CR_uU9l2sOtRRmjM',
-      property: 'google-site-verification',
-    },
-    {
-      content: '#122023',
-      property: 'theme-color',
-    },
-    {
-      content: `${requestInfo?.origin}/images/seo-banner.png`,
-      property: 'image',
-    },
-  ]
-
-  return enhanceMeta(meta, {
+  return enhanceMeta([], {
     origin: requestInfo?.origin,
     pathname: requestInfo?.pathname,
   })

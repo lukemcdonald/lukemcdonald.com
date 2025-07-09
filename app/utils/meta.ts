@@ -43,7 +43,8 @@ export function createMetaEnhancer(defaultOptions: Omit<EnhanceMetaOptions, 'pat
     const title = metaTitle ? `${metaTitle} — ${siteName}` : siteName
     const url = pathname === '/' ? origin : `${origin}${pathname}`
 
-    return cleanMeta([
+    // Enhanced meta tags for social media and SEO
+    const enhancedMeta = [
       { title: title },
       { content: metaAuthor ?? author, property: 'author' },
 
@@ -59,7 +60,13 @@ export function createMetaEnhancer(defaultOptions: Omit<EnhanceMetaOptions, 'pat
       { content: metaImage, property: 'twitter:image' },
       { content: twitterSite, property: 'twitter:site' },
       { content: title, property: 'twitter:title' },
-    ])
+
+      { content: '4jMDBbKyVQPMqqE3YYqw2vabnA3CR_uU9l2sOtRRmjM', name: 'google-site-verification' },
+      { content: '#122023', property: 'theme-color' },
+      { content: `${origin}/images/seo-banner.png`, property: 'image' },
+    ]
+
+    return cleanMeta([...meta, ...enhancedMeta])
   }
 }
 
