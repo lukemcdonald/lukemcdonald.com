@@ -1345,6 +1345,14 @@ html:has(div[data-theme='orange']) {
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
 }
 
+.text-primary-500 {
+  color: var(--color-primary-500);
+}
+
+.text-primary-600 {
+  color: var(--color-primary-600);
+}
+
 .no-underline {
   text-decoration-line: none;
 }
