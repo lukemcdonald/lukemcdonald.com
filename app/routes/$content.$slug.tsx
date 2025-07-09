@@ -30,12 +30,10 @@ export const meta: MetaFunction<typeof loader> = ({ data, matches }) => {
     },
   ]
 
-  const options = {
-    origin: parentRequest.requestInfo.origin,
-    pathname: parentRequest.requestInfo.pathname,
-  }
-
-  return enhanceMeta(meta, options)
+  return enhanceMeta(meta, {
+    origin: parentRequest.requestInfo?.origin,
+    pathname: parentRequest.requestInfo?.pathname,
+  })
 }
 
 export const loader: LoaderFunction = async ({ params, request }): Promise<LoaderData> => {
