@@ -20,9 +20,7 @@ function Link({
   if (internal) {
     return (
       <NavLink
-        className={({ isActive }) =>
-          clsx({ activeClassName: isActive, inactiveClassName: !isActive }, className)
-        }
+        className={({ isActive }) => clsx({ 'text-primary-600': isActive }, className)}
         prefetch={prefetch}
         rel="canonical"
         to={to}
