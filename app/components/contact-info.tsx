@@ -5,8 +5,9 @@ import clsx from 'clsx'
 import { Link } from '#app/components/link'
 
 const contactLinks = [
-  { name: 'GitHub', to: 'https://github.com/lukemcdonald' },
   { name: 'Email', to: 'mailto:thelukemcdonald@gmail.com' },
+  { name: 'GitHub', to: 'https://github.com/lukemcdonald' },
+  { name: 'LinkedIn', to: 'https://www.linkedin.com/in/thelukemcdonald/' },
 ]
 
 export function ContactInfo({ title }: { title?: string }) {
@@ -19,7 +20,7 @@ export function ContactInfo({ title }: { title?: string }) {
     >
       <h1 className="mb-6 text-3xl font-normal">{title || 'Connect.'}</h1>
 
-      <div className="inline-flex items-center">
+      <nav className="flex items-center">
         {contactLinks.map((link) => (
           <React.Fragment key={link.name}>
             <Link
@@ -28,10 +29,10 @@ export function ContactInfo({ title }: { title?: string }) {
             >
               {link.name}
             </Link>
-            <span className="mx-4 w-24 border-b last:hidden" />
+            <hr className="mx-4 block w-24 border-b last:hidden" />
           </React.Fragment>
         ))}
-      </div>
+      </nav>
     </div>
   )
 }
