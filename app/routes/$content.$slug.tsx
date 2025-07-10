@@ -31,7 +31,6 @@ export const meta: MetaFunction<typeof loader> = ({ data, matches }) => {
   ]
 
   return enhanceMeta(meta, {
-    origin: parentRequest.requestInfo?.origin,
     pathname: parentRequest.requestInfo?.pathname,
   })
 }

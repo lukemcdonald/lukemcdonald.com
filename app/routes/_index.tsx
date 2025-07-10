@@ -29,7 +29,6 @@ export const meta: MetaFunction<typeof loader> = ({ matches }) => {
   ]
 
   return enhanceMeta(meta, {
-    origin: parentRequest.requestInfo?.origin,
     pathname: parentRequest.requestInfo?.pathname,
   })
 }

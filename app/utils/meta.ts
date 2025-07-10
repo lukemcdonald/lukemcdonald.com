@@ -1,5 +1,8 @@
 // Alternate solution: https://github.com/edmundhung/remix-guide/blob/main/app/helpers.ts#L7
 
+import { SITE_URL } from '#app/constants'
+import { createSiteUrl } from '#app/utils/misc'
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Metadata = Record<string, any>
 
@@ -22,7 +25,6 @@ export function deriveMetaFromMetadata(metadata: Metadata): Array<Metadata> {
 
 interface EnhanceMetaOptions {
   author: string
-  origin: string
   pathname: string
   siteName: string
   twitterCard: string
@@ -33,7 +35,7 @@ interface EnhanceMetaOptions {
 export function createMetaEnhancer(defaultOptions: Omit<EnhanceMetaOptions, 'pathname'>) {
   return (meta: Array<Metadata>, options: Partial<EnhanceMetaOptions> = {}): Array<Metadata> => {
     const allOptions = { ...defaultOptions, ...options }
-    const { author, origin, pathname, siteName, twitterCard, twitterSite, type } = allOptions
+    const { author, siteName, twitterCard, twitterSite, type } = allOptions
 
     const metaAuthor = meta.find((entry) => entry.property === 'author')?.content || ''
     const metaDescription = meta.find((entry) => entry.name === 'description')?.content || ''
@@ -41,12 +43,16 @@ export function createMetaEnhancer(defaultOptions: Omit<EnhanceMetaOptions, 'pat
     const metaTitle = meta.find((entry) => entry.title)?.title || ''
 
     const title = metaTitle ? `${metaTitle} — ${siteName}` : siteName
-    const url = pathname === '/' ? origin : `${origin}${pathname}`
+    const url = createSiteUrl(allOptions.pathname)
 
     // Enhanced meta tags for social media and SEO
     const enhancedMeta = [
       { title: title },
       { content: metaAuthor ?? author, property: 'author' },
+      { href: url, rel: 'canonical' },
+      { content: '4jMDBbKyVQPMqqE3YYqw2vabnA3CR_uU9l2sOtRRmjM', name: 'google-site-verification' },
+      { content: '#122023', property: 'theme-color' },
+      { content: `${SITE_URL}/images/seo-banner.png`, property: 'image' },
 
       { content: metaDescription, property: 'og:description' },
       { content: metaImage, property: 'og:image' },
@@ -60,10 +66,6 @@ export function createMetaEnhancer(defaultOptions: Omit<EnhanceMetaOptions, 'pat
       { content: metaImage, property: 'twitter:image' },
       { content: twitterSite, property: 'twitter:site' },
       { content: title, property: 'twitter:title' },
-
-      { content: '4jMDBbKyVQPMqqE3YYqw2vabnA3CR_uU9l2sOtRRmjM', name: 'google-site-verification' },
-      { content: '#122023', property: 'theme-color' },
-      { content: `${origin}/images/seo-banner.png`, property: 'image' },
     ]
 
     return cleanMeta([...meta, ...enhancedMeta])
@@ -72,7 +74,6 @@ export function createMetaEnhancer(defaultOptions: Omit<EnhanceMetaOptions, 'pat
 
 export const enhanceMeta = createMetaEnhancer({
   author: 'Luke McDonald',
-  origin: 'https://lukemcdonald.com',
   siteName: 'Luke McDonald',
   twitterCard: 'summary',
   twitterSite: '@thelukemcdonald',
