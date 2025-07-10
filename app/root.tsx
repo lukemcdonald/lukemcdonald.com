@@ -15,8 +15,9 @@ import * as Sentry from '@sentry/react-router'
 import { Entry } from '#app/components/entry'
 import { Layout } from '#app/components/layout'
 import { SITE_DOMAIN, FLY_DOMAIN_SUFFIX } from '#app/constants'
+import { REDIRECTS } from '#app/redirects'
 import { enhanceMeta } from '#app/utils/meta'
-import { getErrorMessage, getRequestInfo } from '#app/utils/misc'
+import { getErrorMessage, getRequestInfo, normalizePathname } from '#app/utils/misc'
 
 import type { EntryProps, RequestInfo } from '#app/types'
 import type { LinksFunction, LoaderFunction, MetaFunction } from 'react-router'
@@ -88,6 +89,15 @@ export const loader: LoaderFunction = async ({ request }) => {
         'X-Forwarded-Proto': 'https',
       },
     })
+  }
+
+  // Handle path redirects
+  const normalizedPath = normalizePathname(url.pathname)
+  const redirectPath = REDIRECTS[normalizedPath]
+
+  if (redirectPath) {
+    url.pathname = redirectPath
+    return redirect(url.toString(), { status: 301 })
   }
 
   return {
