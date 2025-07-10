@@ -13,9 +13,6 @@ type Pages = {
   "/": {
     params: {};
   };
-  "/resume": {
-    params: {};
-  };
   "/:content/:slug": {
     params: {
       "content": string;
@@ -25,20 +22,22 @@ type Pages = {
   "/dev/error": {
     params: {};
   };
+  "/resume": {
+    params: {};
+  };
+  "/sitemap.xml": {
+    params: {};
+  };
 };
 
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/resume" | "/:content/:slug" | "/dev/error";
+    page: "/" | "/:content/:slug" | "/dev/error" | "/resume" | "/sitemap.xml";
   };
   "./routes/_index.tsx": {
     id: "routes/_index";
     page: "/";
-  };
-  "./routes/resume.ts": {
-    id: "routes/resume";
-    page: "/resume";
   };
   "./routes/$content.$slug.tsx": {
     id: "routes/$content.$slug";
@@ -47,5 +46,13 @@ type RouteFiles = {
   "./routes/dev.error.tsx": {
     id: "routes/dev.error";
     page: "/dev/error";
+  };
+  "./routes/resume.ts": {
+    id: "routes/resume";
+    page: "/resume";
+  };
+  "./routes/sitemap[.]xml.tsx": {
+    id: "routes/sitemap[.]xml";
+    page: "/sitemap.xml";
   };
 };
