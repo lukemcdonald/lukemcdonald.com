@@ -34,6 +34,15 @@ export function getRequestInfo(request: Request): RequestInfo {
 }
 
 /**
+ * Normalizes a pathname by removing trailing slashes
+ * @param pathname - The pathname (e.g., '/about' or '/about/')
+ * @returns Normalized pathname without trailing slash (except for root)
+ */
+export function normalizePathname(pathname: string): string {
+  return pathname === '/' ? pathname : pathname.replace(/\/$/, '')
+}
+
+/**
  * Normalizes a URL by removing trailing slashes
  * @param baseUrl - The base URL (e.g., 'https://lukemcdonald.com')
  * @param pathname - The pathname (e.g., '/about' or '/about/')

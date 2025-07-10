@@ -14,9 +14,10 @@ import * as Sentry from '@sentry/react-router'
 
 import { Entry } from '#app/components/entry'
 import { Layout } from '#app/components/layout'
-import { SITE_DOMAIN, FLY_DOMAIN_SUFFIX } from '#app/constants'
+import { SITE_DOMAIN, SITE_DEV_DOMAIN } from '#app/constants'
+import { REDIRECTS } from '#app/redirects'
 import { enhanceMeta } from '#app/utils/meta'
-import { getErrorMessage, getRequestInfo } from '#app/utils/misc'
+import { getErrorMessage, getRequestInfo, normalizePathname } from '#app/utils/misc'
 
 import type { EntryProps, RequestInfo } from '#app/types'
 import type { LinksFunction, LoaderFunction, MetaFunction } from 'react-router'
@@ -55,44 +56,45 @@ export const links: LinksFunction = () => [
 ]
 
 export const loader: LoaderFunction = async ({ request }) => {
-  // Force https
   const url = new URL(request.url)
-  const hostname = url.hostname
-  const proto = request.headers.get('X-Forwarded-Proto') ?? url.protocol
 
+  // Set correct host header for proper URL construction
   url.host = request.headers.get('X-Forwarded-Host') ?? request.headers.get('host') ?? url.host
-  url.protocol = 'https:'
 
-  // Redirect from .fly.dev to custom domain
-  if (hostname.includes(FLY_DOMAIN_SUFFIX)) {
+  // Use HTTPS for production URLs, HTTP for localhost development
+  url.protocol = url.hostname === 'localhost' ? 'http:' : 'https:'
+
+  // Redirect development domain to custom domain (unless bypass is enabled)
+  if (url.hostname === SITE_DEV_DOMAIN && !process.env.DISABLE_DEV_REDIRECT) {
     url.hostname = SITE_DOMAIN
     return redirect(url.toString(), {
       headers: {
         'X-Forwarded-Proto': 'https',
       },
-      status: 301, // Permanent redirect for SEO
+      status: 301,
     })
   }
 
-  if (proto === 'http' && hostname !== 'localhost') {
-    return redirect(url.toString(), {
-      headers: {
-        'X-Forwarded-Proto': 'https',
-      },
-    })
-  }
-
+  // Remove www prefix
   if (url.host.includes('www.')) {
     return redirect(url.toString().replace('www.', ''), {
       headers: {
         'X-Forwarded-Proto': 'https',
       },
+      status: 301,
     })
   }
 
-  return {
-    ...getRequestInfo(request),
+  // Handle path redirects
+  const normalizedPath = normalizePathname(url.pathname)
+  const redirectPath = REDIRECTS[normalizedPath]
+
+  if (redirectPath) {
+    url.pathname = redirectPath
+    return redirect(url.toString(), { status: 301 })
   }
+
+  return { ...getRequestInfo(request) }
 }
 
 function Document({ children, title }: { children: React.ReactNode; title?: string }) {
