@@ -14,6 +14,7 @@ import * as Sentry from '@sentry/react-router'
 
 import { Entry } from '#app/components/entry'
 import { Layout } from '#app/components/layout'
+import { SITE_DOMAIN, FLY_DOMAIN_SUFFIX } from '#app/constants'
 import { enhanceMeta } from '#app/utils/meta'
 import { getErrorMessage, getRequestInfo } from '#app/utils/misc'
 
@@ -26,7 +27,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   const requestInfo = (data as RequestInfo | undefined)?.requestInfo
 
   return enhanceMeta([], {
-    origin: requestInfo?.origin,
     pathname: requestInfo?.pathname,
   })
 }
@@ -62,6 +62,17 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   url.host = request.headers.get('X-Forwarded-Host') ?? request.headers.get('host') ?? url.host
   url.protocol = 'https:'
+
+  // Redirect from .fly.dev to custom domain
+  if (hostname.includes(FLY_DOMAIN_SUFFIX)) {
+    url.hostname = SITE_DOMAIN
+    return redirect(url.toString(), {
+      headers: {
+        'X-Forwarded-Proto': 'https',
+      },
+      status: 301, // Permanent redirect for SEO
+    })
+  }
 
   if (proto === 'http' && hostname !== 'localhost') {
     return redirect(url.toString(), {

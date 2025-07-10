@@ -1328,6 +1328,10 @@ html:has(div[data-theme='orange']) {
   color: var(--color-primary-400);
 }
 
+.text-primary-600 {
+  color: var(--color-primary-600);
+}
+
 .text-primary-700 {
   color: var(--color-primary-700);
 }
@@ -1343,14 +1347,6 @@ html:has(div[data-theme='orange']) {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
-}
-
-.text-primary-500 {
-  color: var(--color-primary-500);
-}
-
-.text-primary-600 {
-  color: var(--color-primary-600);
 }
 
 .no-underline {
