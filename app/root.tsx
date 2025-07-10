@@ -14,7 +14,7 @@ import * as Sentry from '@sentry/react-router'
 
 import { Entry } from '#app/components/entry'
 import { Layout } from '#app/components/layout'
-import { SITE_DOMAIN, FLY_DOMAIN_SUFFIX } from '#app/constants'
+import { SITE_DOMAIN, SITE_DEV_DOMAIN } from '#app/constants'
 import { REDIRECTS } from '#app/redirects'
 import { enhanceMeta } from '#app/utils/meta'
 import { getErrorMessage, getRequestInfo, normalizePathname } from '#app/utils/misc'
@@ -57,16 +57,15 @@ export const links: LinksFunction = () => [
 
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url)
-  const hostname = url.hostname
 
   // Set correct host header for proper URL construction
   url.host = request.headers.get('X-Forwarded-Host') ?? request.headers.get('host') ?? url.host
 
   // Use HTTPS for production URLs, HTTP for localhost development
-  url.protocol = hostname === 'localhost' ? 'http:' : 'https:'
+  url.protocol = url.hostname === 'localhost' ? 'http:' : 'https:'
 
-  // Redirect from .fly.dev to custom domain
-  if (hostname.includes(FLY_DOMAIN_SUFFIX)) {
+  // Redirect development domain to custom domain (unless bypass is enabled)
+  if (url.hostname === SITE_DEV_DOMAIN && !process.env.DISABLE_DEV_REDIRECT) {
     url.hostname = SITE_DOMAIN
     return redirect(url.toString(), {
       headers: {
