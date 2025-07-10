@@ -56,13 +56,14 @@ export const links: LinksFunction = () => [
 ]
 
 export const loader: LoaderFunction = async ({ request }) => {
-  // Force https
   const url = new URL(request.url)
   const hostname = url.hostname
-  const proto = request.headers.get('X-Forwarded-Proto') ?? url.protocol
 
+  // Set correct host header for proper URL construction
   url.host = request.headers.get('X-Forwarded-Host') ?? request.headers.get('host') ?? url.host
-  url.protocol = 'https:'
+
+  // Use HTTPS for production URLs, HTTP for localhost development
+  url.protocol = hostname === 'localhost' ? 'http:' : 'https:'
 
   // Redirect from .fly.dev to custom domain
   if (hostname.includes(FLY_DOMAIN_SUFFIX)) {
@@ -71,23 +72,17 @@ export const loader: LoaderFunction = async ({ request }) => {
       headers: {
         'X-Forwarded-Proto': 'https',
       },
-      status: 301, // Permanent redirect for SEO
+      status: 301,
     })
   }
 
-  if (proto === 'http' && hostname !== 'localhost') {
-    return redirect(url.toString(), {
-      headers: {
-        'X-Forwarded-Proto': 'https',
-      },
-    })
-  }
-
+  // Remove www prefix
   if (url.host.includes('www.')) {
     return redirect(url.toString().replace('www.', ''), {
       headers: {
         'X-Forwarded-Proto': 'https',
       },
+      status: 301,
     })
   }
 
@@ -100,9 +95,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     return redirect(url.toString(), { status: 301 })
   }
 
-  return {
-    ...getRequestInfo(request),
-  }
+  return { ...getRequestInfo(request) }
 }
 
 function Document({ children, title }: { children: React.ReactNode; title?: string }) {
