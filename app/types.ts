@@ -3,7 +3,6 @@ import type { NavLinkProps as ReactRouterNavLinkProps } from 'react-router'
 
 export interface RequestInfo {
   requestInfo: {
-    origin: string
     pathname: string
   }
 }

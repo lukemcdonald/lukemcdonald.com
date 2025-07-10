@@ -3,31 +3,13 @@ import { SITE_DOMAIN, SITE_URL } from '#app/constants'
 import type { RequestInfo } from '#app/types'
 
 /**
- * Extracts domain URL from request headers
- * @param request - The incoming request object
- * @returns Full domain URL with protocol (e.g., 'https://lukemcdonald.com')
- */
-function getDomainUrl(request: Request) {
-  const host = request.headers.get('X-Forwarded-Host') ?? request.headers.get('host')
-
-  if (!host) {
-    throw new Error('Could not determine domain URL.')
-  }
-
-  const protocol = host.includes('localhost') ? 'http' : 'https'
-
-  return `${protocol}://${host}`
-}
-
-/**
  * Extracts request information for use in loaders and meta functions
  * @param request - The incoming request object
- * @returns Object containing origin and pathname information
+ * @returns Object containing pathname information
  */
 export function getRequestInfo(request: Request): RequestInfo {
   return {
     requestInfo: {
-      origin: getDomainUrl(request),
       pathname: new URL(request.url).pathname,
     },
   }
