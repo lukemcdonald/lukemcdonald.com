@@ -1,6 +1,15 @@
 // Alternate solution: https://github.com/edmundhung/remix-guide/blob/main/app/helpers.ts#L7
 
-import { SITE_URL } from '#app/constants'
+import {
+  GOOGLE_SITE_VERIFICATION,
+  SITE_AUTHOR,
+  SITE_NAME,
+  SITE_TYPE,
+  SITE_URL,
+  THEME_COLOR,
+  TWITTER_CARD_TYPE,
+  TWITTER_HANDLE,
+} from '#app/constants/config'
 import { createSiteUrl } from '#app/utils/misc'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -37,9 +46,9 @@ export function createMetaEnhancer(defaultOptions: Omit<EnhanceMetaOptions, 'pat
     const allOptions = { ...defaultOptions, ...options }
     const { author, siteName, twitterCard, twitterSite, type } = allOptions
 
-    const metaAuthor = meta.find((entry) => entry.property === 'author')?.content || ''
+    const metaAuthor = meta.find((entry) => entry.name === 'author')?.content || ''
     const metaDescription = meta.find((entry) => entry.name === 'description')?.content || ''
-    const metaImage = meta.find((entry) => entry.property === 'image')?.content || ''
+    const metaImage = meta.find((entry) => entry.name === 'image')?.content || ''
     const metaTitle = meta.find((entry) => entry.title)?.title || ''
 
     const title = metaTitle ? `${metaTitle} — ${siteName}` : siteName
@@ -48,11 +57,11 @@ export function createMetaEnhancer(defaultOptions: Omit<EnhanceMetaOptions, 'pat
     // Enhanced meta tags for social media and SEO
     const enhancedMeta = [
       { title: title },
-      { content: metaAuthor ?? author, property: 'author' },
+      { content: metaAuthor ?? author, name: 'author' },
       { href: url, rel: 'canonical' },
-      { content: '4jMDBbKyVQPMqqE3YYqw2vabnA3CR_uU9l2sOtRRmjM', name: 'google-site-verification' },
-      { content: '#122023', property: 'theme-color' },
-      { content: `${SITE_URL}/images/seo-banner.png`, property: 'image' },
+      { content: GOOGLE_SITE_VERIFICATION, name: 'google-site-verification' },
+      { content: THEME_COLOR, name: 'theme-color' },
+      { content: `${SITE_URL}/images/seo-banner.png`, name: 'image' },
 
       { content: metaDescription, property: 'og:description' },
       { content: metaImage, property: 'og:image' },
@@ -73,9 +82,9 @@ export function createMetaEnhancer(defaultOptions: Omit<EnhanceMetaOptions, 'pat
 }
 
 export const enhanceMeta = createMetaEnhancer({
-  author: 'Luke McDonald',
-  siteName: 'Luke McDonald',
-  twitterCard: 'summary',
-  twitterSite: '@thelukemcdonald',
-  type: 'website',
+  author: SITE_AUTHOR,
+  siteName: SITE_NAME,
+  twitterCard: TWITTER_CARD_TYPE,
+  twitterSite: TWITTER_HANDLE,
+  type: SITE_TYPE,
 })

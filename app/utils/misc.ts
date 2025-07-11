@@ -1,4 +1,4 @@
-import { SITE_DOMAIN, SITE_URL } from '#app/constants'
+import { SITE_DOMAIN, SITE_URL } from '#app/constants/config'
 
 import type { RequestInfo } from '#app/types'
 
