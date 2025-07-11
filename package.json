@@ -22,7 +22,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@forge42/seo-tools": "^1.4.5",
     "@headlessui/react": "^2.2.4",
     "@react-router/node": "^7.6.3",
     "@react-router/serve": "^7.6.3",
