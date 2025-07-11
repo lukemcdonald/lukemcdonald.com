@@ -46,9 +46,9 @@ export function createMetaEnhancer(defaultOptions: Omit<EnhanceMetaOptions, 'pat
     const allOptions = { ...defaultOptions, ...options }
     const { author, siteName, twitterCard, twitterSite, type } = allOptions
 
-    const metaAuthor = meta.find((entry) => entry.property === 'author')?.content || ''
+    const metaAuthor = meta.find((entry) => entry.name === 'author')?.content || ''
     const metaDescription = meta.find((entry) => entry.name === 'description')?.content || ''
-    const metaImage = meta.find((entry) => entry.property === 'image')?.content || ''
+    const metaImage = meta.find((entry) => entry.name === 'image')?.content || ''
     const metaTitle = meta.find((entry) => entry.title)?.title || ''
 
     const title = metaTitle ? `${metaTitle} — ${siteName}` : siteName
@@ -57,11 +57,11 @@ export function createMetaEnhancer(defaultOptions: Omit<EnhanceMetaOptions, 'pat
     // Enhanced meta tags for social media and SEO
     const enhancedMeta = [
       { title: title },
-      { content: metaAuthor ?? author, property: 'author' },
+      { content: metaAuthor ?? author, name: 'author' },
       { href: url, rel: 'canonical' },
       { content: GOOGLE_SITE_VERIFICATION, name: 'google-site-verification' },
-      { content: THEME_COLOR, property: 'theme-color' },
-      { content: `${SITE_URL}/images/seo-banner.png`, property: 'image' },
+      { content: THEME_COLOR, name: 'theme-color' },
+      { content: `${SITE_URL}/images/seo-banner.png`, name: 'image' },
 
       { content: metaDescription, property: 'og:description' },
       { content: metaImage, property: 'og:image' },
