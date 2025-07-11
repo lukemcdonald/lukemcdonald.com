@@ -14,8 +14,8 @@ import * as Sentry from '@sentry/react-router'
 
 import { Entry } from '#app/components/entry'
 import { Layout } from '#app/components/layout'
-import { SITE_DOMAIN, SITE_DEV_DOMAIN } from '#app/constants'
-import { REDIRECTS } from '#app/constants'
+import { SITE_DOMAIN, SITE_DEV_DOMAIN } from '#app/constants/config'
+import { REDIRECTS } from '#app/constants/redirects'
 import { enhanceMeta } from '#app/utils/meta'
 import { getErrorMessage, getRequestInfo, normalizePathname } from '#app/utils/misc'
 

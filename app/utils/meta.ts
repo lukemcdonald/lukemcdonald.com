@@ -9,7 +9,7 @@ import {
   THEME_COLOR,
   TWITTER_CARD_TYPE,
   TWITTER_HANDLE,
-} from '#app/constants'
+} from '#app/constants/config'
 import { createSiteUrl } from '#app/utils/misc'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
