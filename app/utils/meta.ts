@@ -1,6 +1,15 @@
 // Alternate solution: https://github.com/edmundhung/remix-guide/blob/main/app/helpers.ts#L7
 
-import { SITE_URL } from '#app/constants'
+import {
+  GOOGLE_SITE_VERIFICATION,
+  SITE_AUTHOR,
+  SITE_NAME,
+  SITE_TYPE,
+  SITE_URL,
+  THEME_COLOR,
+  TWITTER_CARD_TYPE,
+  TWITTER_HANDLE,
+} from '#app/constants'
 import { createSiteUrl } from '#app/utils/misc'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,8 +59,8 @@ export function createMetaEnhancer(defaultOptions: Omit<EnhanceMetaOptions, 'pat
       { title: title },
       { content: metaAuthor ?? author, property: 'author' },
       { href: url, rel: 'canonical' },
-      { content: '4jMDBbKyVQPMqqE3YYqw2vabnA3CR_uU9l2sOtRRmjM', name: 'google-site-verification' },
-      { content: '#122023', property: 'theme-color' },
+      { content: GOOGLE_SITE_VERIFICATION, name: 'google-site-verification' },
+      { content: THEME_COLOR, property: 'theme-color' },
       { content: `${SITE_URL}/images/seo-banner.png`, property: 'image' },
 
       { content: metaDescription, property: 'og:description' },
@@ -73,9 +82,9 @@ export function createMetaEnhancer(defaultOptions: Omit<EnhanceMetaOptions, 'pat
 }
 
 export const enhanceMeta = createMetaEnhancer({
-  author: 'Luke McDonald',
-  siteName: 'Luke McDonald',
-  twitterCard: 'summary',
-  twitterSite: '@thelukemcdonald',
-  type: 'website',
+  author: SITE_AUTHOR,
+  siteName: SITE_NAME,
+  twitterCard: TWITTER_CARD_TYPE,
+  twitterSite: TWITTER_HANDLE,
+  type: SITE_TYPE,
 })
