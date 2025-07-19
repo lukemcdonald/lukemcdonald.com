@@ -1,19 +1,42 @@
 ---
-import "@/styles/global.css";
+import type { MetaData } from '@/utils/meta'
+import { SITE } from '@/constants/config'
+import Head from '@/components/Head.astro'
+import '@/styles/global.css'
 
-const { generator, props } = Astro;
-const { description, title } = props;
+export type Props = MetaData
+
+const { generator, props, url } = Astro
+
+const {
+  author = SITE.author,
+  canonicalUrl = new URL(url.pathname, url),
+  dir = SITE.dir,
+  lang = SITE.lang ?? 'en',
+  title = SITE.name,
+  ...siteMeta
+} = props
+
+const meta: MetaData = {
+  author,
+  canonicalUrl: canonicalUrl.toString(),
+  dir,
+  lang,
+  title,
+  ...siteMeta,
+}
 ---
 
 <!doctype html>
-<html lang="en">
+<html
+  dir={dir}
+  lang={lang}
+>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={generator} />
-    <title>{title || "Luke McDonald"}</title>
-    {description && <meta name="description" content={description} />}
+    <Head
+      generator={generator}
+      meta={meta}
+    />
   </head>
   <body>
     <slot />
