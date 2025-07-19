@@ -6,7 +6,7 @@ import react from '@astrojs/react';
 import netlify from '@astrojs/netlify';
 
 import tailwindcss from "@tailwindcss/vite";
-import { SITE } from '@/constants/config';
+import { SITE } from './src/constants/config.js';
 
 // https://astro.build/config
 export default defineConfig({
