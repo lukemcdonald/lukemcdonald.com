@@ -1,0 +1,25 @@
+---
+import Header from '@/components/Header.astro'
+---
+
+<div class="bg-primary-50 lg:grid">
+  <img
+    alt="Tree fog background"
+    class="absolute top-1/2 left-1/2 hidden h-full max-h-screen w-full -translate-x-1/2 -translate-y-1/2 transform overflow-hidden object-cover opacity-20 blur-xs grayscale lg:block"
+    src="/images/landscape-tree-fog.jpg"
+    style="grid-area: 1/1"
+  />
+  <div
+    class="place-items-center text-primary-900 lg:relative lg:flex lg:min-h-screen lg:items-center lg:justify-center"
+    style="grid-area: 1/1"
+  >
+    <div
+      class="site relative m-auto bg-white lg:max-h-site lg:w-11/12 lg:max-w-screen-xl lg:shadow-2xl"
+    >
+      <Header />
+      <main class="lg:flex lg:h-screen lg:max-h-site">
+        <slot />
+      </main>
+    </div>
+  </div>
+</div>

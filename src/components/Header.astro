@@ -1,0 +1,56 @@
+---
+import Logo from '@/components/Logo.astro'
+import Nav from '@/components/Nav.astro'
+import NavMenu from '@/components/NavMenu.astro'
+
+type MenuLink = {
+  links: { name: string; to: string }[]
+  name: string
+  to: string
+}
+
+const menuLinks: MenuLink[] = [
+  {
+    links: [{ name: 'Resume', to: '/resume' }],
+    name: 'Work',
+    to: '#',
+  },
+  { links: [{ name: 'TREAD Talks', to: 'https://gettreadtalks.com/' }], name: 'Play', to: '#' },
+  {
+    links: [
+      { name: 'Faith', to: '/i-am-a/christian' },
+      { name: 'Marriage', to: '/i-am-a/husband' },
+      { name: 'Kids', to: '/i-am-a/father' },
+      { name: 'Coaching', to: '/i-am-a/coach' },
+    ],
+    name: 'Live',
+    to: '#',
+  },
+]
+---
+
+<header class="site-header absolute top-0 left-0 z-50 flex w-full items-center p-5 lg:w-1/2">
+  <a
+    class="group peer relative z-10 inline-flex items-center bg-white whitespace-nowrap text-white no-underline hover:shadow-lg"
+    href="/"
+  >
+    <Logo class="h-16 w-16 bg-primary-900 fill-current p-4" />
+
+    <h1
+      class="absolute left-16 flex h-16 max-w-0 items-center overflow-hidden bg-white px-0 text-xl font-bold tracking-wide text-primary-900 uppercase shadow-lg transition-all duration-150 group-hover:max-w-6xl group-hover:px-4 group-hover:duration-300"
+    >
+      Luke McDonald
+    </h1>
+  </a>
+
+  <Nav class="px-4 duration-200 peer-hover:opacity-0 peer-hover:delay-0 peer-hover:duration-0">
+    {
+      menuLinks.map((menuLink) => (
+        <NavMenu
+          key={menuLink.name}
+          link={menuLink}
+        />
+      ))
+    }
+  </Nav>
+</header>

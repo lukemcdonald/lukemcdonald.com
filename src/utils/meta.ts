@@ -1,4 +1,4 @@
-import type { SITE } from '@/constants/config'
+import type { SITE } from '@/config'
 
 export type ContentType = 'article' | 'blog' | 'page'
 

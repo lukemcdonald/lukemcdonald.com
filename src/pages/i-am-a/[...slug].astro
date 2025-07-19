@@ -1,0 +1,37 @@
+---
+import { getCollection, render } from 'astro:content'
+import Layout from '../../layouts/Layout.astro'
+import Entry from '@/components/Entry.astro'
+import Main from '@/layouts/Main.astro'
+
+// Generate static paths for all identity pages
+export async function getStaticPaths() {
+  const identityPages = await getCollection('i-am-a', ({ data }) => !data.draft)
+
+  return identityPages.map((page) => ({
+    params: { slug: page.id },
+    props: { page },
+  }))
+}
+
+// Get the page data from props
+const { page } = Astro.props
+const { Content } = await render(page)
+---
+
+<Layout
+  title={`${page.data.title} - Luke McDonald`}
+  description={page.data.description}
+  contentType="page"
+>
+  <Main>
+    <Entry
+      description={page.data.description}
+      image={page.data.image}
+      imageAlt={page.data.imageAlt}
+      html={Content}
+      subtitle={page.data.subtitle}
+      title={page.data.title}
+    />
+  </Main>
+</Layout>

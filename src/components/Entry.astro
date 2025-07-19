@@ -1,0 +1,33 @@
+---
+import { type CollectionEntry } from 'astro:content'
+
+import { render } from 'astro:content'
+import EntryHeader from '@/components/EntryHeader.astro'
+import EntryBody from '@/components/EntryBody.astro'
+import ContactInfo from '@/components/ContactInfo.astro'
+
+export interface Props {
+  entry: CollectionEntry<'i-am-a' | 'index'>
+}
+
+const { entry } = Astro.props
+const { description, image, imageAlt, subtitle, title } = entry.data
+const { Content } = await render(entry)
+---
+
+<article class="entry min-h-screen w-full overflow-hidden bg-primary-800 lg:min-h-0">
+  <EntryHeader
+    description={description}
+    subtitle={subtitle}
+    title={title}
+  />
+
+  <ContactInfo />
+
+  <EntryBody
+    image={image}
+    imageAlt={imageAlt}
+  >
+    <Content />
+  </EntryBody>
+</article>

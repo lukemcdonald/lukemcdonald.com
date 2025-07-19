@@ -1,12 +1,21 @@
 ---
-import Welcome from '../components/Welcome.astro'
-import Layout from '../layouts/Layout.astro'
+import Layout from '@/layouts/Layout.astro'
+import Main from '@/layouts/Main.astro'
+import { getEntry } from 'astro:content'
+import Entry from '@/components/Entry.astro'
+
+const entry = await getEntry('index', 'index')
+
+if (!entry) {
+  throw new Error('Homepage content not found')
+}
 ---
 
 <Layout
   title="Luke McDonald / ✝︎ / 👫 / 👨‍👧‍👧 / 🤼‍♂️"
   description="I'm Luke, a Christian, husband, father and wrestling coach living in beautiful Eastern Iowa. My tent making is as a full-stack developer with an eye for design."
-  contentType="page"
 >
-  <Welcome />
+  <Main>
+    <Entry entry={entry} />
+  </Main>
 </Layout>

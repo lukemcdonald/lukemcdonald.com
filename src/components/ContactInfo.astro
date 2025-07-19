@@ -1,0 +1,29 @@
+---
+const { title } = Astro.props
+
+const contactLinks = [
+  { name: 'Email', href: 'mailto:thelukemcdonald@gmail.com' },
+  { name: 'GitHub', href: 'https://github.com/lukemcdonald' },
+  { name: 'LinkedIn', href: 'https://www.linkedin.com/in/thelukemcdonald/' },
+]
+---
+
+<div class="entry__nav bg-white px-5 py-10 text-primary-900 sm:px-10 lg:py-8 xl:py-12">
+  <h1 class="mb-6 text-3xl font-normal">{title || 'Connect.'}</h1>
+
+  <nav class="flex items-center">
+    {
+      contactLinks.map((link) => (
+        <Fragment key={link.name}>
+          <a
+            class="block border-b-2 border-transparent tracking-wide text-inherit uppercase no-underline hover:border-primary-500"
+            href={link.href}
+          >
+            {link.name}
+          </a>
+          <hr class="mx-4 block w-24 border-b border-primary-200 last:hidden" />
+        </Fragment>
+      ))
+    }
+  </nav>
+</div>

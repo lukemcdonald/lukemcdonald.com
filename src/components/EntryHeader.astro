@@ -1,0 +1,30 @@
+---
+import Mountains from '@/components/Mountains.astro'
+
+export interface Props {
+  description?: string
+  subtitle?: string
+  title: string
+}
+
+const { description, subtitle, title } = Astro.props
+---
+
+<header
+  class="entry__header relative flex grow flex-col justify-center overflow-hidden bg-primary-500 px-5 pt-32 pb-30vw text-primary-900 sm:px-10 lg:grow-0 lg:pb-10 xl:py-20"
+  style={{ backgroundSize: '120%' }}
+>
+  <div class="relative z-10">
+    {subtitle && <h2 class="subtitle">{subtitle}</h2>}
+    <h1 class="mb-6 text-5xl font-semibold">{title}.</h1>
+    {
+      description && (
+        <div class="text-lg leading-normal">
+          <slot name="description" />
+        </div>
+      )
+    }
+  </div>
+
+  <Mountains class="absolute bottom-0 left-0 z-0 w-full" />
+</header>

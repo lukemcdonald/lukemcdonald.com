@@ -1,0 +1,29 @@
+---
+import { type CollectionEntry } from 'astro:content'
+
+export interface Props {
+  entry: CollectionEntry<'i-am-a' | 'index'>
+}
+
+const { image, imageAlt } = Astro.props
+---
+
+<div class="entry__body bg-primary-900">
+  {
+    image && (
+      <figure class="entry__media relative bg-primary-500 mix-blend-lighten">
+        <img
+          src={image}
+          alt={imageAlt || ''}
+          class="block h-full w-full grayscale xs:object-cover"
+        />
+      </figure>
+    )
+  }
+
+  <div
+    class="entry__content relative z-10 flex flex-col justify-center bg-primary-900 px-5 py-10 text-lg leading-normal break-words text-white xs:px-10"
+  >
+    <slot />
+  </div>
+</div>
