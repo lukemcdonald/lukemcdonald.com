@@ -1,0 +1,10 @@
+# Domain redirects (optional - if you want to redirect from old domains)
+
+https://lukemcdonlad.netlify.com/*   https://gettreadtalks.com/:splat 301!
+https://www.lukemcdonald.com/*       https://lukemcdonald.com/:splat  301!
+
+/jplayer-skins/premium-pixels       /
+/work/audiotheme                    /
+/work/blazer-six                    /
+/work/cedaro                        /
+/xmlrpc.php                         /
