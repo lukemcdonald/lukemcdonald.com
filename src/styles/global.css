@@ -1,5 +1,11 @@
 @import 'tailwindcss';
 
+/*
+TODO: Consider prose component
+https://docs.astro.build/en/recipes/tailwind-rendered-markdown/
+*/
+@plugin '@tailwindcss/typography';
+
 @theme {
   --breakpoint-xl: 1280px;
   --breakpoint-lg: 1080px;

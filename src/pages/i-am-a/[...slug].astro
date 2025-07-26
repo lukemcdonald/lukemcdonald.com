@@ -1,5 +1,5 @@
 ---
-import { getCollection, render } from 'astro:content'
+import { getCollection } from 'astro:content'
 import Layout from '../../layouts/Layout.astro'
 import Entry from '@/components/Entry.astro'
 import Main from '@/layouts/Main.astro'
@@ -8,30 +8,22 @@ import Main from '@/layouts/Main.astro'
 export async function getStaticPaths() {
   const identityPages = await getCollection('i-am-a', ({ data }) => !data.draft)
 
-  return identityPages.map((page) => ({
-    params: { slug: page.id },
-    props: { page },
+  return identityPages.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
   }))
 }
 
-// Get the page data from props
-const { page } = Astro.props
-const { Content } = await render(page)
+const { entry } = Astro.props
+const { description, title } = entry.data
 ---
 
 <Layout
-  title={`${page.data.title} - Luke McDonald`}
-  description={page.data.description}
+  title={`${title} - Luke McDonald`}
+  description={description}
   contentType="page"
 >
   <Main>
-    <Entry
-      description={page.data.description}
-      image={page.data.image}
-      imageAlt={page.data.imageAlt}
-      html={Content}
-      subtitle={page.data.subtitle}
-      title={page.data.title}
-    />
+    <Entry entry={entry} />
   </Main>
 </Layout>

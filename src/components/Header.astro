@@ -1,31 +1,31 @@
 ---
 import Logo from '@/components/Logo.astro'
-import Nav from '@/components/Nav.astro'
-import NavMenu from '@/components/NavMenu.astro'
+import NavMenu from '@/components/NavMenu.tsx'
 
-type MenuLink = {
-  links: { name: string; to: string }[]
+type MenuLinkItem = {
   name: string
-  to: string
+  href: string
 }
 
+interface MenuLink extends MenuLinkItem {
+  links?: MenuLinkItem[]
+}
+
+const workLinks: MenuLink[] = [{ name: 'Resume', href: '/resume' }]
+
+const playLinks: MenuLink[] = [{ name: 'TREAD Talks', href: 'https://gettreadtalks.com/' }]
+
+const liveLinks: MenuLink[] = [
+  { name: 'Faith', href: '/i-am-a/christian' },
+  { name: 'Marriage', href: '/i-am-a/husband' },
+  { name: 'Kids', href: '/i-am-a/father' },
+  { name: 'Coaching', href: '/i-am-a/coach' },
+]
+
 const menuLinks: MenuLink[] = [
-  {
-    links: [{ name: 'Resume', to: '/resume' }],
-    name: 'Work',
-    to: '#',
-  },
-  { links: [{ name: 'TREAD Talks', to: 'https://gettreadtalks.com/' }], name: 'Play', to: '#' },
-  {
-    links: [
-      { name: 'Faith', to: '/i-am-a/christian' },
-      { name: 'Marriage', to: '/i-am-a/husband' },
-      { name: 'Kids', to: '/i-am-a/father' },
-      { name: 'Coaching', to: '/i-am-a/coach' },
-    ],
-    name: 'Live',
-    to: '#',
-  },
+  { name: 'Work', href: '#', links: workLinks },
+  { name: 'Play', href: '#', links: playLinks },
+  { name: 'Live', href: '#', links: liveLinks },
 ]
 ---
 
@@ -43,14 +43,14 @@ const menuLinks: MenuLink[] = [
     </h1>
   </a>
 
-  <Nav class="px-4 duration-200 peer-hover:opacity-0 peer-hover:delay-0 peer-hover:duration-0">
+  <nav class="px-4 duration-200 peer-hover:opacity-0 peer-hover:delay-0 peer-hover:duration-0">
     {
       menuLinks.map((menuLink) => (
         <NavMenu
-          key={menuLink.name}
+          client:load
           link={menuLink}
         />
       ))
     }
-  </Nav>
+  </nav>
 </header>
