@@ -14,7 +14,6 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   adapter: netlify(),
-
   env: {
     schema: {
       PUBLIC_GOOGLE_SITE_VERIFICATION: envField.string({
@@ -24,15 +23,12 @@ export default defineConfig({
       }),
     },
   },
-
   image: {
     responsiveStyles: true,
     layout: 'constrained',
   },
-
   integrations: [react(), sitemap()],
   site: SITE.url,
-
   vite: {
     // @ts-expect-error https://github.com/withastro/astro/issues/14030
     plugins: [tailwindcss()],
