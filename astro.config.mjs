@@ -9,6 +9,8 @@ import { SITE } from './src/config.js';
 
 import tailwindcss from "@tailwindcss/vite";
 
+import sitemap from '@astrojs/sitemap';
+
 // https://astro.build/config
 export default defineConfig({
   adapter: netlify(),
@@ -28,7 +30,7 @@ export default defineConfig({
     layout: 'constrained',
   },
 
-  integrations: [react()],
+  integrations: [react(), sitemap()],
   site: SITE.url,
 
   vite: {
