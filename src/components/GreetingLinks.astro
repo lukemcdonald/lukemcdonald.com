@@ -1,11 +1,7 @@
 ---
-import type { CollectionEntry } from 'astro:content'
+import { getCollection } from 'astro:content'
 
-export interface Props {
-  pages: CollectionEntry<'i-am-a'>[]
-}
-
-const { pages } = Astro.props
+const pages = await getCollection('i-am-a')
 
 const linkStyles =
   'relative flex items-center rounded-sm bg-black/0 bg-transparent p-1.5 pr-3 leading-none transition hover:bg-black/5'

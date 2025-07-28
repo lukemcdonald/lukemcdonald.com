@@ -240,28 +240,12 @@ html:has(div[data-theme='orange']) {
 
 /* Numbered List
 ------------------------------------------------------------------------------*/
-@layer components {
-  .numbered-list {
-    counter-reset: list-number;
-    text-shadow: none;
+@utility numbered-list {
+  counter-reset: list-number;
+  text-shadow: none;
 
-    a:before {
-      counter-increment: list-number;
-      content: counter(list-number);
-    }
-  }
-}
-
-/* Scrollbar
-------------------------------------------------------------------------------*/
-@layer utilities {
-  /* Chrome, Safari and Opera */
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-
-  .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+  a:before {
+    counter-increment: list-number;
+    content: counter(list-number);
   }
 }
