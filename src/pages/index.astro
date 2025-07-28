@@ -1,7 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro'
 import Main from '@/layouts/Main.astro'
-import { getEntry } from 'astro:content'
+import { getEntry, render } from 'astro:content'
 import Entry from '@/components/Entry.astro'
 
 const entry = await getEntry('index', 'index')
@@ -9,13 +9,24 @@ const entry = await getEntry('index', 'index')
 if (!entry) {
   throw new Error('Homepage content not found')
 }
+
+const { description, image, imageAlt, subtitle, title } = entry.data
+const { Content } = await render(entry)
 ---
 
 <Layout
-  title="Luke McDonald / ✝︎ / 👫 / 👨‍👧‍👧 / 🤼‍♂️"
+  title="Luke McDonald"
   description="I'm Luke, a Christian, husband, father and wrestling coach living in beautiful Eastern Iowa. My tent making is as a full-stack developer with an eye for design."
 >
   <Main>
-    <Entry entry={entry} />
+    <Entry
+      description={description}
+      image={image}
+      imageAlt={imageAlt}
+      subtitle={subtitle}
+      title={title}
+    >
+      <Content />
+    </Entry>
   </Main>
 </Layout>

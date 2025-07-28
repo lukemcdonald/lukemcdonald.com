@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content'
 import Layout from '../../layouts/Layout.astro'
 import Entry from '@/components/Entry.astro'
 import Main from '@/layouts/Main.astro'
+import { render } from 'astro:content'
 
 // Generate static paths for all identity pages
 export async function getStaticPaths() {
@@ -15,7 +16,8 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props
-const { description, title } = entry.data
+const { description, image, imageAlt, subtitle, title } = entry.data
+const { Content } = await render(entry)
 ---
 
 <Layout
@@ -24,6 +26,14 @@ const { description, title } = entry.data
   contentType="page"
 >
   <Main>
-    <Entry entry={entry} />
+    <Entry
+      description={description}
+      image={image}
+      imageAlt={imageAlt}
+      subtitle={subtitle}
+      title={title}
+    >
+      <Content />
+    </Entry>
   </Main>
 </Layout>
