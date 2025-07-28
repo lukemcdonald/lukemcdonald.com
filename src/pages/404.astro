@@ -1,0 +1,22 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import Entry from '@/components/Entry.astro'
+import { createErrorData } from '@/utils/error'
+import Main from '@/layouts/Main.astro'
+
+const errorData = createErrorData(404, 'The page you are looking for does not exist.')
+const { html, image, imageAlt, subtitle, title } = errorData
+---
+
+<Layout title={subtitle}>
+  <Main>
+    <Entry
+      subtitle={subtitle}
+      title={title}
+      image={image}
+      imageAlt={imageAlt}
+    >
+      <slot set:html={html} />
+    </Entry>
+  </Main>
+</Layout>
