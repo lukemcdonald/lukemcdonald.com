@@ -1,6 +1,7 @@
 ---
 import Logo from '@/components/Logo.astro'
 import NavMenu from '@/components/NavMenu.tsx'
+import { getPublishedPages } from '../utils/content/pages'
 
 type MenuLinkItem = {
   name: string
@@ -15,12 +16,15 @@ const workLinks: MenuLink[] = [{ name: 'Resume', href: '/resume' }]
 
 const playLinks: MenuLink[] = [{ name: 'TREAD Talks', href: 'https://gettreadtalks.com/' }]
 
-const liveLinks: MenuLink[] = [
-  { name: 'Faith', href: '/i-am-a/christian' },
-  { name: 'Marriage', href: '/i-am-a/husband' },
-  { name: 'Kids', href: '/i-am-a/father' },
-  { name: 'Coaching', href: '/i-am-a/coach' },
-]
+const livePages = await getPublishedPages({
+  include: ['i-am-a'],
+  sortBy: 'order',
+})
+
+const liveLinks: MenuLink[] = livePages.map((page) => ({
+  name: page.data.title,
+  href: `/${page.id}`,
+}))
 
 const menuLinks: MenuLink[] = [
   { name: 'Work', href: '#', links: workLinks },
