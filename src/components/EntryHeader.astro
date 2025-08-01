@@ -16,7 +16,13 @@ const { description, subtitle, title } = Astro.props
   style={{ backgroundSize: '120%' }}
 >
   <div class="relative z-10">
-    {subtitle && <h2 class="subtitle">{subtitle}</h2>}
+    {
+      subtitle && (
+        <h2 class="mb-1 text-sm font-semibold tracking-wider text-primary-800 uppercase">
+          {subtitle}
+        </h2>
+      )
+    }
     <h1 class="mb-6 text-5xl font-semibold">{title}.</h1>
     {description && <EntryHeaderDescription description={description} />}
   </div>

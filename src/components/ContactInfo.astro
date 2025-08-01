@@ -14,15 +14,13 @@ const contactLinks = [
   <nav class="flex items-center">
     {
       contactLinks.map((link) => (
-        <Fragment key={link.name}>
-          <a
-            class="block border-b-2 border-transparent tracking-wide text-inherit uppercase no-underline hover:border-primary-500"
-            href={link.href}
-          >
-            {link.name}
-          </a>
-          <hr class="mx-4 block w-24 border-b border-primary-200 last:hidden" />
-        </Fragment>
+        <a
+          class="block border-b-2 border-transparent tracking-wide text-inherit uppercase no-underline hover:border-primary-500 font-medium"
+          href={link.href}
+        >
+          {link.name}
+        </a>
+        <hr class="mx-4 block w-24  border-primary-200 last:hidden" />
       ))
     }
   </nav>
