@@ -5,6 +5,7 @@ const INCLUDE_PAGES = ['i-am-a']
 
 const pages = await getPublishedPages({
   include: INCLUDE_PAGES,
+  sortBy: 'order',
 })
 
 const linkStyles =

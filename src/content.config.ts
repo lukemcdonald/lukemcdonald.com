@@ -16,6 +16,7 @@ const createPagesCollection = function () {
         image: z.string().optional(),
         imageAlt: z.string().optional(),
         modDatetime: z.date().optional(),
+        order: z.number().optional(),
         pubDatetime: z.date().optional(),
         subtitle: z.string().optional(),
         title: z.string(),
