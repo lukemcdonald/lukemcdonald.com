@@ -1,4 +1,4 @@
-import { CONTENT_PATHS } from '../config'
+import { CONTENT_PATHS } from '@/configs/content'
 
 /**
  * Get all available collection keys

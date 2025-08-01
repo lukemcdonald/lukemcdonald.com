@@ -2,16 +2,16 @@ import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/r
 import { Fragment } from 'react'
 import clsx from 'clsx'
 import { ChevronDown as ChevronDownIcon } from 'lucide-react'
-import NavMenuLink from './NavMenuLink'
+import NavMenuLink from '@/components/NavMenuLink'
 
 interface LinkItem {
-  name: string
   href: string
+  name: string
 }
 
 interface Link {
-  name: string
   links?: LinkItem[]
+  name: string
 }
 
 interface NavMenuProps {

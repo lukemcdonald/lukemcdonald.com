@@ -1,15 +1,12 @@
 // @ts-check
-import { defineConfig, envField } from "astro/config";
-
-import react from '@astrojs/react';
-
 import netlify from '@astrojs/netlify';
-
-import { SITE } from './src/config.js';
-
+import react from '@astrojs/react';
+import sitemap from '@astrojs/sitemap';
 import tailwindcss from "@tailwindcss/vite";
 
-import sitemap from '@astrojs/sitemap';
+import { defineConfig, envField } from "astro/config";
+
+import { SITE } from './src/configs/site.js';
 
 // https://astro.build/config
 export default defineConfig({

@@ -1,9 +1,9 @@
 import eslintPluginAstro from "eslint-plugin-astro";
 import globals from "globals";
-import tseslint from "typescript-eslint";
+import tsEslint from "typescript-eslint";
 
 export default [
-  ...tseslint.configs.recommended,
+  ...tsEslint.configs.recommended,
   ...eslintPluginAstro.configs.recommended,
   {
     languageOptions: {

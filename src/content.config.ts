@@ -1,7 +1,6 @@
 import { defineCollection, z } from 'astro:content'
 import { glob } from 'astro/loaders'
-import { CONTENT_PATHS } from './config'
-import { getCollectionNameByKey } from './utils/collections'
+import { getCollectionNameByKey, getCollectionPath } from './utils/collections'
 
 const contentSchema = {
   description: z.string().optional(),
@@ -15,10 +14,11 @@ const contentSchema = {
 }
 
 function createMainCollection() {
+  const collectionPath = getCollectionPath('main')
   return defineCollection({
     loader: glob({
-      pattern: '**/[^_]*.md',
-      base: `./${CONTENT_PATHS.main}`,
+      pattern: '**/[^_]*.{md,mdx}',
+      base: `./${collectionPath}`,
     }),
     schema: () =>
       z.object({
@@ -28,10 +28,12 @@ function createMainCollection() {
 }
 
 function createIdentityCollection() {
+  const collectionPath = getCollectionPath('identity')
   return defineCollection({
     loader: glob({
-      pattern: '**/[^_]*.md',
-      base: `./${CONTENT_PATHS.identity}`,
+      pattern: '**/[^_]*.{md,mdx}',
+      base: `./${collectionPath}`,
+      // generateId: (options) => options.data.title as unknown as string,
     }),
     schema: () =>
       z.object({

@@ -7,7 +7,7 @@ import Entry from '@/components/Entry.astro'
 const entry = await getEntry('index', 'index')
 
 if (!entry) {
-  throw new Error('Homepage content not found')
+  return new Response(null, { status: 404 })
 }
 
 const { description, image, imageAlt, subtitle, title } = entry.data
