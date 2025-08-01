@@ -1,6 +1,6 @@
 import { defineCollection, z } from 'astro:content'
 import { glob } from 'astro/loaders'
-import { getCollectionNameByKey, getCollectionPath } from './utils/collections'
+import { getCollectionNameByKey, getCollectionPath } from '@/utils/collections'
 
 const createPagesCollection = function () {
   const collectionPath = getCollectionPath('pages')

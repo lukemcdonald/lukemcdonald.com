@@ -1,5 +1,5 @@
+import { getContentDirectory } from '@/utils/collections'
 import { getCollection, type CollectionEntry } from 'astro:content'
-import { getContentDirectory } from '../collections'
 
 export type SortBy = 'title' | 'order' | 'pubDate' | 'custom' | 'manual'
 

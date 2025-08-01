@@ -1,7 +1,8 @@
 ---
 import Logo from '@/components/Logo.astro'
 import NavMenu from '@/components/NavMenu.tsx'
-import { getPublishedPages } from '../utils/content/pages'
+import { SITE } from '@/configs/site'
+import { getPublishedPages } from '@/utils/content/pages'
 
 type MenuLinkItem = {
   name: string
@@ -41,9 +42,9 @@ const menuLinks: MenuLink[] = [
     <Logo class="h-16 w-16 bg-primary-900 fill-current p-4" />
 
     <h1
-      class="absolute left-16 flex h-16 max-w-0 items-center overflow-hidden bg-white px-0 text-xl font-bold tracking-wide text-primary-900 uppercase shadow-lg transition-all duration-150 group-hover:max-w-6xl group-hover:px-4 group-hover:duration-300"
+      class="absolute left-16 flex h-16 max-w-0 items-center overflow-hidden bg-white px-0 text-xl font-semibold tracking-wide text-primary-900 uppercase shadow-lg transition-all duration-150 group-hover:max-w-6xl group-hover:px-4 group-hover:duration-300"
     >
-      Luke McDonald
+      {SITE.name}
     </h1>
   </a>
 
