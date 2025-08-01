@@ -68,6 +68,20 @@ export async function getPublishedPages(options: PageFilterOptions = {}) {
   return sortPages(pages, sortBy, customSort, manualOrder)
 }
 
+/**
+ * Helper function to sort pages by title
+ */
+function sortByTitle(pages: CollectionEntry<'pages'>[]): CollectionEntry<'pages'>[] {
+  return pages.sort((a, b) => a.data.title.localeCompare(b.data.title))
+}
+
+/**
+ * Sorts pages based on the specified criteria
+ * @param pages - Array of page entries to sort
+ * @param sortBy - Sort method to use
+ * @param customSort - Required when sortBy is 'custom'
+ * @param manualOrder - Required when sortBy is 'manual'
+ */
 function sortPages(
   pages: CollectionEntry<'pages'>[],
   sortBy: SortBy,
@@ -76,7 +90,7 @@ function sortPages(
 ): CollectionEntry<'pages'>[] {
   switch (sortBy) {
     case 'title':
-      return pages.sort((a, b) => a.data.title.localeCompare(b.data.title))
+      return sortByTitle(pages)
 
     case 'order':
       return pages.sort((a, b) => {
@@ -97,35 +111,40 @@ function sortPages(
 
     case 'custom':
       if (!customSort) {
-        console.warn('Custom sort function not provided, falling back to title sort')
-        return pages.sort((a, b) => a.data.title.localeCompare(b.data.title))
+        throw new Error('Custom sort function is required when sortBy is "custom"')
       }
       return pages.sort(customSort)
 
     case 'manual':
       if (!manualOrder || manualOrder.length === 0) {
-        console.warn('Manual order array not provided, falling back to title sort')
-        return pages.sort((a, b) => a.data.title.localeCompare(b.data.title))
+        throw new Error('Manual order array is required when sortBy is "manual"')
       }
+
+      const orderMap = new Map(manualOrder.map((id, index) => [id, index]))
+
       return pages.sort((a, b) => {
-        const indexA = manualOrder.indexOf(a.id)
-        const indexB = manualOrder.indexOf(b.id)
+        const indexA = orderMap.get(a.id)
+        const indexB = orderMap.get(b.id)
 
         // If both are in manual order, sort by their position
-        if (indexA !== -1 && indexB !== -1) {
+        if (indexA !== undefined && indexB !== undefined) {
           return indexA - indexB
         }
 
         // Items in manual order come first
-        if (indexA !== -1) return -1
-        if (indexB !== -1) return 1
+        if (indexA !== undefined) {
+          return -1
+        }
+        if (indexB !== undefined) {
+          return 1
+        }
 
         // Items not in manual order fall back to title sort
         return a.data.title.localeCompare(b.data.title)
       })
 
     default:
-      return pages.sort((a, b) => a.data.title.localeCompare(b.data.title))
+      return sortByTitle(pages)
   }
 }
 
