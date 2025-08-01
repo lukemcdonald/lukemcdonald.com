@@ -10,12 +10,10 @@ const { description } = Astro.props
 const descriptionComponents = {
   GreetingLinks,
 }
-const DescriptionComponent =
-  descriptionComponents[description as keyof typeof descriptionComponents]
-const isDescriptionComponent = Boolean(DescriptionComponent)
+const Component = descriptionComponents[description as keyof typeof descriptionComponents]
+const isComponent = Boolean(Component)
 ---
 
 <div class="text-lg leading-normal">
-  {isDescriptionComponent && <DescriptionComponent />}
-  {!isDescriptionComponent && <slot set:html={description} />}
+  {isComponent ? <Component /> : <slot set:html={description} />}
 </div>

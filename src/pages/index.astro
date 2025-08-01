@@ -4,14 +4,14 @@ import Main from '@/layouts/Main.astro'
 import { getEntry, render } from 'astro:content'
 import Entry from '@/components/Entry.astro'
 
-const entry = await getEntry('index', 'index')
+const page = await getEntry('pages', 'index')
 
-if (!entry) {
+if (!page) {
   return new Response(null, { status: 404 })
 }
 
-const { description, image, imageAlt, subtitle, title } = entry.data
-const { Content } = await render(entry)
+const { description, image, imageAlt, subtitle, title } = page.data
+const { Content } = await render(page)
 ---
 
 <Layout

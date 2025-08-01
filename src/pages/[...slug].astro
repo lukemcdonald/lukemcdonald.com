@@ -1,23 +1,23 @@
 ---
-import { getCollection } from 'astro:content'
 import Layout from '@/layouts/Layout.astro'
 import Entry from '@/components/Entry.astro'
 import Main from '@/layouts/Main.astro'
 import { render } from 'astro:content'
+import { getPublishedPages } from '@/utils/content/pages'
 
 // Generate static paths for all identity pages
 export async function getStaticPaths() {
-  const identityPages = await getCollection('i-am-a', ({ data }) => !data.draft)
+  const pages = await getPublishedPages()
 
-  return identityPages.map((entry) => ({
-    params: { slug: entry.id },
-    props: { entry },
+  return pages.map((page) => ({
+    params: { slug: page.id },
+    props: { page },
   }))
 }
 
-const { entry } = Astro.props
-const { description, image, imageAlt, subtitle, title } = entry.data
-const { Content } = await render(entry)
+const { page } = Astro.props
+const { description, image, imageAlt, subtitle, title } = page.data
+const { Content } = await render(page)
 ---
 
 <Layout

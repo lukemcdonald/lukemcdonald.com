@@ -1,7 +1,11 @@
 ---
-import { getCollection } from 'astro:content'
+import { getPublishedPages } from '../utils/content/pages'
 
-const pages = await getCollection('i-am-a')
+const INCLUDE_PAGES = ['i-am-a']
+
+const pages = await getPublishedPages({
+  include: INCLUDE_PAGES,
+})
 
 const linkStyles =
   'relative flex items-center rounded-sm bg-black/0 bg-transparent p-1.5 pr-3 leading-none transition hover:bg-black/5'
@@ -11,18 +15,20 @@ const linkNumberStyles =
 ---
 
 <nav>
-  <ol class="numbered-list inline-flex flex-col">
+  <ol class="inline-flex flex-col numbered-list">
     {
-      pages.map((page) => (
-        <li>
-          <a
-            class={`${linkStyles} ${linkNumberStyles}`}
-            href={`/i-am-a/${page.id}`}
-          >
-            {page.data.title}
-          </a>
-        </li>
-      ))
+      pages.map((page) => {
+        return (
+          <li>
+            <a
+              class={`${linkStyles} ${linkNumberStyles}`}
+              href={`/${page.id}`}
+            >
+              {page.data.title}
+            </a>
+          </li>
+        )
+      })
     }
   </ol>
 </nav>
