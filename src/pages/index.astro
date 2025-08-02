@@ -10,13 +10,17 @@ if (!page) {
   return new Response(null, { status: 404 })
 }
 
-const { description, image, imageAlt, subtitle, title } = page.data
+const { description, image, imageAlt, subtitle, title, seo } = page.data
+
+const seoTitle = seo?.title || title
+const seoDescription = seo?.description || page.rendered?.html || description
+
 const { Content } = await render(page)
 ---
 
 <Layout
-  title="Luke McDonald"
-  description="I'm Luke, a Christian, husband, father and wrestling coach living in beautiful Eastern Iowa. My tent making is as a full-stack developer with an eye for design."
+  title={seoTitle}
+  description={seoDescription}
 >
   <Main>
     <Entry

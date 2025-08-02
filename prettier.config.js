@@ -10,7 +10,7 @@ export default {
   ],
   plugins: ["prettier-plugin-astro", "prettier-plugin-tailwindcss"],
   printWidth: 100,
-  proseWrap: "always",
+  proseWrap: "preserve",
   semi: false,
   singleAttributePerLine: true,
   singleQuote: true,

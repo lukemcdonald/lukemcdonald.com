@@ -14,14 +14,16 @@ const { generator, meta } = Astro.props
 const {
   author,
   canonicalUrl,
-  description: uncleanDescription,
+  description: inDescription,
   modDatetime,
   pubDatetime,
-  title,
+  title: inTitle,
 } = meta
 
+const title = inTitle === SITE.name ? inTitle : `${inTitle} - ${SITE.name}`
+
 // Clean and optimize the description for meta tags
-const description = stripHtmlAndTruncate(uncleanDescription, 160, '...')
+const description = stripHtmlAndTruncate(inDescription, 160, '...')
 
 // Create structured data
 const structuredData = createStructuredData(meta, SITE)
