@@ -6,6 +6,7 @@ package-lock.json
 dist/
 .astro/
 .netlify/
+public/_redirects
 
 # Generated files
 *.log
