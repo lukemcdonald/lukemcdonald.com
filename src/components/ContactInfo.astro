@@ -1,4 +1,6 @@
 ---
+import Heading from "@/components/Heading.astro"
+
 const { title } = Astro.props
 
 const contactLinks = [
@@ -9,7 +11,14 @@ const contactLinks = [
 ---
 
 <div class="entry__nav bg-white px-5 py-10 text-primary-900 sm:px-10 lg:py-8 xl:py-12">
-  <h1 class="mb-6 text-3xl font-normal">{title || 'Connect.'}</h1>
+  <Heading
+    as="h1"
+    class="mb-6"
+    size="3xl"
+    weight="normal"
+  >
+    {title || 'Connect.'}
+  </Heading>
 
   <nav class="flex items-center">
     {

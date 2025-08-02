@@ -1,6 +1,7 @@
 ---
 import Mountains from '@/components/Mountains.astro'
 import EntryHeaderDescription from '@/components/EntryHeaderDescription.astro'
+import Heading from '@/components/Heading.astro'
 
 export interface Props {
   description?: string
@@ -18,12 +19,22 @@ const { description, subtitle, title } = Astro.props
   <div class="relative z-10">
     {
       subtitle && (
-        <h2 class="mb-1 text-sm font-semibold tracking-wider text-primary-800 uppercase">
+        <Heading
+          as="h2"
+          class="mb-1 tracking-wider uppercase"
+          size="sm"
+        >
           {subtitle}
-        </h2>
+        </Heading>
       )
     }
-    <h1 class="mb-6 text-5xl font-semibold">{title}.</h1>
+    <Heading
+      as="h1"
+      class="mb-6"
+      size="5xl"
+    >
+      {title}.
+    </Heading>
     {description && <EntryHeaderDescription description={description} />}
   </div>
 

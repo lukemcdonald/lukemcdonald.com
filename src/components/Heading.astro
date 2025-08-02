@@ -3,6 +3,11 @@ import type { HTMLAttributes } from 'astro/types'
 
 type HeadingTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 
+const colors = {
+  primary: 'text-primary-900',
+  secondary: 'text-primary-800',
+}
+
 const sizes = {
   sm: 'text-sm',
   md: 'text-base',
@@ -24,22 +29,22 @@ const weights = {
 
 interface Props extends HTMLAttributes<HeadingTag> {
   as?: HeadingTag
-  className?: string | string[] | Record<string, boolean>
+  color?: keyof typeof colors
   size?: keyof typeof sizes
   weight?: keyof typeof weights
 }
 
 const {
   as: Component = 'h2',
-  className,
+  color = 'primary',
   size = 'xl',
-  weight = 'medium',
+  weight = 'semibold',
   ...delegated
 } = Astro.props satisfies Props
 ---
 
 <Component
-  class:list={['font-medium', sizes[size], weights[weight], className]}
+  class:list={[sizes[size], weights[weight], colors[color]]}
   {...delegated}
 >
   <slot />
