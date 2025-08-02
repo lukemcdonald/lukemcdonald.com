@@ -1,7 +1,7 @@
 ---
 import type { MetaData } from '@/utils/meta'
 import { SITE } from '@/configs/site'
-import Head from '@/components/Head.astro'
+import Head from '@/layouts/Head.astro'
 import ThemeProvider from '@/components/ThemeProvider.astro'
 import '@/styles/global.css'
 
@@ -33,12 +33,10 @@ const meta: MetaData = {
   dir={dir}
   lang={lang}
 >
-  <head>
-    <Head
-      generator={generator}
-      meta={meta}
-    />
-  </head>
+  <Head
+    generator={generator}
+    meta={meta}
+  />
   <body>
     <ThemeProvider theme="default">
       <slot />

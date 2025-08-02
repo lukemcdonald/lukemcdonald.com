@@ -1,0 +1,179 @@
+---
+import type { MetaData } from '@/utils/meta'
+import { createStructuredData, createSocialMetaTags } from '@/utils/meta'
+import { stripHtmlAndTruncate } from '@/utils/text'
+import { SITE } from '@/configs/site'
+import { ClientRouter } from 'astro:transitions'
+
+export interface Props {
+  generator?: string
+  meta: MetaData
+}
+
+const { generator, meta } = Astro.props
+const {
+  author,
+  canonicalUrl,
+  description: inDescription,
+  modDatetime,
+  pubDatetime,
+  title: inTitle,
+} = meta
+
+const title = inTitle === SITE.name ? inTitle : `${inTitle} - ${SITE.name}`
+
+// Clean and optimize the description for meta tags
+const description = stripHtmlAndTruncate(inDescription, 160, '...')
+
+// Create structured data
+const structuredData = createStructuredData(meta, SITE)
+
+// Create social meta tags
+const socialMetaTags = createSocialMetaTags(meta, SITE)
+---
+
+<head>
+  <!-- Basic HTML Head Elements -->
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  />
+
+  <!-- Favicon -->
+  <link
+    href="/favicon.svg"
+    rel="icon"
+    type="image/svg+xml"
+  />
+  <link
+    href="/apple-touch-icon.png"
+    rel="apple-touch-icon"
+  />
+
+  <!-- Sitemap -->
+  <link
+    rel="sitemap"
+    href="/sitemap-index.xml"
+  />
+
+  <!-- General Meta Tags -->
+  <title>{title}</title>
+  <link
+    rel="canonical"
+    href={canonicalUrl}
+  />
+  {
+    description && (
+      <meta
+        name="description"
+        content={description}
+      />
+    )
+  }
+  {
+    author?.name && (
+      <meta
+        name="author"
+        content={author.name}
+      />
+    )
+  }
+  {
+    generator && (
+      <meta
+        name="generator"
+        content={generator}
+      />
+    )
+  }
+
+  <!-- Article Published/Modified time -->
+  {
+    pubDatetime && (
+      <meta
+        property="article:published_time"
+        content={pubDatetime.toISOString()}
+      />
+    )
+  }
+  {
+    modDatetime && (
+      <meta
+        property="article:modified_time"
+        content={modDatetime.toISOString()}
+      />
+    )
+  }
+
+  <!-- Open Graph / Facebook -->
+  <meta
+    property="og:title"
+    content={socialMetaTags['og:title']}
+  />
+  <meta
+    property="og:url"
+    content={socialMetaTags['og:url']}
+  />
+  <meta
+    property="og:image"
+    content={socialMetaTags['og:image']}
+  />
+  <meta
+    property="og:site_name"
+    content={socialMetaTags['og:site_name']}
+  />
+  <meta
+    property="og:type"
+    content={socialMetaTags['og:type']}
+  />
+  {
+    socialMetaTags['og:description'] && (
+      <meta
+        property="og:description"
+        content={socialMetaTags['og:description']}
+      />
+    )
+  }
+
+  <!-- Twitter -->
+  <meta
+    property="twitter:card"
+    content={socialMetaTags['twitter:card']}
+  />
+  <meta
+    property="twitter:url"
+    content={socialMetaTags['twitter:url']}
+  />
+  <meta
+    property="twitter:title"
+    content={socialMetaTags['twitter:title']}
+  />
+  <meta
+    property="twitter:image"
+    content={socialMetaTags['twitter:image']}
+  />
+  {
+    socialMetaTags['twitter:description'] && (
+      <meta
+        property="twitter:description"
+        content={socialMetaTags['twitter:description']}
+      />
+    )
+  }
+
+  <!-- Google JSON-LD Structured data -->
+  <script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(structuredData)}
+  />
+
+  <!-- Theme color -->
+  <meta
+    name="theme-color"
+    content={SITE.themeColor}
+  />
+
+  <ClientRouter />
+</head>
