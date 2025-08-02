@@ -34,7 +34,9 @@ const menuLinks: MenuLink[] = [
 ]
 ---
 
-<header class="site-header absolute top-0 left-0 z-50 flex w-full items-center p-5 lg:w-1/2">
+<header
+  class="site-header absolute top-0 left-0 z-50 flex w-full items-center gap-2 p-5 sm:gap-4 lg:w-1/2"
+>
   <a
     class="group peer relative z-10 inline-flex items-center bg-white whitespace-nowrap text-white no-underline hover:shadow-lg"
     href="/"
@@ -48,7 +50,7 @@ const menuLinks: MenuLink[] = [
     </h1>
   </a>
 
-  <nav class="px-4 duration-200 peer-hover:opacity-0 peer-hover:delay-0 peer-hover:duration-0">
+  <nav class="duration-200 peer-hover:opacity-0 peer-hover:delay-0 peer-hover:duration-0">
     {
       menuLinks.map((menuLink) => (
         <NavMenu
