@@ -171,8 +171,6 @@ html:has(div[data-theme='orange']) {
   }
 
   @media (width >= theme(--breakpoint-xs)) {
-    display: none !important;
-
     .entry__body {
       display: grid;
       grid-area: entry__body;
