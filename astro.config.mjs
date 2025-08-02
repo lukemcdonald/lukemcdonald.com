@@ -7,6 +7,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig, envField } from "astro/config";
 
 import { SITE } from './src/configs/site.js';
+import { REDIRECTS } from './src/configs/redirects';
 
 // https://astro.build/config
 export default defineConfig({
@@ -25,6 +26,7 @@ export default defineConfig({
     layout: 'constrained',
   },
   integrations: [react(), sitemap()],
+  redirects: REDIRECTS,
   site: SITE.url,
   vite: {
     // @ts-expect-error https://github.com/withastro/astro/issues/14030
