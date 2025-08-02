@@ -37,7 +37,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ link }) => {
           unmount={false}
         >
           {link.links.map((item: LinkItem) => (
-            <MenuItem>
+            <MenuItem key={item.href}>
               <NavMenuLink
                 className="group flex w-full items-center rounded-sm px-3 py-2 text-base text-primary-900 data-active:bg-primary-200"
                 showExternalIcon={true}

@@ -5,7 +5,6 @@ import Main from '@/layouts/Main.astro'
 import { render } from 'astro:content'
 import { getPublishedPages } from '@/utils/content/pages'
 
-// Generate static paths for all identity pages
 export async function getStaticPaths() {
   const pages = await getPublishedPages()
 

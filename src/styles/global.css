@@ -170,7 +170,7 @@ html:has(div[data-theme='orange']) {
     @apply order-1;
   }
 
-  @media (width >= theme(--breakpoint-xs)) {
+  @media (width >= theme(--breakpoint-sm)) {
     .entry__body {
       display: grid;
       grid-area: entry__body;
