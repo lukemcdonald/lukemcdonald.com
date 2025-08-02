@@ -26,16 +26,16 @@ https://docs.astro.build/en/recipes/tailwind-rendered-markdown/
   --color-transparent: transparent;
   --color-white: white;
 
-  --color-primary-50: #fafaf9;
-  --color-primary-100: #f5f5f4;
-  --color-primary-200: #e7e5e4;
-  --color-primary-300: #d6d3d1;
-  --color-primary-400: #c6c6bd;
-  --color-primary-500: #abab9d;
-  --color-primary-600: #7c8169;
-  --color-primary-700: #3e504f;
-  --color-primary-800: #3a401f;
-  --color-primary-900: #122023;
+  --color-primary-50: oklch(98.4% 0.001 106);
+  --color-primary-100: oklch(96.9% 0.001 106);
+  --color-primary-200: oklch(92.3% 0.002 480);
+  --color-primary-300: oklch(86.8% 0.002 760);
+  --color-primary-400: oklch(82.4% 0.012 106);
+  --color-primary-500: oklch(73.7% 0.019 106);
+  --color-primary-600: oklch(59.2% 0.035 117);
+  --color-primary-700: oklch(39.6% 0.022 192);
+  --color-primary-800: oklch(32.7% 0.052 117);
+  --color-primary-900: oklch(17.1% 0.025 212);
 }
 
 /* CSS Variables for Theme Colors */
@@ -44,68 +44,80 @@ https://docs.astro.build/en/recipes/tailwind-rendered-markdown/
 }
 
 html:has(div[data-theme='blue']) {
-  --color-primary-50: #f0f9ff;
-  --color-primary-100: #e0f2fe;
-  --color-primary-200: #bae6fd;
-  --color-primary-300: #7dd3fc;
-  --color-primary-400: #38bdf8;
-  --color-primary-500: #0ea5e9;
-  --color-primary-600: #0284c7;
-  --color-primary-700: #0369a1;
-  --color-primary-800: #075985;
-  --color-primary-900: #072b40;
+  --color-primary-50: oklch(98.4% 0.004 240);
+  --color-primary-200: oklch(92.3% 0.015 240);
+  --color-primary-300: oklch(86.8% 0.025 240);
+  --color-primary-400: oklch(82.4% 0.035 245);
+  --color-primary-500: oklch(73.7% 0.055 250);
+  --color-primary-600: oklch(59.2% 0.085 245);
+  --color-primary-700: oklch(39.6% 0.095 270);
+  --color-primary-800: oklch(32.7% 0.085 240);
+  --color-primary-900: oklch(17.1% 0.04 280);
 }
 
 html:has(div[data-theme='purple']) {
-  --color-primary-50: #eef2ff;
-  --color-primary-100: #e0e7ff;
-  --color-primary-200: #c7d2fe;
-  --color-primary-300: #a5b4fc;
-  --color-primary-400: #818cf8;
-  --color-primary-500: #7a7df3;
-  --color-primary-600: #4f46e5;
-  --color-primary-700: #4338ca;
-  --color-primary-800: #3730a3;
-  --color-primary-900: #1c1a49;
+  --color-primary-50: oklch(98.4% 0.005 320);
+  --color-primary-100: oklch(96.9% 0.01 320);
+  --color-primary-200: oklch(92.3% 0.02 315);
+  --color-primary-300: oklch(86.8% 0.035 315);
+  --color-primary-400: oklch(82.4% 0.05 310);
+  --color-primary-500: oklch(73.7% 0.07 305);
+  --color-primary-600: oklch(59.2% 0.09 310);
+  --color-primary-700: oklch(39.6% 0.1 290);
+  --color-primary-800: oklch(32.7% 0.085 320);
+  --color-primary-900: oklch(17.1% 0.045 280);
 }
 
 html:has(div[data-theme='yellow']) {
-  --color-primary-50: #fefce8;
-  --color-primary-100: #fef9c3;
-  --color-primary-200: #fef08a;
-  --color-primary-300: #fde047;
-  --color-primary-400: #facc15;
-  --color-primary-500: #eab308;
-  --color-primary-600: #ca8a04;
-  --color-primary-700: #a16207;
-  --color-primary-800: #854d0e;
-  --color-primary-900: #45260b;
+  --color-primary-50: oklch(98.4% 0.005 92);
+  --color-primary-100: oklch(96.9% 0.01 92);
+  --color-primary-200: oklch(92.3% 0.02 92);
+  --color-primary-300: oklch(86.8% 0.035 92);
+  --color-primary-400: oklch(82.4% 0.055 92);
+  --color-primary-500: oklch(73.7% 0.075 91);
+  --color-primary-600: oklch(59.2% 0.09 85);
+  --color-primary-700: oklch(39.6% 0.08 100);
+  --color-primary-800: oklch(32.7% 0.065 80);
+  --color-primary-900: oklch(17.1% 0.035 105);
 }
 
 html:has(div[data-theme='green']) {
-  --color-primary-50: #ffffff;
-  --color-primary-100: #fafdf9;
-  --color-primary-200: #dbeecd;
-  --color-primary-300: #bcdfa1;
-  --color-primary-400: #9cd075;
-  --color-primary-500: #7dc149;
-  --color-primary-600: #49a24c;
-  --color-primary-700: #15824e;
-  --color-primary-800: #175c35;
-  --color-primary-900: #18351c;
+  --color-primary-50: oklch(98.4% 0.006 129);
+  --color-primary-100: oklch(96.9% 0.012 129);
+  --color-primary-200: oklch(92.3% 0.025 129);
+  --color-primary-300: oklch(86.8% 0.04 129);
+  --color-primary-400: oklch(82.4% 0.06 129);
+  --color-primary-500: oklch(73.7% 0.08 128);
+  --color-primary-600: oklch(59.2% 0.095 135);
+  --color-primary-700: oklch(39.6% 0.085 115);
+  --color-primary-800: oklch(32.7% 0.07 140);
+  --color-primary-900: oklch(17.1% 0.04 110);
 }
 
 html:has(div[data-theme='orange']) {
-  --color-primary-50: #fff7ed;
-  --color-primary-100: #ffedd5;
-  --color-primary-200: #fed7aa;
-  --color-primary-300: #fdba74;
-  --color-primary-400: #fb923c;
-  --color-primary-500: #f97316;
-  --color-primary-600: #ea580c;
-  --color-primary-700: #c2410c;
-  --color-primary-800: #9a3412;
-  --color-primary-900: #4f1d0c;
+  --color-primary-50: oklch(98.4% 0.006 45);
+  --color-primary-100: oklch(96.9% 0.012 45);
+  --color-primary-200: oklch(92.3% 0.025 45);
+  --color-primary-300: oklch(86.8% 0.04 45);
+  --color-primary-400: oklch(82.4% 0.06 45);
+  --color-primary-500: oklch(73.7% 0.08 44);
+  --color-primary-600: oklch(59.2% 0.095 35);
+  --color-primary-700: oklch(39.6% 0.085 65);
+  --color-primary-800: oklch(32.7% 0.07 25);
+  --color-primary-900: oklch(17.1% 0.04 70);
+}
+
+html:has(div[data-theme='neon']) {
+  --color-primary-50: oklch(98.94% 0.027 122.59);
+  --color-primary-100: oklch(98.94% 0.027 122.59);
+  --color-primary-200: oklch(97.82% 0.057 123.41);
+  --color-primary-300: oklch(95.67% 0.126 122.78);
+  --color-primary-400: oklch(94.59% 0.167 122.68);
+  --color-primary-500: oklch(93.27% 0.227 122.42);
+  --color-primary-600: oklch(77.38% 0.189 135);
+  --color-primary-700: oklch(61.2% 0.15 110);
+  --color-primary-800: oklch(45.93% 0.112 130);
+  --color-primary-900: oklch(12.17% 0.051 105);
 }
 
 @utility max-w-screen-xl {
