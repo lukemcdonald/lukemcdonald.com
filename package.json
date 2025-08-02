@@ -15,7 +15,6 @@
     "lint:fix": "eslint ./src --fix --report-unused-disable-directives"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.4",
     "@astrojs/netlify": "^6.5.1",
     "@astrojs/react": "^4.3.0",
     "@astrojs/sitemap": "^3.4.1",
@@ -24,7 +23,6 @@
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "astro": "^5.12.0",
-    "clsx": "^2.1.1",
     "lucide-react": "^0.525.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
