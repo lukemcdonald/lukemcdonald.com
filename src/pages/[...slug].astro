@@ -15,6 +15,11 @@ export async function getStaticPaths() {
 }
 
 const { page } = Astro.props
+
+if (!page) {
+  return new Response(null, { status: 404 })
+}
+
 const { description, image, imageAlt, subtitle, title } = page.data
 const { Content } = await render(page)
 ---
