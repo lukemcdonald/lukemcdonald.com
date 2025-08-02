@@ -20,6 +20,13 @@ const createPagesCollection = function () {
         pubDatetime: z.date().optional(),
         subtitle: z.string().optional(),
         title: z.string(),
+        seo: z
+          .object({
+            title: z.string().optional(),
+            description: z.string().optional(),
+            ogImage: z.string().optional(),
+          })
+          .optional(),
       }),
   })
 }

@@ -1,6 +1,7 @@
 ---
 import type { MetaData } from '@/utils/meta'
 import { createStructuredData, createSocialMetaTags } from '@/utils/meta'
+import { stripHtmlAndTruncate } from '@/utils/text'
 import { SITE } from '@/configs/site'
 import { ClientRouter } from 'astro:transitions'
 
@@ -10,7 +11,17 @@ export interface Props {
 }
 
 const { generator, meta } = Astro.props
-const { author, canonicalUrl, description, modDatetime, pubDatetime, title } = meta
+const {
+  author,
+  canonicalUrl,
+  description: uncleanDescription,
+  modDatetime,
+  pubDatetime,
+  title,
+} = meta
+
+// Clean and optimize the description for meta tags
+const description = stripHtmlAndTruncate(uncleanDescription, 160, '...')
 
 // Create structured data
 const structuredData = createStructuredData(meta, SITE)

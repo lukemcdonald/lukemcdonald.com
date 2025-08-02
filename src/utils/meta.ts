@@ -65,7 +65,7 @@ export function createStructuredData(meta: MetaData, site: typeof SITE): Structu
   const structuredData: StructuredData = {
     '@context': 'https://schema.org',
     '@type': getSchemaType(contentType),
-    description: description,
+    description,
     headline: title,
     name: title,
     url: canonicalUrl?.toString(),

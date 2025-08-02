@@ -20,13 +20,16 @@ if (!page) {
   return new Response(null, { status: 404 })
 }
 
-const { description, image, imageAlt, subtitle, title } = page.data
+const { description, image, imageAlt, subtitle, title, seo } = page.data
 const { Content } = await render(page)
+
+const seoTitle = seo?.title || title
+const seoDescription = seo?.description || page.rendered?.html || description
 ---
 
 <Layout
-  title={`${title} - Luke McDonald`}
-  description={description}
+  title={`${seoTitle} - Luke McDonald`}
+  description={seoDescription}
   contentType="page"
 >
   <Main>
