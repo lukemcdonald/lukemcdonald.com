@@ -17,15 +17,6 @@ https://docs.astro.build/en/recipes/tailwind-rendered-markdown/
   --transition-delay-0: 0ms;
   --transition-duration-0: 0ms;
 
-  /* Default Colors */
-  --color-black: black;
-  --color-current: currentColor;
-  --color-error: red;
-  --color-gray: neutral;
-  --color-inherit: inherit;
-  --color-transparent: transparent;
-  --color-white: white;
-
   --color-primary-50: oklch(98.4% 0.001 106);
   --color-primary-100: oklch(96.9% 0.001 106);
   --color-primary-200: oklch(92.3% 0.002 480);

@@ -21,10 +21,17 @@ const sizes = {
 }
 
 const weights = {
+  light: 'font-light',
   normal: 'font-normal',
   medium: 'font-medium',
-  semibold: 'font-semibold',
-  bold: 'font-bold',
+  bold: 'font-semibold',
+}
+
+const wraps = {
+  balance: 'text-balance',
+  nowrap: 'text-nowrap',
+  pretty: 'text-pretty',
+  wrap: 'text-wrap',
 }
 
 interface Props extends HTMLAttributes<HeadingTag> {
@@ -32,19 +39,21 @@ interface Props extends HTMLAttributes<HeadingTag> {
   color?: keyof typeof colors
   size?: keyof typeof sizes
   weight?: keyof typeof weights
+  wrap?: keyof typeof wraps
 }
 
 const {
   as: Component = 'h2',
   color = 'primary',
   size = 'xl',
-  weight = 'semibold',
+  weight = 'bold',
+  wrap = 'balance',
   ...delegated
 } = Astro.props satisfies Props
 ---
 
 <Component
-  class:list={[sizes[size], weights[weight], colors[color]]}
+  class:list={[colors[color], sizes[size], weights[weight], wraps[wrap]]}
   {...delegated}
 >
   <slot />

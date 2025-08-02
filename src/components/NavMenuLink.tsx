@@ -7,10 +7,10 @@ interface NavMenuLinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>,
 }
 
 const NavMenuLink: React.FC<NavMenuLinkProps> = ({
-  href,
-  className,
-  showExternalIcon,
   children,
+  className,
+  href,
+  showExternalIcon,
   ...delegated
 }) => {
   const isExternal = href.startsWith('http')
