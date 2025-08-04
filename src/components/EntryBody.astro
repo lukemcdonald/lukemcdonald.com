@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets'
+
 const { image, imageAlt } = Astro.props
 ---
 
@@ -6,7 +8,7 @@ const { image, imageAlt } = Astro.props
   {
     image && (
       <figure class="entry__media relative bg-primary-500 mix-blend-lighten">
-        <img
+        <Image
           src={image}
           alt={imageAlt || ''}
           class="block h-full w-full grayscale xs:object-cover"

@@ -2,7 +2,8 @@
 order: 2
 subtitle: 'I am a'
 title: 'Husband'
-image: 'https://res.cloudinary.com/lukemcdonald/image/upload/v1642547067/lukemcdonald-com/luke-heather_o9zmlf.jpg'
+image: '../../../assets/images/luke-and-heather.jpg'
+imageAlt: 'luke and heather'
 description: '"You being you, lets me be me, and us be us."'
 ---
 

@@ -9,11 +9,11 @@ const createPagesCollection = function () {
       pattern: '**/[^_]*.{md,mdx}',
       base: `./${collectionPath}`,
     }),
-    schema: () =>
+    schema: ({ image }) =>
       z.object({
         description: z.string().optional(),
         draft: z.boolean().default(false),
-        image: z.string().optional(),
+        image: image().optional(),
         imageAlt: z.string().optional(),
         modDatetime: z.date().optional(),
         order: z.number().optional(),

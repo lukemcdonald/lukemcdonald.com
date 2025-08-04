@@ -3,9 +3,11 @@ import EntryHeader from '@/components/EntryHeader.astro'
 import EntryBody from '@/components/EntryBody.astro'
 import ContactInfo from '@/components/ContactInfo.astro'
 
+import type { ImageMetadata } from 'astro'
+
 export interface Props {
   description?: string
-  image?: string
+  image?: ImageMetadata
   imageAlt?: string
   subtitle?: string
   title: string

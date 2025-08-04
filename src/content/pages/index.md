@@ -1,9 +1,8 @@
 ---
 title: 'Greetings'
 description: 'GreetingLinks'
-# image: './luke-mustachio.jpg'
-image: '/images/luke-mustachio.jpg'
-imageAlt: 'Luke with mustache'
+image: '../../assets/images/luke-mustachio.jpg'
+imageAlt: 'luke with mustache'
 seo:
   title: Luke McDonald
   description: I'm Luke, a Christian, husband, father and wrestling coach living in beautiful Eastern Iowa. My tent making is as a full-stack developer with an eye for design.
