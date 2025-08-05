@@ -4,6 +4,7 @@ import { createStructuredData, createSocialMetaTags } from '@/utils/meta'
 import { stripHtmlAndTruncate } from '@/utils/text'
 import { SITE } from '@/configs/site'
 import { ClientRouter } from 'astro:transitions'
+import PostHog from '@/components/PostHog.astro'
 
 export interface Props {
   generator?: string
@@ -175,5 +176,9 @@ const socialMetaTags = createSocialMetaTags(meta, SITE)
     content={SITE.themeColor}
   />
 
+  <!-- View Transitions API -->
   <ClientRouter />
+
+  <!-- PostHog Analytics -->
+  <PostHog />
 </head>
