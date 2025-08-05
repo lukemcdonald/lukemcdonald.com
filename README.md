@@ -12,6 +12,7 @@ A modern, responsive personal website built with [Astro](https://astro.build) an
 - **[TailwindCSS](https://tailwindcss.com)** - Utility-first CSS framework
 - **[TypeScript](https://typescriptlang.org)** - Type-safe development
 - **[Netlify](https://netlify.com)** - Deployment and hosting
+- **[PostHog](https://posthog.com)** - Analytics and feature flags
 
 ## Features
 
@@ -21,3 +22,4 @@ A modern, responsive personal website built with [Astro](https://astro.build) an
 - Markdown-based content management
 - SEO optimized with automatic sitemap generation
 - Accessible design following WCAG guidelines
+- Analytics tracking with PostHog
