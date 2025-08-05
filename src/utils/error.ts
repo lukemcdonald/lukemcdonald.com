@@ -1,10 +1,8 @@
-export interface ErrorData {
-  description: string
+import notFoundImage from '@/assets/images/not-found.jpg'
+import type { Props as EntryProps } from '@/components/Entry.astro'
+
+export interface ErrorData extends EntryProps {
   html?: string
-  image: string
-  imageAlt: string
-  subtitle: string
-  title: string
 }
 
 export function buildErrorHtml(errorMessage: string): string {
@@ -23,8 +21,7 @@ export function createErrorData(status: number, errorMessage?: string): ErrorDat
   const { description, statusText } = ERROR_TYPES[status as keyof typeof ERROR_TYPES]
   const baseData: ErrorData = {
     description,
-    image:
-      'https://res.cloudinary.com/lukemcdonald/image/upload/v1642448418/lukemcdonald-com/not-found_y5jbrf.jpg',
+    image: notFoundImage,
     imageAlt: 'Little Carly coding.',
     subtitle: statusText,
     title: status.toString(),
