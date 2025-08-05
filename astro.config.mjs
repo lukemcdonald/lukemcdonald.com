@@ -24,8 +24,8 @@ export default defineConfig({
     },
   },
   image: {
-    responsiveStyles: false, // issue with Tailwind v4 if enabled
     layout: 'constrained',
+    responsiveStyles: false, // issue with Tailwind v4 if enabled
   },
   integrations: [react(), sitemap()],
   site: SITE.url,
