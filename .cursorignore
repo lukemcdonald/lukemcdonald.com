@@ -1,0 +1,39 @@
+# Build artifacts and dependencies
+node_modules/
+dist/
+.astro/
+.netlify/
+.cache/
+
+# Lock files (usually not relevant for code discussions)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+
+# Coverage and test artifacts
+coverage/
+.nyc_output/
+test-results/
+playwright-report/
+
+# IDE and editor files
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment and secrets (already in global ignore, but being explicit)
+.env
+.env.*
+*.key
+*.pem
