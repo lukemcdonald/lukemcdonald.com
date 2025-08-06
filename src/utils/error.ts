@@ -1,5 +1,5 @@
 import notFoundImage from '@/assets/images/not-found.jpg'
-import type { Props as EntryProps } from '@/components/Entry.astro'
+import type { Props as EntryProps } from '@/components/Entry/Entry.astro'
 
 export interface ErrorData extends EntryProps {
   html?: string

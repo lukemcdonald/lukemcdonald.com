@@ -1,6 +1,6 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { ChevronDown as ChevronDownIcon } from 'lucide-react'
-import NavMenuLink from '@/components/NavMenuLink'
+import NavMenuLink from './NavMenuLink'
 
 interface LinkItem {
   href: string
