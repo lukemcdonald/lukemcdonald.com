@@ -8,6 +8,9 @@ import { defineConfig, envField } from "astro/config";
 
 import { SITE } from './src/configs/site.js';
 
+// Sitemap exclusions
+const SITEMAP_EXCLUSIONS = new Set([`${SITE.url}/index`]);
+
 // https://astro.build/config
 export default defineConfig({
   adapter: netlify(),
@@ -27,7 +30,12 @@ export default defineConfig({
     layout: 'constrained',
     responsiveStyles: false, // issue with Tailwind v4 if enabled
   },
-  integrations: [react(), sitemap()],
+  integrations: [
+    react(),
+    sitemap({
+      filter: (page) => !SITEMAP_EXCLUSIONS.has(page),
+    }),
+  ],
   site: SITE.url,
   trailingSlash: 'never',
   vite: {
