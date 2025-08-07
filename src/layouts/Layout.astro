@@ -1,6 +1,6 @@
 ---
 import type { MetaData } from '@/utils/meta'
-import { SITE } from '@/configs/site'
+import { GLOBAL_CONFIG } from '@/configs/global'
 import Head from '@/layouts/Head.astro'
 import ThemeProvider from '@/components/ThemeProvider.astro'
 
@@ -10,12 +10,14 @@ export type Props = MetaData
 
 const { generator, props, url } = Astro
 
+// Use Astro.site for dynamic URL logic when available
+const canonicalUrl = new URL(url.pathname, Astro.site || url)
+
 const {
-  author = SITE.author,
-  canonicalUrl = new URL(url.pathname, url),
-  dir = SITE.dir,
-  lang = SITE.lang ?? 'en',
-  title = SITE.name,
+  author = GLOBAL_CONFIG.author,
+  dir = GLOBAL_CONFIG.dir,
+  lang = GLOBAL_CONFIG.lang ?? 'en',
+  title = GLOBAL_CONFIG.name,
   ...siteMeta
 } = props
 

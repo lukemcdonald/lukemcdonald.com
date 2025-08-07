@@ -1,13 +1,14 @@
 import { defineCollection, z } from 'astro:content'
 import { glob } from 'astro/loaders'
-import { getCollectionNameByKey, getCollectionPath } from '@/utils/collections'
+import { getCollectionMeta } from '@/utils/collections'
+
+const pages = getCollectionMeta('pages')
 
 const createPagesCollection = function () {
-  const collectionPath = getCollectionPath('pages')
   return defineCollection({
     loader: glob({
       pattern: '**/[^_]*.{md,mdx}',
-      base: `./${collectionPath}`,
+      base: `./${pages.path}`,
     }),
     schema: ({ image }) =>
       z.object({
@@ -34,5 +35,5 @@ const createPagesCollection = function () {
 const pagesCollection = createPagesCollection()
 
 export const collections = {
-  [getCollectionNameByKey('pages')]: pagesCollection,
+  [pages.id]: pagesCollection,
 }

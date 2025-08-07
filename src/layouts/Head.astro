@@ -2,7 +2,7 @@
 import type { MetaData } from '@/utils/meta'
 import { createStructuredData, createSocialMetaTags } from '@/utils/meta'
 import { stripHtmlAndTruncate } from '@/utils/text'
-import { SITE } from '@/configs/site'
+import { GLOBAL_CONFIG } from '@/configs/global'
 import { ClientRouter } from 'astro:transitions'
 import PostHog from '@/components/PostHog.astro'
 
@@ -21,16 +21,16 @@ const {
   title: inTitle,
 } = meta
 
-const title = inTitle === SITE.name ? inTitle : `${inTitle} - ${SITE.name}`
+const title = inTitle === GLOBAL_CONFIG.name ? inTitle : `${inTitle} - ${GLOBAL_CONFIG.name}`
 
 // Clean and optimize the description for meta tags
 const description = stripHtmlAndTruncate(inDescription, 160, '...')
 
 // Create structured data
-const structuredData = createStructuredData(meta, SITE)
+const structuredData = createStructuredData(meta, GLOBAL_CONFIG)
 
 // Create social meta tags
-const socialMetaTags = createSocialMetaTags(meta, SITE)
+const socialMetaTags = createSocialMetaTags(meta, GLOBAL_CONFIG)
 ---
 
 <head>
@@ -173,7 +173,7 @@ const socialMetaTags = createSocialMetaTags(meta, SITE)
   <!-- Theme color -->
   <meta
     name="theme-color"
-    content={SITE.themeColor}
+    content={GLOBAL_CONFIG.themeColor}
   />
 
   <!-- View Transitions API -->

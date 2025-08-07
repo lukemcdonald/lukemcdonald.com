@@ -6,10 +6,10 @@ import tailwindcss from "@tailwindcss/vite";
 
 import { defineConfig, envField } from "astro/config";
 
-import { SITE } from './src/configs/site.js';
+import { GLOBAL_CONFIG } from './src/configs/global.js';
 
 // Sitemap exclusions
-const SITEMAP_EXCLUSIONS = new Set([`${SITE.url}/index`]);
+const SITEMAP_EXCLUSIONS = new Set([`${GLOBAL_CONFIG.site.origin}/index`]);
 
 // https://astro.build/config
 export default defineConfig({
@@ -36,7 +36,7 @@ export default defineConfig({
       filter: (page) => !SITEMAP_EXCLUSIONS.has(page),
     }),
   ],
-  site: SITE.url,
+  site: GLOBAL_CONFIG.site.origin,
   trailingSlash: 'never',
   vite: {
     // @ts-expect-error https://github.com/withastro/astro/issues/14030

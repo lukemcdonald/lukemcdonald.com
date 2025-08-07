@@ -2,7 +2,7 @@
 import Heading from '@/components/Heading.astro'
 import Logo from '@/components/Logo.astro'
 import Navigation from '@/components/Nav/Nav.astro'
-import { SITE } from '@/configs/site'
+import { GLOBAL_CONFIG } from '@/configs/global'
 ---
 
 <header
@@ -19,7 +19,7 @@ import { SITE } from '@/configs/site'
       size="xl"
       class="absolute left-16 flex h-16 max-w-0 items-center overflow-hidden bg-white px-0 tracking-wide whitespace-nowrap uppercase shadow-lg transition-all duration-150 group-hover:max-w-6xl group-hover:px-4 group-hover:duration-300"
     >
-      {SITE.name}
+      {GLOBAL_CONFIG.name}
     </Heading>
   </a>
 

@@ -1,11 +1,15 @@
-import { CONTENT_PATHS } from '@/configs/content'
+import { CONTENT_CONFIG } from '@/configs/content'
+
+// Type aliases for cleaner type definitions
+type CollectionKey = keyof typeof CONTENT_CONFIG.collections
+type Collection<K extends CollectionKey> = (typeof CONTENT_CONFIG.collections)[K]
 
 /**
  * Get all available collection keys
  * @returns Array of collection keys
  */
-export function getCollectionKeys(): (keyof typeof CONTENT_PATHS)[] {
-  return Object.keys(CONTENT_PATHS) as (keyof typeof CONTENT_PATHS)[]
+export function getCollectionKeys(): CollectionKey[] {
+  return Object.keys(CONTENT_CONFIG.collections) as CollectionKey[]
 }
 
 /**
@@ -18,21 +22,12 @@ export function getCollectionName(path: string): string {
 }
 
 /**
- * Get collection name for a specific content key
+ * Get collection metadata
  * @param key - The content key (e.g. 'blog', 'pages', etc)
- * @returns The collection name for that content type
+ * @returns The collection object
  */
-export function getCollectionNameByKey(key: keyof typeof CONTENT_PATHS): string {
-  return getCollectionName(CONTENT_PATHS[key])
-}
-
-/**
- * Get collection path for a specific content key
- * @param key - The content key (e.g. 'blog', 'pages', etc)
- * @returns The collection path for that content type
- */
-export function getCollectionPath(key: keyof typeof CONTENT_PATHS): string {
-  return CONTENT_PATHS[key]
+export function getCollectionMeta<K extends CollectionKey>(key: K): Collection<K> {
+  return CONTENT_CONFIG.collections[key]
 }
 
 /**
@@ -40,8 +35,8 @@ export function getCollectionPath(key: keyof typeof CONTENT_PATHS): string {
  * @param key - The collection key to check
  * @returns True if the collection exists
  */
-export function hasCollection(key: string): key is keyof typeof CONTENT_PATHS {
-  return key in CONTENT_PATHS
+export function hasCollection(key: string): key is CollectionKey {
+  return key in CONTENT_CONFIG.collections
 }
 
 /**

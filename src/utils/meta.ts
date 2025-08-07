@@ -1,4 +1,4 @@
-import type { SITE } from '@/configs/site'
+import type { GLOBAL_CONFIG } from '@/configs/global'
 
 export type ContentType = 'article' | 'blog' | 'page'
 
@@ -51,7 +51,7 @@ export function getSchemaType(type: ContentType): string {
   }
 }
 
-export function createStructuredData(meta: MetaData, site: typeof SITE): StructuredData {
+export function createStructuredData(meta: MetaData, config: typeof GLOBAL_CONFIG): StructuredData {
   const {
     author,
     canonicalUrl,
@@ -88,8 +88,8 @@ export function createStructuredData(meta: MetaData, site: typeof SITE): Structu
   if (contentType === 'page') {
     structuredData.publisher = {
       '@type': 'Organization',
-      name: site.name,
-      url: site.url,
+      name: config.name,
+      url: config.site.origin,
     }
   }
 
@@ -102,9 +102,9 @@ export function getSocialImageURL(ogImage?: string, siteUrl?: string): string {
 }
 
 // Create meta tags for social media
-export function createSocialMetaTags(meta: MetaData, site: typeof SITE) {
+export function createSocialMetaTags(meta: MetaData, site: typeof GLOBAL_CONFIG) {
   const { canonicalUrl, description, ogImage, title } = meta
-  const socialImageURL = getSocialImageURL(ogImage, site.url)
+  const socialImageURL = getSocialImageURL(ogImage, site.site.origin)
 
   return {
     // Open Graph / Facebook
