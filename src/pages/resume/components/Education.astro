@@ -1,5 +1,5 @@
 ---
-import Heading from '@/components/Heading.astro'
+import Section from '@/pages/resume/components/ui/Section.astro'
 
 interface EducationItem {
   area?: string
@@ -14,22 +14,18 @@ interface Props {
 const { education } = Astro.props
 ---
 
-{
-  education.length > 0 && (
-    <section class="print:mt-6">
-      <Heading
-        as="h2"
-        size="xl"
-      >
-        Education
-      </Heading>
-      <ul class="space-y-1">
-        {education.map((item: EducationItem) => (
-          <li>
-            {item.studyType} {item.area ? `${item.area} ` : ''}— {item.institution}
-          </li>
-        ))}
-      </ul>
-    </section>
-  )
-}
+<Section
+  title="Education"
+  items={education}
+>
+  <template slot="item">
+    {
+      (item: EducationItem) => (
+        <>
+          {item.studyType}
+          {item.area ? `${item.area} ` : ''}— {item.institution}
+        </>
+      )
+    }
+  </template>
+</Section>

@@ -1,5 +1,5 @@
 ---
-import Heading from '@/components/Heading.astro'
+import Section from '@/pages/resume/components/ui/Section.astro'
 
 interface Props {
   personal: string[]
@@ -8,21 +8,11 @@ interface Props {
 const { personal } = Astro.props
 ---
 
-{
-  personal.length > 0 && (
-    <section class="print:mt-6">
-      <Heading
-        as="h2"
-        size="xl"
-      >
-        Personal
-      </Heading>
-
-      <ul class="space-y-1">
-        {personal.map((item: string) => (
-          <li>{item}</li>
-        ))}
-      </ul>
-    </section>
-  )
-}
+<Section
+  title="Personal"
+  items={personal}
+>
+  <template slot="item">
+    {(item: string) => item}
+  </template>
+</Section>

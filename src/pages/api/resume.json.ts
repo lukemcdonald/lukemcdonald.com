@@ -1,12 +1,15 @@
+import { CONTENT_CONFIG } from '@/configs/content'
 import type { APIRoute } from 'astro'
 import { getCollection } from 'astro:content'
 
+const collection = CONTENT_CONFIG.collections.resume.id
+
 // Aggregate all entries in the `resume` collection into a single JSON object
 export const GET: APIRoute = async () => {
-  const entries = await getCollection('resume')
+  const entries = await getCollection(collection)
 
   // Group by top-level key. Files directly under `resume/` become fields.
-  // Files under a subdirectory (e.g. `work/zenbusiness`) become an array under that key.
+  // Files under a subdirectory (e.g. `experience/zenbusiness`) become an array under that key.
   const result: Record<string, unknown> = {}
 
   for (const entry of entries) {
@@ -45,6 +48,8 @@ export const GET: APIRoute = async () => {
   }
 
   return new Response(JSON.stringify(result), {
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+    },
   })
 }

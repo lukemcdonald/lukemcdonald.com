@@ -10,12 +10,12 @@ import Education from './components/Education.astro'
 import Personal from './components/Personal.astro'
 import Footer from './components/Footer.astro'
 import type {
-  BasicsData,
-  SkillsData,
-  WorkData,
   AwardsData,
+  BasicsData,
   EducationData,
+  ExperienceData,
   PersonalData,
+  SkillsData,
 } from './types'
 
 const base = new URL(Astro.request.url)
@@ -27,16 +27,16 @@ if (!resume) {
   throw new Response('Failed to fetch resume', { status: 500 })
 }
 
-const basics: BasicsData = resume.basics
-const skills: SkillsData = resume.skills
-const work: WorkData = resume.work
 const awards: AwardsData = resume.awards
+const basics: BasicsData = resume.basics
 const education: EducationData = resume.education
+const experience: ExperienceData = resume.experience
 const personal: PersonalData = resume.personal
+const skills: SkillsData = resume.skills
 ---
 
 <Layout title="Resume">
-  <main class="mx-auto max-w-screen-md px-4">
+  <main class="px-4">
     <button
       class="fixed top-4 right-4 rounded-md bg-blue-600 px-4 py-2 font-medium text-white shadow-sm hover:bg-blue-700 print:hidden"
       onclick="window.print()"
@@ -44,13 +44,16 @@ const personal: PersonalData = resume.personal
       📄 Download PDF
     </button>
 
-    <Header basics={basics} />
-    <Skills skills={skills} />
-    <Experience work={work} />
-    <Awards awards={awards} />
-    <Education education={education} />
-    <Personal personal={personal} />
+    <article class="mx-auto prose">
+      <Header basics={basics} />
 
-    <Footer />
+      <Skills skills={skills} />
+      <Experience experience={experience} />
+      <Awards awards={awards} />
+      <Education education={education} />
+      <Personal personal={personal} />
+
+      <Footer />
+    </article>
   </main>
 </Layout>

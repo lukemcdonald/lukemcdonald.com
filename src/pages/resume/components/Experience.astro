@@ -1,7 +1,7 @@
 ---
-import Heading from '@/components/Heading.astro'
+import Section from '@/pages/resume/components/ui/Section.astro'
 
-interface WorkItem {
+interface ExperienceItem {
   company: string
   endDate?: string | null
   highlights?: string[]
@@ -10,38 +10,33 @@ interface WorkItem {
 }
 
 interface Props {
-  work: WorkItem[]
+  experience: ExperienceItem[]
 }
 
-const { work } = Astro.props
+const { experience } = Astro.props
 ---
 
-{
-  work.length > 0 && (
-    <section>
-      <Heading
-        as="h2"
-        size="xl"
-      >
-        Experience
-      </Heading>
+<Section
+  title="Experience"
+  items={experience}
+>
+  <template slot="item">
+    {
+      (item: ExperienceItem) => (
+        <>
+          <div>
+            {item.position} @ {item.company} ({item.startDate}–{item.endDate || 'Present'})
+          </div>
 
-      <ul class="space-y-4">
-        {work.map((item: WorkItem) => (
-          <li>
-            <div class="font-bold">
-              {item.position} @ {item.company} ({item.startDate}–{item.endDate || 'Present'})
-            </div>
-            {item.highlights && (
-              <ul class="mt-2 space-y-1">
-                {item.highlights.map((highlight: string) => (
-                  <li>{highlight}</li>
-                ))}
-              </ul>
-            )}
-          </li>
-        ))}
-      </ul>
-    </section>
-  )
-}
+          {item.highlights && (
+            <ul>
+              {item.highlights.map((highlight: string) => (
+                <li>{highlight}</li>
+              ))}
+            </ul>
+          )}
+        </>
+      )
+    }
+  </template>
+</Section>
