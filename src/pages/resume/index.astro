@@ -1,0 +1,56 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import DarkModeToggle from '@/components/DarkModeToggle.astro'
+
+import Header from './components/Header.astro'
+import Skills from './components/Skills.astro'
+import Experience from './components/Experience.astro'
+import Awards from './components/Awards.astro'
+import Education from './components/Education.astro'
+import Personal from './components/Personal.astro'
+import Footer from './components/Footer.astro'
+import type {
+  BasicsData,
+  SkillsData,
+  WorkData,
+  AwardsData,
+  EducationData,
+  PersonalData,
+} from './types'
+
+const base = new URL(Astro.request.url)
+const fetchJson = (path: string) => fetch(new URL(path, base)).then((r) => r.json())
+
+const resume: Record<string, unknown> = await fetchJson('/api/resume.json')
+
+if (!resume) {
+  throw new Response('Failed to fetch resume', { status: 500 })
+}
+
+const basics: BasicsData = resume.basics
+const skills: SkillsData = resume.skills
+const work: WorkData = resume.work
+const awards: AwardsData = resume.awards
+const education: EducationData = resume.education
+const personal: PersonalData = resume.personal
+---
+
+<Layout title="Resume">
+  <main class="mx-auto max-w-screen-md px-4">
+    <button
+      class="fixed top-4 right-4 rounded-md bg-blue-600 px-4 py-2 font-medium text-white shadow-sm hover:bg-blue-700 print:hidden"
+      onclick="window.print()"
+    >
+      📄 Download PDF
+    </button>
+
+    <Header basics={basics} />
+    <Skills skills={skills} />
+    <Experience work={work} />
+    <Awards awards={awards} />
+    <Education education={education} />
+    <Personal personal={personal} />
+
+    <Footer />
+  </main>
+</Layout>

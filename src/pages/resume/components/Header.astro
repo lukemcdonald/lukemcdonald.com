@@ -1,0 +1,36 @@
+---
+import Heading from '@/components/Heading.astro'
+
+interface BasicsItem {
+  email?: string
+  intro?: string
+  label?: string
+  name: string
+  website?: string
+}
+
+interface Props {
+  basics: BasicsItem
+}
+
+const { basics } = Astro.props
+---
+
+<header>
+  <Heading
+    as="h1"
+    size="3xl"
+  >
+    {basics.name}
+  </Heading>
+
+  {basics.label && <p class="m-0 mb-4">{basics.label}</p>}
+
+  <p class="m-0 mb-4">
+    {basics.website && <a href={basics.website}>{basics.website}</a>}
+    {basics.website && basics.email}
+    {basics.email && <a href={`mailto:${basics.email}`}>{basics.email}</a>}
+  </p>
+
+  {basics.intro && <p>{basics.intro}</p>}
+</header>

@@ -1,0 +1,47 @@
+---
+import Heading from '@/components/Heading.astro'
+
+interface WorkItem {
+  company: string
+  endDate?: string | null
+  highlights?: string[]
+  position: string
+  startDate: string
+}
+
+interface Props {
+  work: WorkItem[]
+}
+
+const { work } = Astro.props
+---
+
+{
+  work.length > 0 && (
+    <section>
+      <Heading
+        as="h2"
+        size="xl"
+      >
+        Experience
+      </Heading>
+
+      <ul class="space-y-4">
+        {work.map((item: WorkItem) => (
+          <li>
+            <div class="font-bold">
+              {item.position} @ {item.company} ({item.startDate}–{item.endDate || 'Present'})
+            </div>
+            {item.highlights && (
+              <ul class="mt-2 space-y-1">
+                {item.highlights.map((highlight: string) => (
+                  <li>{highlight}</li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

@@ -1,0 +1,37 @@
+---
+import Heading from '@/components/Heading.astro'
+
+export interface AwardItem {
+  date?: string
+  org?: string
+  title: string
+}
+
+interface Props {
+  awards: AwardItem[]
+}
+
+const { awards } = Astro.props
+---
+
+{
+  awards.length > 0 && (
+    <section class="print:mt-6">
+      <Heading
+        as="h2"
+        size="xl"
+      >
+        Awards & Accomplishments
+      </Heading>
+      <ul class="space-y-1">
+        {awards.map((item: AwardItem) => (
+          <li>
+            {item.title}
+            {item.org ? ` — ${item.org}` : ''}
+            {item.date ? ` (${item.date})` : ''}
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

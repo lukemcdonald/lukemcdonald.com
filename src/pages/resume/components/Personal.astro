@@ -1,0 +1,28 @@
+---
+import Heading from '@/components/Heading.astro'
+
+interface Props {
+  personal: string[]
+}
+
+const { personal } = Astro.props
+---
+
+{
+  personal.length > 0 && (
+    <section class="print:mt-6">
+      <Heading
+        as="h2"
+        size="xl"
+      >
+        Personal
+      </Heading>
+
+      <ul class="space-y-1">
+        {personal.map((item: string) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+    </section>
+  )
+}

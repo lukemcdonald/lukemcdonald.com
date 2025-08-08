@@ -1,0 +1,28 @@
+---
+import Heading from '@/components/Heading.astro'
+
+interface Props {
+  skills: string[]
+}
+
+const { skills } = Astro.props
+---
+
+{
+  skills.length > 0 && (
+    <section>
+      <Heading
+        as="h2"
+        size="xl"
+      >
+        Skills
+      </Heading>
+
+      <ul class="space-y-1">
+        {skills.map((item: string) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+    </section>
+  )
+}
