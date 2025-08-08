@@ -4,6 +4,10 @@ export const CONTENT_CONFIG = {
       id: 'pages',
       path: 'src/content/pages',
     },
+    resume: {
+      id: 'resume',
+      path: 'src/content/resume',
+    },
   },
   settings: {
     defaultLocale: 'en',

@@ -3,6 +3,7 @@ import { glob } from 'astro/loaders'
 import { getCollectionMeta } from '@/utils/collections'
 
 const pages = getCollectionMeta('pages')
+const resume = getCollectionMeta('resume')
 
 const createPagesCollection = function () {
   return defineCollection({
@@ -33,7 +34,16 @@ const createPagesCollection = function () {
 }
 
 const pagesCollection = createPagesCollection()
+const resumeCollection = defineCollection({
+  loader: glob({
+    pattern: '**/[^_]*.{json,yaml,yml}',
+    base: `./${resume.path}`,
+  }),
+  // Accept any JSON/YAML shape so sections can be arrays or objects
+  schema: z.any(),
+})
 
 export const collections = {
   [pages.id]: pagesCollection,
+  [resume.id]: resumeCollection,
 }
