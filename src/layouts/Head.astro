@@ -176,9 +176,15 @@ const socialMetaTags = createSocialMetaTags(meta, GLOBAL_CONFIG)
     content={GLOBAL_CONFIG.themeColor}
   />
 
-  <!-- View Transitions API -->
-  <ClientRouter />
+  <!-- Prefetch resume page for snappier nav -->
+  <link
+    rel="prefetch"
+    href="/resume"
+  />
 
   <!-- PostHog Analytics -->
   {IS_PROD && <PostHog />}
+
+  <!-- View Transitions API -->
+  <ClientRouter />
 </head>
