@@ -2,7 +2,7 @@
 import type { MetaData } from '@/utils/meta'
 import { createStructuredData, createSocialMetaTags } from '@/utils/meta'
 import { stripHtmlAndTruncate } from '@/utils/text'
-import { GLOBAL_CONFIG } from '@/configs/global'
+import { GLOBAL_CONFIG, IS_PROD } from '@/configs/global'
 import { ClientRouter } from 'astro:transitions'
 import PostHog from '@/components/PostHog.astro'
 
@@ -180,5 +180,5 @@ const socialMetaTags = createSocialMetaTags(meta, GLOBAL_CONFIG)
   <ClientRouter />
 
   <!-- PostHog Analytics -->
-  <PostHog />
+  {IS_PROD && <PostHog />}
 </head>
