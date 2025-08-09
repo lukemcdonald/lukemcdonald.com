@@ -1,5 +1,6 @@
 ---
 import Section from '@/pages/resume/components/ui/Section.astro'
+import { Signature as PersonalIcon } from 'lucide-astro'
 
 interface Props {
   personal: string[]
@@ -11,6 +12,7 @@ const { personal } = Astro.props
 <Section
   title="Personal"
   items={personal}
+  icon={PersonalIcon}
 >
   <template slot="item">
     {(item: string) => item}

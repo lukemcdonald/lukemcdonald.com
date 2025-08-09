@@ -1,4 +1,6 @@
 ---
+import { GLOBAL_CONFIG } from '@/configs/global'
+
 interface BasicsItem {
   email?: string
   intro?: string
@@ -17,7 +19,9 @@ const { email, intro, label: subtitle, name: title, website } = basics || {}
 ---
 
 <header>
-  <h1>{title}</h1>
+  <h1>
+    <a href="/">{title}</a>
+  </h1>
 
   {subtitle && <p>{subtitle}</p>}
 

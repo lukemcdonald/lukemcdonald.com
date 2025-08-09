@@ -1,12 +1,11 @@
 ---
 import type { HTMLAttributes } from 'astro/types'
-import type { LucideIcon } from 'lucide-react'
 
 interface Props extends HTMLAttributes<'section'> {
   items: unknown[]
   itemsClass?: string
   title: string
-  icon?: LucideIcon
+  icon?: unknown
   iconClass?: string
   iconSize?: number | string
 }
@@ -26,8 +25,8 @@ if (hasItems && hasItemSlot) {
 
 <section {...delegated}>
   <header>
-    <h2 class="flex items-center gap-2.5">
-      {Icon && <Icon class:list={['print:hidden']} />}
+    <h2 class="flex items-center gap-2">
+      {Icon && <Icon class:list={['text-primary-900/90 print:hidden']} />}
       {title}
     </h2>
   </header>
@@ -35,8 +34,20 @@ if (hasItems && hasItemSlot) {
   {
     hasItems && (
       <ul class:list={['list-none px-0', itemsClass]}>
-        {hasItemSlot && renderedItemSlots.map((html) => <li set:html={html} />)}
-        {!hasItemSlot && items.map((item) => <li>{String(item)}</li>)}
+        {hasItemSlot &&
+          renderedItemSlots.map((html) => (
+            <li
+              class="p-0"
+              set:html={html}
+            />
+          ))}
+        {!hasItemSlot &&
+          items.map((item) => (
+            <li
+              class="p-0"
+              set:html={String(item)}
+            />
+          ))}
       </ul>
     )
   }

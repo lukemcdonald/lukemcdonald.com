@@ -1,5 +1,6 @@
 ---
 import Section from '@/pages/resume/components/ui/Section.astro'
+import { Brain as EducationIcon } from 'lucide-astro'
 
 interface EducationItem {
   area?: string
@@ -17,6 +18,7 @@ const { education } = Astro.props
 <Section
   title="Education"
   items={education}
+  icon={EducationIcon}
 >
   <template slot="item">
     {
