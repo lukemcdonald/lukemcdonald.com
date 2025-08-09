@@ -34,7 +34,7 @@ https://docs.astro.build/en/recipes/tailwind-rendered-markdown/
   @apply transition-colors;
 }
 
-html:has(div[data-theme='blue']) {
+html[data-theme='blue'] {
   --color-primary-50: oklch(98.4% 0.004 240);
   --color-primary-200: oklch(92.3% 0.015 240);
   --color-primary-300: oklch(86.8% 0.025 240);
@@ -46,7 +46,7 @@ html:has(div[data-theme='blue']) {
   --color-primary-900: oklch(17.1% 0.04 280);
 }
 
-html:has(div[data-theme='purple']) {
+html[data-theme='purple'] {
   --color-primary-50: oklch(98.4% 0.005 320);
   --color-primary-100: oklch(96.9% 0.01 320);
   --color-primary-200: oklch(92.3% 0.02 315);
@@ -59,7 +59,7 @@ html:has(div[data-theme='purple']) {
   --color-primary-900: oklch(17.1% 0.045 280);
 }
 
-html:has(div[data-theme='yellow']) {
+html[data-theme='yellow'] {
   --color-primary-50: oklch(98.4% 0.005 92);
   --color-primary-100: oklch(96.9% 0.01 92);
   --color-primary-200: oklch(92.3% 0.02 92);
@@ -72,7 +72,7 @@ html:has(div[data-theme='yellow']) {
   --color-primary-900: oklch(17.1% 0.035 105);
 }
 
-html:has(div[data-theme='green']) {
+html[data-theme='green'] {
   --color-primary-50: oklch(98.4% 0.006 129);
   --color-primary-100: oklch(96.9% 0.012 129);
   --color-primary-200: oklch(92.3% 0.025 129);
@@ -85,7 +85,7 @@ html:has(div[data-theme='green']) {
   --color-primary-900: oklch(17.1% 0.04 110);
 }
 
-html:has(div[data-theme='orange']) {
+html[data-theme='orange'] {
   --color-primary-50: oklch(98.4% 0.006 45);
   --color-primary-100: oklch(96.9% 0.012 45);
   --color-primary-200: oklch(92.3% 0.025 45);
@@ -98,7 +98,7 @@ html:has(div[data-theme='orange']) {
   --color-primary-900: oklch(17.1% 0.04 70);
 }
 
-html:has(div[data-theme='neon']) {
+html[data-theme='neon'] {
   --color-primary-50: oklch(98.94% 0.027 122.59);
   --color-primary-100: oklch(98.94% 0.027 122.59);
   --color-primary-200: oklch(97.82% 0.057 123.41);

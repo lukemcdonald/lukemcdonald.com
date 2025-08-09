@@ -1,7 +1,16 @@
 ---
-const { theme } = Astro.props
+import type { HTMLAttributes } from 'astro/types'
+
+type WrapperTag = 'body' | 'div' | 'html' | 'main' | 'section'
+
+interface Props extends HTMLAttributes<WrapperTag> {
+  as: WrapperTag
+  theme?: 'default' | 'dark'
+}
+
+const { as: Component, theme = 'default' } = Astro.props satisfies Props
 ---
 
-<div data-theme={theme}>
+<Component data-theme={theme}>
   <slot />
-</div>
+</Component>

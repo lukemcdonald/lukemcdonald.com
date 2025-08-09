@@ -8,10 +8,9 @@ import '@/styles/global.css'
 
 export type Props = MetaData
 
-const { generator, props, url } = Astro
+const { generator, props, site, url } = Astro
 
-// Use Astro.site for dynamic URL logic when available
-const canonicalUrl = new URL(url.pathname, Astro.site || url)
+const canonicalUrl = new URL(url.pathname, site ?? url).href
 
 const {
   author = GLOBAL_CONFIG.author,
@@ -23,7 +22,7 @@ const {
 
 const meta: MetaData = {
   author,
-  canonicalUrl: canonicalUrl.toString(),
+  canonicalUrl,
   dir,
   lang,
   title,
@@ -32,7 +31,8 @@ const meta: MetaData = {
 ---
 
 <!doctype html>
-<html
+<ThemeProvider
+  as="html"
   dir={dir}
   lang={lang}
 >
@@ -40,9 +40,8 @@ const meta: MetaData = {
     generator={generator}
     meta={meta}
   />
+
   <body>
-    <ThemeProvider theme="default">
-      <slot />
-    </ThemeProvider>
+    <slot />
   </body>
-</html>
+</ThemeProvider>
