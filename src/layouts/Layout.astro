@@ -2,11 +2,15 @@
 import type { MetaData } from '@/utils/meta'
 import { GLOBAL_CONFIG } from '@/configs/global'
 import Head from '@/layouts/Head.astro'
-import ThemeProvider from '@/components/ThemeProvider.astro'
 
 import '@/styles/global.css'
 
-export type Props = MetaData
+type Theme = 'default' | 'blue' | 'purple' | 'yellow' | 'green' | 'orange' | 'neon'
+
+export interface Props extends MetaData {
+  bodyClass?: string
+  theme?: Theme
+}
 
 const { generator, props, site, url } = Astro
 
@@ -14,8 +18,10 @@ const canonicalUrl = new URL(url.pathname, site ?? url).href
 
 const {
   author = GLOBAL_CONFIG.author,
+  bodyClass,
   dir = GLOBAL_CONFIG.dir,
   lang = GLOBAL_CONFIG.lang ?? 'en',
+  theme = 'default',
   title = GLOBAL_CONFIG.name,
   ...siteMeta
 } = props
@@ -31,17 +37,17 @@ const meta: MetaData = {
 ---
 
 <!doctype html>
-<ThemeProvider
-  as="html"
+<html
   dir={dir}
   lang={lang}
+  data-theme={theme}
 >
   <Head
     generator={generator}
     meta={meta}
   />
 
-  <body>
+  <body class={bodyClass}>
     <slot />
   </body>
-</ThemeProvider>
+</html>

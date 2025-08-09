@@ -1,6 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro'
-import DarkModeToggle from '@/components/DarkModeToggle.astro'
+import Prose from '@/pages/resume/components/ui/Prose.astro'
 
 import Header from './components/Header.astro'
 import Skills from './components/Skills.astro'
@@ -9,6 +9,7 @@ import Awards from './components/Awards.astro'
 import Education from './components/Education.astro'
 import Personal from './components/Personal.astro'
 import Footer from './components/Footer.astro'
+import PrintButton from './components/ui/PrintButton.astro'
 import type {
   AwardsData,
   BasicsData,
@@ -35,16 +36,17 @@ const personal: PersonalData = resume.personal
 const skills: SkillsData = resume.skills
 ---
 
-<Layout title="Resume">
-  <main class="px-4">
-    <button
-      class="fixed top-4 right-4 rounded-md bg-blue-600 px-4 py-2 font-medium text-white shadow-sm hover:bg-blue-700 print:hidden"
-      onclick="window.print()"
-    >
-      📄 Download PDF
-    </button>
+<Layout
+  title="Resume"
+  bodyClass="bg-white text-primary-900 dark:bg-primary-900 dark:text-primary-50"
+>
+  <main class="px-4 py-6">
+    <PrintButton class="fixed top-4 right-4 dark:shadow" />
 
-    <article class="mx-auto prose">
+    <Prose
+      as="article"
+      class="mx-auto dark:prose-invert"
+    >
       <Header basics={basics} />
 
       <Skills skills={skills} />
@@ -54,6 +56,6 @@ const skills: SkillsData = resume.skills
       <Personal personal={personal} />
 
       <Footer />
-    </article>
+    </Prose>
   </main>
 </Layout>

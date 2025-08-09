@@ -1,0 +1,30 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+
+type WrapperTag = 'div' | 'section' | 'article' | 'main'
+
+interface Props extends HTMLAttributes<WrapperTag> {
+  as?: WrapperTag
+  class?: string
+}
+
+const { as: Component = 'div', class: className, ...delegated } = Astro.props satisfies Props
+---
+
+<Component
+  {...delegated}
+  class:list={[
+    'prose',
+    'prose-h1:text-3xl',
+    'prose-h2:text-2xl',
+    'prose-h3:text-xl',
+    'prose-headings:font-semibold',
+    // 'prose-neutral',
+    // 'prose-ol:my-2',
+    // 'prose-p:my-1',
+    // 'prose-ul:my-2',
+    className,
+  ]}
+>
+  <slot />
+</Component>

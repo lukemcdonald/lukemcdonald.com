@@ -1,18 +1,30 @@
 ---
 import Section from '@/pages/resume/components/ui/Section.astro'
+import { Check as CheckIcon } from 'lucide-react'
+import { Swords as SkillsIcon } from 'lucide-react'
 
 interface Props {
   skills: string[]
 }
 
-const { skills } = Astro.props
+const { skills, ...delegated } = Astro.props satisfies Props
 ---
 
 <Section
-  title="Skills"
   items={skills}
+  itemsClass="columns-2 sm:columns-3"
+  title="Skills"
+  icon={SkillsIcon}
+  {...delegated}
 >
   <template slot="item">
-    {(item: string) => item}
+    {
+      (item: string) => (
+        <div class="flex items-center gap-2">
+          <CheckIcon className="text-primary-400 size-4" />
+          <span>{item}</span>
+        </div>
+      )
+    }
   </template>
 </Section>

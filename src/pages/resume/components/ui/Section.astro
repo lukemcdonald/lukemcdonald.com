@@ -1,35 +1,42 @@
 ---
-interface Props {
-  title: string
+import type { HTMLAttributes } from 'astro/types'
+import type { LucideIcon } from 'lucide-react'
+
+interface Props extends HTMLAttributes<'section'> {
   items: unknown[]
+  itemsClass?: string
+  title: string
+  icon?: LucideIcon
+  iconClass?: string
+  iconSize?: number | string
 }
 
-const { title, items } = Astro.props
+const { items, itemsClass, title, icon: Icon, ...delegated } = Astro.props
 
-const hasItemSlot = Astro.slots.has('item')
 const hasItems = Array.isArray(items) && items.length > 0
+const hasItemSlot = Astro.slots.has('item')
 
 let renderedItemSlots: string[] = []
-
-if (hasItemSlot && hasItems) {
+if (hasItems && hasItemSlot) {
   renderedItemSlots = await Promise.all(
     items.map((item, index) => Astro.slots.render('item', [item, index]))
   )
 }
 ---
 
-<section>
-  <h2>{title}</h2>
+<section {...delegated}>
+  <header>
+    <h2 class="flex items-center gap-2.5">
+      {Icon && <Icon class:list={['print:hidden']} />}
+      {title}
+    </h2>
+  </header>
+
   {
     hasItems && (
-      <ul>
-        {hasItemSlot ?
-          renderedItemSlots.map((html) => (
-            <li>
-              <Fragment set:html={html} />
-            </li>
-          ))
-        : items.map((item) => <li>{String(item)}</li>)}
+      <ul class:list={['list-none px-0', itemsClass]}>
+        {hasItemSlot && renderedItemSlots.map((html) => <li set:html={html} />)}
+        {!hasItemSlot && items.map((item) => <li>{String(item)}</li>)}
       </ul>
     )
   }

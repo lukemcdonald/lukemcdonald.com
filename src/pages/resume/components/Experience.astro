@@ -1,5 +1,6 @@
 ---
 import Section from '@/pages/resume/components/ui/Section.astro'
+import { LaptopMinimal as ExperienceIcon } from 'lucide-astro'
 
 interface ExperienceItem {
   company: string
@@ -19,6 +20,7 @@ const { experience } = Astro.props
 <Section
   title="Experience"
   items={experience}
+  icon={ExperienceIcon}
 >
   <template slot="item">
     {

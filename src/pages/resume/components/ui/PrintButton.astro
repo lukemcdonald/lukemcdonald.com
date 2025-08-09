@@ -1,0 +1,36 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import { Printer as PrinterIcon } from 'lucide-react'
+
+const sizes = {
+  sm: 'px-2 py-2 rounded-md',
+  md: 'px-3 py-2 rounded-md',
+  lg: 'px-5 py-3 rounded-lg',
+}
+
+const iconSizes = {
+  sm: 'w-4 h-4',
+  md: 'w-5 h-5',
+  lg: 'w-6 h-6',
+}
+
+interface Props extends HTMLAttributes<'button'> {
+  iconSize?: keyof typeof iconSizes
+  size?: keyof typeof sizes
+}
+
+const { class: className, size = 'md' } = Astro.props satisfies Props
+---
+
+<button
+  class:list={[
+    'bg-primary-700 font-medium text-primary-50 shadow-sm transition-colors',
+    'hover:bg-primary-700/80',
+    'print:hidden',
+    sizes[size],
+    className,
+  ]}
+  onclick="window.print()"
+>
+  <PrinterIcon className={iconSizes[size]} />
+</button>
