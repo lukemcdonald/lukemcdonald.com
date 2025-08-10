@@ -1,6 +1,6 @@
-import eslintPluginAstro from "eslint-plugin-astro";
-import globals from "globals";
-import tsEslint from "typescript-eslint";
+import eslintPluginAstro from 'eslint-plugin-astro'
+import globals from 'globals'
+import tsEslint from 'typescript-eslint'
 
 export default [
   ...tsEslint.configs.recommended,
@@ -15,13 +15,10 @@ export default [
   },
   {
     rules: {
-      'no-console': 'warn'
-    }
+      'no-console': 'warn',
+    },
   },
   {
-    ignores: [
-      'dist/**',
-      '.astro/**',
-    ],
+    ignores: ['dist/**', '.astro/**'],
   },
 ]
