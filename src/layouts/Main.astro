@@ -2,10 +2,18 @@
 import { Image } from 'astro:assets'
 
 import backgroundImage from '@/assets/images/landscape-tree-fog.jpg'
+import Grass from '@/components/Grass.astro'
 import Header from '@/components/Header.astro'
+
+function getRandomGrassId(excludeId?: string) {
+  const ids = ['1', '2', '3', '4']
+  return ids.filter((id) => id !== excludeId)[Math.floor(Math.random() * ids.length)]
+}
+const foregroundGrassId = getRandomGrassId()
+const backgroundGrassId = getRandomGrassId(foregroundGrassId)
 ---
 
-<div class="dark:bg-primary-950 bg-primary-50 lg:grid">
+<div class="bg-primary-50 lg:grid dark:bg-primary-950">
   <Image
     alt=""
     class="absolute top-1/2 left-1/2 hidden h-full max-h-screen w-full -translate-x-1/2 -translate-y-1/2 transform overflow-hidden object-cover opacity-20 blur-xs grayscale lg:block dark:opacity-15"
@@ -15,6 +23,29 @@ import Header from '@/components/Header.astro'
     src={backgroundImage}
     style="grid-area: 1/1"
   />
+
+  <Grass
+    id={backgroundGrassId}
+    class:list={[
+      'overlay pointer-events-none fixed -bottom-[2dvh] z-0 hidden opacity-[3%] dark:invert',
+      // '-left-[20dvw] w-[70dvh] max-w-[60%] lg:block',
+      // '-left-[20dvw] w-[70dvh] max-w-[60%] xl:block',
+      '-right-[12dvw] w-[50dvh] max-w-[60%] 2xl:block',
+    ]}
+    aria-hidden="true"
+  />
+
+  <Grass
+    id={foregroundGrassId}
+    class:list={[
+      'overlay pointer-events-none fixed -bottom-4 z-50 hidden opacity-[4%] dark:invert',
+      // '-left-[20dvw] w-[70dvh] max-w-[60%] lg:block',
+      // '-left-[20dvw] w-[70dvh] max-w-[60%] xl:block',
+      '-left-[12dvw] w-[50dvh] max-w-[60%] 2xl:block',
+    ]}
+    aria-hidden="true"
+  />
+
   <div
     class="place-items-center text-primary-900 lg:relative lg:flex lg:min-h-screen lg:items-center lg:justify-center"
     style="grid-area: 1/1"

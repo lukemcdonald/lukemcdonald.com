@@ -1,0 +1,36 @@
+---
+import { Image } from 'astro:assets'
+
+import leaf1 from '@/assets/images/grass/grass-1.svg'
+import leaf2 from '@/assets/images/grass/grass-2.svg'
+import leaf3 from '@/assets/images/grass/grass-3.svg'
+import leaf4 from '@/assets/images/grass/grass-4.svg'
+
+const { alt, class: className, id = '1', ...delegated } = Astro.props
+
+function getLeafSrc(requestedId: string) {
+  switch (requestedId) {
+    case '1':
+      return leaf1
+    case '2':
+      return leaf2
+    case '3':
+      return leaf3
+    case '4':
+      return leaf4
+    default:
+      return leaf1
+  }
+}
+
+const selectedSrc = getLeafSrc(String(id))
+---
+
+<Image
+  alt={alt || ''}
+  class={className}
+  fetchpriority="low"
+  loading="lazy"
+  src={selectedSrc}
+  {...delegated}
+/>

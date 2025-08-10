@@ -5,9 +5,9 @@ function ChevronDown(props: SVGProps<SVGSVGElement>) {
     <svg
       fill="none"
       height="24"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
       stroke="currentColor"
       viewBox="0 0 24 24"
       width="24"
