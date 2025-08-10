@@ -1,7 +1,7 @@
 import type { PageEntry, PageSortOptions } from './pages.types'
 
 export function sortByTitle(pages: PageEntry[]): PageEntry[] {
-  return pages.sort((a, b) => a.data.title.localeCompare(b.data.title))
+  return [...pages].sort((a, b) => a.data.title.localeCompare(b.data.title))
 }
 
 export function sortPages(pages: PageEntry[], options: PageSortOptions = {}): PageEntry[] {
@@ -15,7 +15,7 @@ export function sortPages(pages: PageEntry[], options: PageSortOptions = {}): Pa
         throw new Error('Custom sort function is required when sortBy is "custom"')
       }
 
-      return pages.sort(customSort)
+      return [...pages].sort(customSort)
     case 'manual':
       if (!manualOrder || manualOrder.length === 0) {
         throw new Error('Manual order array is required when sortBy is "manual"')
@@ -23,7 +23,7 @@ export function sortPages(pages: PageEntry[], options: PageSortOptions = {}): Pa
 
       const orderMap = new Map(manualOrder.map((id, index) => [id, index]))
 
-      return pages.sort((a, b) => {
+      return [...pages].sort((a, b) => {
         const indexA = orderMap.get(a.id)
         const indexB = orderMap.get(b.id)
         if (indexA !== undefined && indexB !== undefined) {

@@ -1,22 +1,23 @@
 import { getContentDirectory } from '@/utils/collections'
-import { sortByAccessorDateDesc } from '@/utils/content/normalize'
+import { sortByAccessorDateDesc, toDate } from '@/utils/content/normalize'
 import { getCollection } from 'astro:content'
-import type { PageFilterOptions } from './pages.types'
+import type { PageEntry, PageFilterOptions } from './pages.types'
 import { sortPages } from './pages.utils'
 
-export async function getPublishedPages(options: PageFilterOptions = {}) {
+export function buildPagesFilter(options: PageFilterOptions = {}) {
   const {
-    allowDrafts,
+    allowDrafts = false,
     customFilter,
-    customSort,
+    dateFrom,
+    dateTo,
     exclude = [],
+    hideFuture,
+    hidePast,
     include,
-    manualOrder,
-    sortBy,
   } = options
 
-  const pages = await getCollection('pages', (entry) => {
-    const { id, data } = entry
+  return (entry: PageEntry) => {
+    const { data, id } = entry
 
     if (!allowDrafts && data.draft) {
       return false
@@ -25,6 +26,7 @@ export async function getPublishedPages(options: PageFilterOptions = {}) {
     if (include) {
       const pageDirectory = getContentDirectory(id)
       const isIncluded = include.some((item) => item === id || item === pageDirectory)
+
       if (!isIncluded) {
         return false
       }
@@ -38,12 +40,46 @@ export async function getPublishedPages(options: PageFilterOptions = {}) {
       return false
     }
 
-    return true
-  })
+    // Date filters based on data.pubDatetime
+    const pub = toDate(data.pubDatetime ?? null)
 
-  // Extend shared sorter with server-only branches (order and pubDate)
+    if (pub && dateFrom) {
+      const from = toDate(dateFrom)
+      if (from && pub < from) {
+        return false
+      }
+    }
+
+    if (dateTo && pub) {
+      const to = toDate(dateTo)
+      if (to && pub > to) {
+        return false
+      }
+    }
+
+    if (hideFuture && pub) {
+      const now = new Date()
+      if (pub > now) {
+        return false
+      }
+    }
+
+    if (hidePast && pub) {
+      const now = new Date()
+      if (pub < now) {
+        return false
+      }
+    }
+
+    return true
+  }
+}
+
+export function sortPagesServer(pages: PageEntry[], options: PageFilterOptions = {}) {
+  const { customSort, manualOrder, sortBy } = options
+
   if (sortBy === 'order') {
-    return pages.sort((a, b) => {
+    return [...pages].sort((a, b) => {
       const orderA = a.data.order ?? 999
       const orderB = b.data.order ?? 999
       if (orderA === orderB) {
@@ -57,10 +93,11 @@ export async function getPublishedPages(options: PageFilterOptions = {}) {
     return sortByAccessorDateDesc(pages, (p) => p.data.pubDatetime ?? 0)
   }
 
-  return sortPages(pages, { sortBy, customSort, manualOrder })
+  return sortPages(pages, { customSort, manualOrder, sortBy })
 }
 
-// removed local sort helpers in favor of shared utils
-
-export const getIdentityPages = (options: PageFilterOptions = {}) =>
-  getPublishedPages({ ...options, include: ['i-am-a'] })
+export async function getPublishedPages(options: PageFilterOptions = {}) {
+  const filter = buildPagesFilter(options)
+  const pages = await getCollection('pages', filter)
+  return sortPagesServer(pages, options)
+}

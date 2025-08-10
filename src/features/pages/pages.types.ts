@@ -12,6 +12,11 @@ export interface PageFilterOptions {
   include?: string[]
   manualOrder?: string[]
   sortBy?: SortBy
+  // Optional date filtering based on `data.pubDatetime`
+  dateFrom?: Date | string | number
+  dateTo?: Date | string | number
+  hideFuture?: boolean
+  hidePast?: boolean
 }
 
 export interface PageSortOptions {
