@@ -1,0 +1,16 @@
+company: ZenBusiness
+position: Staff Software Engineer
+startDate: '2023-05'
+endDate: null
+location: Remote
+highlights:
+  - Tech Lead across four full-stack teams (L2–L4), supporting engineers working on customer purchases, checkout, payments, experimentation, and observability.
+  - Lead runahead work for major features — scoping requirements, drafting tickets, and aligning architecture to reduce blockers and keep projects moving.
+  - Write and review production code daily, with a focus on clean, accessible, and maintainable solutions across front-end and full-stack workflows.
+  - Implemented and managed LaunchDarkly feature flags and experiments across customer flows, supporting controlled rollouts and data-driven decisions.
+  - Helped implement internationalization (i18n) across the app using POEditor and translation workflows, supporting future localization and global readiness.
+  - Serve as the primary technical liaison for the Core Web Experience group, representing team interests in cross-functional planning while shielding engineers from unnecessary context switching.
+  - Architected and launched ZUI — a scalable internal component library built on MUI — reducing dev time and improving design consistency across the org; transitioned maintenance to a dedicated team.
+  - Implemented cursor rules to improve AI behavior and maintain consistent UX patterns across apps.
+  - Guide the migration of legacy micro-frontends into unified systems, improving performance, consistency, and maintainability.
+  - Review code across 15+ repositories, mentoring engineers and reinforcing best practices for accessibility, performance, and long-term clarity.

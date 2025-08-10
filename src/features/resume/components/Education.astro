@@ -1,0 +1,28 @@
+---
+import Section from '@/features/resume/components/ui/Section.astro'
+import { Brain as EducationIcon } from 'lucide-astro'
+import type { EducationItem } from '@/features/resume/resume.types'
+
+export interface Props {
+  education: EducationItem[]
+}
+
+const { education } = Astro.props
+---
+
+<Section
+  title="Education"
+  items={education}
+  icon={EducationIcon}
+>
+  <template slot="item">
+    {
+      (item: EducationItem) => (
+        <>
+          {item.studyType}
+          {item.area ? `${item.area} ` : ''}— {item.institution}
+        </>
+      )
+    }
+  </template>
+</Section>

@@ -1,0 +1,20 @@
+---
+import Link from '@/components/Link.astro'
+
+const endpoints = [
+  '/api/resume.json',
+  '/api/resume/basics.json',
+  '/api/resume/skills.json',
+  '/api/resume/personal.json',
+  '/api/resume/work.json',
+  '/api/resume/awards.json',
+  '/api/resume/education.json',
+]
+---
+
+<footer class="print:hidden">
+  <nav>
+    <span>Endpoints:</span>
+    {endpoints.map((endpoint) => <Link href={endpoint}>{endpoint}</Link>)}
+  </nav>
+</footer>

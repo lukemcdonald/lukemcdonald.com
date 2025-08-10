@@ -1,0 +1,27 @@
+---
+import type { BasicsItem } from '@/features/resume/resume.types'
+
+export interface Props {
+  basics: BasicsItem
+}
+
+const { basics } = Astro.props
+
+const { email, intro, label: subtitle, name: title, website } = basics || {}
+---
+
+<header>
+  <h1>
+    <a href="/">{title}</a>
+  </h1>
+
+  {subtitle && <p>{subtitle}</p>}
+
+  <p>
+    {website && <a href={website}>{website}</a>}
+    {website && email && ' — '}
+    {email && <a href={`mailto:${email}`}>{email}</a>}
+  </p>
+
+  {intro && <p>{intro}</p>}
+</header>

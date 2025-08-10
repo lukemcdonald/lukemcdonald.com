@@ -1,0 +1,10 @@
+company: Fellowship of Christian Athletes
+position: Senior Software Engineer
+startDate: '2023-01'
+endDate: '2023-05'
+location: Remote
+highlights:
+  - Led a team to build an internal tool on a new Snowflake data lake, delivering ahead of a tight deadline.
+  - Refactored a React codebase to adopt TypeScript, improving type safety and maintainability.
+  - Created shared UI components and branding elements using Tailwind and WordPress, ensuring consistency across internal tools.
+  - Helped define engineering standards across TypeScript and WordPress projects, streamlining developer onboarding and team workflows.

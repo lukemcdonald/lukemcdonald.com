@@ -6,13 +6,16 @@
     "astro": "astro",
     "build": "astro build",
     "check": "astro check",
+    "deploy:prod": "netlify deploy --build --prod",
     "dev": "astro dev",
-    "preview": "astro preview",
+    "dev:netlify": "netlify dev",
     "fix": "npm run lint:fix && npm run format:fix",
     "format": "prettier .",
     "format:fix": "prettier . --write --ignore-unknown",
     "lint": "eslint ./src --report-unused-disable-directives",
-    "lint:fix": "eslint ./src --fix --report-unused-disable-directives"
+    "lint:fix": "eslint ./src --fix --report-unused-disable-directives",
+    "preview": "netlify deploy --build --message \"preview $(git rev-parse --short HEAD)\"",
+    "style": "lint:fix && format:fix"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -24,7 +27,8 @@
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "astro": "^5.12.0",
-    "lucide-react": "^0.525.0",
+    "date-fns": "4.1.0",
+    "lucide-astro": "^0.539.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "tailwindcss": "^4.1.11",

@@ -1,0 +1,24 @@
+name: Luke McDonald
+label: Software Engineer with a Product Mindset and an Eye for Design
+email: thelukemcdonald@gmail.com
+phone: (319) 480-7088
+website: https://lukemcdonald.com
+location:
+  street: 21291 175th Ave.
+  city: Monticello
+  region: IA
+  postalCode: 52310
+  country: US
+profiles:
+  - network: Website
+    url: https://lukemcdonald.com
+  - network: GitHub
+    username: lukemcdonald
+    url: https://github.com/lukemcdonald
+  - network: LinkedIn
+    username: thelukemcdonald
+    url: https://www.linkedin.com/in/thelukemcdonald
+intro: |
+  Senior software engineer with a front-end focus and full-stack flexibility. I specialize in building performant, accessible, and maintainable web interfaces using modern tools like React and TypeScript, while also being comfortable working across backend systems with PHP, Node.js, GraphQL, and SQL.
+
+  With over 15 years of experience — including as a tech lead and business owner — I bring more than just technical skills. I understand how design, development, and product goals intersect. I've led component library architecture, shipped cross-functional tools, mentored engineers, and helped scale both startups and established teams. I thrive in roles where thoughtful UI meets practical engineering.

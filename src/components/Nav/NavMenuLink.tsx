@@ -1,5 +1,5 @@
-import { ExternalLink as ExternalLinkIcon } from 'lucide-react'
 import type { AnchorHTMLAttributes } from 'react'
+import ExternalLinkIcon from '@/components/icons/ExternalLink'
 
 interface NavMenuLinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
   href: string

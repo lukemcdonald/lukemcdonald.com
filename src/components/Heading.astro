@@ -44,6 +44,7 @@ interface Props extends HTMLAttributes<HeadingTag> {
 
 const {
   as: Component = 'h2',
+  class: className,
   color = 'primary',
   size = 'xl',
   weight = 'bold',
@@ -53,7 +54,7 @@ const {
 ---
 
 <Component
-  class:list={[colors[color], sizes[size], weights[weight], wraps[wrap]]}
+  class:list={[colors[color], sizes[size], weights[weight], wraps[wrap], className]}
   {...delegated}
 >
   <slot />

@@ -1,0 +1,37 @@
+---
+import Section from '@/features/resume/components/ui/Section.astro'
+import { ShieldEllipsis as ExperienceIcon } from 'lucide-astro'
+import type { ExperienceItem } from '@/features/resume/resume.types'
+
+export interface Props {
+  experience: ExperienceItem[]
+}
+
+const { experience } = Astro.props
+---
+
+<Section
+  title="Experience"
+  items={experience}
+  icon={ExperienceIcon}
+>
+  <template slot="item">
+    {
+      (item: ExperienceItem) => (
+        <>
+          <div>
+            {item.position} @ {item.company} ({item.startDate}–{item.endDate || 'Present'})
+          </div>
+
+          {item.highlights && (
+            <ul>
+              {item.highlights.map((highlight: string) => (
+                <li>{highlight}</li>
+              ))}
+            </ul>
+          )}
+        </>
+      )
+    }
+  </template>
+</Section>

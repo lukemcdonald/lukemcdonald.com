@@ -1,0 +1,29 @@
+---
+import Section from '@/features/resume/components/ui/Section.astro'
+import { Medal as AwardsIcon } from 'lucide-astro'
+import type { AwardItem } from '@/features/resume/resume.types'
+
+export interface Props {
+  awards: AwardItem[]
+}
+
+const { awards } = Astro.props
+---
+
+<Section
+  title="Awards & Accomplishments"
+  items={awards}
+  icon={AwardsIcon}
+>
+  <template slot="item">
+    {
+      (item: AwardItem) => (
+        <>
+          {item.title}
+          {item.org && ` — ${item.org}`}
+          {item.date && ` (${item.date})`}
+        </>
+      )
+    }
+  </template>
+</Section>

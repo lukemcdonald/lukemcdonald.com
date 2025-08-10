@@ -9,9 +9,11 @@ const { image, imageAlt } = Astro.props
     image && (
       <figure class="entry__media relative bg-primary-500 mix-blend-lighten">
         <Image
-          src={image}
           alt={imageAlt || ''}
           class="block h-full w-full grayscale xs:object-cover"
+          decoding="sync"
+          fetchpriority="high"
+          src={image}
         />
       </figure>
     )
