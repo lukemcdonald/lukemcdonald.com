@@ -1,4 +1,5 @@
 import { getContentDirectory } from '@/utils/collections'
+import { sortByAccessorDateDesc } from '@/utils/content/normalize'
 import { getCollection, type CollectionEntry } from 'astro:content'
 
 export type SortBy = 'title' | 'order' | 'pubDate' | 'custom' | 'manual'
@@ -103,11 +104,7 @@ function sortPages(
       })
 
     case 'pubDate':
-      return pages.sort((a, b) => {
-        const dateA = a.data.pubDatetime || new Date(0)
-        const dateB = b.data.pubDatetime || new Date(0)
-        return dateB.getTime() - dateA.getTime() // newest first
-      })
+      return sortByAccessorDateDesc(pages, (p) => p.data.pubDatetime ?? 0)
 
     case 'custom':
       if (!customSort) {

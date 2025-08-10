@@ -1,7 +1,8 @@
 import type { ResumeData } from '@/features/resume/resume.types'
 import { getCollection } from 'astro:content'
+import { parseContentId, sortByDateDesc } from '@/utils/content/normalize'
 
-type Dateable = { date?: string; startDate?: string }
+// removed unused Dateable type; sorting now uses shared utility
 
 /**
  * Aggregates all entries in the `resume` collection into a single JSON object.
@@ -15,36 +16,27 @@ export async function getResumeData(): Promise<ResumeData> {
   const result: Record<string, unknown> = {}
 
   for (const entry of entries) {
-    const id = entry.id.replace(/\.(json|ya?ml)$/i, '')
-    const parts = id.split('/')
-    if (parts.length === 1) {
-      result[parts[0]] = entry.data
-    } else {
-      const [section, ...rest] = parts
-      const itemId = rest.join('/')
-      const existing = (result[section] as Array<unknown>) || []
-      const next = [
-        ...existing,
-        {
-          id: itemId,
-          ...(entry.data && typeof entry.data === 'object' ? entry.data : { value: entry.data }),
-        },
-      ]
-      result[section] = next
+    const { section, itemId, isTopLevel } = parseContentId(entry.id)
+
+    if (isTopLevel) {
+      result[section] = entry.data
+      continue
     }
+
+    const existing = (result[section] as Array<unknown>) || []
+    const next = [
+      ...existing,
+      {
+        id: itemId,
+        ...(entry.data && typeof entry.data === 'object' ? entry.data : { value: entry.data }),
+      },
+    ]
+    result[section] = next
   }
 
   for (const [key, value] of Object.entries(result)) {
     if (Array.isArray(value)) {
-      result[key] = [...value].sort((a: unknown, b: unknown) => {
-        const ad = (a as Dateable).date || (a as Dateable).startDate || ''
-        const bd = (b as Dateable).date || (b as Dateable).startDate || ''
-        return (
-          ad < bd ? 1
-          : ad > bd ? -1
-          : 0
-        )
-      })
+      result[key] = sortByDateDesc(value)
     }
   }
 

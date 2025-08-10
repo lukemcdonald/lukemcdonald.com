@@ -1,21 +1,26 @@
 import type { APIRoute } from 'astro'
 import { getCollection, getEntry } from 'astro:content'
+import {
+  parseContentId,
+  stripDataExtension,
+  sortByDateDesc,
+  getDateKey,
+} from '@/utils/content/normalize'
 
 export async function getStaticPaths() {
   const entries = await getCollection('resume')
   const sections = new Set<string>()
   for (const entry of entries) {
-    const id = entry.id.replace(/\.(json|ya?ml)$/i, '')
-    const first = id.split('/')[0]
-    sections.add(first)
+    const { section } = parseContentId(entry.id)
+    if (section) sections.add(section)
   }
   return Array.from(sections).map((section) => ({
-    params: { id: section },
+    params: { section },
   }))
 }
 
 export const GET: APIRoute = async ({ params }) => {
-  const { id: sectionId } = params
+  const { section: sectionId } = params
 
   if (!sectionId) {
     return new Response(null, { status: 400 })
@@ -26,35 +31,17 @@ export const GET: APIRoute = async ({ params }) => {
 
   // Also collect any nested entries (e.g., resume/experience/*.yaml)
   const all = await getCollection('resume')
-  const normalizeId = (id: string) => id.replace(/\.(json|ya?ml)$/i, '')
   const nested = all
-    .map((e) => ({ key: normalizeId(e.id), data: e.data }))
+    .map((e) => ({ key: stripDataExtension(e.id), data: e.data }))
     .filter((e) => e.key.startsWith(sectionId + '/'))
-    .map((e) => ({
-      id: e.key.slice(sectionId.length + 1),
-      ...e.data,
-    }))
+    .map((e) => ({ id: e.key.slice(sectionId.length + 1), ...e.data }))
 
-  const getDateLike = (obj: unknown): string => {
-    if (obj && typeof obj === 'object') {
-      const anyObj = obj as Record<string, unknown>
-      return String(anyObj.date || anyObj.startDate || '')
-    }
-    return ''
-  }
+  // date key extraction is shared via getDateKey
 
   let payload: unknown
   if (nested.length > 0) {
     // Sort nested by date/startDate desc if present
-    payload = nested.sort((a, b) => {
-      const ad = getDateLike(a)
-      const bd = getDateLike(b)
-      return (
-        ad < bd ? 1
-        : ad > bd ? -1
-        : 0
-      )
-    })
+    payload = sortByDateDesc(nested, getDateKey)
   } else if (topLevel) {
     payload = topLevel.data
   } else {
