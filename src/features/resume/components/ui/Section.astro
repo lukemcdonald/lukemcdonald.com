@@ -1,13 +1,14 @@
 ---
+import type { Icon as IconType } from '@lucide/astro/icons'
 import type { HTMLAttributes } from 'astro/types'
 
 interface Props extends HTMLAttributes<'section'> {
+  icon?: typeof IconType
+  iconClass?: string
+  iconSize?: number | string
   items: unknown[]
   itemsClass?: string
   title: string
-  icon?: unknown
-  iconClass?: string
-  iconSize?: number | string
 }
 
 const { icon: Icon, items, itemsClass, title, ...delegated } = Astro.props

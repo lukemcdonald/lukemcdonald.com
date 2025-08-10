@@ -17,6 +17,18 @@ export default [
   {
     rules: {
       'no-console': 'warn',
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@lucide/astro',
+              message:
+                'Do not import from "@lucide/astro". Use direct imports to improve dev performance e.g. import ChevronDown from "@lucide/astro/icons/chevron-down".',
+            },
+          ],
+        },
+      ],
     },
   },
   {
