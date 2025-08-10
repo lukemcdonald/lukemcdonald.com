@@ -6,6 +6,7 @@
     "astro": "astro",
     "build": "astro build",
     "check": "astro check",
+    "clean": "rm -rf .astro dist node_modules",
     "deploy:prod": "netlify deploy --build --prod",
     "dev": "astro dev",
     "dev:netlify": "netlify dev",
@@ -16,6 +17,7 @@
     "lint": "eslint ./src --report-unused-disable-directives",
     "lint:fix": "eslint ./src --fix --report-unused-disable-directives",
     "preview": "netlify deploy --build --message \"preview $(git rev-parse --short HEAD)\"",
+    "reinstall": "npm run clean && npm ci",
     "style": "npm run lint:fix && npm run format:fix",
     "validate": "npm run -s lint && npm run -s format:check && npm run -s check"
   },
