@@ -3,7 +3,7 @@ import Layout from '@/layouts/Layout.astro'
 import Entry from '@/components/Entry/Entry.astro'
 import Main from '@/layouts/Main.astro'
 import { render } from 'astro:content'
-import { getPublishedPages } from '@/utils/content/pages'
+import { getPublishedPages } from '@/features/pages/pages.server'
 
 export async function getStaticPaths() {
   const pages = await getPublishedPages()

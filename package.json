@@ -11,11 +11,13 @@
     "dev:netlify": "netlify dev",
     "fix": "npm run lint:fix && npm run format:fix",
     "format": "prettier .",
+    "format:check": "prettier . --check --ignore-unknown",
     "format:fix": "prettier . --write --ignore-unknown",
     "lint": "eslint ./src --report-unused-disable-directives",
     "lint:fix": "eslint ./src --fix --report-unused-disable-directives",
     "preview": "netlify deploy --build --message \"preview $(git rev-parse --short HEAD)\"",
-    "style": "lint:fix && format:fix"
+    "style": "lint:fix && format:fix",
+    "validate": "npm run -s lint && npm run -s format:check && npm run -s check"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
