@@ -1,15 +1,7 @@
 ---
-import { GLOBAL_CONFIG } from '@/configs/global'
+import type { BasicsItem } from '@/features/resume/resume.types'
 
-interface BasicsItem {
-  email?: string
-  intro?: string
-  label?: string
-  name: string
-  website?: string
-}
-
-interface Props {
+export interface Props {
   basics: BasicsItem
 }
 

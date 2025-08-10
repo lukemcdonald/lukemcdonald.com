@@ -6,13 +6,16 @@
     "astro": "astro",
     "build": "astro build",
     "check": "astro check",
+    "deploy:prod": "netlify deploy --build --prod",
     "dev": "astro dev",
-    "preview": "astro preview",
+    "dev:netlify": "netlify dev",
     "fix": "npm run lint:fix && npm run format:fix",
     "format": "prettier .",
     "format:fix": "prettier . --write --ignore-unknown",
     "lint": "eslint ./src --report-unused-disable-directives",
-    "lint:fix": "eslint ./src --fix --report-unused-disable-directives"
+    "lint:fix": "eslint ./src --fix --report-unused-disable-directives",
+    "preview": "netlify deploy --build --message \"preview $(git rev-parse --short HEAD)\"",
+    "style": "lint:fix && format:fix"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

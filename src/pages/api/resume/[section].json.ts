@@ -9,25 +9,30 @@ export async function getStaticPaths() {
     const first = id.split('/')[0]
     sections.add(first)
   }
-  return Array.from(sections).map((section) => ({ params: { section } }))
+  return Array.from(sections).map((section) => ({
+    params: { id: section },
+  }))
 }
 
 export const GET: APIRoute = async ({ params }) => {
-  const section = params?.section
-  if (!section) return new Response(null, { status: 400 })
+  const { id: sectionId } = params
 
-  // Try exact top-level entry first (e.g., resume/work.json)
-  const topLevel = await getEntry('resume', section)
+  if (!sectionId) {
+    return new Response(null, { status: 400 })
+  }
 
-  // Also collect any nested entries (e.g., resume/work/*.yaml)
+  // Try exact top-level entry first (e.g., resume/experience.json)
+  const topLevel = await getEntry('resume', sectionId)
+
+  // Also collect any nested entries (e.g., resume/experience/*.yaml)
   const all = await getCollection('resume')
   const normalizeId = (id: string) => id.replace(/\.(json|ya?ml)$/i, '')
   const nested = all
     .map((e) => ({ key: normalizeId(e.id), data: e.data }))
-    .filter((e) => e.key.startsWith(section + '/'))
+    .filter((e) => e.key.startsWith(sectionId + '/'))
     .map((e) => ({
-      id: e.key.slice(section.length + 1),
-      ...(typeof e.data === 'object' ? e.data : { value: e.data }),
+      id: e.key.slice(sectionId.length + 1),
+      ...e.data,
     }))
 
   const getDateLike = (obj: unknown): string => {
@@ -57,6 +62,10 @@ export const GET: APIRoute = async ({ params }) => {
   }
 
   return new Response(JSON.stringify(payload), {
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      // 30 minutes, 1 week, 30 days
+      'Cache-Control': 'public, max-age=1800, s-maxage=604800, stale-while-revalidate=2592000',
+    },
   })
 }

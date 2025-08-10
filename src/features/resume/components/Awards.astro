@@ -1,14 +1,9 @@
 ---
-import Section from '@/pages/resume/components/ui/Section.astro'
+import Section from '@/features/resume/components/ui/Section.astro'
 import { Medal as AwardsIcon } from 'lucide-astro'
+import type { AwardItem } from '@/features/resume/resume.types'
 
-export interface AwardItem {
-  date?: string
-  org?: string
-  title: string
-}
-
-interface Props {
+export interface Props {
   awards: AwardItem[]
 }
 

@@ -1,39 +1,19 @@
 ---
 import Layout from '@/layouts/Layout.astro'
-import Prose from '@/pages/resume/components/ui/Prose.astro'
 
-import Header from './components/Header.astro'
-import Skills from './components/Skills.astro'
-import Experience from './components/Experience.astro'
-import Awards from './components/Awards.astro'
-import Education from './components/Education.astro'
-import Personal from './components/Personal.astro'
-import Footer from './components/Footer.astro'
-import PrintButton from './components/ui/PrintButton.astro'
-import type {
-  AwardsData,
-  BasicsData,
-  EducationData,
-  ExperienceData,
-  PersonalData,
-  SkillsData,
-} from './types'
+import Awards from '@/features/resume/components/Awards.astro'
+import Education from '@/features/resume/components/Education.astro'
+import Experience from '@/features/resume/components/Experience.astro'
+import Footer from '@/features/resume/components/Footer.astro'
+import Header from '@/features/resume/components/Header.astro'
+import Personal from '@/features/resume/components/Personal.astro'
+import PrintButton from '@/features/resume/components/ui/PrintButton.astro'
+import Prose from '@/features/resume/components/ui/Prose.astro'
+import Skills from '@/features/resume/components/Skills.astro'
 
-const base = new URL(Astro.request.url)
-const fetchJson = (path: string) => fetch(new URL(path, base)).then((r) => r.json())
+import { getResumeData } from '@/features/resume/resume.server'
 
-const resume: Record<string, unknown> = await fetchJson('/api/resume.json')
-
-if (!resume) {
-  throw new Response('Failed to fetch resume', { status: 500 })
-}
-
-const awards: AwardsData = resume.awards
-const basics: BasicsData = resume.basics
-const education: EducationData = resume.education
-const experience: ExperienceData = resume.experience
-const personal: PersonalData = resume.personal
-const skills: SkillsData = resume.skills
+const data = await getResumeData()
 ---
 
 <Layout
@@ -47,14 +27,12 @@ const skills: SkillsData = resume.skills
       as="article"
       class="mx-auto dark:prose-invert"
     >
-      <Header basics={basics} />
-
-      <Skills skills={skills} />
-      <Experience experience={experience} />
-      <Awards awards={awards} />
-      <Education education={education} />
-      <Personal personal={personal} />
-
+      <Header basics={data.basics} />
+      <Skills skills={data.skills} />
+      <Experience experience={data.experience} />
+      <Awards awards={data.awards} />
+      <Education education={data.education} />
+      <Personal personal={data.personal} />
       <Footer />
     </Prose>
   </main>

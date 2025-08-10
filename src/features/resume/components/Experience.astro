@@ -1,16 +1,9 @@
 ---
-import Section from '@/pages/resume/components/ui/Section.astro'
+import Section from '@/features/resume/components/ui/Section.astro'
 import { ShieldEllipsis as ExperienceIcon } from 'lucide-astro'
+import type { ExperienceItem } from '@/features/resume/resume.types'
 
-interface ExperienceItem {
-  company: string
-  endDate?: string | null
-  highlights?: string[]
-  position: string
-  startDate: string
-}
-
-interface Props {
+export interface Props {
   experience: ExperienceItem[]
 }
 
