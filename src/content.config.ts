@@ -36,10 +36,10 @@ const createPagesCollection = function () {
 const pagesCollection = createPagesCollection()
 const resumeCollection = defineCollection({
   loader: glob({
-    pattern: '**/[^_]*.{json,yaml,yml}',
+    pattern: '**/[^_]*.yaml',
     base: `./${resume.path}`,
   }),
-  // Accept any JSON/YAML shape so sections can be arrays or objects
+  // Accept any YAML shape so sections can be arrays or objects
   schema: z.any(),
 })
 
