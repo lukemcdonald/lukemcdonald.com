@@ -1,5 +1,7 @@
 import type { ResumeData } from '@/features/resume/resume.types'
+
 import { getCollection } from 'astro:content'
+
 import { parseContentId, sortByDateDesc } from '@/utils/content/normalize'
 
 // removed unused Dateable type; sorting now uses shared utility

@@ -1,5 +1,6 @@
-import { defineCollection, z } from 'astro:content'
 import { glob } from 'astro/loaders'
+import { defineCollection, z } from 'astro:content'
+
 import { getCollectionMeta } from '@/utils/collections'
 
 const pages = getCollectionMeta('pages')

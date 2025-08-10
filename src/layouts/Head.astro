@@ -1,10 +1,12 @@
 ---
 import type { MetaData } from '@/utils/meta'
-import { createStructuredData, createSocialMetaTags } from '@/utils/meta'
-import { stripHtmlAndTruncate } from '@/utils/text'
-import { GLOBAL_CONFIG, IS_PROD } from '@/configs/global'
+
 import { ClientRouter } from 'astro:transitions'
+
 import PostHog from '@/components/PostHog.astro'
+import { GLOBAL_CONFIG, IS_PROD } from '@/configs/global'
+import { createSocialMetaTags, createStructuredData } from '@/utils/meta'
+import { stripHtmlAndTruncate } from '@/utils/text'
 
 export interface Props {
   generator?: string

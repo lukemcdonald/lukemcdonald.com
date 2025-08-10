@@ -1,8 +1,9 @@
 ---
+import { getEntry, render } from 'astro:content'
+
+import Entry from '@/components/Entry/Entry.astro'
 import Layout from '@/layouts/Layout.astro'
 import Main from '@/layouts/Main.astro'
-import { getEntry, render } from 'astro:content'
-import Entry from '@/components/Entry/Entry.astro'
 
 const page = await getEntry('pages', 'index')
 

@@ -2,7 +2,7 @@
  * Content helpers: ID normalization and generic date-based sorting.
  * Framework-agnostic and reusable across features.
  */
-import { parseISO, isValid, compareDesc } from 'date-fns'
+import { compareDesc, isValid, parseISO } from 'date-fns'
 
 /** Remove known data file extensions from a content id */
 export function stripDataExtension(id: string): string {

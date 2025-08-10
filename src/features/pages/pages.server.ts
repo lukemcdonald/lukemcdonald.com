@@ -1,7 +1,10 @@
+import type { PageEntry, PageFilterOptions } from './pages.types'
+
+import { getCollection } from 'astro:content'
+
 import { getContentDirectory } from '@/utils/collections'
 import { sortByAccessorDateDesc, toDate } from '@/utils/content/normalize'
-import { getCollection } from 'astro:content'
-import type { PageEntry, PageFilterOptions } from './pages.types'
+
 import { sortPages } from './pages.utils'
 
 export function buildPagesFilter(options: PageFilterOptions = {}) {

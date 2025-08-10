@@ -1,9 +1,10 @@
 ---
-import EntryHeader from './EntryHeader.astro'
-import EntryBody from './EntryBody.astro'
+import type { ImageMetadata } from 'astro'
+
 import ContactInfo from '@/components/ContactInfo.astro'
 
-import type { ImageMetadata } from 'astro'
+import EntryBody from './EntryBody.astro'
+import EntryHeader from './EntryHeader.astro'
 
 export interface Props {
   description?: string
