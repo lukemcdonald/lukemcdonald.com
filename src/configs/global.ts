@@ -13,7 +13,6 @@ const SITE_URLS = {
 } as const
 
 export const GLOBAL_CONFIG = {
-  site: SITE_URLS,
   author: {
     name: SITE_NAME,
     url: SITE_URLS.origin,
@@ -21,6 +20,7 @@ export const GLOBAL_CONFIG = {
   dir: 'ltr',
   lang: 'en',
   name: SITE_NAME,
+  site: SITE_URLS,
   themeColor: '#122023',
   timezone: 'America/Chicago',
 } as const

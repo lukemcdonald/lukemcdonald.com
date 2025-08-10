@@ -20,7 +20,7 @@ if (!page) {
   return new Response(null, { status: 404 })
 }
 
-const { description, image, imageAlt, subtitle, title, seo } = page.data
+const { description, image, imageAlt, seo, subtitle, title } = page.data
 const { Content } = await render(page)
 
 const seoTitle = seo?.title || title

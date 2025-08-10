@@ -10,7 +10,7 @@ if (!page) {
   return new Response(null, { status: 404 })
 }
 
-const { description, image, imageAlt, subtitle, title, seo } = page.data
+const { description, image, imageAlt, seo, subtitle, title } = page.data
 
 const seoTitle = seo?.title || title
 const seoDescription = seo?.description || page.rendered?.html || description

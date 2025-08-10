@@ -59,10 +59,10 @@ export function redirectToError(status: number, message?: string): Response {
   }
 
   return new Response(null, {
-    status: 302,
     headers: {
       Location: url.pathname + url.search,
     },
+    status: 302,
   })
 }
 

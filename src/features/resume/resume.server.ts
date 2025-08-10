@@ -16,7 +16,7 @@ export async function getResumeData(): Promise<ResumeData> {
   const result: Record<string, unknown> = {}
 
   for (const entry of entries) {
-    const { section, itemId, isTopLevel } = parseContentId(entry.id)
+    const { isTopLevel, itemId, section } = parseContentId(entry.id)
 
     if (isTopLevel) {
       result[section] = entry.data

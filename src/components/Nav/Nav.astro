@@ -11,9 +11,9 @@ interface MenuLink extends MenuLinkItem {
   links?: MenuLinkItem[]
 }
 
-const workLinks: MenuLink[] = [{ name: 'Resume', href: '/resume' }]
+const workLinks: MenuLink[] = [{ href: '/resume', name: 'Resume' }]
 
-const playLinks: MenuLink[] = [{ name: 'TREAD Talks', href: '/tread-talks' }]
+const playLinks: MenuLink[] = [{ href: '/tread-talks', name: 'TREAD Talks' }]
 
 const livePages = await getPublishedPages({
   include: ['i-am-a'],
@@ -21,14 +21,14 @@ const livePages = await getPublishedPages({
 })
 
 const liveLinks: MenuLink[] = livePages.map((page) => ({
-  name: page.data.title,
   href: `/${page.id}`,
+  name: page.data.title,
 }))
 
 const menuLinks: MenuLink[] = [
-  { name: 'Work', href: '#', links: workLinks },
-  { name: 'Play', href: '#', links: playLinks },
-  { name: 'Live', href: '#', links: liveLinks },
+  { href: '#', links: workLinks, name: 'Work' },
+  { href: '#', links: playLinks, name: 'Play' },
+  { href: '#', links: liveLinks, name: 'Live' },
 ]
 ---
 
