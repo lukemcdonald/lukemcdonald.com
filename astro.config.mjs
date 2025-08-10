@@ -1,15 +1,15 @@
 // @ts-check
-import netlify from '@astrojs/netlify';
-import react from '@astrojs/react';
-import sitemap from '@astrojs/sitemap';
-import tailwindcss from "@tailwindcss/vite";
+import netlify from '@astrojs/netlify'
+import react from '@astrojs/react'
+import sitemap from '@astrojs/sitemap'
+import tailwindcss from '@tailwindcss/vite'
 
-import { defineConfig, envField } from "astro/config";
+import { defineConfig, envField } from 'astro/config'
 
-import { GLOBAL_CONFIG } from './src/configs/global.js';
+import { GLOBAL_CONFIG } from './src/configs/global.js'
 
 // Sitemap exclusions
-const SITEMAP_EXCLUSIONS = new Set([`${GLOBAL_CONFIG.site.origin}/index`]);
+const SITEMAP_EXCLUSIONS = new Set([`${GLOBAL_CONFIG.site.origin}/index`])
 
 // https://astro.build/config
 export default defineConfig({

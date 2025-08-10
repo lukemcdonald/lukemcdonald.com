@@ -1,6 +1,6 @@
 ---
-import Heading from "@/components/Heading.astro"
-import Link from "@/components/Link.astro"
+import Heading from '@/components/Heading.astro'
+import Link from '@/components/Link.astro'
 
 const { title } = Astro.props
 
@@ -24,14 +24,16 @@ const contactLinks = [
   <nav class="flex items-center">
     {
       contactLinks.map((link) => (
-        <Link
-          class="block tracking-wide uppercase"
-          href={link.href}
-          weight="medium"
-        >
-          {link.name}
-        </Link>
-        <hr class="mx-4 block w-full max-w-24 border-primary-200 last:hidden" />
+        <>
+          <Link
+            class="block tracking-wide uppercase"
+            href={link.href}
+            weight="medium"
+          >
+            {link.name}
+          </Link>
+          <hr class="mx-4 block w-full max-w-24 border-primary-200 last:hidden" />
+        </>
       ))
     }
   </nav>

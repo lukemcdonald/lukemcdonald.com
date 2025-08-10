@@ -2,17 +2,17 @@ export default {
   experimentalTernaries: true,
   overrides: [
     {
-      files: "*.astro",
+      files: '*.astro',
       options: {
-        parser: "astro",
+        parser: 'astro',
       },
     },
   ],
-  plugins: ["prettier-plugin-astro", "prettier-plugin-tailwindcss"],
+  plugins: ['prettier-plugin-astro', 'prettier-plugin-tailwindcss'],
   printWidth: 100,
-  proseWrap: "preserve",
+  proseWrap: 'preserve',
   semi: false,
   singleAttributePerLine: true,
   singleQuote: true,
-  tailwindStylesheet: "./src/styles/global.css",
-};
+  tailwindStylesheet: './src/styles/global.css',
+}
