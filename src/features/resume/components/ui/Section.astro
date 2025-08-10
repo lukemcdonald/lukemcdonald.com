@@ -10,7 +10,7 @@ interface Props extends HTMLAttributes<'section'> {
   iconSize?: number | string
 }
 
-const { items, itemsClass, title, icon: Icon, ...delegated } = Astro.props
+const { icon: Icon, items, itemsClass, title, ...delegated } = Astro.props
 
 const hasItems = Array.isArray(items) && items.length > 0
 const hasItemSlot = Astro.slots.has('item')

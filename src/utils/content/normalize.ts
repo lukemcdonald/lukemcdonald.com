@@ -19,7 +19,7 @@ export function parseContentId(id: string): {
   const parts = base.split('/')
   const section = parts[0] || ''
   const itemId = parts.slice(1).join('/')
-  return { section, itemId, isTopLevel: parts.length === 1 }
+  return { isTopLevel: parts.length === 1, itemId, section }
 }
 
 /** Extract the primary date key (date or startDate) as a string */
@@ -38,15 +38,20 @@ export function getDateKey(input: unknown): string {
 }
 
 export function toDate(value: DateLike): Date | null {
-  if (value instanceof Date) return isValid(value) ? value : null
+  if (value instanceof Date) {
+    return isValid(value) ? value : null
+  }
+
   if (typeof value === 'string') {
     const parsed = parseISO(value)
     return isValid(parsed) ? parsed : null
   }
+
   if (typeof value === 'number') {
     const d = new Date(value)
     return isValid(d) ? d : null
   }
+
   return null
 }
 

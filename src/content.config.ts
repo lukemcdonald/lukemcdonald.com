@@ -8,8 +8,8 @@ const resume = getCollectionMeta('resume')
 const createPagesCollection = function () {
   return defineCollection({
     loader: glob({
-      pattern: '**/[^_]*.{md,mdx}',
       base: `./${pages.path}`,
+      pattern: '**/[^_]*.{md,mdx}',
     }),
     schema: ({ image }) =>
       z.object({
@@ -20,15 +20,15 @@ const createPagesCollection = function () {
         modDatetime: z.date().optional(),
         order: z.number().optional(),
         pubDatetime: z.date().optional(),
-        subtitle: z.string().optional(),
-        title: z.string(),
         seo: z
           .object({
-            title: z.string().optional(),
             description: z.string().optional(),
             ogImage: z.string().optional(),
+            title: z.string().optional(),
           })
           .optional(),
+        subtitle: z.string().optional(),
+        title: z.string(),
       }),
   })
 }
@@ -36,8 +36,8 @@ const createPagesCollection = function () {
 const pagesCollection = createPagesCollection()
 const resumeCollection = defineCollection({
   loader: glob({
-    pattern: '**/[^_]*.yaml',
     base: `./${resume.path}`,
+    pattern: '**/[^_]*.yaml',
   }),
   // Accept any YAML shape so sections can be arrays or objects
   schema: z.any(),

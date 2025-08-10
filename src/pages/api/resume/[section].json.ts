@@ -32,7 +32,7 @@ export const GET: APIRoute = async ({ params }) => {
   // Also collect any nested entries (e.g., resume/experience/*.yaml)
   const all = await getCollection('resume')
   const nested = all
-    .map((e) => ({ key: stripDataExtension(e.id), data: e.data }))
+    .map((e) => ({ data: e.data, key: stripDataExtension(e.id) }))
     .filter((e) => e.key.startsWith(sectionId + '/'))
     .map((e) => ({ id: e.key.slice(sectionId.length + 1), ...e.data }))
 
@@ -50,9 +50,9 @@ export const GET: APIRoute = async ({ params }) => {
 
   return new Response(JSON.stringify(payload), {
     headers: {
-      'Content-Type': 'application/json',
       // 30 minutes, 1 week, 30 days
       'Cache-Control': 'public, max-age=1800, s-maxage=604800, stale-while-revalidate=2592000',
+      'Content-Type': 'application/json',
     },
   })
 }
