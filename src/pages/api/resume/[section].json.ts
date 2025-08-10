@@ -1,10 +1,12 @@
 import type { APIRoute } from 'astro'
+
 import { getCollection, getEntry } from 'astro:content'
+
 import {
-  parseContentId,
-  stripDataExtension,
-  sortByDateDesc,
   getDateKey,
+  parseContentId,
+  sortByDateDesc,
+  stripDataExtension,
 } from '@/utils/content/normalize'
 
 export async function getStaticPaths() {

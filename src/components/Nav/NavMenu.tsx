@@ -1,6 +1,8 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import NavMenuLink from './NavMenuLink'
+
 import ChevronDownIcon from '@/components/icons/ChevronDown'
+
+import NavMenuLink from './NavMenuLink'
 
 interface LinkItem {
   href: string
