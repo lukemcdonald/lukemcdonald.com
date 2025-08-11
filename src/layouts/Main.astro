@@ -9,8 +9,8 @@ function getRandomGrassId(excludeId?: string) {
   const ids = ['1', '2', '3', '4']
   return ids.filter((id) => id !== excludeId)[Math.floor(Math.random() * ids.length)]
 }
-const foregroundGrassId = getRandomGrassId()
-const backgroundGrassId = getRandomGrassId(foregroundGrassId)
+const leftGrassId = getRandomGrassId()
+const rightGrassId = getRandomGrassId(leftGrassId)
 ---
 
 <div class="bg-primary-50 lg:grid dark:bg-primary-950">
@@ -25,25 +25,13 @@ const backgroundGrassId = getRandomGrassId(foregroundGrassId)
   />
 
   <Grass
-    id={backgroundGrassId}
-    class:list={[
-      'overlay pointer-events-none fixed -bottom-[2dvh] z-0 hidden opacity-[3%] dark:invert',
-      // '-left-[20dvw] w-[70dvh] max-w-[60%] lg:block',
-      // '-left-[20dvw] w-[70dvh] max-w-[60%] xl:block',
-      '-right-[12dvw] w-[50dvh] max-w-[60%] 2xl:block',
-    ]}
-    aria-hidden="true"
+    id={rightGrassId}
+    position="right"
   />
 
   <Grass
-    id={foregroundGrassId}
-    class:list={[
-      'overlay pointer-events-none fixed -bottom-4 z-50 hidden opacity-[4%] dark:invert',
-      // '-left-[20dvw] w-[70dvh] max-w-[60%] lg:block',
-      // '-left-[20dvw] w-[70dvh] max-w-[60%] xl:block',
-      '-left-[12dvw] w-[50dvh] max-w-[60%] 2xl:block',
-    ]}
-    aria-hidden="true"
+    id={leftGrassId}
+    position="left"
   />
 
   <div

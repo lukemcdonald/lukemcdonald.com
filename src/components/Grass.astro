@@ -6,7 +6,14 @@ import leaf2 from '@/assets/images/grass/grass-2.svg'
 import leaf3 from '@/assets/images/grass/grass-3.svg'
 import leaf4 from '@/assets/images/grass/grass-4.svg'
 
-const { alt, class: className, id = '1', ...delegated } = Astro.props
+export type Props = {
+  alt?: string
+  class?: string
+  id: string
+  position: 'left' | 'right'
+}
+
+const { alt, class: className, id, position, ...delegated } = Astro.props
 
 function getLeafSrc(requestedId: string) {
   switch (requestedId) {
@@ -24,11 +31,22 @@ function getLeafSrc(requestedId: string) {
 }
 
 const selectedSrc = getLeafSrc(String(id))
+
+const positionClasses = {
+  left: '-left-[20%] 2xl:-left-[10%] 3xl:-left-[2%]',
+  right: '-right-[20%] 2xl:-right-[10%] 3xl:-right-[2%]',
+}
 ---
 
 <Image
   alt={alt || ''}
-  class={className}
+  class:list={[
+    'overlay pointer-events-none fixed -bottom-4 hidden dark:invert',
+    `z-0 w-[50dvh] opacity-[4%]`,
+    'xl:block',
+    positionClasses[position],
+    className,
+  ]}
   fetchpriority="low"
   loading="lazy"
   src={selectedSrc}
