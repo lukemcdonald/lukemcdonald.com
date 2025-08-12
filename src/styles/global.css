@@ -1,9 +1,5 @@
 @import 'tailwindcss';
 
-/*
-TODO: Consider prose component
-https://docs.astro.build/en/recipes/tailwind-rendered-markdown/
-*/
 @plugin '@tailwindcss/typography';
 
 @theme {

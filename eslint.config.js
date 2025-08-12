@@ -1,6 +1,6 @@
 import eslintPluginAstro from 'eslint-plugin-astro'
-import perfectionist from 'eslint-plugin-perfectionist'
 import globals from 'globals'
+import perfectionist from 'eslint-plugin-perfectionist'
 import tsEslint from 'typescript-eslint'
 
 export default [
