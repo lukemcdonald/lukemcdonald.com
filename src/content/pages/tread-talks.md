@@ -1,7 +1,7 @@
 ---
 title: 'TREAD Talks'
 subtitle: 'Website'
-image: '../../assets/images/tread-talks-billy-graham.jpg'
+image: '@/assets/images/tread-talks-billy-graham.jpg'
 imageAlt: 'billy graham preaching'
 description: >
   Workout your salvation with Christ-centered sermons to elevate your spiritual heartbeat.
