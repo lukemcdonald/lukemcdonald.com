@@ -4,10 +4,9 @@ import { getCollection } from 'astro:content'
 
 import { parseContentId, sortByDateDesc } from '@/utils/content/normalize'
 
-// removed unused Dateable type; sorting now uses shared utility
-
 /**
  * Aggregates all entries in the `resume` collection into a single JSON object.
+ *
  * - Top-level files (e.g. `basics.yaml`) become fields on the root object
  * - Nested files (e.g. `experience/zenbusiness.yaml`) become array items under their section
  * - Arrays are sorted by `date` or `startDate` descending when present

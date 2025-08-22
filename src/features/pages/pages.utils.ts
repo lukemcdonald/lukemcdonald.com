@@ -10,12 +10,13 @@ export function sortPages(pages: PageEntry[], options: PageSortOptions = {}): Pa
   switch (sortBy) {
     case 'title':
       return sortByTitle(pages)
+
     case 'custom':
       if (!customSort) {
         throw new Error('Custom sort function is required when sortBy is "custom"')
       }
-
       return [...pages].sort(customSort)
+
     case 'manual':
       if (!manualOrder || manualOrder.length === 0) {
         throw new Error('Manual order array is required when sortBy is "manual"')
@@ -33,6 +34,7 @@ export function sortPages(pages: PageEntry[], options: PageSortOptions = {}): Pa
         if (indexB !== undefined) return 1
         return a.data.title.localeCompare(b.data.title)
       })
+
     default:
       return pages
   }
