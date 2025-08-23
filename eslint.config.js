@@ -33,6 +33,7 @@ export default [
   },
   {
     files: ['src/**/*.{js,jsx,ts,tsx,astro}'],
+    ignores: ['**/*.config.*'],
     plugins: {
       perfectionist,
     },
@@ -85,8 +86,5 @@ export default [
         },
       ],
     },
-  },
-  {
-    ignores: ['dist/**', '.astro/**'],
   },
 ]

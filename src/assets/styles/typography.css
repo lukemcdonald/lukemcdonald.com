@@ -1,0 +1,50 @@
+@plugin '@tailwindcss/typography';
+/* @config './typography.config.ts'; */
+
+@layer utilities {
+  .prose {
+    --font-weight-bold: 600;
+    --font-weight-semibold: 500;
+    --font-weight-normal: 400;
+    --font-weight-light: 300;
+
+    /* !NOTE: Is this the best way or typography.config.ts? */
+    --tw-prose-body: var(--color-primary-700);
+    --tw-prose-bullets: var(--color-primary-500);
+    --tw-prose-headings: var(--color-primary-950);
+    --tw-prose-links: inherit;
+
+    @variant dark {
+      --tw-prose-body: var(--color-primary-400);
+      --tw-prose-bullets: var(--color-primary-600);
+      --tw-prose-headings: var(--color-primary-100);
+      /* --tw-prose-links: inherit; */
+    }
+  }
+}
+
+@layer components {
+  .entry__header {
+    text-shadow:
+      -3px -3px 10px var(--color-primary-500),
+      3px -3px 15px var(--color-primary-500),
+      -3px 3px 10px var(--color-primary-500),
+      3px 3px 15px var(--color-primary-500);
+  }
+
+  .entry__content {
+    a {
+      @apply border-b-2 border-primary-500 text-inherit no-underline;
+    }
+  }
+}
+
+@utility numbered-list {
+  counter-reset: list-number;
+  text-shadow: none;
+
+  a:before {
+    counter-increment: list-number;
+    content: counter(list-number);
+  }
+}
