@@ -26,6 +26,10 @@ export default defineConfig({
       }),
     },
   },
+  experimental: {
+    contentIntellisense: true,
+    staticImportMetaEnv: true, // enabled by default in v6
+  },
   image: {
     layout: 'constrained',
     responsiveStyles: false, // issue with Tailwind v4 if enabled
