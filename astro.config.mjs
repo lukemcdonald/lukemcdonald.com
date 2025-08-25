@@ -37,7 +37,15 @@ export default defineConfig({
   integrations: [
     react(),
     sitemap({
-      filter: (page) => !SITEMAP_EXCLUSIONS.has(page),
+      filter: (page) => {
+        if (SITEMAP_EXCLUSIONS.has(page)) {
+          return false
+        }
+        if (page.includes('/dev/')) {
+          return false
+        }
+        return true
+      },
     }),
   ],
   site: GLOBAL_CONFIG.site.origin,
