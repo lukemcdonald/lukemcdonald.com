@@ -126,6 +126,8 @@ module.exports = {
 }
 ```
 
+This is a `code tag` followed by <pre>pre tag</pre>
+
 Hopefully that looks good enough to you.
 
 ### What about nested lists?

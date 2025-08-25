@@ -23,10 +23,7 @@
   --color-primary-900: oklch(17.1% 0.025 212);
   --color-primary-950: oklch(6% 0.02 212);
 
-  /* Base secondary color - complementary to primary */
-  --color-secondary-base: oklch(73.7% 0.08 25); /* Orange - complementary to teal */
-
-  /* Generate secondary palette using color-mix */
+  --color-secondary-base: oklch(73.7% 0.08 25);
   --color-secondary-50: color-mix(in oklch, var(--color-secondary-base), white 95%);
   --color-secondary-100: color-mix(in oklch, var(--color-secondary-base), white 90%);
   --color-secondary-200: color-mix(in oklch, var(--color-secondary-base), white 75%);
