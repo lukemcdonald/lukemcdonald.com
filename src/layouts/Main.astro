@@ -13,10 +13,10 @@ const leftGrassId = getRandomGrassId()
 const rightGrassId = getRandomGrassId(leftGrassId)
 ---
 
-<div class="bg-primary-50 dark:bg-primary-950 lg:grid">
+<div class="bg-primary-50 lg:grid dark:bg-primary-900">
   <Image
     alt=""
-    class="blur-xs absolute left-1/2 top-1/2 hidden h-full max-h-screen w-full -translate-x-1/2 -translate-y-1/2 transform overflow-hidden object-cover opacity-20 grayscale lg:block dark:opacity-15"
+    class="absolute top-1/2 left-1/2 hidden h-full max-h-screen w-full -translate-x-1/2 -translate-y-1/2 transform overflow-hidden object-cover opacity-20 blur-xs grayscale lg:block dark:opacity-10"
     fetchpriority="low"
     loading="lazy"
     quality={70}
@@ -35,14 +35,14 @@ const rightGrassId = getRandomGrassId(leftGrassId)
   />
 
   <div
-    class="text-primary-900 place-items-center lg:relative lg:flex lg:min-h-screen lg:items-center lg:justify-center"
+    class="place-items-center text-primary-900 lg:relative lg:flex lg:min-h-screen lg:items-center lg:justify-center"
     style="grid-area: 1/1"
   >
     <div
-      class="site lg:max-h-site relative m-auto bg-white lg:w-11/12 lg:max-w-screen-xl lg:shadow-2xl"
+      class="site relative m-auto bg-white lg:max-h-site lg:w-11/12 lg:max-w-screen-xl lg:shadow-2xl"
     >
       <Header />
-      <main class="lg:max-h-site lg:flex lg:h-screen">
+      <main class="lg:flex lg:h-screen lg:max-h-site">
         <slot />
       </main>
     </div>
