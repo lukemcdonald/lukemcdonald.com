@@ -22,10 +22,27 @@
   --color-primary-800: oklch(32.7% 0.052 117);
   --color-primary-900: oklch(17.1% 0.025 212);
   --color-primary-950: oklch(6% 0.02 212);
+
+  /* Base secondary color - complementary to primary */
+  --color-secondary-base: oklch(73.7% 0.08 25); /* Orange - complementary to teal */
+
+  /* Generate secondary palette using color-mix */
+  --color-secondary-50: color-mix(in oklch, var(--color-secondary-base), white 95%);
+  --color-secondary-100: color-mix(in oklch, var(--color-secondary-base), white 90%);
+  --color-secondary-200: color-mix(in oklch, var(--color-secondary-base), white 75%);
+  --color-secondary-300: color-mix(in oklch, var(--color-secondary-base), white 60%);
+  --color-secondary-400: color-mix(in oklch, var(--color-secondary-base), white 40%);
+  --color-secondary-500: var(--color-secondary-base);
+  --color-secondary-600: color-mix(in oklch, var(--color-secondary-base), black 20%);
+  --color-secondary-700: color-mix(in oklch, var(--color-secondary-base), black 40%);
+  --color-secondary-800: color-mix(in oklch, var(--color-secondary-base), black 60%);
+  --color-secondary-900: color-mix(in oklch, var(--color-secondary-base), black 75%);
+  --color-secondary-950: color-mix(in oklch, var(--color-secondary-base), black 85%);
 }
 
 html[data-theme='blue'] {
   --color-primary-50: oklch(98.4% 0.004 240);
+  --color-primary-100: oklch(96.9% 0.008 240);
   --color-primary-200: oklch(92.3% 0.015 240);
   --color-primary-300: oklch(86.8% 0.025 240);
   --color-primary-400: oklch(82.4% 0.035 245);
@@ -35,6 +52,8 @@ html[data-theme='blue'] {
   --color-primary-800: oklch(32.7% 0.085 240);
   --color-primary-900: oklch(17.1% 0.04 280);
   --color-primary-950: oklch(6% 0.03 280);
+
+  --color-secondary-base: oklch(73.7% 0.08 30); /* Orange - complementary to blue */
 }
 
 html[data-theme='purple'] {
@@ -49,6 +68,8 @@ html[data-theme='purple'] {
   --color-primary-800: oklch(32.7% 0.085 320);
   --color-primary-900: oklch(17.1% 0.045 280);
   --color-primary-950: oklch(6% 0.03 280);
+
+  --color-secondary-base: oklch(73.7% 0.08 85); /* Yellow-green - complementary to purple */
 }
 
 html[data-theme='yellow'] {
@@ -63,6 +84,8 @@ html[data-theme='yellow'] {
   --color-primary-800: oklch(32.7% 0.065 80);
   --color-primary-900: oklch(17.1% 0.035 105);
   --color-primary-950: oklch(6% 0.02 105);
+
+  --color-secondary-base: oklch(73.7% 0.08 270); /* Purple - complementary to yellow */
 }
 
 html[data-theme='green'] {
@@ -77,6 +100,8 @@ html[data-theme='green'] {
   --color-primary-800: oklch(32.7% 0.07 140);
   --color-primary-900: oklch(17.1% 0.04 110);
   --color-primary-950: oklch(6% 0.025 110);
+
+  --color-secondary-base: oklch(73.7% 0.08 350); /* Red-pink - complementary to green */
 }
 
 html[data-theme='orange'] {
@@ -91,6 +116,8 @@ html[data-theme='orange'] {
   --color-primary-800: oklch(32.7% 0.07 25);
   --color-primary-900: oklch(17.1% 0.04 70);
   --color-primary-950: oklch(6% 0.025 70);
+
+  --color-secondary-base: oklch(73.7% 0.08 225); /* Blue - complementary to orange */
 }
 
 html[data-theme='neon'] {
@@ -105,4 +132,6 @@ html[data-theme='neon'] {
   --color-primary-800: oklch(45.93% 0.112 130);
   --color-primary-900: oklch(12.17% 0.051 105);
   --color-primary-950: oklch(6.5% 0.03 105);
+
+  --color-secondary-base: oklch(73.7% 0.15 320); /* Magenta - complementary to neon green */
 }
