@@ -2,7 +2,9 @@
 import type { ExperienceItem } from '@/features/resume/resume.types'
 
 import ExperienceIcon from '@lucide/astro/icons/shield-ellipsis'
+import { Image } from 'astro:assets'
 
+// import Image from '@/features/resume/components/ui/Image.astro'
 import Section from '@/features/resume/components/ui/Section.astro'
 
 export interface Props {
@@ -20,10 +22,24 @@ const { experience } = Astro.props
   <template slot="item">
     {
       (item: ExperienceItem) => (
-        <>
-          <div>
-            {item.position} @ {item.company} ({item.startDate}–{item.endDate || 'Present'})
-          </div>
+        <div class="mt-8">
+          <dl class="not-prose flex flex-auto flex-wrap items-baseline gap-x-1 text-primary-900 dark:text-primary-100">
+            <dt class="sr-only">Role</dt>
+            <dd class="font-semibold">{item.position}</dd>
+            <dt class="sr-only">Company</dt>
+            <dd class="flex-none">@ {item.company}</dd>
+            <dt class="sr-only">Date</dt>
+            <dd
+              class="my-0 ml-1 text-sm text-primary-600 md:ml-auto dark:text-primary-400"
+              aria-label={`${item.startDate} until ${item.endDate || 'Present'}`}
+            >
+              <time datetime={item.startDate}>{item.startDate}</time>
+              <span aria-hidden="true">
+                <em>to</em>
+              </span>
+              <time datetime={item.endDate || 'Present'}>{item.endDate || 'Present'}</time>
+            </dd>
+          </dl>
 
           {item.highlights && (
             <ul>
@@ -32,7 +48,7 @@ const { experience } = Astro.props
               ))}
             </ul>
           )}
-        </>
+        </div>
       )
     }
   </template>

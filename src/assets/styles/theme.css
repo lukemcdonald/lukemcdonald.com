@@ -1,6 +1,4 @@
-@import 'tailwindcss';
-
-@plugin '@tailwindcss/typography';
+/* @custom-variant dark (&:where(.dark, .dark *)); */
 
 @theme {
   --breakpoint-xl: 1280px;
@@ -24,15 +22,24 @@
   --color-primary-800: oklch(32.7% 0.052 117);
   --color-primary-900: oklch(17.1% 0.025 212);
   --color-primary-950: oklch(6% 0.02 212);
-}
 
-/* CSS Variables for Theme Colors */
-:root {
-  @apply transition-colors;
+  --color-secondary-base: oklch(73.7% 0.08 25);
+  --color-secondary-50: color-mix(in oklch, var(--color-secondary-base), white 95%);
+  --color-secondary-100: color-mix(in oklch, var(--color-secondary-base), white 90%);
+  --color-secondary-200: color-mix(in oklch, var(--color-secondary-base), white 75%);
+  --color-secondary-300: color-mix(in oklch, var(--color-secondary-base), white 60%);
+  --color-secondary-400: color-mix(in oklch, var(--color-secondary-base), white 40%);
+  --color-secondary-500: var(--color-secondary-base);
+  --color-secondary-600: color-mix(in oklch, var(--color-secondary-base), black 20%);
+  --color-secondary-700: color-mix(in oklch, var(--color-secondary-base), black 40%);
+  --color-secondary-800: color-mix(in oklch, var(--color-secondary-base), black 60%);
+  --color-secondary-900: color-mix(in oklch, var(--color-secondary-base), black 75%);
+  --color-secondary-950: color-mix(in oklch, var(--color-secondary-base), black 85%);
 }
 
 html[data-theme='blue'] {
   --color-primary-50: oklch(98.4% 0.004 240);
+  --color-primary-100: oklch(96.9% 0.008 240);
   --color-primary-200: oklch(92.3% 0.015 240);
   --color-primary-300: oklch(86.8% 0.025 240);
   --color-primary-400: oklch(82.4% 0.035 245);
@@ -42,6 +49,8 @@ html[data-theme='blue'] {
   --color-primary-800: oklch(32.7% 0.085 240);
   --color-primary-900: oklch(17.1% 0.04 280);
   --color-primary-950: oklch(6% 0.03 280);
+
+  --color-secondary-base: oklch(73.7% 0.08 30); /* Orange - complementary to blue */
 }
 
 html[data-theme='purple'] {
@@ -56,6 +65,8 @@ html[data-theme='purple'] {
   --color-primary-800: oklch(32.7% 0.085 320);
   --color-primary-900: oklch(17.1% 0.045 280);
   --color-primary-950: oklch(6% 0.03 280);
+
+  --color-secondary-base: oklch(73.7% 0.08 85); /* Yellow-green - complementary to purple */
 }
 
 html[data-theme='yellow'] {
@@ -70,6 +81,8 @@ html[data-theme='yellow'] {
   --color-primary-800: oklch(32.7% 0.065 80);
   --color-primary-900: oklch(17.1% 0.035 105);
   --color-primary-950: oklch(6% 0.02 105);
+
+  --color-secondary-base: oklch(73.7% 0.08 270); /* Purple - complementary to yellow */
 }
 
 html[data-theme='green'] {
@@ -84,6 +97,8 @@ html[data-theme='green'] {
   --color-primary-800: oklch(32.7% 0.07 140);
   --color-primary-900: oklch(17.1% 0.04 110);
   --color-primary-950: oklch(6% 0.025 110);
+
+  --color-secondary-base: oklch(73.7% 0.08 350); /* Red-pink - complementary to green */
 }
 
 html[data-theme='orange'] {
@@ -98,6 +113,8 @@ html[data-theme='orange'] {
   --color-primary-800: oklch(32.7% 0.07 25);
   --color-primary-900: oklch(17.1% 0.04 70);
   --color-primary-950: oklch(6% 0.025 70);
+
+  --color-secondary-base: oklch(73.7% 0.08 225); /* Blue - complementary to orange */
 }
 
 html[data-theme='neon'] {
@@ -112,144 +129,6 @@ html[data-theme='neon'] {
   --color-primary-800: oklch(45.93% 0.112 130);
   --color-primary-900: oklch(12.17% 0.051 105);
   --color-primary-950: oklch(6.5% 0.03 105);
-}
 
-@utility max-w-screen-xl {
-  max-width: var(--breakpoint-xl);
-}
-
-/* Typography plugin customizations */
-@layer base {
-  .prose a {
-    @apply text-current;
-  }
-}
-
-/* Site Layout
-------------------------------------------------------------------------------*/
-@layer base {
-  .site {
-    &:before {
-      content: '';
-      float: left;
-      padding-top: 56.25%;
-    }
-
-    &:after {
-      content: '';
-      display: table;
-      clear: both;
-    }
-  }
-}
-
-/* Entry
-------------------------------------------------------------------------------*/
-@layer components {
-  .entry {
-    @apply flex flex-col;
-  }
-
-  .entry__header {
-    text-shadow:
-      -3px -3px 10px var(--color-primary-500),
-      3px -3px 15px var(--color-primary-500),
-      -3px 3px 10px var(--color-primary-500),
-      3px 3px 15px var(--color-primary-500);
-  }
-
-  .entry__body {
-    @apply flex flex-col;
-  }
-
-  .entry__media {
-    @apply order-1;
-  }
-
-  .entry__content {
-    a {
-      @apply border-b-2 border-primary-500 text-inherit no-underline;
-    }
-  }
-
-  .entry__nav {
-    @apply order-1;
-  }
-
-  @media (width >= theme(--breakpoint-sm)) {
-    .entry__body {
-      display: grid;
-      grid-area: entry__body;
-      grid-template-columns: 1.4fr 0.6fr;
-      grid-template-rows: 1.2fr 0.8fr;
-      grid-template-areas:
-        'entry__content entry__media'
-        'entry__content entry__media';
-    }
-
-    .entry__content {
-      grid-area: entry__content;
-    }
-
-    .entry__media {
-      grid-area: entry__media;
-    }
-  }
-
-  @media (width >= theme(--breakpoint-lg)) {
-    .entry {
-      display: grid;
-      grid-area: entry;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-      grid-template-rows: 1.1fr 1.1fr 0.8fr;
-      grid-template-areas:
-        'entry__header  entry__header  entry__body  entry__body'
-        'entry__header  entry__header  entry__body  entry__body'
-        'entry__nav     entry__nav     entry__body  entry__body';
-    }
-
-    .entry__body {
-      display: grid;
-      grid-area: entry__body;
-      grid-template-columns: 1.4fr 0.6fr;
-      grid-template-rows: 1.2fr 0.8fr;
-      grid-template-areas:
-        'entry__media entry__media'
-        'entry__media entry__media';
-    }
-
-    .entry__content {
-      grid-area: 2 / 1 / 3 / 3;
-    }
-
-    .entry__header {
-      grid-area: entry__header;
-    }
-
-    .entry__media {
-      grid-area: entry__media;
-    }
-
-    .entry__nav {
-      grid-area: entry__nav;
-    }
-  }
-
-  @media (width >= theme(--breakpoint-xl)) {
-    .entry__content {
-      grid-area: 2 / 1 / 3 / 2;
-    }
-  }
-}
-
-/* Numbered List
-------------------------------------------------------------------------------*/
-@utility numbered-list {
-  counter-reset: list-number;
-  text-shadow: none;
-
-  a:before {
-    counter-increment: list-number;
-    content: counter(list-number);
-  }
+  --color-secondary-base: oklch(73.7% 0.15 320); /* Magenta - complementary to neon green */
 }

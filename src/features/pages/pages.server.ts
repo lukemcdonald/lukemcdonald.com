@@ -43,7 +43,6 @@ export function buildPagesFilter(options: PageFilterOptions = {}) {
       return false
     }
 
-    // Date filters based on data.pubDatetime
     const pub = toDate(data.pubDatetime ?? null)
 
     if (pub && dateFrom) {

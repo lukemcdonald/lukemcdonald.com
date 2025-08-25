@@ -1,6 +1,9 @@
 ---
 import type { BasicsItem } from '@/features/resume/resume.types'
 
+import GlobeIcon from '@lucide/astro/icons/globe'
+import MailIcon from '@lucide/astro/icons/mail'
+
 export interface Props {
   basics: BasicsItem
 }
@@ -10,18 +13,46 @@ const { basics } = Astro.props
 const { email, intro, label: subtitle, name: title, website } = basics || {}
 ---
 
-<header>
-  <h1>
-    <a href="/">{title}</a>
+<header class="">
+  <h1 class="mb-0">
+    <a
+      href="/"
+      class="no-underline hover:underline"
+      >{title}</a
+    >
   </h1>
 
-  {subtitle && <p>{subtitle}</p>}
+  {subtitle && <blockquote>{subtitle}</blockquote>}
 
-  <p>
-    {website && <a href={website}>{website}</a>}
-    {website && email && ' — '}
-    {email && <a href={`mailto:${email}`}>{email}</a>}
-  </p>
+  <dl class="not-prose mt-4">
+    {
+      website && (
+        <>
+          <dt class="sr-only">Website</dt>
+          <dd class="flex items-center gap-2">
+            <GlobeIcon class="size-4 text-primary-600 dark:text-primary-400" />
+            <code>
+              <a href={website}>{website}</a>
+            </code>
+          </dd>
+        </>
+      )
+    }
+
+    {
+      email && (
+        <>
+          <dt class="sr-only">Email</dt>
+          <dd class="flex items-center gap-2">
+            <MailIcon class="size-4 text-primary-600 dark:text-primary-400" />
+            <code>
+              <a href={`mailto:${email}`}>{email}</a>
+            </code>
+          </dd>
+        </>
+      )
+    }
+  </dl>
 
   {intro && <p>{intro}</p>}
 </header>

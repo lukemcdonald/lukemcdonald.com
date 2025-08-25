@@ -9,18 +9,32 @@ import {
   stripDataExtension,
 } from '@/utils/content/normalize'
 
+/**
+ * Returns a list of all resume sections.
+ */
 export async function getStaticPaths() {
   const entries = await getCollection('resume')
   const sections = new Set<string>()
+
   for (const entry of entries) {
     const { section } = parseContentId(entry.id)
-    if (section) sections.add(section)
+
+    if (section) {
+      sections.add(section)
+    }
   }
+
   return Array.from(sections).map((section) => ({
     params: { section },
   }))
 }
 
+/**
+ * Returns a JSON payload for a given resume section.
+ *
+ * @param params - The route parameters
+ * @returns A JSON payload for the given resume section
+ */
 export const GET: APIRoute = async ({ params }) => {
   const { section: sectionId } = params
 
@@ -28,21 +42,20 @@ export const GET: APIRoute = async ({ params }) => {
     return new Response(null, { status: 400 })
   }
 
-  // Try exact top-level entry first (e.g., resume/experience.json)
+  // Try exact top-level entry first (e.g., resume/experience.yaml)
   const topLevel = await getEntry('resume', sectionId)
 
   // Also collect any nested entries (e.g., resume/experience/*.yaml)
   const all = await getCollection('resume')
+
   const nested = all
     .map((e) => ({ data: e.data, key: stripDataExtension(e.id) }))
     .filter((e) => e.key.startsWith(sectionId + '/'))
     .map((e) => ({ id: e.key.slice(sectionId.length + 1), ...e.data }))
 
-  // date key extraction is shared via getDateKey
-
   let payload: unknown
+
   if (nested.length > 0) {
-    // Sort nested by date/startDate desc if present
     payload = sortByDateDesc(nested, getDateKey)
   } else if (topLevel) {
     payload = topLevel.data

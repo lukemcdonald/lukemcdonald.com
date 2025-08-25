@@ -20,7 +20,7 @@ export interface PageFilterOptions {
 }
 
 export interface PageSortOptions {
-  sortBy?: SortBy
   customSort?: (a: PageEntry, b: PageEntry) => number
   manualOrder?: string[]
+  sortBy?: SortBy
 }

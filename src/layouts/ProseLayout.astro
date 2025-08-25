@@ -1,0 +1,24 @@
+---
+import Prose from '@/components/Prose.astro'
+
+import Layout from './Layout.astro'
+
+const { description, title } = Astro.props
+---
+
+<Layout
+  title={title}
+  description={description}
+  bodyClass="bg-white text-primary-900 dark:bg-primary-900 dark:text-primary-50"
+>
+  <main class="px-4 py-6">
+    <slot name="before-prose" />
+    <Prose
+      as="article"
+      class="mx-auto"
+    >
+      <slot />
+    </Prose>
+    <slot name="after-prose" />
+  </main>
+</Layout>

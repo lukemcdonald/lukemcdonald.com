@@ -1,6 +1,6 @@
 // Environment flags
-export const IS_PROD = import.meta.env.PROD
-export const IS_DEV = import.meta.env.DEV
+export const IS_PROD = process.env.PROD
+export const IS_DEV = process.env.DEV
 
 const SITE_NAME = 'Luke McDonald'
 const DOMAIN = 'lukemcdonald.com'

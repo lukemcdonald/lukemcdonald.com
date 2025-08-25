@@ -3,6 +3,7 @@ position: Staff Software Engineer
 startDate: '2023-05'
 endDate: null
 location: Remote
+image: '@/assets/images/logo-zenbusiness.png'
 highlights:
   - Tech Lead across four full-stack teams (L2–L4), supporting engineers working on customer purchases, checkout, payments, experimentation, and observability.
   - Lead runahead work for major features — scoping requirements, drafting tickets, and aligning architecture to reduce blockers and keep projects moving.

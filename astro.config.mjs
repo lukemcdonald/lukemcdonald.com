@@ -26,6 +26,10 @@ export default defineConfig({
       }),
     },
   },
+  experimental: {
+    contentIntellisense: true,
+    staticImportMetaEnv: true, // enabled by default in v6
+  },
   image: {
     layout: 'constrained',
     responsiveStyles: false, // issue with Tailwind v4 if enabled
@@ -33,7 +37,15 @@ export default defineConfig({
   integrations: [
     react(),
     sitemap({
-      filter: (page) => !SITEMAP_EXCLUSIONS.has(page),
+      filter: (page) => {
+        if (SITEMAP_EXCLUSIONS.has(page)) {
+          return false
+        }
+        if (page.includes('/dev/')) {
+          return false
+        }
+        return true
+      },
     }),
   ],
   site: GLOBAL_CONFIG.site.origin,
