@@ -1,0 +1,119 @@
+---
+import ProseLayout from '../../layouts/ProseLayout.astro'
+
+const colorShades = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950']
+
+const themes = [
+  { name: 'Default', value: '' },
+  { name: 'Blue', value: 'blue' },
+  { name: 'Purple', value: 'purple' },
+  { name: 'Yellow', value: 'yellow' },
+  { name: 'Green', value: 'green' },
+  { name: 'Orange', value: 'orange' },
+  { name: 'Neon', value: 'neon' },
+] as const
+
+const primaryColors = {
+  '100': 'bg-primary-100',
+  '200': 'bg-primary-200',
+  '300': 'bg-primary-300',
+  '400': 'bg-primary-400',
+  '50': 'bg-primary-50',
+  '500': 'bg-primary-500',
+  '600': 'bg-primary-600',
+  '700': 'bg-primary-700',
+  '800': 'bg-primary-800',
+  '900': 'bg-primary-900',
+  '950': 'bg-primary-950',
+} as const
+
+const secondaryColors = {
+  '100': 'bg-secondary-100',
+  '200': 'bg-secondary-200',
+  '300': 'bg-secondary-300',
+  '400': 'bg-secondary-400',
+  '50': 'bg-secondary-50',
+  '500': 'bg-secondary-500',
+  '600': 'bg-secondary-600',
+  '700': 'bg-secondary-700',
+  '800': 'bg-secondary-800',
+  '900': 'bg-secondary-900',
+  '950': 'bg-secondary-950',
+} as const
+---
+
+<ProseLayout
+  title="Theme"
+  description="Theme colors"
+>
+  <h1>Color Palette</h1>
+
+  <div class="mt-6 flex flex-wrap gap-2">
+    {
+      themes.map((theme) => (
+        <button
+          data-theme={theme.value}
+          class="theme-button rounded-md border px-3 py-1 text-sm transition-colors hover:bg-gray-50"
+        >
+          {theme.name}
+        </button>
+      ))
+    }
+  </div>
+
+  <div class="mt-6 grid grid-cols-12 gap-3">
+    {
+      colorShades.map((shade) => (
+        <div class="text-center">
+          <div class="text-sm font-semibold text-gray-900">{shade}</div>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="mt-3 grid grid-cols-12 items-center gap-3">
+    {
+      colorShades.map((shade) => (
+        <div
+          class={`h-16 w-full rounded-lg border border-black/5 shadow-sm ${primaryColors[shade as keyof typeof primaryColors]}`}
+        />
+      ))
+    }
+  </div>
+
+  <!-- Secondary Colors Row -->
+  <div class="mt-3 grid grid-cols-12 items-center gap-3">
+    {
+      colorShades.map((shade) => (
+        <div
+          class={`h-16 w-full rounded-lg border border-black/5 shadow-sm ${secondaryColors[shade as keyof typeof secondaryColors]}`}
+        />
+      ))
+    }
+  </div>
+</ProseLayout>
+
+<script>
+  // Theme switching only
+  document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('.theme-button')
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const theme = button.getAttribute('data-theme') || ''
+        document.documentElement.setAttribute('data-theme', theme)
+
+        // Update button states
+        buttons.forEach((b) => b.classList.remove('bg-gray-100'))
+        button.classList.add('bg-gray-100')
+      })
+    })
+
+    // Set initial active state
+    const currentTheme = document.documentElement.getAttribute('data-theme') || ''
+    const activeButton = document.querySelector(`[data-theme="${currentTheme}"]`)
+    if (activeButton) {
+      activeButton.classList.add('bg-gray-100')
+    }
+  })
+</script>

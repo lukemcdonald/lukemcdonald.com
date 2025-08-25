@@ -1,5 +1,4 @@
 ---
-import Prose from '@/components/Prose.astro'
 import Awards from '@/features/resume/components/Awards.astro'
 import Education from '@/features/resume/components/Education.astro'
 import Experience from '@/features/resume/components/Experience.astro'
@@ -9,30 +8,26 @@ import Personal from '@/features/resume/components/Personal.astro'
 import Skills from '@/features/resume/components/Skills.astro'
 import PrintButton from '@/features/resume/components/ui/PrintButton.astro'
 import { getResumeData } from '@/features/resume/resume.server'
-import Layout from '@/layouts/Layout.astro'
+import ProseLayout from '@/layouts/ProseLayout.astro'
 
 const data = await getResumeData()
 ---
 
-<Layout
+<ProseLayout
   title="Resume"
   description="The resume of Luke McDonald, a Software Engineer with a product mindset and an eye for design."
   bodyClass="bg-white text-primary-900 dark:bg-primary-900 dark:text-primary-50"
 >
-  <main class="px-4 py-6">
-    <PrintButton class="fixed right-4 top-4 dark:shadow" />
+  <PrintButton
+    slot="before-prose"
+    class="fixed top-4 right-4 dark:shadow"
+  />
 
-    <Prose
-      as="article"
-      class="mx-auto"
-    >
-      <Header basics={data.basics} />
-      <Skills skills={data.skills} />
-      <Experience experience={data.experience} />
-      <Awards awards={data.awards} />
-      <Education education={data.education} />
-      <Personal personal={data.personal} />
-      <Footer />
-    </Prose>
-  </main>
-</Layout>
+  <Header basics={data.basics} />
+  <Skills skills={data.skills} />
+  <Experience experience={data.experience} />
+  <Awards awards={data.awards} />
+  <Education education={data.education} />
+  <Personal personal={data.personal} />
+  <Footer />
+</ProseLayout>
