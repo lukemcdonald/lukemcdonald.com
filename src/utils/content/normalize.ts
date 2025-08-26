@@ -1,6 +1,6 @@
-import type { DateLike } from '@/utils/types'
-
 import { compareDesc, isValid, parseISO } from 'date-fns'
+
+export type DateLike = Date | string | number | null | undefined
 
 /**
  * Remove known data file extensions from a content id
@@ -12,7 +12,7 @@ import { compareDesc, isValid, parseISO } from 'date-fns'
  * @returns The content id without the `.yaml` extension
  */
 export function stripDataExtension(id: string): string {
-  return id.replace(/\.yaml$/i, '')
+  return id.replace(/\.(ya?ml)$/i, '')
 }
 
 /**
@@ -60,7 +60,12 @@ function hasDateFields(x: unknown): x is { date?: DateLike; startDate?: DateLike
 export function getDateKey(input: unknown): string {
   if (hasDateFields(input)) {
     const value = input.date ?? input.startDate ?? ''
-    return typeof value === 'string' ? value : String(value ?? '')
+    const d = toDate(value as DateLike)
+    return (
+      d ? d.toISOString()
+      : typeof value === 'string' ? value
+      : ''
+    )
   }
 
   return ''
@@ -79,7 +84,11 @@ export function toDate(value: DateLike): Date | null {
 
   if (typeof value === 'string') {
     const parsed = parseISO(value)
-    return isValid(parsed) ? parsed : null
+    if (isValid(parsed)) {
+      return parsed
+    }
+    const loose = new Date(value)
+    return isValid(loose) ? loose : null
   }
 
   if (typeof value === 'number') {
