@@ -1,0 +1,29 @@
+---
+import type { TypographyProps, TypographyTag } from './Typography.types'
+
+import { colors, sizes, weights, wraps } from './Typography.tokens'
+
+interface Props extends TypographyProps<TypographyTag> {}
+
+const {
+  as: Component = 'div',
+  class: className,
+  color,
+  size,
+  weight,
+  wrap,
+  ...delegated
+} = Astro.props satisfies Props
+
+const colorClass = color ? colors[color] : undefined
+const sizeClass = size ? sizes[size] : undefined
+const weightClass = weight ? weights[weight] : undefined
+const wrapClass = wrap ? wraps[wrap] : undefined
+---
+
+<Component
+  class:list={[colorClass, sizeClass, weightClass, wrapClass, className]}
+  {...delegated}
+>
+  <slot />
+</Component>
