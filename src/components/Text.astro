@@ -1,17 +1,17 @@
 ---
-import type { HeadingProps } from '@/components/Typography/Typography.types'
+import type { TextProps } from '@/components/Typography/Typography.types'
 
 import Typography from '@/components/Typography/Typography.astro'
 
-type Props = HeadingProps
+type Props = TextProps
 
 const {
-  as = 'h2',
+  as = 'div',
   class: className,
-  color = 'primary',
-  size = 'xl',
-  weight = 'bold',
-  wrap = 'balance',
+  color,
+  size = 'md',
+  weight,
+  wrap = 'pretty',
   ...delegated
 } = Astro.props satisfies Props
 ---
