@@ -1,6 +1,6 @@
 import type { AnchorHTMLAttributes } from 'react'
 
-import ExternalLinkIcon from '@/components/icons/ExternalLink'
+import ExternalLinkIcon from '@/components/Nav/icons/ExternalLink'
 
 interface NavMenuLinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
   href: string
