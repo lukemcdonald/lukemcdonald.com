@@ -1,0 +1,21 @@
+---
+import Grass from '@/components/Background/Grass.astro'
+
+function getRandomGrassId(excludeId?: string) {
+  const ids = ['1', '2', '3', '4']
+  return ids.filter((id) => id !== excludeId)[Math.floor(Math.random() * ids.length)]
+}
+
+const leftGrassId = getRandomGrassId()
+const rightGrassId = getRandomGrassId(leftGrassId)
+---
+
+<Grass
+  id={rightGrassId}
+  position="right"
+/>
+
+<Grass
+  id={leftGrassId}
+  position="left"
+/>
