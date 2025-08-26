@@ -1,10 +1,11 @@
-import type { colors, sizes, weights, wraps } from '@/components/Typography/Typography.tokens'
 import type { HTMLAttributes } from 'astro/types'
 
-export type ColorKey = keyof typeof colors
-export type SizeKey = keyof typeof sizes
-export type WeightKey = keyof typeof weights
-export type WrapKey = keyof typeof wraps
+import * as tokens from '@/components/Typography/Typography.tokens'
+
+export type ColorKey = keyof typeof tokens.colors
+export type SizeKey = keyof typeof tokens.sizes
+export type WeightKey = keyof typeof tokens.weights
+export type WrapKey = keyof typeof tokens.wraps
 
 export type HeadingTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 export type TextTag = 'div' | 'em' | 'label' | 'p' | 'small' | 'span' | 'strong'
