@@ -1,38 +1,12 @@
 ---
-import { Image } from 'astro:assets'
-
-import backgroundImage from '@/assets/images/landscape-tree-fog.jpg'
-import Grass from '@/components/Grass.astro'
+import Background from '@/components/Background/Background.astro'
+import Grasses from '@/components/Background/Grasses.astro'
 import Header from '@/components/Header.astro'
-
-function getRandomGrassId(excludeId?: string) {
-  const ids = ['1', '2', '3', '4']
-  return ids.filter((id) => id !== excludeId)[Math.floor(Math.random() * ids.length)]
-}
-const leftGrassId = getRandomGrassId()
-const rightGrassId = getRandomGrassId(leftGrassId)
 ---
 
 <div class="bg-primary-50 lg:grid dark:bg-primary-900">
-  <Image
-    alt=""
-    class="absolute top-1/2 left-1/2 hidden h-full max-h-screen w-full -translate-x-1/2 -translate-y-1/2 transform overflow-hidden object-cover opacity-20 blur-xs grayscale lg:block dark:opacity-10"
-    fetchpriority="low"
-    loading="lazy"
-    quality={70}
-    src={backgroundImage}
-    style="grid-area: 1/1"
-  />
-
-  <Grass
-    id={rightGrassId}
-    position="right"
-  />
-
-  <Grass
-    id={leftGrassId}
-    position="left"
-  />
+  <Background />
+  <Grasses />
 
   <div
     class="place-items-center text-primary-900 lg:relative lg:flex lg:min-h-screen lg:items-center lg:justify-center"
