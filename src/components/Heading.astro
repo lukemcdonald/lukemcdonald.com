@@ -3,7 +3,7 @@ import type { HeadingProps } from '@/components/Typography/Typography.types'
 
 import Typography from '@/components/Typography/Typography.astro'
 
-type Props = HeadingProps
+interface Props extends HeadingProps {}
 
 const {
   as = 'h2',

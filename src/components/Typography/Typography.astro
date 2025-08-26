@@ -3,7 +3,7 @@ import type { TypographyProps, TypographyTag } from './Typography.types'
 
 import { colors, sizes, weights, wraps } from './Typography.tokens'
 
-type Props = TypographyProps<TypographyTag>
+interface Props extends TypographyProps<TypographyTag> {}
 
 const {
   as: Component = 'div',

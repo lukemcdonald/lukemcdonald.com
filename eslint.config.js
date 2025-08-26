@@ -16,6 +16,13 @@ export default [
   },
   {
     rules: {
+      '@typescript-eslint/no-empty-object-type': [
+        'error',
+        {
+          allowInterfaces: 'with-single-extends',
+          allowWithName: 'Props$',
+        },
+      ],
       'no-console': 'warn',
       'no-restricted-imports': [
         'error',

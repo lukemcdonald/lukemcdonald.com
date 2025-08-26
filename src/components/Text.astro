@@ -3,7 +3,7 @@ import type { TextProps } from '@/components/Typography/Typography.types'
 
 import Typography from '@/components/Typography/Typography.astro'
 
-type Props = TextProps
+interface Props extends TextProps {}
 
 const {
   as = 'div',
