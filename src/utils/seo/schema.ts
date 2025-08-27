@@ -1,5 +1,6 @@
 import type { SeoMeta } from './types'
 import type { GLOBAL_CONFIG } from '@/configs/global'
+type SchemaType = 'Article' | 'BlogPosting' | 'WebPage'
 
 export function buildWebsiteJsonLd(config: typeof GLOBAL_CONFIG) {
   return {
@@ -21,26 +22,42 @@ export function buildPageJsonLd(meta: SeoMeta, config: typeof GLOBAL_CONFIG) {
     pubDatetime,
     title,
   } = meta
-  const pageLang = meta.lang ?? config.lang ?? 'en'
 
-  const type =
-    contentType === 'article' ? 'Article'
-    : contentType === 'blog' ? 'BlogPosting'
-    : 'WebPage'
+  let type: SchemaType
+  switch (contentType) {
+    case 'article':
+      type = 'Article'
+      break
+    case 'blog':
+      type = 'BlogPosting'
+      break
+    default:
+      type = 'WebPage'
+  }
+
+  const publisher = {
+    '@type': 'Organization',
+    name: config.name,
+    url: config.site.origin,
+  }
+
+  const website = {
+    '@type': 'WebSite',
+    name: config.name,
+    url: config.site.origin,
+  }
+
+  const url = canonicalUrl ? new URL(canonicalUrl, config.site.origin).toString() : undefined
 
   const base = {
     '@context': 'https://schema.org',
     '@type': type,
     description,
     headline: title,
-    inLanguage: pageLang,
-    isPartOf: {
-      '@type': 'WebSite',
-      name: config.name,
-      url: config.site.origin,
-    },
+    inLanguage: meta.lang ?? config.lang ?? 'en',
+    isPartOf: website,
     name: title,
-    url: canonicalUrl ? new URL(canonicalUrl, config.site.origin).toString() : undefined,
+    url,
     ...(modDatetime && { dateModified: modDatetime.toISOString() }),
     ...(pubDatetime && { datePublished: pubDatetime.toISOString() }),
   } as const
@@ -48,32 +65,16 @@ export function buildPageJsonLd(meta: SeoMeta, config: typeof GLOBAL_CONFIG) {
   const isArticleOrBlog = type === 'Article' || type === 'BlogPosting'
 
   if (isArticleOrBlog && author && typeof author === 'object') {
-    return {
-      ...base,
-      author: [
-        {
-          '@type': 'Person',
-          name: author.name,
-          ...(author.url && { url: author.url }),
-        },
-      ],
-      publisher: {
-        '@type': 'Organization',
-        name: config.name,
-        url: config.site.origin,
-      },
+    const person = {
+      '@type': 'Person',
+      name: author.name,
+      ...(author.url && { url: author.url }),
     }
+    return { ...base, author: [person], publisher }
   }
 
   if (!isArticleOrBlog) {
-    return {
-      ...base,
-      publisher: {
-        '@type': 'Organization',
-        name: config.name,
-        url: config.site.origin,
-      },
-    }
+    return { ...base, publisher }
   }
 
   return base
