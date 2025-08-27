@@ -1,16 +1,16 @@
 ---
-import type { MetaData } from '@/utils/meta'
+import type { SeoMeta } from '@/utils/seo'
 
 import { ClientRouter } from 'astro:transitions'
 
 import PostHog from '@/components/PostHog.astro'
 import { GLOBAL_CONFIG, IS_PROD } from '@/configs/global'
-import { createSocialMetaTags, createStructuredData } from '@/utils/meta'
+import { buildGraphJsonLd, buildSocialMetaTags } from '@/utils/seo'
 import { stripHtmlAndTruncate } from '@/utils/text'
 
 export interface Props {
   generator?: string
-  meta: MetaData
+  meta: SeoMeta
 }
 
 const { generator, meta } = Astro.props
@@ -28,11 +28,10 @@ const title = inTitle === GLOBAL_CONFIG.name ? inTitle : `${inTitle} - ${GLOBAL_
 // Clean and optimize the description for meta tags
 const description = stripHtmlAndTruncate(inDescription, 160, '...')
 
-// Create structured data
-const structuredData = createStructuredData(meta, GLOBAL_CONFIG)
-
-// Create social meta tags
-const socialMetaTags = createSocialMetaTags(meta, GLOBAL_CONFIG)
+// Create JSON-LD graph ([WebSite, Page]) and social meta tags
+const metaForSeo: SeoMeta = { ...meta, description }
+const structuredData = buildGraphJsonLd(metaForSeo, GLOBAL_CONFIG)
+const socialMetaTags = buildSocialMetaTags(metaForSeo, GLOBAL_CONFIG)
 ---
 
 <head>
@@ -141,31 +140,31 @@ const socialMetaTags = createSocialMetaTags(meta, GLOBAL_CONFIG)
 
   <!-- Twitter -->
   <meta
-    property="twitter:card"
+    name="twitter:card"
     content={socialMetaTags['twitter:card']}
   />
   <meta
-    property="twitter:url"
+    name="twitter:url"
     content={socialMetaTags['twitter:url']}
   />
   <meta
-    property="twitter:title"
+    name="twitter:title"
     content={socialMetaTags['twitter:title']}
   />
   <meta
-    property="twitter:image"
+    name="twitter:image"
     content={socialMetaTags['twitter:image']}
   />
   {
     socialMetaTags['twitter:description'] && (
       <meta
-        property="twitter:description"
+        name="twitter:description"
         content={socialMetaTags['twitter:description']}
       />
     )
   }
 
-  <!-- Google JSON-LD Structured data -->
+  <!-- Google JSON-LD Structured data (@graph) -->
   <script
     type="application/ld+json"
     is:inline

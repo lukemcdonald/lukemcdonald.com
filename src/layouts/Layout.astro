@@ -1,5 +1,5 @@
 ---
-import type { MetaData } from '@/utils/meta'
+import type { SeoMeta } from '@/utils/seo'
 
 import '@/assets/styles/global.css'
 
@@ -8,7 +8,7 @@ import Head from '@/layouts/Head.astro'
 
 type Theme = 'default' | 'blue' | 'purple' | 'yellow' | 'green' | 'orange' | 'neon'
 
-export interface Props extends MetaData {
+export interface Props extends SeoMeta {
   bodyClass?: string
   theme?: Theme
 }
@@ -27,7 +27,7 @@ const {
   ...siteMeta
 } = props
 
-const meta: MetaData = {
+const meta: SeoMeta = {
   author,
   canonicalUrl,
   dir,
@@ -48,7 +48,7 @@ const meta: MetaData = {
     meta={meta}
   />
 
-  <body class={bodyClass}>
+  <body class:list={{ [bodyClass!]: Boolean(bodyClass) }}>
     <slot />
   </body>
 </html>
