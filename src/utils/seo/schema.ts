@@ -1,5 +1,6 @@
 import type { SeoContentType, SeoMeta } from './types'
-import type { GLOBAL_CONFIG } from '@/configs/global'
+
+import { GLOBAL_CONFIG } from '@/configs/global'
 
 type SchemaType = 'Article' | 'BlogPosting' | 'WebPage'
 
@@ -9,17 +10,17 @@ const CONTENT_TYPE_MAP: Record<SeoContentType, SchemaType> = {
   page: 'WebPage',
 } as const
 
-export function buildWebsiteJsonLd(config: typeof GLOBAL_CONFIG) {
+function buildWebsiteJsonLd() {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    alternateName: new URL(config.site.origin).hostname,
-    name: config.name,
-    url: config.site.origin,
+    alternateName: new URL(GLOBAL_CONFIG.site.origin).hostname,
+    name: GLOBAL_CONFIG.name,
+    url: GLOBAL_CONFIG.site.origin,
   }
 }
 
-export function buildPageJsonLd(meta: SeoMeta, config: typeof GLOBAL_CONFIG) {
+function buildPageJsonLd(meta: SeoMeta) {
   const {
     author,
     canonicalUrl,
@@ -35,24 +36,24 @@ export function buildPageJsonLd(meta: SeoMeta, config: typeof GLOBAL_CONFIG) {
 
   const publisher = {
     '@type': 'Organization',
-    name: config.name,
-    url: config.site.origin,
+    name: GLOBAL_CONFIG.name,
+    url: GLOBAL_CONFIG.site.origin,
   }
 
   const website = {
     '@type': 'WebSite',
-    name: config.name,
-    url: config.site.origin,
+    name: GLOBAL_CONFIG.name,
+    url: GLOBAL_CONFIG.site.origin,
   }
 
-  const url = canonicalUrl ? new URL(canonicalUrl, config.site.origin).toString() : undefined
+  const url = canonicalUrl ? new URL(canonicalUrl, GLOBAL_CONFIG.site.origin).toString() : undefined
 
   const base = {
     '@context': 'https://schema.org',
     '@type': type,
     description,
     headline: title,
-    inLanguage: meta.lang ?? config.lang ?? 'en',
+    inLanguage: meta.lang ?? GLOBAL_CONFIG.lang ?? 'en',
     isPartOf: website,
     name: title,
     url,
@@ -81,9 +82,9 @@ export function buildPageJsonLd(meta: SeoMeta, config: typeof GLOBAL_CONFIG) {
   return base
 }
 
-export function buildGraphJsonLd(meta: SeoMeta, config: typeof GLOBAL_CONFIG) {
+export function buildGraphJsonLd(meta: SeoMeta) {
   return {
     '@context': 'https://schema.org',
-    '@graph': [buildWebsiteJsonLd(config), buildPageJsonLd(meta, config)],
+    '@graph': [buildWebsiteJsonLd(), buildPageJsonLd(meta)],
   }
 }

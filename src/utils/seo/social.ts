@@ -1,5 +1,6 @@
 import type { SeoContentType, SeoMeta } from './types'
-import type { GLOBAL_CONFIG } from '@/configs/global'
+
+import { GLOBAL_CONFIG } from '@/configs/global'
 
 const OG_TYPE_MAP: Record<SeoContentType, string> = {
   article: 'article',
@@ -7,22 +8,22 @@ const OG_TYPE_MAP: Record<SeoContentType, string> = {
   page: 'website',
 } as const
 
-export function getSocialImageUrl(ogImage?: string, siteUrl?: string): string {
+function getSocialImageUrl(ogImage?: string, siteUrl?: string): string {
   return ogImage || `${siteUrl}/og-image.jpg`
 }
 
-export function buildSocialMetaTags(meta: SeoMeta, site: typeof GLOBAL_CONFIG) {
+export function buildSocialMetaTags(meta: SeoMeta) {
   const { canonicalUrl, contentType = 'page', description, ogImage, title } = meta
-  const socialImageUrl = getSocialImageUrl(ogImage, site.site.origin)
+  const socialImageUrl = getSocialImageUrl(ogImage, GLOBAL_CONFIG.site.origin)
   const ogType = OG_TYPE_MAP[contentType]
   const absoluteCanonical =
-    canonicalUrl ? new URL(canonicalUrl, site.site.origin).toString() : undefined
+    canonicalUrl ? new URL(canonicalUrl, GLOBAL_CONFIG.site.origin).toString() : undefined
 
   return {
     // Open Graph / Facebook
     'og:description': description,
     'og:image': socialImageUrl,
-    'og:site_name': site.name,
+    'og:site_name': GLOBAL_CONFIG.name,
     'og:title': title,
     'og:type': ogType,
     'og:url': absoluteCanonical,

@@ -30,8 +30,8 @@ const description = stripHtmlAndTruncate(inDescription, 160, '...')
 
 // Create JSON-LD graph ([WebSite, Page]) and social meta tags
 const metaForSeo: SeoMeta = { ...meta, description }
-const structuredData = buildGraphJsonLd(metaForSeo, GLOBAL_CONFIG)
-const socialMetaTags = buildSocialMetaTags(metaForSeo, GLOBAL_CONFIG)
+const structuredData = buildGraphJsonLd(metaForSeo)
+const socialMetaTags = buildSocialMetaTags(metaForSeo)
 ---
 
 <head>
