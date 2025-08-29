@@ -1,6 +1,13 @@
-import type { SeoMeta } from './types'
+import type { SeoContentType, SeoMeta } from './types'
 import type { GLOBAL_CONFIG } from '@/configs/global'
+
 type SchemaType = 'Article' | 'BlogPosting' | 'WebPage'
+
+const CONTENT_TYPE_MAP: Record<SeoContentType, SchemaType> = {
+  article: 'Article',
+  blog: 'BlogPosting',
+  page: 'WebPage',
+} as const
 
 export function buildWebsiteJsonLd(config: typeof GLOBAL_CONFIG) {
   return {
@@ -23,17 +30,8 @@ export function buildPageJsonLd(meta: SeoMeta, config: typeof GLOBAL_CONFIG) {
     title,
   } = meta
 
-  let type: SchemaType
-  switch (contentType) {
-    case 'article':
-      type = 'Article'
-      break
-    case 'blog':
-      type = 'BlogPosting'
-      break
-    default:
-      type = 'WebPage'
-  }
+  const type = CONTENT_TYPE_MAP[contentType]
+  const isArticleOrBlog = type === 'Article' || type === 'BlogPosting'
 
   const publisher = {
     '@type': 'Organization',
@@ -62,15 +60,18 @@ export function buildPageJsonLd(meta: SeoMeta, config: typeof GLOBAL_CONFIG) {
     ...(pubDatetime && { datePublished: pubDatetime.toISOString() }),
   } as const
 
-  const isArticleOrBlog = type === 'Article' || type === 'BlogPosting'
-
   if (isArticleOrBlog && author && typeof author === 'object') {
     const person = {
       '@type': 'Person',
       name: author.name,
       ...(author.url && { url: author.url }),
     }
-    return { ...base, author: [person], publisher }
+
+    return {
+      ...base,
+      author: [person],
+      publisher,
+    }
   }
 
   if (!isArticleOrBlog) {
