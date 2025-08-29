@@ -2,7 +2,8 @@ import type { ResumeData } from '@/features/resume/resume.types'
 
 import { getCollection } from 'astro:content'
 
-import { parseContentId, sortByDateDesc } from '@/utils/content/normalize'
+import { parseContentId } from '@/utils/content'
+import { sortByDateDesc } from '@/utils/dates'
 
 /**
  * Aggregates all entries in the `resume` collection into a single JSON object.
