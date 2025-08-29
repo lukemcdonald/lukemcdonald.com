@@ -2,12 +2,8 @@ import type { APIRoute } from 'astro'
 
 import { getCollection, getEntry } from 'astro:content'
 
-import {
-  getDateKey,
-  parseContentId,
-  sortByDateDesc,
-  stripDataExtension,
-} from '@/utils/content/normalize'
+import { parseContentId, stripDataExtension } from '@/utils/content'
+import { getDateKey, sortByDateDesc } from '@/utils/dates'
 
 /**
  * Returns a list of all resume sections.

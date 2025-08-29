@@ -1,22 +1,29 @@
-import type { SeoMeta } from './types'
-import type { GLOBAL_CONFIG } from '@/configs/global'
+import type { SeoContentType, SeoMeta } from './types'
 
-export function getSocialImageUrl(ogImage?: string, siteUrl?: string): string {
+import { GLOBAL_CONFIG } from '@/configs/global'
+
+const OG_TYPE_MAP: Record<SeoContentType, string> = {
+  article: 'article',
+  blog: 'article',
+  page: 'website',
+} as const
+
+function getSocialImageUrl(ogImage?: string, siteUrl?: string): string {
   return ogImage || `${siteUrl}/og-image.jpg`
 }
 
-export function buildSocialMetaTags(meta: SeoMeta, site: typeof GLOBAL_CONFIG) {
-  const { canonicalUrl, contentType, description, ogImage, title } = meta
-  const socialImageURL = getSocialImageUrl(ogImage, site.site.origin)
-  const ogType = contentType === 'article' || contentType === 'blog' ? 'article' : 'website'
+export function buildSocialMetaTags(meta: SeoMeta) {
+  const { canonicalUrl, contentType = 'page', description, ogImage, title } = meta
+  const socialImageUrl = getSocialImageUrl(ogImage, GLOBAL_CONFIG.site.origin)
+  const ogType = OG_TYPE_MAP[contentType]
   const absoluteCanonical =
-    canonicalUrl ? new URL(canonicalUrl, site.site.origin).toString() : undefined
+    canonicalUrl ? new URL(canonicalUrl, GLOBAL_CONFIG.site.origin).toString() : undefined
 
   return {
     // Open Graph / Facebook
     'og:description': description,
-    'og:image': socialImageURL,
-    'og:site_name': site.name,
+    'og:image': socialImageUrl,
+    'og:site_name': GLOBAL_CONFIG.name,
     'og:title': title,
     'og:type': ogType,
     'og:url': absoluteCanonical,
@@ -24,7 +31,7 @@ export function buildSocialMetaTags(meta: SeoMeta, site: typeof GLOBAL_CONFIG) {
     // Twitter
     'twitter:card': 'summary_large_image',
     'twitter:description': description,
-    'twitter:image': socialImageURL,
+    'twitter:image': socialImageUrl,
     'twitter:title': title,
     'twitter:url': absoluteCanonical,
   }

@@ -1,18 +1,26 @@
-import type { SeoMeta } from './types'
-import type { GLOBAL_CONFIG } from '@/configs/global'
+import type { SeoContentType, SeoMeta } from './types'
+
+import { GLOBAL_CONFIG } from '@/configs/global'
+
 type SchemaType = 'Article' | 'BlogPosting' | 'WebPage'
 
-export function buildWebsiteJsonLd(config: typeof GLOBAL_CONFIG) {
+const CONTENT_TYPE_MAP: Record<SeoContentType, SchemaType> = {
+  article: 'Article',
+  blog: 'BlogPosting',
+  page: 'WebPage',
+} as const
+
+function buildWebsiteJsonLd() {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    alternateName: new URL(config.site.origin).hostname,
-    name: config.name,
-    url: config.site.origin,
+    alternateName: new URL(GLOBAL_CONFIG.site.origin).hostname,
+    name: GLOBAL_CONFIG.name,
+    url: GLOBAL_CONFIG.site.origin,
   }
 }
 
-export function buildPageJsonLd(meta: SeoMeta, config: typeof GLOBAL_CONFIG) {
+function buildPageJsonLd(meta: SeoMeta) {
   const {
     author,
     canonicalUrl,
@@ -23,38 +31,29 @@ export function buildPageJsonLd(meta: SeoMeta, config: typeof GLOBAL_CONFIG) {
     title,
   } = meta
 
-  let type: SchemaType
-  switch (contentType) {
-    case 'article':
-      type = 'Article'
-      break
-    case 'blog':
-      type = 'BlogPosting'
-      break
-    default:
-      type = 'WebPage'
-  }
+  const type = CONTENT_TYPE_MAP[contentType]
+  const isArticleOrBlog = type === 'Article' || type === 'BlogPosting'
 
   const publisher = {
     '@type': 'Organization',
-    name: config.name,
-    url: config.site.origin,
+    name: GLOBAL_CONFIG.name,
+    url: GLOBAL_CONFIG.site.origin,
   }
 
   const website = {
     '@type': 'WebSite',
-    name: config.name,
-    url: config.site.origin,
+    name: GLOBAL_CONFIG.name,
+    url: GLOBAL_CONFIG.site.origin,
   }
 
-  const url = canonicalUrl ? new URL(canonicalUrl, config.site.origin).toString() : undefined
+  const url = canonicalUrl ? new URL(canonicalUrl, GLOBAL_CONFIG.site.origin).toString() : undefined
 
   const base = {
     '@context': 'https://schema.org',
     '@type': type,
     description,
     headline: title,
-    inLanguage: meta.lang ?? config.lang ?? 'en',
+    inLanguage: meta.lang ?? GLOBAL_CONFIG.lang ?? 'en',
     isPartOf: website,
     name: title,
     url,
@@ -62,15 +61,18 @@ export function buildPageJsonLd(meta: SeoMeta, config: typeof GLOBAL_CONFIG) {
     ...(pubDatetime && { datePublished: pubDatetime.toISOString() }),
   } as const
 
-  const isArticleOrBlog = type === 'Article' || type === 'BlogPosting'
-
   if (isArticleOrBlog && author && typeof author === 'object') {
     const person = {
       '@type': 'Person',
       name: author.name,
       ...(author.url && { url: author.url }),
     }
-    return { ...base, author: [person], publisher }
+
+    return {
+      ...base,
+      author: [person],
+      publisher,
+    }
   }
 
   if (!isArticleOrBlog) {
@@ -80,9 +82,9 @@ export function buildPageJsonLd(meta: SeoMeta, config: typeof GLOBAL_CONFIG) {
   return base
 }
 
-export function buildGraphJsonLd(meta: SeoMeta, config: typeof GLOBAL_CONFIG) {
+export function buildGraphJsonLd(meta: SeoMeta) {
   return {
     '@context': 'https://schema.org',
-    '@graph': [buildWebsiteJsonLd(config), buildPageJsonLd(meta, config)],
+    '@graph': [buildWebsiteJsonLd(), buildPageJsonLd(meta)],
   }
 }

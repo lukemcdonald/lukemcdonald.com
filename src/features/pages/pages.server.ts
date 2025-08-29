@@ -3,7 +3,7 @@ import type { PageEntry, PageFilterOptions } from './pages.types'
 import { getCollection } from 'astro:content'
 
 import { getContentDirectory } from '@/utils/collections'
-import { sortByAccessorDateDesc, toDate } from '@/utils/content/normalize'
+import { sortByAccessorDateDesc, toDate } from '@/utils/dates'
 
 import { sortPages } from './pages.utils'
 
