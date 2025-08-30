@@ -15,7 +15,7 @@ const SITEMAP_EXCLUSIONS = new Set([`${GLOBAL_CONFIG.site.origin}/index`])
 export default defineConfig({
   adapter: netlify(),
   build: {
-    format: 'file',
+    format: 'directory',
   },
   env: {
     schema: {
