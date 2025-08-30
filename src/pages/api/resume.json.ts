@@ -10,6 +10,7 @@ export const GET: APIRoute = async () => {
       // 30 minutes, 1 week, 30 days
       'Cache-Control': 'public, max-age=1800, s-maxage=604800, stale-while-revalidate=2592000',
       'Content-Type': 'application/json',
+      'X-Robots-Tag': 'noindex, nofollow',
     },
   })
 }
