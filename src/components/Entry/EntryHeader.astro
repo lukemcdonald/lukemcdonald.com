@@ -1,6 +1,7 @@
 ---
 import Heading from '@/components/Heading.astro'
 import Mountains from '@/components/Mountains.astro'
+import Text from '@/components/Text.astro'
 
 import EntryHeaderDescription from './EntryHeaderDescription.astro'
 
@@ -19,13 +20,13 @@ const { description, subtitle, title } = Astro.props
   <div class="relative z-10">
     {
       subtitle && (
-        <Heading
-          as="h2"
+        <Text
+          as="span"
           class="mb-1 tracking-wider uppercase"
           size="sm"
         >
           {subtitle}
-        </Heading>
+        </Text>
       )
     }
     <Heading
