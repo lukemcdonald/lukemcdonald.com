@@ -15,6 +15,16 @@ const endpoints = [
 <footer class="print:hidden">
   <nav>
     <span>Endpoints:</span>
-    {endpoints.map((endpoint) => <Link href={endpoint}>{endpoint}</Link>)}
+    {
+      endpoints.map((endpoint) => (
+        <a
+          href={endpoint}
+          rel="nofollow noindex"
+          class="border-b-2 border-transparent no-underline hover:border-primary-500"
+        >
+          {endpoint}
+        </a>
+      ))
+    }
   </nav>
 </footer>
