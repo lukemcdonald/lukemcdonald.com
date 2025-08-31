@@ -12,6 +12,7 @@ export interface Props {
 }
 
 const { description, subtitle, title } = Astro.props
+const hasDescriptionSlot = Astro.slots.has('description')
 ---
 
 <header
@@ -36,7 +37,14 @@ const { description, subtitle, title } = Astro.props
     >
       {title}.
     </Heading>
-    {description && <EntryHeaderDescription description={description} />}
+    {
+      hasDescriptionSlot ?
+        <EntryHeaderDescription>
+          <slot name="description" />
+        </EntryHeaderDescription>
+      : description ? <EntryHeaderDescription description={description} />
+      : null
+    }
   </div>
 
   <Mountains class="absolute bottom-0 left-0 z-0 w-full" />

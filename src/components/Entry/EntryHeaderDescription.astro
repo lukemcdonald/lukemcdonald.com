@@ -2,10 +2,11 @@
 import GreetingLinks from '@/components/GreetingLinks.astro'
 
 export interface Props {
-  description: string
+  description?: string
 }
 
 const { description } = Astro.props
+const hasDefaultSlot = Astro.slots.has('default')
 
 const descriptionComponents = {
   GreetingLinks,
@@ -15,5 +16,10 @@ const isComponent = Boolean(Component)
 ---
 
 <div class="text-lg leading-normal text-pretty">
-  {isComponent ? <Component /> : <slot set:html={description} />}
+  {
+    hasDefaultSlot ? <slot />
+    : isComponent ? <Component />
+    : description ? <slot set:html={description} />
+    : null
+  }
 </div>
