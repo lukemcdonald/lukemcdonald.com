@@ -30,7 +30,7 @@ const hasItemSlot = Astro.slots.has('item')
 let renderedItemSlots: string[] = []
 if (hasItems && hasItemSlot) {
   renderedItemSlots = await Promise.all(
-    items.map((item, index) => Astro.slots.render('item', [item, index]))
+    items.map((item, index) => Astro.slots.render('item', [item, index])),
   )
 }
 ---
