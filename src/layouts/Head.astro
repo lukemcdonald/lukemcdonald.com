@@ -23,7 +23,11 @@ const {
   title: inTitle,
 } = meta
 
-const title = inTitle === GLOBAL_CONFIG.name ? inTitle : `${inTitle} - ${GLOBAL_CONFIG.name}`
+const siteNameLower = GLOBAL_CONFIG.name.trim().toLowerCase()
+const providedTitleLower = (inTitle ?? '').trim().toLowerCase()
+const title = providedTitleLower.includes(siteNameLower)
+  ? inTitle
+  : `${inTitle} - ${GLOBAL_CONFIG.name}`
 
 // Clean and optimize the description for meta tags
 const description = stripHtmlAndTruncate(inDescription, 160, '...')
