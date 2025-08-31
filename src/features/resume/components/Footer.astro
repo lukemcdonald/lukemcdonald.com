@@ -1,6 +1,4 @@
 ---
-import Link from '@/components/Link.astro'
-
 const endpoints = [
   '/api/resume.json',
   '/api/resume/awards.json',
@@ -12,15 +10,14 @@ const endpoints = [
 ]
 ---
 
-<footer class="print:hidden">
-  <nav>
-    <span>Endpoints:</span>
+<footer class="mt-12 flex gap-x-2 opacity-35 hover:opacity-100 print:hidden">
+  <h2 class="not-prose">Endpoints:</h2>
+  <nav class="flex flex-wrap gap-x-2">
     {
       endpoints.map((endpoint) => (
         <a
           href={endpoint}
           rel="nofollow noindex"
-          class="border-b-2 border-transparent no-underline hover:border-primary-500"
         >
           {endpoint}
         </a>

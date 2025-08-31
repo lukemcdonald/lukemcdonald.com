@@ -24,6 +24,8 @@ export interface ExperienceItem {
   highlights?: string[]
   position: string
   startDate: string
+  summary?: string
+  website?: string
 }
 
 export interface ResumeData {
