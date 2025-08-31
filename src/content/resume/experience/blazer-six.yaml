@@ -4,13 +4,8 @@ startDate: '2014-07'
 endDate: '2025-07'
 location: Remote
 image: '@/assets/images/logo-blazer-six.png'
-website: 'https://www.blazersix.com/about/'
+website: 'https://www.blazersix.com/'
 summary: Blazer Six is a small product studio behind AudioTheme and Cedaro, building WordPress themes, plugins, and custom web solutions.
-links:
-  - label: About
-    url: 'https://www.blazersix.com/about/'
-  - label: AudioTheme About
-    url: 'https://audiotheme.com/about/'
 highlights:
   - Co-founded and helped grow AudioTheme and Cedaro into sustainable businesses, supporting a team of three full-time employees.
   - Built and maintained full-stack web solutions using JavaScript, PHP, WordPress, and React.

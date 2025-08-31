@@ -18,11 +18,6 @@ export interface EducationItem {
   studyType?: string
 }
 
-export interface LinkItem {
-  label?: string
-  url: string
-}
-
 export interface ExperienceItem {
   company: string
   endDate?: string | null
@@ -31,7 +26,6 @@ export interface ExperienceItem {
   startDate: string
   summary?: string
   website?: string
-  links?: LinkItem[]
 }
 
 export interface ResumeData {

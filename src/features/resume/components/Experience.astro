@@ -3,6 +3,7 @@ import type { ExperienceItem } from '@/features/resume/resume.types'
 
 import ExperienceIcon from '@lucide/astro/icons/shield-ellipsis'
 
+import Link from '@/components/Link.astro'
 import Section from '@/features/resume/components/ui/Section.astro'
 
 export interface Props {
@@ -26,11 +27,15 @@ const { experience } = Astro.props
             <dd class="font-semibold">{item.position}</dd>
             <dt class="sr-only">Company</dt>
             <dd class="flex-none">
-              @ {item.website ? (
-                <a class="underline-offset-2 hover:underline" href={item.website}>{item.company}</a>
-              ) : (
-                item.company
-              )}
+              @{' '}
+              {item.website ?
+                <Link
+                  underline="always"
+                  href={item.website}
+                >
+                  {item.company}
+                </Link>
+              : item.company}
             </dd>
             <dt class="sr-only">Date</dt>
             <dd
