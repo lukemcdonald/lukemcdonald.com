@@ -1,4 +1,4 @@
-import { isValid } from 'date-fns'
+import type { DateLike } from './index'
 
 import { toDate } from './toDate'
 
@@ -7,14 +7,11 @@ import { toDate } from './toDate'
  * Returns null if the input cannot be parsed as a valid date.
  */
 export function formatMonthYear(input: unknown): string | null {
-  const d = toDate(input as never)
-  if (!d || !isValid(d)) {
-    return null
-  }
+  const d = toDate(input as DateLike)
+  if (!d) return null
 
-  // Use a fixed en-US short month for resume readability.
-  // Avoid toLocaleDateString variability by specifying locale-independent options.
-  const month = d.toLocaleString('en-US', { month: 'short' }).replace('.', '') // Normalize locales that add periods (e.g., "Sept.")
-  const year = d.getFullYear()
+  // Use fixed en-US month and UTC to avoid TZ skew at midnight.
+  const month = d.toLocaleString('en-US', { month: 'short', timeZone: 'UTC' }).replace(/\.$/, '')
+  const year = d.getUTCFullYear()
   return `${month} ${year}`
 }

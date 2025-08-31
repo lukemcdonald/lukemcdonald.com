@@ -41,15 +41,15 @@ const { experience } = Astro.props
             <dt class="sr-only">Date</dt>
             <dd
               class="my-0 ml-1 text-sm text-primary-600 md:ml-auto dark:text-primary-400"
-              aria-label={`${formatMonthYear(item.startDate) || item.startDate} until ${formatMonthYear(item.endDate) || 'Present'}`}
+              aria-label={`${formatMonthYear(item.startDate) || item.startDate || 'Unknown start date'} until ${formatMonthYear(item.endDate) || 'Present'}`}
             >
               <time datetime={item.startDate}>
-                {formatMonthYear(item.startDate) || item.startDate}
+                {formatMonthYear(item.startDate) || item.startDate || 'Unknown start date'}
               </time>
               <span aria-hidden="true">&nbsp;–&nbsp;</span>
-              <time datetime={item.endDate || 'Present'}>
-                {formatMonthYear(item.endDate) || 'Present'}
-              </time>
+              {item.endDate ?
+                <time datetime={item.endDate}>{formatMonthYear(item.endDate) || item.endDate}</time>
+              : <span>Present</span>}
             </dd>
           </dl>
 
