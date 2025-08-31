@@ -25,7 +25,13 @@ const { experience } = Astro.props
             <dt class="sr-only">Role</dt>
             <dd class="font-semibold">{item.position}</dd>
             <dt class="sr-only">Company</dt>
-            <dd class="flex-none">@ {item.company}</dd>
+            <dd class="flex-none">
+              @ {item.website ? (
+                <a class="underline-offset-2 hover:underline" href={item.website}>{item.company}</a>
+              ) : (
+                item.company
+              )}
+            </dd>
             <dt class="sr-only">Date</dt>
             <dd
               class="my-0 ml-1 text-sm text-primary-600 md:ml-auto dark:text-primary-400"
@@ -38,6 +44,8 @@ const { experience } = Astro.props
               <time datetime={item.endDate || 'Present'}>{item.endDate || 'Present'}</time>
             </dd>
           </dl>
+
+          {item.summary && <p class="mt-2">{item.summary}</p>}
 
           {item.highlights && (
             <ul>

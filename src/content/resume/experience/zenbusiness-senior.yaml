@@ -4,6 +4,11 @@ startDate: '2022-02'
 endDate: '2022-11'
 location: Remote
 image: '@/assets/images/logo-zenbusiness.png'
+website: 'https://www.zenbusiness.com/'
+summary: ZenBusiness helps entrepreneurs start, run, and grow their businesses with company formation, compliance, and tools.
+links:
+  - label: About
+    url: 'https://www.zenbusiness.com/'
 highlights:
   - Built and maintained reusable React components in JavaScript and TypeScript, accelerating front-end development and code reuse.
   - Led integration of a chatbot microservice using React and GraphQL, improving customer support automation.
