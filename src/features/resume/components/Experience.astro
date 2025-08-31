@@ -21,49 +21,55 @@ const { experience } = Astro.props
 >
   <template slot="item">
     {
-      (item: ExperienceItem) => (
-        <div class="mt-8">
-          <dl class="not-prose flex flex-auto flex-wrap items-baseline gap-x-1 text-primary-900 dark:text-primary-100">
-            <dt class="sr-only">Role</dt>
-            <dd class="font-semibold">{item.position}</dd>
-            <dt class="sr-only">Company</dt>
-            <dd class="flex-none">
-              @{' '}
-              {item.website ?
-                <Link
-                  underline="always"
-                  href={item.website}
-                >
-                  {item.company}
-                </Link>
-              : item.company}
-            </dd>
-            <dt class="sr-only">Date</dt>
-            <dd
-              class="my-0 ml-1 text-sm text-primary-600 md:ml-auto dark:text-primary-400"
-              aria-label={`${formatMonthYear(item.startDate) || item.startDate || 'Unknown start date'} until ${formatMonthYear(item.endDate) || 'Present'}`}
-            >
-              <time datetime={item.startDate}>
-                {formatMonthYear(item.startDate) || item.startDate || 'Unknown start date'}
-              </time>
-              <span aria-hidden="true">&nbsp;–&nbsp;</span>
-              {item.endDate ?
-                <time datetime={item.endDate}>{formatMonthYear(item.endDate) || item.endDate}</time>
-              : <span>Present</span>}
-            </dd>
-          </dl>
+      (item: ExperienceItem) => {
+        const startDate = item.startDate
+        const endDate = item.endDate
 
-          {item.summary && <p class="mt-2">{item.summary}</p>}
+        const startDateLabel = formatMonthYear(startDate) || startDate || 'Unknown'
+        const endDateLabel = formatMonthYear(endDate) || endDate || 'Present'
 
-          {item.highlights && (
-            <ul>
-              {item.highlights.map((highlight: string) => (
-                <li>{highlight}</li>
-              ))}
-            </ul>
-          )}
-        </div>
-      )
+        return (
+          <div class="mt-8">
+            <dl class="not-prose flex flex-auto flex-wrap items-baseline gap-x-1 text-primary-900 dark:text-primary-100">
+              <dt class="sr-only">Role</dt>
+              <dd class="font-semibold">{item.position}</dd>
+              <dt class="sr-only">Company</dt>
+              <dd class="flex-none">
+                @{' '}
+                {item.website ?
+                  <Link
+                    underline="always"
+                    href={item.website}
+                  >
+                    {item.company}
+                  </Link>
+                : item.company}
+              </dd>
+              <dt class="sr-only">Date</dt>
+              <dd
+                class="my-0 ml-1 text-sm text-primary-600 md:ml-auto dark:text-primary-400"
+                aria-label={`${startDateLabel} until ${endDateLabel}`}
+              >
+                <time datetime={startDate}>{startDateLabel}</time>
+                <span aria-hidden="true">&nbsp;–&nbsp;</span>
+                {endDate ?
+                  <time datetime={endDate}>{endDateLabel}</time>
+                : <span>Present</span>}
+              </dd>
+            </dl>
+
+            {item.summary && <p class="mt-2">{item.summary}</p>}
+
+            {item.highlights && (
+              <ul>
+                {item.highlights.map((highlight: string) => (
+                  <li>{highlight}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )
+      }
     }
   </template>
 </Section>
