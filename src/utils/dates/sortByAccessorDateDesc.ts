@@ -1,5 +1,7 @@
-import { compareDesc } from 'date-fns'
 import type { DateLike } from './index'
+
+import { compareDesc } from 'date-fns'
+
 import { toDate } from './toDate'
 
 /**

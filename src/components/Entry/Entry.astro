@@ -22,7 +22,12 @@ const { description, image, imageAlt, subtitle, title } = Astro.props
     description={description}
     subtitle={subtitle}
     title={title}
-  />
+  >
+    <slot
+      slot="description"
+      name="description"
+    />
+  </EntryHeader>
 
   <ContactInfo />
 
