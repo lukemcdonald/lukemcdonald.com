@@ -8,7 +8,6 @@ const {
   target,
   truncate,
   underline = 'auto',
-  underlineColor = 'border-primary-500',
   variant = 'text',
   weight = 'normal',
   wrap = 'wrap',
@@ -33,11 +32,13 @@ const sizes = {
   xl: 'text-xl',
 }
 
+const baseUnderline =
+  'underline-offset-2 transition-all decoration-primary-500 hover:decoration-inherit'
 const underlines = {
-  always: `no-underline border-b-2 ${underlineColor}`,
-  auto: `no-underline border-b-2 border-transparent hover:${underlineColor}`,
-  hover: `no-underline border-b-2 border-transparent hover:${underlineColor}`,
-  none: `no-underline border-b-0`,
+  always: `${baseUnderline} underline`,
+  auto: baseUnderline,
+  hover: `no-underline ${baseUnderline} hover:underline`,
+  none: `no-underline`,
 }
 
 const weights = {

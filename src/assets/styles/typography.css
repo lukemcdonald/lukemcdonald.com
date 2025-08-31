@@ -3,8 +3,8 @@
 
 @layer utilities {
   .prose {
-    --font-weight-bold: 600;
-    --font-weight-semibold: 500;
+    --font-weight-bold: 800;
+    --font-weight-semibold: 600;
     --font-weight-normal: 400;
     --font-weight-light: 300;
 
@@ -68,6 +68,10 @@
 }
 
 @layer components {
+  a {
+    @apply decoration-primary-500 underline-offset-2 transition-all hover:decoration-inherit;
+  }
+
   .entry__header {
     text-shadow:
       -3px -3px 10px var(--color-primary-500),
@@ -78,7 +82,7 @@
 
   .entry__content {
     a {
-      @apply border-b-2 border-primary-500 text-inherit no-underline;
+      @apply underline;
     }
   }
 }
