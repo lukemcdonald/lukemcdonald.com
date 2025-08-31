@@ -81,7 +81,7 @@
   }
 
   .entry__content {
-    a {
+    a:not(.no-underline) {
       @apply underline;
     }
   }
