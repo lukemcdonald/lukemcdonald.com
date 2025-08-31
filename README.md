@@ -20,8 +20,8 @@ Content lives in `src/content/pages`. Frontmatter supports friendly date fields 
 ```md
 ---
 title: 'Post title'
-date: 2025-08-31        # optional: published date (YYYY-MM-DD or ISO)
-updated: 2025-09-01     # optional: last modified date
+date: 2025-08-31 # optional: published date (YYYY-MM-DD or ISO)
+updated: 2025-09-01 # optional: last modified date
 # Advanced (also supported):
 # pubDatetime: 2025-08-31T14:00:00Z
 # modDatetime: 2025-09-01T16:30:00-05:00
