@@ -20,11 +20,7 @@ export function getDateKey(input: unknown): string {
   if (hasDateFields(input)) {
     const value = input.date ?? input.startDate ?? ''
     const d = toDate(value as DateLike)
-    return (
-      d ? d.toISOString()
-      : typeof value === 'string' ? value
-      : ''
-    )
+    return d ? d.toISOString() : typeof value === 'string' ? value : ''
   }
   return ''
 }

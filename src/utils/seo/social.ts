@@ -16,8 +16,9 @@ export function buildSocialMetaTags(meta: SeoMeta) {
   const { canonicalUrl, contentType = 'page', description, ogImage, title } = meta
   const socialImageUrl = getSocialImageUrl(ogImage, GLOBAL_CONFIG.site.origin)
   const ogType = OG_TYPE_MAP[contentType]
-  const absoluteCanonical =
-    canonicalUrl ? new URL(canonicalUrl, GLOBAL_CONFIG.site.origin).toString() : undefined
+  const absoluteCanonical = canonicalUrl
+    ? new URL(canonicalUrl, GLOBAL_CONFIG.site.origin).toString()
+    : undefined
 
   return {
     // Open Graph / Facebook

@@ -20,16 +20,10 @@ interface NavMenuProps {
 
 const NavMenu: React.FC<NavMenuProps> = ({ link }) => {
   return (
-    <Menu
-      as="div"
-      className="relative inline-block text-left"
-    >
+    <Menu as="div" className="relative inline-block text-left">
       <MenuButton className="inline-flex justify-center rounded-md bg-black/0 px-2.5 py-2 text-base font-semibold tracking-wide text-primary-900 uppercase hover:bg-black/5 focus:outline-hidden sm:px-3">
         <span>{link.name}</span>
-        <ChevronDownIcon
-          aria-hidden="true"
-          className="mt-px h-6 w-6 text-primary-900"
-        />
+        <ChevronDownIcon aria-hidden="true" className="mt-px h-6 w-6 text-primary-900" />
       </MenuButton>
 
       {link?.links && (
