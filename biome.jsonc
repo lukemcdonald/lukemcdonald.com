@@ -30,7 +30,16 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "recommended": true,
+      "nursery": {
+        "useSortedClasses": {
+          "level": "error",
+          "options": {
+            "attributes": ["class", "className", "class:list"],
+            "functions": ["clsx", "cn", "cva", "twMerge", "twJoin"]
+          }
+        }
+      }
     }
   },
   "overrides": [
@@ -38,6 +47,20 @@
       "includes": ["**/*.astro"],
       "formatter": {
         "enabled": true
+      }
+    },
+    {
+      "includes": ["**/*.css"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noUnknownAtRules": "off",
+            "noDuplicateCustomProperties": "off"
+          },
+          "correctness": {
+            "noUnknownFunction": "off"
+          }
+        }
       }
     }
   ]

@@ -15,6 +15,7 @@
     "format": "biome format .",
     "format:check": "biome check --formatter-enabled=true --linter-enabled=false --assist-enabled=false .",
     "format:fix": "biome format --write .",
+    "lint:tailwind": "biome lint --write .",
     "lint": "eslint ./src --report-unused-disable-directives",
     "lint:fix": "eslint ./src --fix --report-unused-disable-directives",
     "preinstall": "npx only-allow pnpm",

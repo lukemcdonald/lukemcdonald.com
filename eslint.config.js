@@ -1,6 +1,6 @@
 import eslintPluginAstro from 'eslint-plugin-astro'
-import globals from 'globals'
 import perfectionist from 'eslint-plugin-perfectionist'
+import globals from 'globals'
 import tsEslint from 'typescript-eslint'
 
 export default [
@@ -47,6 +47,15 @@ export default [
     rules: {
       // Avoid inline (implicit) returns in arrow functions
       // 'arrow-body-style': ['error', 'always'],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
+      ],
       'perfectionist/sort-objects': [
         'error',
         {
