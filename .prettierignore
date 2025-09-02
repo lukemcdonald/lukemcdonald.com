@@ -10,6 +10,7 @@ public/_redirects
 
 # Generated files
 *.log
+pnpm-lock.yaml
 
 # Environment files
 .env
