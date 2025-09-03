@@ -51,7 +51,6 @@ export default defineConfig({
   site: GLOBAL_CONFIG.site.origin,
   trailingSlash: 'never',
   vite: {
-    // @ts-expect-error https://github.com/withastro/astro/issues/14030
     plugins: [tailwindcss()],
   },
 })
