@@ -2,7 +2,7 @@ import type { CollectionEntry } from 'astro:content'
 
 export type PageEntry = CollectionEntry<'pages'>
 
-export type SortBy = 'title' | 'order' | 'pubDate' | 'custom' | 'manual'
+export type SortBy = 'title' | 'order' | 'date' | 'custom' | 'manual'
 
 export interface PageFilterOptions {
   allowDrafts?: boolean
@@ -12,7 +12,7 @@ export interface PageFilterOptions {
   include?: string[]
   manualOrder?: string[]
   sortBy?: SortBy
-  // Optional date filtering based on `data.pubDatetime`
+  // Optional date filtering based on `data.pubDate`
   dateFrom?: Date | string | number
   dateTo?: Date | string | number
   hideFuture?: boolean
