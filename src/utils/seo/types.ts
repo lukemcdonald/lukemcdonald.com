@@ -13,8 +13,8 @@ export interface SeoMeta {
   description?: string
   dir?: 'ltr' | 'rtl' | 'auto'
   lang?: string
-  modDate?: Date | null
+  modDate?: Date
   ogImage?: string
-  pubDate?: Date | null
+  pubDate?: Date
   title: string
 }
