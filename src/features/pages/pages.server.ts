@@ -43,7 +43,7 @@ export function buildPagesFilter(options: PageFilterOptions = {}) {
       return false
     }
 
-    const pub = toDate(data.pubDatetime ?? null)
+    const pub = toDate(data.pubDate ?? null)
 
     if (pub && dateFrom) {
       const from = toDate(dateFrom)
@@ -91,8 +91,8 @@ export function sortPagesServer(pages: PageEntry[], options: PageFilterOptions =
     })
   }
 
-  if (sortBy === 'pubDate') {
-    return sortByAccessorDateDesc(pages, (p) => p.data.pubDatetime ?? 0)
+  if (sortBy === 'date') {
+    return sortByAccessorDateDesc(pages, (p) => p.data.pubDate ?? 0)
   }
 
   return sortPages(pages, { customSort, manualOrder, sortBy })

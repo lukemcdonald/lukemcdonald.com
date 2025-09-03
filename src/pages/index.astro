@@ -11,7 +11,7 @@ if (!page) {
   return new Response(null, { status: 404 })
 }
 
-const { description, image, imageAlt, seo, subtitle, title } = page.data
+const { description, image, imageAlt, modDate, pubDate, seo, subtitle, title } = page.data
 
 const seoTitle = seo?.title || title
 const seoDescription = seo?.description || page.rendered?.html || description
@@ -20,8 +20,10 @@ const { Content } = await render(page)
 ---
 
 <Layout
-  title={seoTitle}
   description={seoDescription}
+  modDate={modDate}
+  pubDate={pubDate}
+  title={seoTitle}
 >
   <Main>
     <Entry

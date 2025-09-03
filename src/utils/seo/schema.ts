@@ -21,15 +21,7 @@ function buildWebsiteJsonLd() {
 }
 
 function buildPageJsonLd(meta: SeoMeta) {
-  const {
-    author,
-    canonicalUrl,
-    contentType = 'page',
-    description,
-    modDatetime,
-    pubDatetime,
-    title,
-  } = meta
+  const { author, canonicalUrl, contentType = 'page', description, modDate, pubDate, title } = meta
 
   const type = CONTENT_TYPE_MAP[contentType]
   const isArticleOrBlog = type === 'Article' || type === 'BlogPosting'
@@ -57,8 +49,8 @@ function buildPageJsonLd(meta: SeoMeta) {
     isPartOf: website,
     name: title,
     url,
-    ...(modDatetime && { dateModified: modDatetime.toISOString() }),
-    ...(pubDatetime && { datePublished: pubDatetime.toISOString() }),
+    ...(modDate && { dateModified: modDate.toISOString() }),
+    ...(pubDate && { datePublished: pubDate.toISOString() }),
   } as const
 
   if (isArticleOrBlog && author && typeof author === 'object') {
