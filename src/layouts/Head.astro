@@ -17,9 +17,9 @@ const { generator, meta } = Astro.props
 const { author, canonicalUrl, description: inDescription, modDate, pubDate, title: inTitle } = meta
 
 const siteNameLower = GLOBAL_CONFIG.name.trim().toLowerCase()
-const providedTitleLower = (inTitle ?? '').trim().toLowerCase()
-const title =
-  providedTitleLower.includes(siteNameLower) ? inTitle : `${inTitle} - ${GLOBAL_CONFIG.name}`
+const baseTitle = (inTitle ?? GLOBAL_CONFIG.name).trim()
+const hasSiteName = baseTitle.toLowerCase().includes(siteNameLower)
+const title = hasSiteName ? baseTitle : `${baseTitle} - ${GLOBAL_CONFIG.name}`
 
 // Clean and optimize the description for meta tags
 const description = stripHtmlAndTruncate(inDescription, 160, '...')
