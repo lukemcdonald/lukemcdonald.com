@@ -12,7 +12,7 @@ export interface PageFilterOptions {
   include?: string[]
   manualOrder?: string[]
   sortBy?: SortBy
-  // Optional date filtering based on `data.pubDate`
+  // Optional date filtering based on `data.pubDate` (derived from frontmatter `date`)
   dateFrom?: Date | string | number
   dateTo?: Date | string | number
   hideFuture?: boolean

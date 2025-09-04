@@ -13,6 +13,7 @@ const CONTENT_TYPE_MAP: Record<SeoContentType, SchemaType> = {
 function buildWebsiteJsonLd() {
   return {
     '@context': 'https://schema.org',
+    '@id': GLOBAL_CONFIG.site.origin,
     '@type': 'WebSite',
     alternateName: new URL(GLOBAL_CONFIG.site.origin).hostname,
     name: GLOBAL_CONFIG.name,
@@ -32,21 +33,16 @@ function buildPageJsonLd(meta: SeoMeta) {
     url: GLOBAL_CONFIG.site.origin,
   }
 
-  const website = {
-    '@type': 'WebSite',
-    name: GLOBAL_CONFIG.name,
-    url: GLOBAL_CONFIG.site.origin,
-  }
-
   const url = canonicalUrl ? new URL(canonicalUrl, GLOBAL_CONFIG.site.origin).toString() : undefined
 
   const base = {
     '@context': 'https://schema.org',
     '@type': type,
+    ...(url && { '@id': url }),
     description,
     headline: title,
     inLanguage: meta.lang ?? GLOBAL_CONFIG.lang ?? 'en',
-    isPartOf: website,
+    isPartOf: { '@id': GLOBAL_CONFIG.site.origin },
     name: title,
     url,
     ...(modDate && { dateModified: modDate.toISOString() }),

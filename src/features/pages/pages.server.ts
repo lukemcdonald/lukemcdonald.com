@@ -92,7 +92,7 @@ export function sortPagesServer(pages: PageEntry[], options: PageFilterOptions =
   }
 
   if (sortBy === 'date') {
-    return sortByAccessorDateDesc(pages, (p) => p.data.pubDate ?? 0)
+    return sortByAccessorDateDesc(pages, (p) => p.data.pubDate ?? null)
   }
 
   return sortPages(pages, { customSort, manualOrder, sortBy })
