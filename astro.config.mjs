@@ -4,9 +4,10 @@ import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
 import tailwindcss from '@tailwindcss/vite'
 
-import { defineConfig, envField } from 'astro/config'
+import { defineConfig } from 'astro/config'
 
 import { GLOBAL_CONFIG } from './src/configs/global.js'
+import { ENV_SCHEMA } from './src/configs/env.js'
 
 // Sitemap exclusions
 const SITEMAP_EXCLUSIONS = new Set([`${GLOBAL_CONFIG.site.origin}/index`])
@@ -18,13 +19,7 @@ export default defineConfig({
     format: 'directory',
   },
   env: {
-    schema: {
-      PUBLIC_GOOGLE_SITE_VERIFICATION: envField.string({
-        access: 'public',
-        context: 'client',
-        optional: true,
-      }),
-    },
+    schema: ENV_SCHEMA,
   },
   experimental: {
     contentIntellisense: true,
