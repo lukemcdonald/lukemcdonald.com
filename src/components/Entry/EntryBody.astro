@@ -13,6 +13,7 @@ const { image, imageAlt } = Astro.props
           class="block h-full w-full grayscale xs:object-cover"
           decoding="sync"
           fetchpriority="high"
+          loading="eager"
           src={image}
         />
       </figure>
