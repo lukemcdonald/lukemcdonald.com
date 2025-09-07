@@ -2,6 +2,7 @@
 import type { SeoMeta } from '@/utils/seo'
 
 import { ClientRouter } from 'astro:transitions'
+import { PUBLIC_GOOGLE_SITE_VERIFICATION } from 'astro:env/client'
 
 import PostHog from '@/components/PostHog.astro'
 import { GLOBAL_CONFIG, IS_PROD } from '@/configs/global'
@@ -45,6 +46,13 @@ const socialMetaTags = buildSocialMetaTags(metaForSeo)
     name="robots"
     content="index, follow, max-image-preview:large"
   />
+
+  {PUBLIC_GOOGLE_SITE_VERIFICATION && (
+    <meta
+      name="google-site-verification"
+      content={PUBLIC_GOOGLE_SITE_VERIFICATION}
+    />
+  )}
 
   <!-- Favicon -->
   <link
