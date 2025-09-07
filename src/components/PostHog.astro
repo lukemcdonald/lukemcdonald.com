@@ -1,7 +1,9 @@
-<script is:inline type="text/javascript" id="posthog-js">
-  /* eslint-disable */
-  import { POSTHOG_API_KEY } from 'astro:env/client'
+---
+import { POSTHOG_API_KEY } from 'astro:env/client'
+---
 
+<script define:vars={{ POSTHOG_API_KEY }} lang="ts" defer>
+  /* eslint-disable */
   !(function (t, e) {
     var o, n, p, r
     e.__SV ||
