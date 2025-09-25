@@ -1,16 +1,13 @@
 company: Blazer Six, Inc
-position: Full-stack Developer, Business Partner
+position: Owner, Full‑stack Engineer
 startDate: '2014-07'
 endDate: '2025-07'
 location: Remote
 image: '@/assets/images/logo-blazer-six.png'
 website: 'https://www.blazersix.com/'
-summary: Blazer Six is a small product studio behind AudioTheme and Cedaro, building WordPress themes, plugins, and custom web solutions.
+summary: Blazer Six is an Independent web studio and product shop; built WordPress themes/plugins for musicians; scaled to 12k+ customers and $2.5M+ revenue.
 highlights:
-  - Co-founded and helped grow AudioTheme and Cedaro into sustainable businesses, supporting a team of three full-time employees.
-  - Built and maintained full-stack web solutions using JavaScript, PHP, WordPress, and React.
-  - Developed custom design systems and component libraries for WordPress themes and plugins, improving UX consistency and developer efficiency.
-  - Led end-to-end product development — from idea to launch — including development, marketing, sales, and customer support.
-  - Automated deployment, version control, and support processes to streamline internal workflows and improve product velocity.
-  - Built and sustained a 10+ year partnership with WordPress.com, supporting long-term product visibility.
-  - Managed day-to-day business operations, including billing, partnerships, and performance tracking.
+  - Co-founded AudioTheme and Cedaro; scaled to 12k+ customers and $2.5M+ revenue, sustaining a decade-long WordPress.com partnership.
+  - Built AudioTheme.com, 15+ commercial WordPress themes, and dozens of plugins.
+  - Developed full product lifecycle—development, design, marketing, sales, and support.
+  - Automated deployments and support workflows to increase delivery speed and reliability.

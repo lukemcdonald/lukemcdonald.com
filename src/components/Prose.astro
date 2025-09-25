@@ -13,7 +13,10 @@ const { as: Component = 'div', class: className, ...delegated } = Astro.props sa
 
 <Component
   {...delegated}
-  class:list={['prose dark:prose-invert prose-headings:font-semibold prose-h1:text-5xl', className]}
+  class:list={[
+    'prose dark:prose-invert prose-headings:font-semibold prose-h1:text-2xl prose-a:font-normal',
+    className,
+  ]}
 >
   <slot />
 </Component>

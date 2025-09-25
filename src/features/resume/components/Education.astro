@@ -21,8 +21,10 @@ const { education } = Astro.props
     {
       (item: EducationItem) => (
         <>
-          {item.studyType}
-          {item.area ? `${item.area} ` : ''}— {item.institution}
+          <strong>
+            {item.studyType} {item.area}
+          </strong>{' '}
+          — {item.institution}
         </>
       )
     }

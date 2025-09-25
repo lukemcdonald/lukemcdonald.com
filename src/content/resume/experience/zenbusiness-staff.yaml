@@ -1,19 +1,14 @@
 company: ZenBusiness
-position: Staff Software Engineer
+position: Staff Software Engineer / Tech Lead
 startDate: '2023-05'
 endDate: null
 location: Remote
 image: '@/assets/images/logo-zenbusiness.png'
 website: 'https://www.zenbusiness.com/'
-summary: ZenBusiness helps entrepreneurs start, run, and grow their businesses by providing formation services, tools, and ongoing compliance support.
+summary: ZenBusiness is a Public Benefit Corporation for business formation, compliance, and growth; served 850k+ entrepreneurs; raised $200M Series C.
 highlights:
-  - Tech Lead across four full-stack teams (L2–L4), supporting engineers working on customer purchases, checkout, payments, experimentation, and observability.
-  - Lead runahead work for major features — scoping requirements, drafting tickets, and aligning architecture to reduce blockers and keep projects moving.
-  - Write and review production code daily, with a focus on clean, accessible, and maintainable solutions across front-end and full-stack workflows.
-  - Implemented and managed LaunchDarkly feature flags and experiments across customer flows, supporting controlled rollouts and data-driven decisions.
-  - Helped implement internationalization (i18n) across the app using POEditor and translation workflows, supporting future localization and global readiness.
-  - Serve as the primary technical liaison for the Core Web Experience group, representing team interests in cross-functional planning while shielding engineers from unnecessary context switching.
-  - Architected and launched ZUI — a scalable internal component library built on MUI — reducing dev time and improving design consistency across the org; transitioned maintenance to a dedicated team.
-  - Implemented cursor rules to improve AI behavior and maintain consistent UX patterns across apps.
-  - Guide the migration of legacy micro-frontends into unified systems, improving performance, consistency, and maintainability.
-  - Review code across 15+ repositories, mentoring engineers and reinforcing best practices for accessibility, performance, and long-term clarity.
+  - Guided engineering on checkout, payments, and experimentation, aligning Core Platform and Growth teams to accelerate funnel delivery and improve reliability.
+  - Architected and launched ZUI, an MUI-based library, in 3 months; drove 90% adoption across 150+ engineers and 10+ designers, cutting duplicate UI by 60% and halving delivery time.
+  - Developed skip-logic funnel framework that reduced flow delivery from 6 weeks to <1 week; shipped 20+ flows and saved ~100 developer-weeks.
+  - Optimized purchase funnel performance by ~40% (LCP/TTI) through Webpack tuning, bundle optimization, and deferred scripts.
+  - Scaled consistency and quality through i18n rollout, LaunchDarkly experiments, and mentorship; created best practices and PR review rules to align teams.

@@ -9,6 +9,11 @@ export interface BasicsItem {
   intro?: string
   label?: string
   name: string
+  profiles?: Array<{
+    network: string
+    username: string
+    url: string
+  }>
   website?: string
 }
 
@@ -22,6 +27,7 @@ export interface ExperienceItem {
   company: string
   endDate?: string | null
   highlights?: string[]
+  location?: string
   position: string
   startDate: string
   summary?: string

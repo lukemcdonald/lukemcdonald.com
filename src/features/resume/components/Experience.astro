@@ -18,6 +18,7 @@ const { experience } = Astro.props
   title="Experience"
   items={experience}
   icon={ExperienceIcon}
+  itemsClass="flex flex-col gap-2 !m-0"
 >
   <template slot="item">
     {
@@ -29,39 +30,34 @@ const { experience } = Astro.props
         const endDateLabel = formatMonthYear(endDate) || endDate || 'Present'
 
         return (
-          <div class="mt-8">
-            <dl class="not-prose flex flex-auto flex-wrap items-baseline gap-x-1 text-primary-900 dark:text-primary-100">
-              <dt class="sr-only">Role</dt>
-              <dd class="font-semibold">{item.position}</dd>
-              <dt class="sr-only">Company</dt>
-              <dd class="flex-none">
-                @{' '}
-                {item.website ?
-                  <Link
-                    underline="always"
-                    href={item.website}
-                  >
-                    {item.company}
-                  </Link>
-                : item.company}
-              </dd>
-              <dt class="sr-only">Date</dt>
-              <dd
-                class="my-0 ml-1 text-sm text-primary-600 md:ml-auto dark:text-primary-400"
-                aria-label={`${startDateLabel} until ${endDateLabel}`}
-              >
+          <div>
+            <h3 class="not-prose font-semibold text-primary-900 dark:text-primary-100">
+              {item.website ?
+                <Link
+                  href={item.website}
+                  class="font-inherit"
+                >
+                  {item.company}
+                </Link>
+              : item.company}{' '}
+              — {item.position}
+            </h3>
+
+            <em class="text-primary-600 dark:text-primary-400">
+              <span aria-label={`${startDateLabel} until ${endDateLabel}`}>
                 <time datetime={startDate}>{startDateLabel}</time>
                 <span aria-hidden="true">&nbsp;–&nbsp;</span>
                 {endDate ?
                   <time datetime={endDate}>{endDateLabel}</time>
                 : <span>Present</span>}
-              </dd>
-            </dl>
+              </span>
+              | {item.location}
+            </em>
 
             {item.summary && <p class="mt-2">{item.summary}</p>}
 
             {item.highlights && (
-              <ul>
+              <ul class="!m-0">
                 {item.highlights.map((highlight: string) => (
                   <li>{highlight}</li>
                 ))}
