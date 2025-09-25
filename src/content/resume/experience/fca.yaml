@@ -5,9 +5,8 @@ endDate: '2023-05'
 location: Remote
 image: '@/assets/images/logo-fca.png'
 website: 'https://www.fca.org/'
-summary: Fellowship of Christian Athletes (FCA) is a nonprofit organization focused on leading every coach and athlete into a growing relationship with Jesus Christ and His church.
+summary: FCA is a global nonprofit sports ministry active in 100+ countries; ~$280M annual revenue (2024).
 highlights:
-  - Led a team to build an internal tool on a new Snowflake data lake, delivering ahead of a tight deadline.
-  - Refactored a React codebase to adopt TypeScript, improving type safety and maintainability.
-  - Created shared UI components and branding elements using Tailwind and WordPress, ensuring consistency across internal tools.
-  - Helped define engineering standards across TypeScript and WordPress projects, streamlining developer onboarding and team workflows.
+  - Delivered an internal tool on a new Snowflake data lake two weeks early.
+  - Migrated React codebase to strict TypeScript, improving type safety and maintainability.
+  - Introduced shared design system with Tailwind and WordPress for consistent app branding.
