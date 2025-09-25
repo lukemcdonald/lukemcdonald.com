@@ -1,59 +1,71 @@
 ---
 import type { BasicsItem } from '@/features/resume/resume.types'
 
+import CodeIcon from '@lucide/astro/icons/github'
 import GlobeIcon from '@lucide/astro/icons/globe'
+import BriefcaseIcon from '@lucide/astro/icons/handshake'
 import MailIcon from '@lucide/astro/icons/mail'
 
 export interface Props {
   basics: BasicsItem
 }
 
+const icons = {
+  email: MailIcon,
+  github: CodeIcon,
+  linkedin: BriefcaseIcon,
+  website: GlobeIcon,
+} as const
+
 const { basics } = Astro.props
 
-const { email, intro, label: subtitle, name: title, website } = basics || {}
+const { email, intro, label: subtitle, name: title, profiles, website } = basics || {}
+
+const linkList = [
+  {
+    icon: icons.email,
+    label: 'Email',
+    url: email,
+  },
+  {
+    icon: icons.website,
+    label: 'Website',
+    url: website,
+  },
+  ...(profiles?.map((profile) => ({
+    icon: icons[profile?.network?.toLowerCase() as keyof typeof icons],
+    label: profile?.network,
+    url: profile?.url,
+  })) || []),
+]
+
+const introParagraphs = intro?.split('\n\n').map(paragraph => paragraph.trim()).filter(Boolean)
 ---
 
-<header class="">
-  <h1 class="mb-0">
-    <a
-      class="no-underline hover:underline"
-      href="/"
-    >
-      {title}
-    </a>
-  </h1>
+<header>
+  <div class="flex flex-col sm:flex-row gap-4 sm:items-baseline print:flex-col print:items-start justify-between">
+    <h1 class="mb-0 flex-shrink-0">
+      <a
+        class="not-prose no-underline hover:underline"
+        href="/"
+      >
+        {title}
+      </a>
+    </h1>
 
-  {subtitle && <blockquote>{subtitle}</blockquote>}
+    <dl class="not-prose flex flex-wrap gap-x-3 sm:gap-x-5 print:block">
+      {linkList.map((link) => (
+        <dt class="sr-only">{link.label}</dt>
+        <dd class="flex items-center gap-2">
+          <link.icon class="size-4 text-primary-400 dark:text-primary-400" />
+          <a class="print:hidden" href={link.label === 'Email' ? `mailto:${link.url}` : link.url}>{link.label}</a>
+          <code class="hidden print:block  print:text-xs">{link.url}</code>
+        </dd>
+      ))}
+    </dl>
+  </div>
 
-  <dl class="not-prose mt-4">
-    {
-      website && (
-        <>
-          <dt class="sr-only">Website</dt>
-          <dd class="flex items-center gap-2">
-            <GlobeIcon class="size-4 text-primary-600 dark:text-primary-400" />
-            <code>
-              <a href={website}>{website}</a>
-            </code>
-          </dd>
-        </>
-      )
-    }
+  {subtitle && <blockquote class="mb-0 mt-12 print:mt-6">{subtitle}</blockquote>}
 
-    {
-      email && (
-        <>
-          <dt class="sr-only">Email</dt>
-          <dd class="flex items-center gap-2">
-            <MailIcon class="size-4 text-primary-600 dark:text-primary-400" />
-            <code>
-              <a href={`mailto:${email}`}>{email}</a>
-            </code>
-          </dd>
-        </>
-      )
-    }
-  </dl>
-
-  {intro && <p>{intro}</p>}
+  {introParagraphs?.map(paragraph => <p>{paragraph}</p>)}
 </header>

@@ -9,6 +9,11 @@ export interface BasicsItem {
   intro?: string
   label?: string
   name: string
+  profiles?: Array<{
+    network: string
+    username: string
+    url: string
+  }>
   website?: string
 }
 
