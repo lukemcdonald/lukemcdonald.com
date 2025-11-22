@@ -1,10 +1,11 @@
 ---
 import type { BasicsItem } from '@/features/resume/resume.types'
 
-import CodeIcon from '@lucide/astro/icons/github'
 import GlobeIcon from '@lucide/astro/icons/globe'
 import BriefcaseIcon from '@lucide/astro/icons/handshake'
 import MailIcon from '@lucide/astro/icons/mail'
+
+import GithubIcon from '@/components/Icons/Github.astro'
 
 export interface Props {
   basics: BasicsItem
@@ -12,7 +13,7 @@ export interface Props {
 
 const icons = {
   email: MailIcon,
-  github: CodeIcon,
+  github: GithubIcon,
   linkedin: BriefcaseIcon,
   website: GlobeIcon,
 } as const
@@ -57,7 +58,7 @@ const introParagraphs = intro?.split('\n\n').map(paragraph => paragraph.trim()).
       {linkList.map((link) => (
         <dt class="sr-only">{link.label}</dt>
         <dd class="flex items-center gap-2">
-          <link.icon class="size-4 text-primary-400 dark:text-primary-400" />
+          <link.icon class="size-4" />
           <a class="print:hidden" href={link.label === 'Email' ? `mailto:${link.url}` : link.url}>{link.label}</a>
           <code class="hidden print:block  print:text-xs">{link.url}</code>
         </dd>

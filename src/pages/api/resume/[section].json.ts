@@ -1,12 +1,13 @@
 import type { APIRoute } from 'astro'
 
-import { getCollection, getEntry } from 'astro:content'
+import { getCollection } from 'astro:content'
 
-import { parseContentId, stripDataExtension } from '@/utils/content'
-import { getDateKey, sortByDateDesc } from '@/utils/dates'
+import { getResumeSection } from '@/features/resume/resume.server'
+import { parseContentId } from '@/utils/content'
 
 /**
- * Returns a list of all resume sections.
+ * Required by Astro for dynamic routes.
+ * Returns a list of all resume sections to generate static paths at build time.
  */
 export async function getStaticPaths() {
   const entries = await getCollection('resume')
@@ -32,30 +33,15 @@ export async function getStaticPaths() {
  * @returns A JSON payload for the given resume section
  */
 export const GET: APIRoute = async ({ params }) => {
-  const { section: sectionId } = params
+  const { section } = params
 
-  if (!sectionId) {
+  if (!section) {
     return new Response(null, { status: 400 })
   }
 
-  // Try exact top-level entry first (e.g., resume/experience.yaml)
-  const topLevel = await getEntry('resume', sectionId)
+  const payload = await getResumeSection(section)
 
-  // Also collect any nested entries (e.g., resume/experience/*.yaml)
-  const all = await getCollection('resume')
-
-  const nested = all
-    .map((e) => ({ data: e.data, key: stripDataExtension(e.id) }))
-    .filter((e) => e.key.startsWith(sectionId + '/'))
-    .map((e) => ({ id: e.key.slice(sectionId.length + 1), ...e.data }))
-
-  let payload: unknown
-
-  if (nested.length > 0) {
-    payload = sortByDateDesc(nested, getDateKey)
-  } else if (topLevel) {
-    payload = topLevel.data
-  } else {
+  if (payload === null) {
     return new Response(null, { status: 404 })
   }
 

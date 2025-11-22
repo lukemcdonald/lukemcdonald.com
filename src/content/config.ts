@@ -1,6 +1,8 @@
 import { glob } from 'astro/loaders'
-import { defineCollection, z } from 'astro:content'
+import { defineCollection } from 'astro:content'
 
+import { createPagesSchema } from '@/features/pages/pages.schema'
+import { createResumeSchema } from '@/features/resume/resume.schema'
 import { getCollectionMeta } from '@/utils/collections'
 
 const pages = getCollectionMeta('pages')
@@ -11,31 +13,7 @@ const pagesCollection = defineCollection({
     base: `./${pages.path}`,
     pattern: '**/[^_]*.{md,mdx}',
   }),
-  schema: ({ image }) =>
-    z
-      .object({
-        date: z.coerce.date().optional(),
-        description: z.string().optional(),
-        draft: z.boolean().default(false),
-        image: image().optional(),
-        imageAlt: z.string().optional(),
-        order: z.number().optional(),
-        seo: z
-          .object({
-            description: z.string().optional(),
-            ogImage: z.string().optional(),
-            title: z.string().optional(),
-          })
-          .optional(),
-        subtitle: z.string().optional(),
-        title: z.string(),
-        updated: z.coerce.date().optional(),
-      })
-      .transform((data) => ({
-        ...data,
-        modDate: data.updated,
-        pubDate: data.date,
-      })),
+  schema: ({ image }) => createPagesSchema(image),
 })
 
 const resumeCollection = defineCollection({
@@ -43,8 +21,7 @@ const resumeCollection = defineCollection({
     base: `./${resume.path}`,
     pattern: '**/[^_]*.yaml',
   }),
-  // Accept any YAML shape so sections can be arrays or objects
-  schema: z.any(),
+  schema: createResumeSchema(),
 })
 
 export const collections = {

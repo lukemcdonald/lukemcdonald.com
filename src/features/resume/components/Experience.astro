@@ -18,7 +18,7 @@ const { experience } = Astro.props
   title="Experience"
   items={experience}
   icon={ExperienceIcon}
-  itemsClass="flex flex-col gap-2 !m-0"
+  itemsClass="flex flex-col gap-2 m-0!"
 >
   <template slot="item">
     {
@@ -63,7 +63,7 @@ const { experience } = Astro.props
             )}
 
             {item.highlights && (
-              <ul class="!m-0">
+              <ul class="m-0!">
                 {item.highlights.map((highlight: string) => (
                   <li set:html={highlight} />
                 ))}
