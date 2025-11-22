@@ -3,7 +3,7 @@ import type { ResumeData } from '@/features/resume/resume.types'
 import { getCollection, getEntry } from 'astro:content'
 
 import { parseContentId } from '@/utils/content'
-import { getDateKey, sortByDateDesc } from '@/utils/dates'
+import { getDateKey, sortByDateDesc, sortExperienceByEndDate } from '@/utils/dates'
 
 /**
  * Aggregates all entries in the `resume` collection into a single JSON object.
@@ -11,6 +11,7 @@ import { getDateKey, sortByDateDesc } from '@/utils/dates'
  * - Top-level files (e.g. `basics.yaml`) become fields on the root object
  * - Nested files (e.g. `experience/zenbusiness.yaml`) become array items under their section
  * - Arrays are sorted by `date` or `startDate` descending when present
+ * - Experience items are sorted by `endDate` with "Present" positions first, then by endDate descending
  */
 export async function getResumeData(): Promise<ResumeData> {
   const entries = await getCollection('resume')
@@ -38,7 +39,12 @@ export async function getResumeData(): Promise<ResumeData> {
 
   for (const [key, value] of Object.entries(result)) {
     if (Array.isArray(value)) {
-      result[key] = sortByDateDesc(value)
+      // Use custom sorting for experience items
+      if (key === 'experience') {
+        result[key] = sortExperienceByEndDate(value as ResumeData['experience'])
+      } else {
+        result[key] = sortByDateDesc(value)
+      }
     }
   }
 
@@ -51,6 +57,7 @@ export async function getResumeData(): Promise<ResumeData> {
  * - Returns top-level entry data if section is a single file (e.g., `basics.yaml`)
  * - Returns array of nested entries if section has nested files (e.g., `experience/*.yaml`)
  * - Only sorts arrays when items have date fields (`date` or `startDate`)
+ * - Experience items are sorted by `endDate` with "Present" positions first, then by endDate descending
  * - Returns null if section doesn't exist
  *
  * @param sectionId - The section ID to retrieve
@@ -83,6 +90,10 @@ export async function getResumeSection(sectionId: string) {
 
   // If we have nested entries, return them (sorted if they have dates)
   if (nestedEntries.length > 0) {
+    // Use custom sorting for experience items
+    if (sectionId === 'experience') {
+      return sortExperienceByEndDate(nestedEntries as ResumeData['experience'])
+    }
     const hasDates = nestedEntries.some((item) => getDateKey(item) !== '')
     return hasDates ? sortByDateDesc(nestedEntries, getDateKey) : nestedEntries
   }
