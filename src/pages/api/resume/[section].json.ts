@@ -1,3 +1,4 @@
+
 import type { APIRoute } from 'astro'
 
 import { getCollection, getEntry } from 'astro:content'
@@ -46,7 +47,7 @@ export const GET: APIRoute = async ({ params }) => {
 
   const nested = all
     .map((e) => ({ data: e.data, key: stripDataExtension(e.id) }))
-    .filter((e) => e.key.startsWith(sectionId + '/'))
+    .filter((e) => e.key.startsWith(`${sectionId}/`))
     .map((e) => ({ id: e.key.slice(sectionId.length + 1), ...e.data }))
 
   let payload: unknown

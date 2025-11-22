@@ -63,7 +63,7 @@ const { experience } = Astro.props
             )}
 
             {item.highlights && (
-              <ul class="!m-0">
+              <ul class="m-0!">
                 {item.highlights.map((highlight: string) => (
                   <li set:html={highlight} />
                 ))}
