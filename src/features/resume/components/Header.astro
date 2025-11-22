@@ -65,7 +65,7 @@ const introParagraphs = intro?.split('\n\n').map(paragraph => paragraph.trim()).
     </dl>
   </div>
 
-  {subtitle && <blockquote class="mb-0 mt-12 print:mt-6">{subtitle}</blockquote>}
+  {subtitle && <h2 class="mt-12 mb-4 font-semibold print:mt-6" set:html={subtitle} />}
 
-  {introParagraphs?.map(paragraph => <p>{paragraph}</p>)}
+  {introParagraphs?.map(paragraph => <p set:html={paragraph} />)}
 </header>

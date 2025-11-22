@@ -1,19 +1,19 @@
 name: Luke McDonald
-label: Staff Software Engineer | Tech Lead | React, TypeScript, Design Systems
 email: thelukemcdonald@gmail.com
-phone: (319) 480-7088
-website: https://lukemcdonald.com
+label: Staff Software Engineer
 location:
   city: Monticello
   region: IA
+phone: (319) 480-7088
 profiles:
   - network: GitHub
     username: lukemcdonald
     url: https://github.com/lukemcdonald
   - network: LinkedIn
     username: thelukemcdonald
-    url: https://www.linkedin.com/in/thelukemcdonald
+    url: https://linkedin.com/in/thelukemcdonald
+website: https://lukemcdonald.com
 intro: |
-  Staff Software Engineer and tech lead with 15+ years delivering scalable, accessible web applications. Specialized in React, TypeScript, and design systems, with strong backend flexibility in Node.js, GraphQL, PHP, and SQL
+  A hands-on <strong>Tech Lead</strong> specializing in building high-velocity platforms and defining engineering standards. Leveraging <strong>15+ years of software development experience</strong> and a modern full-stack profile (<strong>React</strong>, <strong>TypeScript</strong>, <strong>GraphQL</strong>), I focus on driving quantifiable business impact—including <strong>slashing delivery time by 80%</strong> and <strong>optimizing funnel performance by 40% (LCP)</strong>.
 
-  Led org-wide adoption of a 150+ component library, developed a skip-logic funnel framework that cut delivery time by 80%, and improved mobile page load times by ~40% in high-traffic purchase flows. Known for mentoring engineers, establishing best practices, scaling solutions across startups and enterprises, and aligning product goals with technical execution.
+  Drives scaling and quality improvement through design systems, advanced <strong>observability</strong>, and pioneering the adoption of <strong>AI-powered development workflows</strong>.

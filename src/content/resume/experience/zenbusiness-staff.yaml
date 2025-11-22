@@ -1,14 +1,15 @@
 company: ZenBusiness
-position: Staff Software Engineer / Tech Lead
+position: Staff Software Engineer, Technical Lead (Platform & Growth)
 startDate: '2023-05'
 endDate: null
-location: Remote
 image: '@/assets/images/logo-zenbusiness.png'
+location: Remote
+summary: ZenBusiness is a Public Benefit Corp for business formation and growth; served 850k+ entrepreneurs; raised $200M Series C.
 website: 'https://www.zenbusiness.com/'
-summary: ZenBusiness is a Public Benefit Corporation for business formation, compliance, and growth; served 850k+ entrepreneurs; raised $200M Series C.
 highlights:
-  - Guided engineering on checkout, payments, and experimentation, aligning Core Platform and Growth teams to accelerate funnel delivery and improve reliability.
-  - Architected and launched ZUI, an MUI-based library, in 3 months; drove 90% adoption across 150+ engineers and 10+ designers, cutting duplicate UI by 60% and halving delivery time.
-  - Developed skip-logic funnel framework that reduced flow delivery from 6 weeks to <1 week; shipped 20+ flows and saved ~100 developer-weeks.
-  - Optimized purchase funnel performance by ~40% (LCP/TTI) through Webpack tuning, bundle optimization, and deferred scripts.
-  - Scaled consistency and quality through i18n rollout, LaunchDarkly experiments, and mentorship; created best practices and PR review rules to align teams.
+  - Led a company-wide Observability and error standardization initiative across GraphQL and micro-frontends, implementing structured Sentry fingerprinting and custom error handling to accelerate root-cause analysis.
+  - Engineered a skip-logic funnel framework that slashed flow delivery time from 6 weeks to <1 week, saving ~100 developer-weeks annually.
+  - Architected and launched ZUI (MUI-based library) in 3 months, driving 90% adoption and cutting duplicate UI code by 60%.
+  - Optimized purchase funnel performance by 40% (LCP) via advanced Webpack tuning and tree shaking, achieving a 60% reduction in bundle size.
+  - Integrated Google Pay and 3DS Secure via Recurly to expand global coverage, reducing fraud risk and simplifying the checkout flow.
+  - Co-led engineering strategy for checkout, aligning Core and Growth teams by defining best practice guides, AI rulesets for Cursor/Claude Code, and improving system quality through PR review standards and A/B experimentation.

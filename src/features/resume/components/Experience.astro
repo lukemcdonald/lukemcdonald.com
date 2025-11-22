@@ -26,8 +26,13 @@ const { experience } = Astro.props
         const startDate = item.startDate
         const endDate = item.endDate
 
-        const startDateLabel = formatMonthYear(startDate) || startDate || 'Unknown'
-        const endDateLabel = formatMonthYear(endDate) || endDate || 'Present'
+        const startDateFormatted = formatMonthYear(startDate)
+        const startDateLabel = startDateFormatted || startDate || 'Unknown'
+        const endDateFormatted = formatMonthYear(endDate)
+        const endDateLabel = endDateFormatted || endDate || 'Present'
+
+        const startDateHtml = startDateFormatted ? <time datetime={startDate}>{startDateLabel}</time> : <span>{startDateLabel}</span>
+        const endDateHtml = endDateFormatted ? <time datetime={endDate}>{endDateLabel}</time> : <span>Present</span>
 
         return (
           <div>
@@ -43,23 +48,24 @@ const { experience } = Astro.props
               — {item.position}
             </h3>
 
-            <em class="text-primary-600 dark:text-primary-400">
+            <p class="uppercase text-sm mt-1">
               <span aria-label={`${startDateLabel} until ${endDateLabel}`}>
-                <time datetime={startDate}>{startDateLabel}</time>
-                <span aria-hidden="true">&nbsp;–&nbsp;</span>
-                {endDate ?
-                  <time datetime={endDate}>{endDateLabel}</time>
-                : <span>Present</span>}
+                {startDateHtml}–{endDateHtml},
               </span>
-              | {item.location}
-            </em>
+              {item.location}
+            </p>
 
-            {item.summary && <p class="mt-2">{item.summary}</p>}
+            {item.summary && (
+              <p
+                class="mt-2"
+                set:html={item.summary}
+              />
+            )}
 
             {item.highlights && (
               <ul class="!m-0">
                 {item.highlights.map((highlight: string) => (
-                  <li>{highlight}</li>
+                  <li set:html={highlight} />
                 ))}
               </ul>
             )}

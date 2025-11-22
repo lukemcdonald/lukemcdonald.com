@@ -2,11 +2,11 @@ company: Fellowship of Christian Athletes
 position: Senior Software Engineer
 startDate: '2023-01'
 endDate: '2023-05'
-location: Remote
 image: '@/assets/images/logo-fca.png'
-website: 'https://www.fca.org/'
+location: Remote
 summary: FCA is a global nonprofit sports ministry active in 100+ countries; ~$280M annual revenue (2024).
+website: 'https://www.fca.org/'
 highlights:
-  - Delivered an internal tool on a new Snowflake data lake two weeks early.
-  - Migrated React codebase to strict TypeScript, improving type safety and maintainability.
-  - Introduced shared design system with Tailwind and WordPress for consistent app branding.
+  - Established a shared design system using Tailwind and WordPress to unify app branding and eliminate UI debt across all web properties.
+  - Spearheaded a critical migration of the core React codebase to TypeScript, drastically improving type safety and reducing the potential for production bugs.
+  - Streamlined data access by delivering a custom internal reporting tool on the new Snowflake data lake two weeks ahead of schedule.
