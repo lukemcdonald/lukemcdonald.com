@@ -4,7 +4,7 @@ description: 'GreetingLinks'
 image: '@/assets/images/luke-mustachio.jpg'
 imageAlt: 'luke with mustache'
 seo:
-  title: Luke McDonald ↗ Christian, Husband, Father and Wrestling Coach
+  title: Luke McDonald | Christian, Husband, Father and Wrestling Coach
   description: I'm Luke, a Christian, husband, father and wrestling coach living in beautiful Eastern Iowa. My tent making is as a full-stack developer with an eye for design.
 ---
 

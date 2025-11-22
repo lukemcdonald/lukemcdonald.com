@@ -1,13 +1,12 @@
-company: Blazer Six, Inc
-position: Owner, Full‑stack Engineer
+company: Blazer Six
+position: Co-Founder, Product Engineering Lead
 startDate: '2014-07'
 endDate: '2025-07'
-location: Remote
 image: '@/assets/images/logo-blazer-six.png'
+location: Remote
+summary: Independent web studio and product shop; scaled to 12k+ customers; drove $2.5M+ in revenue.
 website: 'https://www.blazersix.com/'
-summary: Blazer Six is an Independent web studio and product shop; built WordPress themes/plugins for musicians; scaled to 12k+ customers and $2.5M+ revenue.
 highlights:
-  - Co-founded AudioTheme and Cedaro; scaled to 12k+ customers and $2.5M+ revenue, sustaining a decade-long WordPress.com partnership.
-  - Built AudioTheme.com, 15+ commercial WordPress themes, and dozens of plugins.
-  - Developed full product lifecycle—development, design, marketing, sales, and support.
-  - Automated deployments and support workflows to increase delivery speed and reliability.
+  - Co-founded a digital product company (AudioTheme.com/Cedaro) and secured a strategic 10-year partnership with Automattic (WordPress.com) to scale distribution.
+  - Architected and shipped a suite of commercial web products serving 12k+ customers, driving $2.5M+ in revenue.
+  - Streamlined the entire product lifecycle by automating deployments, version control, and support workflows, reducing time-to-market and increasing stability.

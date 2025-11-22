@@ -2,13 +2,12 @@ company: ZenBusiness
 position: Senior Software Engineer
 startDate: '2022-02'
 endDate: '2022-11'
-location: Remote
 image: '@/assets/images/logo-zenbusiness.png'
-website: 'https://www.zenbusiness.com/'
+location: Remote
 summary: ZenBusiness helps entrepreneurs start, run, and grow their businesses with company formation, compliance, and tools.
+website: 'https://www.zenbusiness.com/'
 highlights:
-  - Drove development of reusable React components, accelerating delivery and reuse.
-  - Integrated a chatbot microservice (React, Dialogflow CX, GraphQL) for support automation.
-  - Designed microservice database schema to strengthen API clarity and performance.
-  - Partnered with design to unify branding across properties, delivering account review page two weeks early.
-  - Modernized legacy components for accessibility and responsiveness; mentored peers on UI best practices.
+  - Owned the design and implementation of a new microservice database schema, ensuring data consistency and strengthening GraphQL API performance.
+  - Pioneered the initial reusable component strategy, establishing core patterns that accelerated feature delivery across multiple squads.
+  - Integrated a complex chatbot microservice (React, Dialogflow CX, GraphQL) by designing the technical architecture and developing core features before a company-wide pivot.
+  - Led the overhaul of legacy UI to meet WCAG accessibility standards and codified frontend best practices adopted by 5+ squads.

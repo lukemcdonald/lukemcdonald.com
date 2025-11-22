@@ -9,7 +9,7 @@ const itemsVariants = {
 
 const itemVariants = {
   list: '',
-  plain: 'p-0',
+  plain: 'p-0 first:mt-0 last:mb-0',
 }
 
 interface Props extends HTMLAttributes<'section'> {
@@ -37,15 +37,13 @@ if (hasItems && hasItemSlot) {
 
 <section {...delegated}>
   <header>
-    <h2 class="flex items-center gap-2">
-      {
-        Icon && (
-          <Icon
-            size={20}
-            class:list={['text-primary-900/90 dark:text-primary-200/90 print:hidden']}
-          />
-        )
-      }
+    <h2 class="flex items-center gap-2 mb-4">
+      {Icon && (
+        <Icon
+          size={20}
+          class:list={['text-primary-900/90 dark:text-primary-200/90 print:hidden']}
+        />
+      )}
       {title}
     </h2>
   </header>
