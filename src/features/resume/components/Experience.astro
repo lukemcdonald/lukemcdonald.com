@@ -31,8 +31,12 @@ const { experience } = Astro.props
         const endDateFormatted = formatMonthYear(endDate)
         const endDateLabel = endDateFormatted || endDate || 'Present'
 
-        const startDateHtml = startDateFormatted ? <time datetime={startDate}>{startDateLabel}</time> : <span>{startDateLabel}</span>
-        const endDateHtml = endDateFormatted ? <time datetime={endDate}>{endDateLabel}</time> : <span>Present</span>
+        const startDateHtml =
+          startDateFormatted ?
+            <time datetime={startDate}>{startDateLabel}</time>
+          : <span>{startDateLabel}</span>
+        const endDateHtml =
+          endDateFormatted ? <time datetime={endDate}>{endDateLabel}</time> : <span>Present</span>
 
         return (
           <div>
@@ -48,7 +52,7 @@ const { experience } = Astro.props
               — {item.position}
             </h3>
 
-            <p class="uppercase text-sm mt-1">
+            <p class="mt-1 text-sm uppercase">
               <span aria-label={`${startDateLabel} until ${endDateLabel}`}>
                 {startDateHtml}–{endDateHtml},
               </span>
