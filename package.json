@@ -20,6 +20,7 @@
     "preinstall": "npx only-allow pnpm",
     "preview": "netlify deploy --build --message \"preview $(git rev-parse --short HEAD)\"",
     "reinstall": "pnpm run clean && pnpm install --frozen-lockfile",
+    "typecheck": "tsc --noEmit",
     "validate": "pnpm run -s lint && pnpm run -s format:check && pnpm run -s check"
   },
   "dependencies": {
