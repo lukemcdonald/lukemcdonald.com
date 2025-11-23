@@ -10,7 +10,7 @@ import { toDate } from './toDate'
  * @returns True if the endDate represents a present position
  */
 function isPresent(endDate?: string | null) {
-  return Boolean(endDate?.toLowerCase() === 'present')
+  return Boolean(!endDate || endDate?.toLowerCase() === 'present')
 }
 
 /**
