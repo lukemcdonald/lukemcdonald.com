@@ -8,6 +8,7 @@ import PostHog from '@/components/PostHog.astro'
 import { GLOBAL_CONFIG, IS_PROD } from '@/configs/global'
 import { buildGraphJsonLd, buildSocialMetaTags } from '@/utils/seo'
 import { stripHtmlAndTruncate } from '@/utils/text'
+import { getThemeInitScript } from '@/utils/theme'
 
 export interface Props {
   generator?: string
@@ -32,6 +33,12 @@ const socialMetaTags = buildSocialMetaTags(metaForSeo)
 ---
 
 <head>
+  <!-- Theme initialization script (prevents flash) - must run before any CSS -->
+  <script
+    is:inline
+    set:html={getThemeInitScript()}
+  />
+
   <!-- Basic HTML Head Elements -->
   <meta charset="UTF-8" />
   <meta
