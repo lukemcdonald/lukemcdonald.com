@@ -1,5 +1,5 @@
 company: ZenBusiness
-position: Senior Software Engineer
+position: Senior Software Engineer (Formations & Compliance)
 startDate: '2022-02'
 endDate: '2022-11'
 image: '@/assets/images/logo-zenbusiness.png'
@@ -7,7 +7,6 @@ location: Remote
 summary: ZenBusiness helps entrepreneurs start, run, and grow their businesses with company formation, compliance, and tools.
 website: 'https://www.zenbusiness.com/'
 highlights:
-  - Owned the design and implementation of a new microservice database schema, ensuring data consistency and strengthening GraphQL API performance.
   - Pioneered the initial reusable component strategy, establishing core patterns that accelerated feature delivery across multiple squads.
-  - Integrated a complex chatbot microservice (React, Dialogflow CX, GraphQL) by designing the technical architecture and developing core features before a company-wide pivot.
-  - Led the overhaul of legacy UI to meet WCAG accessibility standards and codified frontend best practices adopted by 5+ squads.
+  - Integrated a complex chatbot microservice (React, Dialogflow CX, GraphQL), designing the architecture and developing core functionality.
+  - Designed and implemented a new microservice database schema for Django, ensuring data consistency for legacy systems.

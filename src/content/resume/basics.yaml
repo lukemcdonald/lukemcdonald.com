@@ -1,9 +1,9 @@
 name: Luke McDonald
 email: thelukemcdonald@gmail.com
-label: Staff Software Engineer
+label: Staff Frontend Software Engineer
 location:
   city: Monticello
-  region: IA
+  region: IA (Remote only)
 phone: (319) 480-7088
 profiles:
   - network: GitHub
@@ -14,6 +14,6 @@ profiles:
     url: https://linkedin.com/in/thelukemcdonald
 website: https://lukemcdonald.com
 intro: |
-  Hands-on <strong>Tech Lead</strong> with <strong>15+ years of experience</strong> building <strong>scalable frontend platforms</strong>, guiding engineering standards, and enabling teams to ship faster with higher quality. My work centers on practical, measurable improvements—<strong>cutting delivery cycles by 80%</strong>, <strong>improving critical funnel performance by ~40%</strong>, and establishing systems and patterns that keep teams aligned and efficient.
+  Hands-on <strong>Tech Lead</strong> with <strong>15+ years of experience</strong> building <strong>scalable frontend platforms</strong>, defining engineering standards, and enabling teams to ship faster with higher quality. My work focuses on practical, measurable improvements that have <strong>cut delivery cycles by 80%</strong>, <strong>improved critical app performance by ~40%</strong>, and established systems and patterns that keep teams aligned and efficient.
 
-  I specialize in modern frontend architecture (<strong>React</strong>, <strong>TypeScript</strong>, <strong>GraphQL</strong>), <strong>design systems</strong>, <strong>advanced observability</strong>, and leading the adoption of <strong>AI-augmented development workflows</strong> that elevate engineering velocity rather than compromise it.
+  I specialize in modern frontend architecture (<strong>React</strong>, <strong>TypeScript</strong>, <strong>GraphQL</strong>), <strong>design systems</strong>, <strong>advanced observability</strong>, and <strong>AI-augmented development workflows</strong> that elevate engineering velocity. I'm targeting frontend-focused roles with meaningful exposure to backend systems.
