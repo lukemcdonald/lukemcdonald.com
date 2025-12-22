@@ -1,4 +1,4 @@
-/* @custom-variant dark (&:where(.dark, .dark *)); */
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   --breakpoint-xl: 1280px;
