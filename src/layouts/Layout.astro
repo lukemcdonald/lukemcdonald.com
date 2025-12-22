@@ -22,7 +22,6 @@ const {
   bodyClass,
   dir = GLOBAL_CONFIG.dir,
   lang = GLOBAL_CONFIG.lang ?? 'en',
-  theme = 'default',
   title = GLOBAL_CONFIG.name,
   ...siteMeta
 } = props
@@ -41,7 +40,6 @@ const meta: SeoMeta = {
 <html
   dir={dir}
   lang={lang}
-  data-theme={theme}
 >
   <Head
     generator={generator}
@@ -50,5 +48,44 @@ const meta: SeoMeta = {
 
   <body class:list={{ [bodyClass!]: Boolean(bodyClass) }}>
     <slot />
+
+    <!-- Theme initialization and system preference watcher -->
+    <script>
+      import { initializeTheme, watchSystemPreference } from '@/utils/theme'
+
+      let cleanupWatcher: (() => void) | null = null
+
+      function setupTheme() {
+        // Initialize theme first to set the correct mode from localStorage
+        initializeTheme()
+
+        // Clean up previous watcher if it exists
+        if (cleanupWatcher) {
+          cleanupWatcher()
+        }
+
+        // Watch for system preference changes after initialization
+        cleanupWatcher = watchSystemPreference()
+      }
+
+      // Initialize theme on page load (backup for inline script)
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupTheme)
+      } else {
+        setupTheme()
+      }
+
+      // Cleanup on page unload (for view transitions)
+      document.addEventListener('astro:before-preparation', () => {
+        if (cleanupWatcher) {
+          cleanupWatcher()
+          cleanupWatcher = null
+        }
+      })
+
+      // Re-initialize theme on view transitions (client-side navigation)
+      document.addEventListener('astro:after-swap', setupTheme)
+      document.addEventListener('astro:page-load', setupTheme)
+    </script>
   </body>
 </html>
