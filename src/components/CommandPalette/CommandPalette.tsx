@@ -1,20 +1,9 @@
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { useEffect, useState } from 'react'
 
-import Moon from '@/components/Icons/Moon'
-import Palette from '@/components/Icons/Palette'
 import Search from '@/components/Icons/Search'
-import Sun from '@/components/Icons/Sun'
-import SunMoon from '@/components/Icons/SunMoon'
-import {
-  getStoredThemeColor,
-  getStoredThemeMode,
-  setThemeColor,
-  setThemeMode,
-  THEME_COLORS,
-  type ThemeColor,
-  type ThemeMode,
-} from '@/utils/theme'
+import { ThemeColorPicker } from '@/components/ThemeColor'
+import { ThemeModePicker } from '@/components/ThemeMode'
 
 export interface NavItem {
   href: string
@@ -25,39 +14,9 @@ export interface CommandPaletteProps {
   navigationItems?: NavItem[]
 }
 
-const THEME_LABELS: Record<ThemeColor, string> = {
-  blue: 'Blue',
-  default: 'Default',
-  green: 'Green',
-  neon: 'Neon',
-  orange: 'Orange',
-  purple: 'Purple',
-  yellow: 'Yellow',
-}
-
-const MODE_ICONS: Record<ThemeMode, typeof Sun> = {
-  dark: Moon,
-  light: Sun,
-  system: SunMoon,
-}
-
-const MODE_LABELS: Record<ThemeMode, string> = {
-  dark: 'Dark',
-  light: 'Light',
-  system: 'System',
-}
-
 export default function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedThemeColor, setSelectedThemeColor] = useState<ThemeColor>('default')
-  const [selectedMode, setSelectedMode] = useState<ThemeMode>('system')
-
-  // Load current theme settings
-  useEffect(() => {
-    setSelectedThemeColor(getStoredThemeColor())
-    setSelectedMode(getStoredThemeMode())
-  }, [])
 
   // Keyboard shortcut handler
   useEffect(() => {
@@ -77,16 +36,6 @@ export default function CommandPalette({ navigationItems = [] }: CommandPaletteP
   const filteredNavItems = navigationItems.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase()),
   )
-
-  const handleThemeColorChange = (color: ThemeColor) => {
-    setThemeColor(color)
-    setSelectedThemeColor(color)
-  }
-
-  const handleModeChange = (mode: ThemeMode) => {
-    setThemeMode(mode)
-    setSelectedMode(mode)
-  }
 
   const handleClose = () => {
     setIsOpen(false)
@@ -164,45 +113,7 @@ export default function CommandPalette({ navigationItems = [] }: CommandPaletteP
                   <DialogTitle className="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-primary-500 dark:text-primary-400">
                     Theme Color
                   </DialogTitle>
-                  <div className="grid grid-cols-4 gap-2 sm:grid-cols-7">
-                    {THEME_COLORS.map((color) => (
-                      <button
-                        key={color}
-                        aria-label={`Select ${THEME_LABELS[color]} theme`}
-                        className="group relative flex flex-col items-center gap-2 rounded-lg p-3 transition-colors hover:bg-primary-100 focus:outline-hidden focus:ring-2 focus:ring-primary-500 dark:hover:bg-primary-800"
-                        type="button"
-                        onClick={() => handleThemeColorChange(color)}
-                      >
-                        <div
-                          className={`h-10 w-10 rounded-full border-2 transition-all ${
-                            selectedThemeColor === color
-                              ? 'border-primary-900 ring-2 ring-primary-500 ring-offset-2 dark:border-primary-100'
-                              : 'border-primary-300 dark:border-primary-600'
-                          }`}
-                          data-theme={color === 'default' ? undefined : color}
-                          style={{
-                            background:
-                              color === 'default'
-                                ? 'linear-gradient(135deg, oklch(73.7% 0.019 106) 0%, oklch(32.7% 0.052 117) 100%)'
-                                : color === 'blue'
-                                  ? 'linear-gradient(135deg, oklch(73.7% 0.055 250) 0%, oklch(32.7% 0.085 240) 100%)'
-                                  : color === 'purple'
-                                    ? 'linear-gradient(135deg, oklch(73.7% 0.07 305) 0%, oklch(32.7% 0.085 320) 100%)'
-                                    : color === 'yellow'
-                                      ? 'linear-gradient(135deg, oklch(73.7% 0.075 91) 0%, oklch(32.7% 0.065 80) 100%)'
-                                      : color === 'green'
-                                        ? 'linear-gradient(135deg, oklch(73.7% 0.08 128) 0%, oklch(32.7% 0.07 140) 100%)'
-                                        : color === 'orange'
-                                          ? 'linear-gradient(135deg, oklch(73.7% 0.08 44) 0%, oklch(32.7% 0.07 25) 100%)'
-                                          : 'linear-gradient(135deg, oklch(93.27% 0.227 122.42) 0%, oklch(45.93% 0.112 130) 100%)',
-                          }}
-                        />
-                        <span className="text-xs text-primary-700 dark:text-primary-300">
-                          {THEME_LABELS[color]}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
+                  <ThemeColorPicker />
                 </div>
 
                 {/* Appearance Mode Section */}
@@ -210,28 +121,7 @@ export default function CommandPalette({ navigationItems = [] }: CommandPaletteP
                   <DialogTitle className="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-primary-500 dark:text-primary-400">
                     Appearance
                   </DialogTitle>
-                  <div className="grid grid-cols-3 gap-2">
-                    {(['light', 'dark', 'system'] as ThemeMode[]).map((mode) => {
-                      const Icon = MODE_ICONS[mode]
-
-                      return (
-                        <button
-                          key={mode}
-                          aria-label={`Select ${MODE_LABELS[mode]} mode`}
-                          className={`flex flex-col items-center gap-2 rounded-lg p-3 transition-colors focus:outline-hidden focus:ring-2 focus:ring-primary-500 ${
-                            selectedMode === mode
-                              ? 'bg-primary-200 text-primary-900 dark:bg-primary-700 dark:text-primary-100'
-                              : 'text-primary-700 hover:bg-primary-100 dark:text-primary-300 dark:hover:bg-primary-800'
-                          }`}
-                          type="button"
-                          onClick={() => handleModeChange(mode)}
-                        >
-                          <Icon className="h-6 w-6" />
-                          <span className="text-xs">{MODE_LABELS[mode]}</span>
-                        </button>
-                      )
-                    })}
-                  </div>
+                  <ThemeModePicker />
                 </div>
               </div>
 
