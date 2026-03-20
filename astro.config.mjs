@@ -21,10 +21,6 @@ export default defineConfig({
   env: {
     schema: ENV_SCHEMA,
   },
-  experimental: {
-    contentIntellisense: true,
-    staticImportMetaEnv: true, // enabled by default in v6
-  },
   image: {
     layout: 'constrained',
     responsiveStyles: false, // issue with Tailwind v4 if enabled
