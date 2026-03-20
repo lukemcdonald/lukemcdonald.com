@@ -1,4 +1,4 @@
-import { z } from 'astro:content'
+import { z } from 'astro/zod'
 
 /**
  * Date string validator that accepts ISO date strings (YYYY-MM or YYYY-MM-DD)
