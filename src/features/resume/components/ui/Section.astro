@@ -2,35 +2,12 @@
 import type { Icon as IconType } from '@lucide/astro/icons'
 import type { HTMLAttributes } from 'astro/types'
 
-const itemsVariants = {
-  list: '',
-  plain: 'list-none px-0',
-}
-
-const itemVariants = {
-  list: '',
-  plain: 'p-0 first:mt-0 last:mb-0',
-}
-
 interface Props extends HTMLAttributes<'section'> {
   icon?: typeof IconType
-  items: unknown[]
-  itemsClass?: string
-  itemsVariant?: 'plain' | 'list'
   title: string
 }
 
-const { icon: Icon, items, itemsClass, itemsVariant = 'plain', title, ...delegated } = Astro.props
-
-const hasItems = Array.isArray(items) && items.length > 0
-const hasItemSlot = Astro.slots.has('item')
-
-let renderedItemSlots: string[] = []
-if (hasItems && hasItemSlot) {
-  renderedItemSlots = await Promise.all(
-    items.map((item, index) => Astro.slots.render('item', [item, index]))
-  )
-}
+const { icon: Icon, title, ...delegated } = Astro.props
 ---
 
 <section {...delegated}>
@@ -46,24 +23,5 @@ if (hasItems && hasItemSlot) {
     </h2>
   </header>
 
-  {
-    hasItems && (
-      <ul class:list={[itemsVariants[itemsVariant], itemsClass]}>
-        {hasItemSlot &&
-          renderedItemSlots.map((html) => (
-            <li
-              class={itemVariants[itemsVariant]}
-              set:html={html}
-            />
-          ))}
-        {!hasItemSlot &&
-          items.map((item) => (
-            <li
-              class={itemVariants[itemsVariant]}
-              set:html={String(item)}
-            />
-          ))}
-      </ul>
-    )
-  }
+  <slot />
 </section>

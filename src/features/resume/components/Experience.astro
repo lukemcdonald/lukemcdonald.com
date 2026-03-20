@@ -16,66 +16,48 @@ const { experience } = Astro.props
 
 <Section
   title="Experience"
-  items={experience}
   icon={ExperienceIcon}
-  itemsClass="flex flex-col gap-2 m-0!"
 >
-  <template slot="item">
-    {
-      (item: ExperienceItem) => {
-        const startDate = item.startDate
-        const endDate = item.endDate
+  <ul class="list-none px-0 flex flex-col gap-2 m-0!">
+    {experience.map((item) => {
+      const startDateFormatted = formatMonthYear(item.startDate)
+      const startDateLabel = startDateFormatted || item.startDate || 'Unknown'
+      const endDateFormatted = formatMonthYear(item.endDate)
+      const endDateLabel = endDateFormatted || item.endDate || 'Present'
 
-        const startDateFormatted = formatMonthYear(startDate)
-        const startDateLabel = startDateFormatted || startDate || 'Unknown'
-        const endDateFormatted = formatMonthYear(endDate)
-        const endDateLabel = endDateFormatted || endDate || 'Present'
-
-        const startDateHtml =
-          startDateFormatted ?
-            <time datetime={startDate}>{startDateLabel}</time>
-          : <span>{startDateLabel}</span>
-        const endDateHtml =
-          endDateFormatted ? <time datetime={endDate}>{endDateLabel}</time> : <span>Present</span>
-
-        return (
+      return (
+        <li class="p-0 first:mt-0 last:mb-0">
           <div>
             <h3 class="not-prose font-semibold text-primary-900 dark:text-primary-100">
-              {item.website ?
-                <Link
-                  href={item.website}
-                  class="font-inherit"
-                >
-                  {item.company}
-                </Link>
-              : item.company}{' '}
-              — {item.position}
+              {item.website
+                ? <Link href={item.website} class="font-inherit">{item.company}</Link>
+                : item.company}
+              {' '}— {item.position}
             </h3>
 
             <p class="mt-1 text-sm uppercase">
               <span aria-label={`${startDateLabel} until ${endDateLabel}`}>
-                {startDateHtml}–{endDateHtml},
+                {startDateFormatted
+                  ? <time datetime={item.startDate}>{startDateLabel}</time>
+                  : <span>{startDateLabel}</span>}–{endDateFormatted
+                  ? <time datetime={item.endDate}>{endDateLabel}</time>
+                  : <span>Present</span>},
               </span>
               {item.location}
             </p>
 
-            {item.summary && (
-              <p
-                class="mt-2"
-                set:html={item.summary}
-              />
-            )}
+            {item.summary && <p class="mt-2" set:html={item.summary} />}
 
             {item.highlights && (
               <ul class="m-0!">
-                {item.highlights.map((highlight: string) => (
-                  <li set:html={highlight} />
+                {item.highlights.map((highlight) => (
+                  <li set:html={highlight}></li>
                 ))}
               </ul>
             )}
           </div>
-        )
-      }
-    }
-  </template>
+        </li>
+      )
+    })}
+  </ul>
 </Section>

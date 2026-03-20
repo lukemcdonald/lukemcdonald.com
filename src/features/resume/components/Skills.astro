@@ -12,20 +12,18 @@ const { skills, ...delegated } = Astro.props satisfies Props
 ---
 
 <Section
-  items={skills}
-  itemsClass="columns-2 sm:columns-3"
   title="Skills"
   icon={SkillsIcon}
   {...delegated}
 >
-  <template slot="item">
-    {
-      (item: string) => (
+  <ul class="list-none px-0 columns-2 sm:columns-3">
+    {skills.map((skill) => (
+      <li class="p-0 first:mt-0 last:mb-0">
         <div class="flex items-center gap-2">
           <CheckIcon class="size-4 text-primary-600" />
-          <span>{item}</span>
+          <span>{skill}</span>
         </div>
-      )
-    }
-  </template>
+      </li>
+    ))}
+  </ul>
 </Section>
