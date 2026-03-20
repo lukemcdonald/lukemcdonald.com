@@ -26,29 +26,29 @@
   "dependencies": {
     "@headlessui/react": "^2.2.9",
     "date-fns": "4.1.0",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.5",
-    "@astrojs/netlify": "^6.6.2",
-    "@astrojs/react": "^4.4.2",
-    "@astrojs/sitemap": "^3.6.0",
-    "@lucide/astro": "^0.544.0",
+    "@astrojs/check": "^0.9.8",
+    "@astrojs/netlify": "^6.6.5",
+    "@astrojs/react": "^5.0.1",
+    "@astrojs/sitemap": "^3.7.1",
+    "@lucide/astro": "^0.577.0",
     "@tailwindcss/typography": "^0.5.19",
-    "@tailwindcss/vite": "^4.1.17",
-    "@types/react": "^19.2.6",
+    "@tailwindcss/vite": "^4.2.2",
+    "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "astro": "^5.16.0",
-    "eslint": "^9.39.1",
-    "eslint-plugin-astro": "^1.5.0",
+    "astro": "^5.18.1",
+    "eslint": "^9.39.4",
+    "eslint-plugin-astro": "^1.6.0",
     "eslint-plugin-perfectionist": "^4.15.1",
-    "globals": "^16.4.0",
-    "prettier": "^3.6.2",
+    "globals": "^16.5.0",
+    "prettier": "^3.8.1",
     "prettier-plugin-astro": "^0.14.1",
-    "prettier-plugin-tailwindcss": "^0.7.1",
-    "tailwindcss": "^4.1.17",
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.43.0"
+    "typescript-eslint": "^8.57.1"
   }
 }
