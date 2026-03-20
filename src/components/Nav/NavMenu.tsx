@@ -1,8 +1,7 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 
 import ChevronDownIcon from '@/components/Nav/icons/ChevronDown'
-
-import NavMenuLink from './NavMenuLink'
+import ExternalLinkIcon from '@/components/Nav/icons/ExternalLink'
 
 interface LinkItem {
   href: string
@@ -38,17 +37,24 @@ const NavMenu: React.FC<NavMenuProps> = ({ link }) => {
           transition
           unmount={false}
         >
-          {link.links.map((item: LinkItem) => (
-            <MenuItem key={item.href}>
-              <NavMenuLink
-                className="group flex w-full items-center rounded-sm px-3 py-2 text-base text-primary-900 data-active:bg-primary-200"
-                showExternalIcon={true}
-                href={item.href}
-              >
-                {item.name}
-              </NavMenuLink>
-            </MenuItem>
-          ))}
+          {link.links.map((item: LinkItem) => {
+            const isExternal = item.href.startsWith('http')
+            return (
+              <MenuItem key={item.href}>
+                <a
+                  className="group flex w-full items-center rounded-sm px-3 py-2 text-base text-primary-900 data-active:bg-primary-200"
+                  href={item.href}
+                  target={isExternal ? '_blank' : undefined}
+                  rel={isExternal ? 'noopener noreferrer' : undefined}
+                >
+                  {item.name}
+                  {isExternal && (
+                    <ExternalLinkIcon className="float-right ml-2 h-4 w-4 opacity-40" />
+                  )}
+                </a>
+              </MenuItem>
+            )
+          })}
         </MenuItems>
       )}
     </Menu>
