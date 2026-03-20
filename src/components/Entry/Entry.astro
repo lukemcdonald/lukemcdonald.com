@@ -15,11 +15,15 @@ export interface Props {
 }
 
 const { description, image, imageAlt, subtitle, title } = Astro.props
+
+const resolvedDescription = Astro.slots.has('description')
+  ? await Astro.slots.render('description')
+  : description
 ---
 
 <article class="entry min-h-screen w-full overflow-hidden bg-primary-800 lg:min-h-0">
   <EntryHeader
-    description={description}
+    description={resolvedDescription}
     subtitle={subtitle}
     title={title}
   />

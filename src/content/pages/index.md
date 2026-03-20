@@ -1,6 +1,5 @@
 ---
 title: 'Greetings'
-description: 'GreetingLinks'
 image: '@/assets/images/luke-mustachio.jpg'
 imageAlt: 'luke with mustache'
 seo:

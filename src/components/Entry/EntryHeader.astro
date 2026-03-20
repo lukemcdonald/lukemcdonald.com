@@ -3,8 +3,6 @@ import Heading from '@/components/Heading.astro'
 import Mountains from '@/components/Mountains.astro'
 import Text from '@/components/Text.astro'
 
-import EntryHeaderDescription from './EntryHeaderDescription.astro'
-
 export interface Props {
   description?: string
   subtitle?: string
@@ -12,6 +10,8 @@ export interface Props {
 }
 
 const { description, subtitle, title } = Astro.props
+
+const hasDescription = Boolean(description)
 ---
 
 <header
@@ -36,7 +36,11 @@ const { description, subtitle, title } = Astro.props
     >
       {title}.
     </Heading>
-    {description && <EntryHeaderDescription description={description} />}
+    {hasDescription && (
+      <div class="text-lg leading-normal text-pretty">
+        <Fragment set:html={description} />
+      </div>
+    )}
   </div>
 
   <Mountains class="absolute bottom-0 left-0 z-0 w-full" />

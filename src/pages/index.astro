@@ -2,6 +2,7 @@
 import { getEntry, render } from 'astro:content'
 
 import Entry from '@/components/Entry/Entry.astro'
+import GreetingLinks from '@/components/GreetingLinks.astro'
 import Layout from '@/layouts/Layout.astro'
 import Main from '@/layouts/Main.astro'
 
@@ -27,12 +28,12 @@ const { Content } = await render(page)
 >
   <Main>
     <Entry
-      description={description}
       image={image}
       imageAlt={imageAlt}
       subtitle={subtitle}
       title={title}
     >
+      <GreetingLinks slot="description" />
       <Content />
     </Entry>
   </Main>
