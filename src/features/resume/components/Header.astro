@@ -24,19 +24,19 @@ const { email, intro, label: subtitle, name: title, profiles, website } = basics
 
 const linkList = [
   {
+    href: email ? `mailto:${email}` : undefined,
     icon: icons.email,
     label: 'Email',
-    url: email,
   },
   {
+    href: website,
     icon: icons.website,
     label: 'Website',
-    url: website,
   },
   ...(profiles?.map((profile) => ({
+    href: profile?.url,
     icon: icons[profile?.network?.toLowerCase() as keyof typeof icons],
     label: profile?.network,
-    url: profile?.url,
   })) || []),
 ]
 
@@ -59,8 +59,8 @@ const introParagraphs = intro?.split('\n\n').map(paragraph => paragraph.trim()).
         <dt class="sr-only">{link.label}</dt>
         <dd class="flex items-center gap-2">
           <link.icon class="size-4" />
-          <a class="print:hidden" href={link.label === 'Email' ? `mailto:${link.url}` : link.url}>{link.label}</a>
-          <code class="hidden print:block  print:text-xs">{link.url}</code>
+          <a class="print:hidden" href={link.href}>{link.label}</a>
+          <code class="hidden print:block print:text-xs">{link.href}</code>
         </dd>
       ))}
     </dl>
