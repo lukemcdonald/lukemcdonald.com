@@ -14,19 +14,14 @@ const { education } = Astro.props
 
 <Section
   title="Education"
-  items={education}
   icon={EducationIcon}
 >
-  <template slot="item">
-    {
-      (item: EducationItem) => (
-        <>
-          <strong>
-            {item.studyType} {item.area}
-          </strong>{' '}
-          — {item.institution}
-        </>
-      )
-    }
-  </template>
+  <ul class="list-none px-0">
+    {education.map((item) => (
+      <li class="p-0 first:mt-0 last:mb-0">
+        <strong>{item.studyType} {item.area}</strong>
+        {' '}— {item.institution}
+      </li>
+    ))}
+  </ul>
 </Section>

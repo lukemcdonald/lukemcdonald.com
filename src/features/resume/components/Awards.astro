@@ -14,19 +14,15 @@ const { awards } = Astro.props
 
 <Section
   title="Awards & Accomplishments"
-  items={awards}
   icon={AwardsIcon}
-  itemsVariant="list"
 >
-  <template slot="item">
-    {
-      (item: AwardItem) => (
-        <>
-          {item.title}
-          {item.org && ` — ${item.org}`}
-          {item.date && ` (${item.date})`}
-        </>
-      )
-    }
-  </template>
+  <ul>
+    {awards.map((item) => (
+      <li>
+        {item.title}
+        {item.org && ` — ${item.org}`}
+        {item.date && ` (${item.date})`}
+      </li>
+    ))}
+  </ul>
 </Section>

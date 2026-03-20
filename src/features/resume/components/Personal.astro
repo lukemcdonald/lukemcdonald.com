@@ -12,10 +12,11 @@ const { personal } = Astro.props
 
 <Section
   title="Personal"
-  items={personal}
   icon={PersonalIcon}
 >
-  <template slot="item">
-    {(item: string) => item}
-  </template>
+  <ul class="list-none px-0">
+    {personal.map((item) => (
+      <li class="p-0 first:mt-0 last:mb-0">{item}</li>
+    ))}
+  </ul>
 </Section>
