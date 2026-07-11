@@ -2,6 +2,8 @@ import type { ThemeMode } from './types'
 
 import { useEffect, useState } from 'react'
 
+import { PRESS_CUE_PROPS } from '@/components/Sound'
+
 import { MODE_ICONS, MODE_LABELS, THEME_MODES } from './constants'
 import { getThemeMode, setThemeMode } from './utils'
 
@@ -33,6 +35,7 @@ export function ThemeModePicker() {
             }`}
             type="button"
             onClick={() => handleModeChange(mode)}
+            {...PRESS_CUE_PROPS}
           >
             <Icon className="h-6 w-6" />
             <span className="text-xs">{MODE_LABELS[mode]}</span>
