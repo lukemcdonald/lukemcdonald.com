@@ -49,8 +49,9 @@ const meta: SeoMeta = {
   <body class:list={{ [bodyClass!]: Boolean(bodyClass) }}>
     <slot />
 
-    <!-- Theme initialization and system preference watcher -->
+    <!-- Theme initialization, system preference watcher, and sound bootstrap -->
     <script>
+      import { initializeSound } from '@/components/Sound'
       import { watchSystemPreference } from '@/components/ThemeMode'
       import { initializeTheme } from '@/utils/theme'
 
@@ -69,11 +70,16 @@ const meta: SeoMeta = {
         cleanupWatcher = watchSystemPreference()
       }
 
-      // Initialize theme on page load (backup for inline script)
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', setupTheme)
-      } else {
+      function setup() {
         setupTheme()
+        initializeSound()
+      }
+
+      // Initialize theme and sound on page load (backup for inline script)
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setup)
+      } else {
+        setup()
       }
 
       // Cleanup on page unload (for view transitions)
@@ -84,9 +90,12 @@ const meta: SeoMeta = {
         }
       })
 
-      // Re-initialize theme on view transitions (client-side navigation)
+      // Re-initialize theme right after the DOM swap, and both theme and
+      // sound once the navigation fully completes -- sound has no FOUC
+      // concern, so it only needs to run once per navigation rather than
+      // on both view-transition events.
       document.addEventListener('astro:after-swap', setupTheme)
-      document.addEventListener('astro:page-load', setupTheme)
+      document.addEventListener('astro:page-load', setup)
     </script>
   </body>
 </html>

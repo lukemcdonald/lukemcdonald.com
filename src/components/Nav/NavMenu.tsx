@@ -2,6 +2,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 
 import ChevronDownIcon from '@/components/Nav/icons/ChevronDown'
 import ExternalLinkIcon from '@/components/Nav/icons/ExternalLink'
+import { TICK_CUE_PROPS } from '@/components/Sound'
 
 interface LinkItem {
   href: string
@@ -23,7 +24,10 @@ const NavMenu: React.FC<NavMenuProps> = ({ link }) => {
       as="div"
       className="relative inline-block text-left"
     >
-      <MenuButton className="inline-flex justify-center rounded-md bg-black/0 px-2.5 py-2 text-base font-semibold tracking-wide text-primary-900 uppercase hover:bg-black/5 focus:outline-hidden sm:px-3">
+      <MenuButton
+        className="inline-flex justify-center rounded-md bg-black/0 px-2.5 py-2 text-base font-semibold tracking-wide text-primary-900 uppercase hover:bg-black/5 focus:outline-hidden sm:px-3"
+        data-cuelume-toggle
+      >
         <span>{link.name}</span>
         <ChevronDownIcon
           aria-hidden="true"
@@ -46,6 +50,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ link }) => {
                   href={item.href}
                   target={isExternal ? '_blank' : undefined}
                   rel={isExternal ? 'noopener noreferrer' : undefined}
+                  {...TICK_CUE_PROPS}
                 >
                   {item.name}
                   {isExternal && (

@@ -1,6 +1,7 @@
 ---
 import Heading from '@/components/Heading.astro'
 import Link from '@/components/Link.astro'
+import { TICK_CUE_PROPS } from '@/components/Sound'
 
 const { title } = Astro.props
 
@@ -29,6 +30,7 @@ const contactLinks = [
             class="block tracking-wide uppercase"
             href={link.href}
             weight="medium"
+            {...TICK_CUE_PROPS}
           >
             {link.name}
           </Link>
