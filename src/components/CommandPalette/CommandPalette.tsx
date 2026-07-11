@@ -1,7 +1,9 @@
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
-import { useEffect, useState } from 'react'
+import { play } from 'cuelume'
+import { useEffect, useRef, useState } from 'react'
 
 import Search from '@/components/Icons/Search'
+import { SoundToggle, TICK_CUE_PROPS } from '@/components/Sound'
 import { ThemeColorPicker } from '@/components/ThemeColor'
 import { ThemeModePicker } from '@/components/ThemeMode'
 
@@ -17,6 +19,17 @@ export interface CommandPaletteProps {
 export default function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const isFirstRender = useRef(true)
+
+  // Play a cue on open/close transitions, skipping the initial mount
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
+
+    play(isOpen ? 'chime' : 'whisper')
+  }, [isOpen])
 
   // Keyboard shortcut handler
   useEffect(() => {
@@ -100,6 +113,7 @@ export default function CommandPalette({ navigationItems = [] }: CommandPaletteP
                           className="block rounded-lg px-3 py-2 text-sm text-primary-900 transition-colors hover:bg-primary-100 dark:text-primary-100 dark:hover:bg-primary-800"
                           href={item.href}
                           onClick={handleClose}
+                          {...TICK_CUE_PROPS}
                         >
                           {item.name}
                         </a>
@@ -117,11 +131,19 @@ export default function CommandPalette({ navigationItems = [] }: CommandPaletteP
                 </div>
 
                 {/* Appearance Mode Section */}
-                <div>
+                <div className="mb-6">
                   <DialogTitle className="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-primary-500 dark:text-primary-400">
                     Appearance
                   </DialogTitle>
                   <ThemeModePicker />
+                </div>
+
+                {/* Sound Section */}
+                <div>
+                  <DialogTitle className="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-primary-500 dark:text-primary-400">
+                    Sound
+                  </DialogTitle>
+                  <SoundToggle />
                 </div>
               </div>
 

@@ -11,6 +11,9 @@ importers:
       '@headlessui/react':
         specifier: ^2.2.9
         version: 2.2.9(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      cuelume:
+        specifier: 0.1.0
+        version: 0.1.0
       date-fns:
         specifier: 4.1.0
         version: 4.1.0
@@ -2092,6 +2095,9 @@ packages:
 
   csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
+
+  cuelume@0.1.0:
+    resolution: {integrity: sha512-J2RRt92Gh1a0ztnjwLEyLfGnDIiWz14vC9aTmg7ZgxRkEk8vR+QxFOz+v1tqntFvl06n5G4si8QCQgHfWjnneA==}
 
   data-uri-to-buffer@4.0.1:
     resolution: {integrity: sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==}
@@ -6829,6 +6835,8 @@ snapshots:
       css-tree: 2.2.1
 
   csstype@3.2.3: {}
+
+  cuelume@0.1.0: {}
 
   data-uri-to-buffer@4.0.1: {}
 

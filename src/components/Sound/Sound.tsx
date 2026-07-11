@@ -1,0 +1,52 @@
+import type { SoundPreference } from './types'
+
+import { play } from 'cuelume'
+import { useEffect, useState } from 'react'
+
+import Volume2 from '@/components/Icons/Volume2'
+import VolumeX from '@/components/Icons/VolumeX'
+
+import { getSoundPreference, setSoundPreference } from './utils'
+
+export function SoundToggle() {
+  const [preference, setPreference] = useState<SoundPreference>('off')
+
+  // Read the stored preference after mount (not as a lazy useState
+  // initializer) so server-rendered markup and the client's initial
+  // hydration pass agree — the same reason ThemeModePicker does this
+  // in a useEffect rather than at construction time.
+  useEffect(() => {
+    setPreference(getSoundPreference())
+  }, [])
+
+  const handleClick = () => {
+    const next: SoundPreference = preference === 'on' ? 'off' : 'on'
+
+    // Apply the preference first, then play imperatively (not via
+    // data-cuelume-toggle) — play() is a no-op once disabled, so this
+    // sequencing is correct on both the enabling and disabling click.
+    setSoundPreference(next)
+    play('toggle')
+    setPreference(next)
+  }
+
+  const isOn = preference === 'on'
+  const Icon = isOn ? Volume2 : VolumeX
+
+  return (
+    <button
+      aria-label={isOn ? 'Disable interaction sounds' : 'Enable interaction sounds'}
+      aria-pressed={isOn}
+      className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors focus:outline-hidden focus:ring-2 focus:ring-primary-500 ${
+        isOn
+          ? 'bg-primary-200 text-primary-900 dark:bg-primary-700 dark:text-primary-100'
+          : 'text-primary-700 hover:bg-primary-100 dark:text-primary-300 dark:hover:bg-primary-800'
+      }`}
+      type="button"
+      onClick={handleClick}
+    >
+      <Icon className="h-5 w-5" />
+      <span>{isOn ? 'Sounds on' : 'Sounds off'}</span>
+    </button>
+  )
+}
