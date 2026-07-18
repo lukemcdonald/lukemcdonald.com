@@ -2,7 +2,7 @@
   "name": "lukemcdonald-astro",
   "type": "module",
   "version": "0.0.1",
-  "packageManager": "pnpm@10.15.1",
+  "packageManager": "pnpm@11.13.1",
   "scripts": {
     "astro": "astro",
     "build": "astro build",
