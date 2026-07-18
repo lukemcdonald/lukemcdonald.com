@@ -20,6 +20,7 @@ export default function CommandPalette({ navigationItems = [] }: CommandPaletteP
   const [isOpen, setIsOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const isFirstRender = useRef(true)
+  const searchInputRef = useRef<HTMLInputElement>(null)
 
   // Play a cue on open/close transitions, skipping the initial mount
   useEffect(() => {
@@ -69,6 +70,7 @@ export default function CommandPalette({ navigationItems = [] }: CommandPaletteP
       <Dialog
         as="div"
         className="relative z-50"
+        initialFocus={searchInputRef}
         open={isOpen}
         onClose={handleClose}
       >
@@ -85,16 +87,17 @@ export default function CommandPalette({ navigationItems = [] }: CommandPaletteP
             >
               {/* Search Input */}
               <div className="flex items-center border-b border-primary-200 px-4 dark:border-primary-700">
-                <Search className="h-5 w-5 text-primary-400 dark:text-primary-500" />
+                <Search className="h-5 w-5 text-primary-700 dark:text-primary-500" />
                 <input
+                  ref={searchInputRef}
                   autoComplete="off"
-                  className="w-full border-0 bg-transparent px-4 py-4 text-primary-900 outline-none placeholder:text-primary-400 focus:ring-0 dark:text-primary-100 dark:placeholder:text-primary-500"
+                  className="w-full border-0 bg-transparent px-4 py-4 text-primary-900 outline-none placeholder:text-primary-700 focus:ring-0 dark:text-primary-100 dark:placeholder:text-primary-500"
                   placeholder="Search navigation..."
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
-                <kbd className="hidden rounded border border-primary-300 px-2 py-1 text-xs text-primary-600 sm:inline-block dark:border-primary-600 dark:text-primary-400">
+                <kbd className="hidden rounded border border-primary-300 px-2 py-1 text-xs text-primary-800 sm:inline-block dark:border-primary-600 dark:text-primary-400">
                   ESC
                 </kbd>
               </div>
@@ -103,7 +106,7 @@ export default function CommandPalette({ navigationItems = [] }: CommandPaletteP
                 {/* Navigation Section */}
                 {filteredNavItems.length > 0 && (
                   <div className="mb-6">
-                    <DialogTitle className="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-primary-500 dark:text-primary-400">
+                    <DialogTitle className="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-primary-800 dark:text-primary-400">
                       Navigation
                     </DialogTitle>
                     <div className="space-y-1">
@@ -124,7 +127,7 @@ export default function CommandPalette({ navigationItems = [] }: CommandPaletteP
 
                 {/* Theme Colors Section */}
                 <div className="mb-6">
-                  <DialogTitle className="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-primary-500 dark:text-primary-400">
+                  <DialogTitle className="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-primary-800 dark:text-primary-400">
                     Theme Color
                   </DialogTitle>
                   <ThemeColorPicker />
@@ -132,7 +135,7 @@ export default function CommandPalette({ navigationItems = [] }: CommandPaletteP
 
                 {/* Appearance Mode Section */}
                 <div className="mb-6">
-                  <DialogTitle className="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-primary-500 dark:text-primary-400">
+                  <DialogTitle className="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-primary-800 dark:text-primary-400">
                     Appearance
                   </DialogTitle>
                   <ThemeModePicker />
@@ -140,7 +143,7 @@ export default function CommandPalette({ navigationItems = [] }: CommandPaletteP
 
                 {/* Sound Section */}
                 <div>
-                  <DialogTitle className="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-primary-500 dark:text-primary-400">
+                  <DialogTitle className="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-primary-800 dark:text-primary-400">
                     Sound
                   </DialogTitle>
                   <SoundToggle />
@@ -148,7 +151,7 @@ export default function CommandPalette({ navigationItems = [] }: CommandPaletteP
               </div>
 
               {/* Footer */}
-              <div className="border-t border-primary-200 px-4 py-3 text-xs text-primary-500 dark:border-primary-700 dark:text-primary-400">
+              <div className="border-t border-primary-200 px-4 py-3 text-xs text-primary-800 dark:border-primary-700 dark:text-primary-400">
                 <div className="flex items-center justify-between">
                   <span>Press ESC to close</span>
                   <span className="hidden sm:inline">⌘K to toggle</span>
