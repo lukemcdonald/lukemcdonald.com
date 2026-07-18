@@ -1,10 +1,10 @@
-import type { ThemeColor } from '@/components/ThemeColor'
-import type { EffectiveMode } from '@/components/ThemeMode'
+import type { ThemeColor } from '@/components/ThemeColor/types'
+import type { EffectiveMode } from '@/components/ThemeMode/types'
 
-import { getThemeColor } from '@/components/ThemeColor'
 import { DEFAULT_THEME_COLOR } from '@/components/ThemeColor/constants'
-import { getEffectiveThemeMode } from '@/components/ThemeMode'
+import { getThemeColor } from '@/components/ThemeColor/utils'
 import { DEFAULT_THEME_MODE } from '@/components/ThemeMode/constants'
+import { getEffectiveThemeMode } from '@/components/ThemeMode/utils'
 
 function getHtmlElement(): HTMLElement | null {
   if (typeof window === 'undefined') {
