@@ -51,8 +51,8 @@ const meta: SeoMeta = {
 
     <!-- Theme initialization, system preference watcher, and sound bootstrap -->
     <script>
-      import { initializeSound } from '@/components/Sound'
-      import { watchSystemPreference } from '@/components/ThemeMode'
+      import { initializeSound } from '@/components/Sound/utils'
+      import { watchSystemPreference } from '@/components/ThemeMode/utils'
       import { initializeTheme } from '@/utils/theme'
 
       let cleanupWatcher: (() => void) | null = null
