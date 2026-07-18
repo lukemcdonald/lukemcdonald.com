@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react'
 
 import { PRESS_CUE_PROPS } from '@/components/Sound'
 
-import { MODE_ICONS, MODE_LABELS, THEME_MODES } from './constants'
+import { MODE_LABELS, THEME_MODES } from './constants'
+import { MODE_ICONS } from './icons'
 import { getThemeMode, setThemeMode } from './utils'
 
 export function ThemeModePicker() {
