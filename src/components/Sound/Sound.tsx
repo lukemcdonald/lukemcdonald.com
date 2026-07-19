@@ -1,10 +1,8 @@
 import type { SoundPreference } from './types'
 
 import { play } from 'cuelume'
+import { Volume2, VolumeX } from 'lucide-react'
 import { useEffect, useState } from 'react'
-
-import Volume2 from '@/components/Icons/Volume2'
-import VolumeX from '@/components/Icons/VolumeX'
 
 import { getSoundPreference, setSoundPreference } from './utils'
 
@@ -37,16 +35,17 @@ export function SoundToggle() {
     <button
       aria-label={isOn ? 'Disable interaction sounds' : 'Enable interaction sounds'}
       aria-pressed={isOn}
-      className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors focus:outline-hidden focus:ring-2 focus:ring-primary-500 ${
+      className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 ${
         isOn
-          ? 'bg-primary-200 text-primary-900 dark:bg-primary-700 dark:text-primary-100'
+          ? 'bg-primary-100 text-primary-900 dark:bg-primary-800 dark:text-primary-100'
           : 'text-primary-700 hover:bg-primary-100 dark:text-primary-300 dark:hover:bg-primary-800'
       }`}
+      data-cuelume-hover="tick"
       type="button"
       onClick={handleClick}
     >
       <Icon className="h-5 w-5" />
-      <span>{isOn ? 'Sounds on' : 'Sounds off'}</span>
+      {isOn ? 'Sounds on' : 'Sounds off'}
     </button>
   )
 }
