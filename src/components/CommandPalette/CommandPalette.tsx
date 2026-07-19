@@ -1,8 +1,8 @@
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { play } from 'cuelume'
+import { Search } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
-import Search from '@/components/Icons/Search'
 import { SoundToggle, TICK_CUE_PROPS } from '@/components/Sound'
 import { ThemeColorPicker } from '@/components/ThemeColor'
 import { ThemeModePicker } from '@/components/ThemeMode'
@@ -106,7 +106,7 @@ export default function CommandPalette({ navigationItems = [] }: CommandPaletteP
                 {/* Navigation Section */}
                 {filteredNavItems.length > 0 && (
                   <div className="mb-6">
-                    <DialogTitle className="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-primary-800 dark:text-primary-400">
+                    <DialogTitle className="mb-3 px-2 text-xs font-semibold tracking-wider text-primary-800 uppercase dark:text-primary-400">
                       Navigation
                     </DialogTitle>
                     <div className="space-y-1">
@@ -127,26 +127,27 @@ export default function CommandPalette({ navigationItems = [] }: CommandPaletteP
 
                 {/* Theme Colors Section */}
                 <div className="mb-6">
-                  <DialogTitle className="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-primary-800 dark:text-primary-400">
+                  <DialogTitle className="mb-3 px-2 text-xs font-semibold tracking-wider text-primary-800 uppercase dark:text-primary-400">
                     Theme Color
                   </DialogTitle>
                   <ThemeColorPicker />
                 </div>
 
-                {/* Appearance Mode Section */}
-                <div className="mb-6">
-                  <DialogTitle className="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-primary-800 dark:text-primary-400">
-                    Appearance
-                  </DialogTitle>
-                  <ThemeModePicker />
-                </div>
+                {/* Appearance & Sound Sections */}
+                <div className="flex flex-wrap gap-x-10 gap-y-6">
+                  <div>
+                    <DialogTitle className="mb-3 px-2 text-xs font-semibold tracking-wider text-primary-800 uppercase dark:text-primary-400">
+                      Appearance
+                    </DialogTitle>
+                    <ThemeModePicker />
+                  </div>
 
-                {/* Sound Section */}
-                <div>
-                  <DialogTitle className="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-primary-800 dark:text-primary-400">
-                    Sound
-                  </DialogTitle>
-                  <SoundToggle />
+                  <div>
+                    <DialogTitle className="mb-3 px-2 text-xs font-semibold tracking-wider text-primary-800 uppercase dark:text-primary-400">
+                      Sound
+                    </DialogTitle>
+                    <SoundToggle />
+                  </div>
                 </div>
               </div>
 

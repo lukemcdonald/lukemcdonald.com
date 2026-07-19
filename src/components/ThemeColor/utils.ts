@@ -13,7 +13,12 @@ function getStoredColor(): ThemeColor {
 
   const stored = localStorage.getItem(STORAGE_KEY)
 
-  if (stored && (['default', 'blue', 'purple', 'yellow', 'green', 'orange', 'neon'] as ThemeColor[]).includes(stored as ThemeColor)) {
+  if (
+    stored &&
+    (['default', 'blue', 'purple', 'yellow', 'green', 'orange', 'neon'] as ThemeColor[]).includes(
+      stored as ThemeColor,
+    )
+  ) {
     return stored as ThemeColor
   }
 

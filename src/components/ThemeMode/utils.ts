@@ -58,9 +58,7 @@ export function getEffectiveThemeMode(): EffectiveMode {
   return getEffectiveMode()
 }
 
-export function watchSystemPreference(
-  callback?: (mode: EffectiveMode) => void,
-): () => void {
+export function watchSystemPreference(callback?: (mode: EffectiveMode) => void): () => void {
   if (typeof window === 'undefined') {
     return () => {}
   }

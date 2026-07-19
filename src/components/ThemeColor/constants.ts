@@ -22,12 +22,9 @@ export const THEME_LABELS: Record<ThemeColor, string> = {
   yellow: 'Yellow',
 }
 
-export const THEME_GRADIENTS: Record<ThemeColor, string> = {
-  blue: 'linear-gradient(135deg, oklch(73.7% 0.055 250) 0%, oklch(32.7% 0.085 240) 100%)',
-  default: 'linear-gradient(135deg, oklch(73.7% 0.019 106) 0%, oklch(32.7% 0.052 117) 100%)',
-  green: 'linear-gradient(135deg, oklch(73.7% 0.08 128) 0%, oklch(32.7% 0.07 140) 100%)',
-  neon: 'linear-gradient(135deg, oklch(93.27% 0.227 122.42) 0%, oklch(45.93% 0.112 130) 100%)',
-  orange: 'linear-gradient(135deg, oklch(73.7% 0.08 44) 0%, oklch(32.7% 0.07 25) 100%)',
-  purple: 'linear-gradient(135deg, oklch(73.7% 0.07 305) 0%, oklch(32.7% 0.085 320) 100%)',
-  yellow: 'linear-gradient(135deg, oklch(73.7% 0.075 91) 0%, oklch(32.7% 0.065 80) 100%)',
-}
+// Swatches preview each theme's --color-primary-400/800 (defined once in
+// theme.css) by scoping a `data-theme` attribute locally rather than
+// duplicating the oklch values here — see the comment above the
+// `[data-theme]` rules in theme.css.
+export const SWATCH_LIGHT_VAR = 'var(--color-primary-400)'
+export const SWATCH_DARK_VAR = 'var(--color-primary-800)'
