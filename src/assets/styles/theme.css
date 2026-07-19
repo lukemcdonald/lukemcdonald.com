@@ -37,7 +37,28 @@
   --color-secondary-950: color-mix(in oklch, var(--color-secondary-base), black 85%);
 }
 
-html[data-theme='blue'] {
+/*
+ * These rules key off `[data-theme]` rather than `html[data-theme]` so the
+ * same tokens can be scoped locally (e.g. a theme-color swatch previewing a
+ * theme that isn't the active one) as well as globally on `<html>`.
+ */
+[data-theme='default'] {
+  --color-primary-50: oklch(98.4% 0.001 106);
+  --color-primary-100: oklch(96.9% 0.001 106);
+  --color-primary-200: oklch(92.3% 0.002 480);
+  --color-primary-300: oklch(86.8% 0.002 760);
+  --color-primary-400: oklch(82.4% 0.012 106);
+  --color-primary-500: oklch(73.7% 0.019 106);
+  --color-primary-600: oklch(59.2% 0.035 117);
+  --color-primary-700: oklch(39.6% 0.022 192);
+  --color-primary-800: oklch(32.7% 0.052 117);
+  --color-primary-900: oklch(17.1% 0.025 212);
+  --color-primary-950: oklch(6% 0.02 212);
+
+  --color-secondary-base: oklch(73.7% 0.08 25);
+}
+
+[data-theme='blue'] {
   --color-primary-50: oklch(98.4% 0.004 240);
   --color-primary-100: oklch(96.9% 0.008 240);
   --color-primary-200: oklch(92.3% 0.015 240);
@@ -53,7 +74,7 @@ html[data-theme='blue'] {
   --color-secondary-base: oklch(73.7% 0.08 30); /* Orange - complementary to blue */
 }
 
-html[data-theme='purple'] {
+[data-theme='purple'] {
   --color-primary-50: oklch(98.4% 0.005 320);
   --color-primary-100: oklch(96.9% 0.01 320);
   --color-primary-200: oklch(92.3% 0.02 315);
@@ -69,7 +90,7 @@ html[data-theme='purple'] {
   --color-secondary-base: oklch(73.7% 0.08 85); /* Yellow-green - complementary to purple */
 }
 
-html[data-theme='yellow'] {
+[data-theme='yellow'] {
   --color-primary-50: oklch(98.4% 0.005 92);
   --color-primary-100: oklch(96.9% 0.01 92);
   --color-primary-200: oklch(92.3% 0.02 92);
@@ -85,7 +106,7 @@ html[data-theme='yellow'] {
   --color-secondary-base: oklch(73.7% 0.08 270); /* Purple - complementary to yellow */
 }
 
-html[data-theme='green'] {
+[data-theme='green'] {
   --color-primary-50: oklch(98.4% 0.006 129);
   --color-primary-100: oklch(96.9% 0.012 129);
   --color-primary-200: oklch(92.3% 0.025 129);
@@ -101,7 +122,7 @@ html[data-theme='green'] {
   --color-secondary-base: oklch(73.7% 0.08 350); /* Red-pink - complementary to green */
 }
 
-html[data-theme='orange'] {
+[data-theme='orange'] {
   --color-primary-50: oklch(98.4% 0.006 45);
   --color-primary-100: oklch(96.9% 0.012 45);
   --color-primary-200: oklch(92.3% 0.025 45);
@@ -117,7 +138,7 @@ html[data-theme='orange'] {
   --color-secondary-base: oklch(73.7% 0.08 225); /* Blue - complementary to orange */
 }
 
-html[data-theme='neon'] {
+[data-theme='neon'] {
   --color-primary-50: oklch(98.94% 0.027 122.59);
   --color-primary-100: oklch(98.94% 0.027 122.59);
   --color-primary-200: oklch(97.82% 0.057 123.41);

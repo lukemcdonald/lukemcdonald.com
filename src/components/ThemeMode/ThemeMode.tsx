@@ -2,7 +2,7 @@ import type { ThemeMode } from './types'
 
 import { useEffect, useState } from 'react'
 
-import { PRESS_CUE_PROPS } from '@/components/Sound'
+import { TICK_CUE_PROPS } from '@/components/Sound'
 
 import { MODE_LABELS, THEME_MODES } from './constants'
 import { MODE_ICONS } from './icons'
@@ -21,25 +21,26 @@ export function ThemeModePicker() {
   }
 
   return (
-    <div className="grid grid-cols-3 gap-2">
+    <div className="flex flex-wrap gap-2">
       {THEME_MODES.map((mode) => {
         const Icon = MODE_ICONS[mode]
+        const isSelected = selectedMode === mode
 
         return (
           <button
             key={mode}
             aria-label={`Select ${MODE_LABELS[mode]} mode`}
-            className={`flex flex-col items-center gap-2 rounded-lg p-3 transition-colors focus:outline-hidden focus:ring-2 focus:ring-primary-500 ${
-              selectedMode === mode
-                ? 'bg-primary-200 text-primary-900 dark:bg-primary-700 dark:text-primary-100'
+            className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 ${
+              isSelected
+                ? 'bg-primary-100 text-primary-900 dark:bg-primary-800 dark:text-primary-100'
                 : 'text-primary-700 hover:bg-primary-100 dark:text-primary-300 dark:hover:bg-primary-800'
             }`}
             type="button"
             onClick={() => handleModeChange(mode)}
-            {...PRESS_CUE_PROPS}
+            {...TICK_CUE_PROPS}
           >
-            <Icon className="h-6 w-6" />
-            <span className="text-xs">{MODE_LABELS[mode]}</span>
+            <Icon className="h-5 w-5" />
+            {MODE_LABELS[mode]}
           </button>
         )
       })}
