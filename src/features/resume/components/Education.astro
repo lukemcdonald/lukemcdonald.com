@@ -17,11 +17,15 @@ const { education } = Astro.props
   icon={EducationIcon}
 >
   <ul class="list-none px-0">
-    {education.map((item) => (
-      <li class="p-0 first:mt-0 last:mb-0">
-        <strong>{item.studyType} {item.area}</strong>
-        {' '}— {item.institution}
-      </li>
-    ))}
+    {
+      education.map((item) => (
+        <li class="p-0 first:mt-0 last:mb-0">
+          <strong>
+            {item.studyType} {item.area}
+          </strong>{' '}
+          — {item.institution}
+        </li>
+      ))
+    }
   </ul>
 </Section>
