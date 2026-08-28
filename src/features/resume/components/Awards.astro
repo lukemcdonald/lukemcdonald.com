@@ -17,12 +17,14 @@ const { awards } = Astro.props
   icon={AwardsIcon}
 >
   <ul>
-    {awards.map((item) => (
-      <li>
-        {item.title}
-        {item.org && ` — ${item.org}`}
-        {item.date && ` (${item.date})`}
-      </li>
-    ))}
+    {
+      awards.map((item) => (
+        <li>
+          {item.title}
+          {item.org && ` — ${item.org}`}
+          {item.date && ` (${item.date})`}
+        </li>
+      ))
+    }
   </ul>
 </Section>

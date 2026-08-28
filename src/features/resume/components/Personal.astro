@@ -15,8 +15,6 @@ const { personal } = Astro.props
   icon={PersonalIcon}
 >
   <ul class="list-none px-0">
-    {personal.map((item) => (
-      <li class="p-0 first:mt-0 last:mb-0">{item}</li>
-    ))}
+    {personal.map((item) => <li class="p-0 first:mt-0 last:mb-0">{item}</li>)}
   </ul>
 </Section>

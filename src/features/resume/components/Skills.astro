@@ -16,14 +16,16 @@ const { skills, ...delegated } = Astro.props satisfies Props
   icon={SkillsIcon}
   {...delegated}
 >
-  <ul class="list-none px-0 columns-2 sm:columns-3">
-    {skills.map((skill) => (
-      <li class="p-0 first:mt-0 last:mb-0">
-        <div class="flex items-center gap-2">
-          <CheckIcon class="size-4 text-primary-600" />
-          <span>{skill}</span>
-        </div>
-      </li>
-    ))}
+  <ul class="list-none columns-2 px-0 sm:columns-3">
+    {
+      skills.map((skill) => (
+        <li class="p-0 first:mt-0 last:mb-0">
+          <div class="flex items-center gap-2">
+            <CheckIcon class="size-4 text-primary-600" />
+            <span>{skill}</span>
+          </div>
+        </li>
+      ))
+    }
   </ul>
 </Section>
