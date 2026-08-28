@@ -1,16 +1,16 @@
 company: ZenBusiness
-position: Staff Software Engineer, Technical Lead (Platform & Growth)
+position: Senior Staff Software Engineer, Technical Lead (Platform & Growth)
 startDate: '2023-05'
-endDate: null
+endDate: '2026-06'
 image: '@/assets/images/logo-zenbusiness.png'
 location: Remote
-summary: ZenBusiness is a Public Benefit Corp for business formation and growth; served 850k+ entrepreneurs; raised $200M Series C. I'm currently serving as tech lead over primary customer acquisition funnel.
+summary: Public Benefit Corp serving 850k+ entrepreneurs; tech lead for primary customer acquisition funnel.
 website: 'https://www.zenbusiness.com/'
 highlights:
-  - Led a company-wide Observability and error standardization initiative across GraphQL and micro-frontends, implementing structured Sentry fingerprinting and custom error handling to accelerate root-cause analysis.
-  - Architected, built, and launched the ZUI design system and React UI library (MUI-based) in 3 months, creating 180+ components, cutting duplicate UI code by 60%, and driving 90% adoption across teams.
-  - Engineered a skip-logic funnel framework that reduced delivery time for new marketing acquisition funnels from 6 weeks to under 1 week, saving ~100 developer-weeks annually.
-  - Optimized purchase funnel performance by 40% (LCP) through advanced Webpack tuning and tree shaking, reducing bundle size by 60%.
-  - Integrated Google Pay and 3DS Secure via Recurly to expand global coverage, reduce fraud risk, and simplify checkout flows.
-  - Co-led engineering strategy for checkout, aligning Core and Growth teams by defining best-practice guides, AI rulesets for Cursor/Claude Code, and improving system quality via PR review standards and A/B experimentation with LaunchDarkly.
-  - Led the overhaul of legacy UI to meet WCAG accessibility standards and codified frontend best practices adopted by 5+ squads.
+  - Cut cached CI builds by 85% and local builds by 97% by implementing Turborepo in a shared frontend monorepo used across 12+ applications, while exposing and resolving a hidden circular dependency.
+  - Replaced Avo with first-party Clickstream v5 analytics across 18 PRs, removing a vendor dependency and fixing an SDK race that silently dropped early events.
+  - Led Node 24 adoption across 20 shared packages and 12+ frontend apps, coordinating breaking package releases and resolving an OIDC auth issue discovered during rollout.
+  - Architected and built a company-wide React design system in 3 months, creating 180+ components, cutting duplicate UI code by 60%, and driving 90% adoption.
+  - Reduced new acquisition funnel delivery from 6 weeks to under 1 week by engineering a reusable skip-logic framework, saving ~100 developer-weeks annually.
+  - Improved purchase funnel LCP by 40% through Webpack tuning and tree shaking, reducing bundle size by 60%.
+  - Delivered the Squarespace enterprise dashboard across frontend and API layers, adding enterprise auth claims, entity selection, LaunchDarkly rollout controls, and NICE chat support.

@@ -4,9 +4,8 @@ startDate: '2022-02'
 endDate: '2022-11'
 image: '@/assets/images/logo-zenbusiness.png'
 location: Remote
-summary: ZenBusiness helps entrepreneurs start, run, and grow their businesses with company formation, compliance, and tools.
+summary: Early frontend platform and product engineering work across formations, compliance, and customer support experiences.
 website: 'https://www.zenbusiness.com/'
 highlights:
-  - Pioneered the initial reusable component strategy, establishing core patterns that accelerated feature delivery across multiple squads.
-  - Integrated a complex chatbot microservice (React, Dialogflow CX, GraphQL), designing the architecture and developing core functionality.
-  - Designed and implemented a new microservice database schema for Django, ensuring data consistency for legacy systems.
+  - Established reusable frontend component patterns that later informed the company-wide design system and accelerated delivery across multiple product squads.
+  - Delivered a React, Dialogflow CX, and GraphQL chatbot microservice, owning the architecture and core customer-facing flow.
