@@ -36,11 +36,13 @@ const hasDescription = Boolean(description)
     >
       {title}.
     </Heading>
-    {hasDescription && (
-      <div class="text-lg leading-normal text-pretty">
-        <Fragment set:html={description} />
-      </div>
-    )}
+    {
+      hasDescription && (
+        <div class="text-lg leading-normal text-pretty">
+          <Fragment set:html={description} />
+        </div>
+      )
+    }
   </div>
 
   <Mountains class="absolute bottom-0 left-0 z-0 w-full" />

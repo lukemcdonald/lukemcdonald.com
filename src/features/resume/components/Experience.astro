@@ -18,46 +18,61 @@ const { experience } = Astro.props
   title="Experience"
   icon={ExperienceIcon}
 >
-  <ul class="list-none px-0 flex flex-col gap-2 m-0!">
-    {experience.map((item) => {
-      const startDateFormatted = formatMonthYear(item.startDate)
-      const startDateLabel = startDateFormatted || item.startDate || 'Unknown'
-      const endDateFormatted = formatMonthYear(item.endDate)
-      const endDateLabel = endDateFormatted || item.endDate || 'Present'
+  <ul class="m-0! flex list-none flex-col gap-2 px-0">
+    {
+      experience.map((item) => {
+        const startDateFormatted = formatMonthYear(item.startDate)
+        const startDateLabel = startDateFormatted || item.startDate || 'Unknown'
+        const endDateFormatted = formatMonthYear(item.endDate)
+        const endDateLabel = endDateFormatted || item.endDate || 'Present'
 
-      return (
-        <li class="p-0 first:mt-0 last:mb-0">
-          <div>
-            <h3 class="not-prose font-semibold text-primary-900 dark:text-primary-100">
-              {item.website
-                ? <Link href={item.website} class="font-inherit">{item.company}</Link>
-                : item.company}
-              {' '}— {item.position}
-            </h3>
+        return (
+          <li class="p-0 first:mt-0 last:mb-0">
+            <div>
+              <h3 class="not-prose font-semibold text-primary-900 dark:text-primary-100">
+                {item.website ?
+                  <Link
+                    href={item.website}
+                    class="font-inherit"
+                  >
+                    {item.company}
+                  </Link>
+                : item.company}{' '}
+                — {item.position}
+              </h3>
 
-            <p class="mt-1 text-sm uppercase">
-              <span aria-label={`${startDateLabel} until ${endDateLabel}`}>
-                {startDateFormatted
-                  ? <time datetime={item.startDate}>{startDateLabel}</time>
-                  : <span>{startDateLabel}</span>}–{endDateFormatted
-                  ? <time datetime={item.endDate}>{endDateLabel}</time>
-                  : <span>Present</span>},
-              </span>
-              {item.location}
-            </p>
+              <p class="mt-1 text-sm uppercase">
+                <span aria-label={`${startDateLabel} until ${endDateLabel}`}>
+                  {startDateFormatted ?
+                    <time datetime={item.startDate}>{startDateLabel}</time>
+                  : <span>{startDateLabel}</span>}
+                  –
+                  {endDateFormatted ?
+                    <time datetime={item.endDate}>{endDateLabel}</time>
+                  : <span>Present</span>}
+                  ,
+                </span>
+                {item.location}
+              </p>
 
-            {item.summary && <p class="mt-2" set:html={item.summary} />}
+              {item.summary && (
+                <p
+                  class="mt-2"
+                  set:html={item.summary}
+                />
+              )}
 
-            {item.highlights && (
-              <ul class="m-0!">
-                {item.highlights.map((highlight) => (
-                  <li set:html={highlight}></li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </li>
-      )
-    })}
+              {item.highlights && (
+                <ul class="m-0!">
+                  {item.highlights.map((highlight) => (
+                    <li set:html={highlight} />
+                  ))}
+                </ul>
+              )}
+            </div>
+          </li>
+        )
+      })
+    }
   </ul>
 </Section>
