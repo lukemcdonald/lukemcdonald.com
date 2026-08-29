@@ -8,9 +8,8 @@ summary: Public Benefit Corp serving 850k+ entrepreneurs; tech lead for primary 
 website: 'https://www.zenbusiness.com/'
 highlights:
   - Cut cached CI builds by 85% and local builds by 97% by implementing Turborepo in a shared frontend monorepo used across 12+ applications, while exposing and resolving a hidden circular dependency.
-  - Replaced Avo with first-party Clickstream v5 analytics across 18 PRs, removing a vendor dependency and fixing an SDK race that silently dropped early events.
-  - Led Node 24 adoption across 20 shared packages and 12+ frontend apps, coordinating breaking package releases and resolving an OIDC auth issue discovered during rollout.
+  - Migrated analytics instrumentation from a third-party event governance platform to an internal eventing system across 12+ frontend apps, removing vendor dependency and fixing an SDK race that dropped early events.
+  - Led observability and error standardization across GraphQL and micro-frontends, introducing structured Sentry fingerprinting and custom error handling to accelerate root-cause analysis.
   - Architected and built a company-wide React design system in 3 months, creating 180+ components, cutting duplicate UI code by 60%, and driving 90% adoption.
   - Reduced new acquisition funnel delivery from 6 weeks to under 1 week by engineering a reusable skip-logic framework, saving ~100 developer-weeks annually.
   - Improved purchase funnel LCP by 40% through Webpack tuning and tree shaking, reducing bundle size by 60%.
-  - Delivered the Squarespace enterprise dashboard across frontend and API layers, adding enterprise auth claims, entity selection, LaunchDarkly rollout controls, and NICE chat support.
