@@ -7,8 +7,8 @@ location: Remote
 summary: Public Benefit Corp serving 850k+ entrepreneurs; tech lead for primary customer acquisition funnel.
 website: 'https://www.zenbusiness.com/'
 highlights:
-  - Cut cached CI builds by 85% and local builds by 97% by implementing Turborepo in a shared frontend monorepo used across 12+ applications, while exposing and resolving a hidden circular dependency.
-  - Migrated analytics instrumentation from a third-party event governance platform to an internal eventing system across 12+ frontend apps, removing vendor dependency and fixing an SDK race that dropped early events.
+  - Cut cached CI builds by 85% and local builds by 97% by modernizing build infrastructure across 12+ frontend apps and resolving a circular dependency.
+  - Migrated analytics instrumentation from a third-party event platform to an internal eventing system across 12+ frontend apps, cutting vendor cost and fixing an SDK race that dropped early events.
   - Led observability and error standardization across GraphQL and micro-frontends, introducing structured Sentry fingerprinting and custom error handling to accelerate root-cause analysis.
   - Architected and built a company-wide React design system in 3 months, creating 180+ components, cutting duplicate UI code by 60%, and driving 90% adoption.
   - Reduced new acquisition funnel delivery from 6 weeks to under 1 week by engineering a reusable skip-logic framework, saving ~100 developer-weeks annually.
