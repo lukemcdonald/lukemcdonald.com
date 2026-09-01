@@ -10,14 +10,13 @@ import { setThemeColor } from '@/components/ThemeColor/utils'
 import { ThemeModePicker } from '@/components/ThemeMode'
 import { setThemeMode } from '@/components/ThemeMode/utils'
 
-import { applyHighlightedCommand } from './applyHighlightedCommand'
 import { CommandPaletteDialog } from './CommandPaletteDialog'
 import { CommandPaletteNav } from './CommandPaletteNav'
 import { CommandPaletteSearch } from './CommandPaletteSearch'
 import { CommandPaletteSection } from './CommandPaletteSection'
 import { CommandPaletteTrigger } from './CommandPaletteTrigger'
-import { getHighlightedCommand } from './getHighlightedCommand'
 import { useCommandPalette } from './useCommandPalette'
+import { applyHighlightedCommand, getHighlightedCommand } from './utils'
 
 export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
   const { close, isOpen, open, searchInputRef, searchQuery, setSearchQuery } = useCommandPalette()

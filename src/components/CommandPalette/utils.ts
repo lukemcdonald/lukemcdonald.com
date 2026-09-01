@@ -7,6 +7,15 @@ import { MODE_LABELS, THEME_MODES } from '@/components/ThemeMode/constants'
 
 const SOUND_LABELS = ['sound', 'sounds off', 'sounds on']
 
+export type ApplyHighlightedCommandActions = {
+  close: () => void
+  navigate: (href: string) => void
+  onPreferenceApplied: () => void
+  setThemeColor: (color: ThemeColor) => void
+  setThemeMode: (mode: ThemeMode) => void
+  toggleSound: () => void
+}
+
 export type HighlightedCommand =
   | { color: ThemeColor; type: 'color' }
   | { href: string; type: 'nav' }
@@ -48,4 +57,34 @@ export function getHighlightedCommand(
   }
 
   return undefined
+}
+
+export function applyHighlightedCommand(
+  actions: ApplyHighlightedCommandActions,
+  command: HighlightedCommand | undefined,
+): void {
+  if (!command) {
+    return
+  }
+
+  if (command.type === 'nav') {
+    actions.close()
+    actions.navigate(command.href)
+    return
+  }
+
+  if (command.type === 'color') {
+    actions.setThemeColor(command.color)
+    actions.onPreferenceApplied()
+    return
+  }
+
+  if (command.type === 'mode') {
+    actions.setThemeMode(command.mode)
+    actions.onPreferenceApplied()
+    return
+  }
+
+  actions.toggleSound()
+  actions.onPreferenceApplied()
 }
