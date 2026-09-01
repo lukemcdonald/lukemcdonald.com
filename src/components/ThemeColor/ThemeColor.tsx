@@ -3,6 +3,7 @@ import type { ThemeColor } from './types'
 import { Check } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
+import { PALETTE_CHROME } from '@/components/CommandPalette/chrome'
 import { TOGGLE_CUE_PROPS } from '@/components/Sound'
 
 import { SWATCH_DARK_VAR, SWATCH_LIGHT_VAR, THEME_COLORS, THEME_LABELS } from './constants'
@@ -85,8 +86,8 @@ export function ThemeColorPicker({
               buttonRefs.current[color] = el
             }}
             aria-label={`Select ${THEME_LABELS[color]} theme`}
-            className={`relative h-10 w-full transition-opacity hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-800 dark:focus-visible:ring-primary-400 ${
-              isHighlighted ? 'ring-2 ring-primary-800 dark:ring-primary-400' : ''
+            className={`relative h-10 w-full transition-opacity hover:opacity-80 ${PALETTE_CHROME.focusRing} ${
+              isHighlighted ? PALETTE_CHROME.swatchRing : ''
             }`}
             data-theme={color}
             style={{

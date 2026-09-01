@@ -3,6 +3,7 @@ import type { SoundPreference } from './types'
 import { Volume2, VolumeX } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
+import { PALETTE_CHROME } from '@/components/CommandPalette/chrome'
 import { getSoundPreference, toggleSoundPreference } from './utils'
 
 type SoundToggleProps = {
@@ -37,10 +38,8 @@ export function SoundToggle({ isHighlighted = false, isOpen, preferenceEpoch }: 
     <button
       aria-label={isOn ? 'Disable interaction sounds' : 'Enable interaction sounds'}
       aria-pressed={isOn}
-      className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-800 dark:focus-visible:ring-primary-400 ${
-        isHighlighted ?
-          'bg-primary-200 text-primary-900 dark:bg-primary-800 dark:text-primary-100'
-        : 'text-primary-900 hover:bg-primary-200 dark:text-primary-100 dark:hover:bg-primary-800'
+      className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${PALETTE_CHROME.focusRing} ${PALETTE_CHROME.ink} ${
+        isHighlighted ? PALETTE_CHROME.activeFill : PALETTE_CHROME.hoverFill
       }`}
       type="button"
       onClick={handleClick}

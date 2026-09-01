@@ -2,6 +2,8 @@ import type { ReactNode, RefObject } from 'react'
 
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
 
+import { PALETTE_CHROME } from './chrome'
+
 type CommandPaletteDialogProps = {
   children: ReactNode
   onClose: () => void
@@ -35,7 +37,9 @@ export function CommandPaletteDialog({
             transition
           >
             {children}
-            <div className="border-t border-primary-200 px-4 py-3 text-xs text-primary-800 dark:border-primary-700 dark:text-primary-400">
+            <div
+              className={`border-t px-4 py-3 text-xs ${PALETTE_CHROME.border} ${PALETTE_CHROME.muted}`}
+            >
               <div className="flex items-center justify-between">
                 <span>Press ESC to close</span>
                 <span className="hidden sm:inline">⌘K to toggle</span>
