@@ -1,6 +1,7 @@
 import type { CommandPaletteProps } from './types'
 
 import { play } from 'cuelume'
+import { useState } from 'react'
 
 import { SoundToggle } from '@/components/Sound'
 import { getSoundPreference, setSoundPreference } from '@/components/Sound/utils'
@@ -19,12 +20,17 @@ import { useCommandPalette } from './useCommandPalette'
 
 export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
   const { close, isOpen, open, searchInputRef, searchQuery, setSearchQuery } = useCommandPalette()
+  const [preferenceEpoch, setPreferenceEpoch] = useState(0)
 
   const filteredNavItems = navigationItems.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase()),
   )
   const highlightedCommand = getHighlightedCommand(navigationItems, searchQuery)
   const highlightedHref = highlightedCommand?.type === 'nav' ? highlightedCommand.href : undefined
+
+  const syncPreferences = () => {
+    setPreferenceEpoch((epoch) => epoch + 1)
+  }
 
   const selectHighlightedItem = () => {
     if (!highlightedCommand) {
@@ -39,13 +45,13 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
 
     if (highlightedCommand.type === 'color') {
       setThemeColor(highlightedCommand.color)
-      close()
+      syncPreferences()
       return
     }
 
     if (highlightedCommand.type === 'mode') {
       setThemeMode(highlightedCommand.mode)
-      close()
+      syncPreferences()
       return
     }
 
@@ -53,7 +59,7 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
 
     setSoundPreference(nextSound)
     play('toggle')
-    close()
+    syncPreferences()
   }
 
   return (
@@ -85,6 +91,7 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
                 highlightedCommand?.type === 'color' ? highlightedCommand.color : undefined
               }
               isOpen={isOpen}
+              preferenceEpoch={preferenceEpoch}
             />
           </CommandPaletteSection>
           <div className="flex flex-wrap gap-x-10 gap-y-6">
@@ -94,12 +101,14 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
                   highlightedCommand?.type === 'mode' ? highlightedCommand.mode : undefined
                 }
                 isOpen={isOpen}
+                preferenceEpoch={preferenceEpoch}
               />
             </CommandPaletteSection>
             <CommandPaletteSection title="Sound">
               <SoundToggle
                 isHighlighted={highlightedCommand?.type === 'sound'}
                 isOpen={isOpen}
+                preferenceEpoch={preferenceEpoch}
               />
             </CommandPaletteSection>
           </div>

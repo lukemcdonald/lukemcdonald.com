@@ -9,9 +9,10 @@ import { getSoundPreference, setSoundPreference } from './utils'
 type SoundToggleProps = {
   isHighlighted?: boolean
   isOpen?: boolean
+  preferenceEpoch?: number
 }
 
-export function SoundToggle({ isHighlighted = false, isOpen }: SoundToggleProps) {
+export function SoundToggle({ isHighlighted = false, isOpen, preferenceEpoch }: SoundToggleProps) {
   const [preference, setPreference] = useState<SoundPreference>('off')
 
   // Read the stored preference after mount (not as a lazy useState
@@ -24,7 +25,7 @@ export function SoundToggle({ isHighlighted = false, isOpen }: SoundToggleProps)
     }
 
     setPreference(getSoundPreference())
-  }, [isOpen])
+  }, [isOpen, preferenceEpoch])
 
   const handleClick = () => {
     const next: SoundPreference = preference === 'on' ? 'off' : 'on'

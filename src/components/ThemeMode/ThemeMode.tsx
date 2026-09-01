@@ -11,9 +11,14 @@ import { getThemeMode, setThemeMode } from './utils'
 type ThemeModePickerProps = {
   highlightedMode?: ThemeMode
   isOpen?: boolean
+  preferenceEpoch?: number
 }
 
-export function ThemeModePicker({ highlightedMode, isOpen }: ThemeModePickerProps) {
+export function ThemeModePicker({
+  highlightedMode,
+  isOpen,
+  preferenceEpoch,
+}: ThemeModePickerProps) {
   const [selectedMode, setSelectedMode] = useState<ThemeMode>('system')
 
   useEffect(() => {
@@ -22,7 +27,7 @@ export function ThemeModePicker({ highlightedMode, isOpen }: ThemeModePickerProp
     }
 
     setSelectedMode(getThemeMode())
-  }, [isOpen])
+  }, [isOpen, preferenceEpoch])
 
   const handleModeChange = (mode: ThemeMode) => {
     setThemeMode(mode)

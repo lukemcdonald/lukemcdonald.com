@@ -16,9 +16,14 @@ interface SwatchShades {
 type ThemeColorPickerProps = {
   highlightedColor?: ThemeColor
   isOpen?: boolean
+  preferenceEpoch?: number
 }
 
-export function ThemeColorPicker({ highlightedColor, isOpen }: ThemeColorPickerProps) {
+export function ThemeColorPicker({
+  highlightedColor,
+  isOpen,
+  preferenceEpoch,
+}: ThemeColorPickerProps) {
   const [selectedColor, setSelectedColor] = useState<ThemeColor>('default')
   const [resolvedColors, setResolvedColors] = useState<Partial<Record<ThemeColor, SwatchShades>>>(
     {},
@@ -31,7 +36,7 @@ export function ThemeColorPicker({ highlightedColor, isOpen }: ThemeColorPickerP
     }
 
     setSelectedColor(getThemeColor())
-  }, [isOpen])
+  }, [isOpen, preferenceEpoch])
 
   useEffect(() => {
     // This picker persists across Astro view transitions (see Header.astro's
