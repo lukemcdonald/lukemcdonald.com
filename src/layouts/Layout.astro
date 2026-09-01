@@ -52,14 +52,17 @@ const meta: SeoMeta = {
     <!-- Theme initialization, system preference watcher, and sound bootstrap -->
     <script>
       import { initializeSound } from '@/components/Sound/utils'
+      import { getThemeColor } from '@/components/ThemeColor/utils'
+      import { getEffectiveThemeMode } from '@/components/ThemeMode/utils'
       import { watchSystemPreference } from '@/components/ThemeMode/utils'
-      import { initializeTheme } from '@/utils/theme'
+      import { applyThemeColor, applyThemeMode } from '@/utils/theme'
 
       let cleanupWatcher: (() => void) | null = null
 
       function setupTheme() {
         // Initialize theme first to set the correct mode from localStorage
-        initializeTheme()
+        applyThemeColor(getThemeColor())
+        applyThemeMode(getEffectiveThemeMode())
 
         // Clean up previous watcher if it exists
         if (cleanupWatcher) {

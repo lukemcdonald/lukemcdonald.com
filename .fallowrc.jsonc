@@ -1,0 +1,14 @@
+{
+  "$schema": "./node_modules/fallow/schema.json",
+  "ignoreDependencies": [
+    // Resolved by Tailwind's CSS/config pipeline rather than JS imports.
+    "@tailwindcss/typography",
+    "tailwindcss",
+  ],
+  "ignoreExports": [
+    {
+      "file": "**/*.astro",
+      "exports": ["Props"],
+    },
+  ],
+}

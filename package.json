@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "astro": "astro",
+    "audit:code": "fallow audit && fallow health --score --hotspots --summary",
     "build": "astro build",
     "check": "astro check",
     "clean": "rm -rf .astro dist node_modules",
@@ -24,6 +25,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
+    "@lucide/astro": "^0.577.0",
     "cuelume": "0.1.0",
     "date-fns": "4.1.0",
     "lucide-react": "^1.25.0",
@@ -35,7 +37,6 @@
     "@astrojs/netlify": "^7.0.3",
     "@astrojs/react": "^5.0.1",
     "@astrojs/sitemap": "^3.7.1",
-    "@lucide/astro": "^0.577.0",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.2.2",
     "@types/react": "^19.2.14",
@@ -44,6 +45,7 @@
     "eslint": "^9.39.4",
     "eslint-plugin-astro": "^1.6.0",
     "eslint-plugin-perfectionist": "^4.15.1",
+    "fallow": "^3.21.0",
     "globals": "^16.5.0",
     "prettier": "^3.8.1",
     "prettier-plugin-astro": "^0.14.1",
