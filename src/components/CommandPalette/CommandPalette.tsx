@@ -17,6 +17,7 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
   const filteredNavItems = navigationItems.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase()),
   )
+  const highlightedHref = searchQuery.trim() === '' ? undefined : filteredNavItems[0]?.href
 
   return (
     <>
@@ -33,6 +34,7 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
         />
         <div className="max-h-96 overflow-y-auto p-4">
           <CommandPaletteNav
+            highlightedHref={highlightedHref}
             items={filteredNavItems}
             onNavigate={close}
           />
