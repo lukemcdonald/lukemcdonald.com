@@ -2,6 +2,13 @@ allowBuilds:
   '@parcel/watcher': true
   esbuild: true
   sharp: true
+minimumReleaseAgeExclude:
+  - '@astrojs/internal-helpers@0.11.0'
+  - '@astrojs/markdown-satteri@0.4.0'
+  - '@astrojs/netlify@8.2.5'
+  - '@astrojs/react@6.0.5'
+  - '@astrojs/sitemap@3.7.4'
+  - astro@7.2.10
 onlyBuiltDependencies:
   - '@parcel/watcher'
   - '@tailwindcss/oxide'

@@ -75,13 +75,7 @@ export function watchSystemPreference(callback?: (mode: EffectiveMode) => void):
     }
   }
 
-  // Modern browsers
-  if (mediaQuery.addEventListener) {
-    mediaQuery.addEventListener('change', handler)
-    return () => mediaQuery.removeEventListener('change', handler)
-  }
+  mediaQuery.addEventListener('change', handler)
 
-  // Safari < 14 fallback
-  mediaQuery.addListener(handler)
-  return () => mediaQuery.removeListener(handler)
+  return () => mediaQuery.removeEventListener('change', handler)
 }

@@ -32,7 +32,7 @@ const experienceSchema = z.object({
   position: z.string(),
   startDate: dateStringSchema,
   summary: z.string().optional(),
-  website: z.string().url().optional(),
+  website: z.url().optional(),
 })
 
 /**
@@ -59,7 +59,7 @@ const awardSchema = z.object({
  */
 const profileSchema = z.object({
   network: z.string(),
-  url: z.string().url(),
+  url: z.url(),
   username: z.string(),
 })
 
@@ -75,14 +75,14 @@ const locationSchema = z.object({
  * Basics schema
  */
 const basicsSchema = z.object({
-  email: z.string().email().optional(),
+  email: z.email().optional(),
   intro: z.string().optional(),
   label: z.string().optional(),
   location: locationSchema.optional(),
   name: z.string(),
   phone: z.string().optional(),
   profiles: z.array(profileSchema).optional(),
-  website: z.string().url().optional(),
+  website: z.url().optional(),
 })
 
 /**

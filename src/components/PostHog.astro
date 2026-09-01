@@ -2,7 +2,7 @@
 import { POSTHOG_API_KEY } from 'astro:env/client'
 ---
 
-<script define:vars={{ POSTHOG_API_KEY }} lang="ts" defer>
+<script is:inline define:vars={{ POSTHOG_API_KEY }} defer>
   /* eslint-disable */
   !(function (t, e) {
     var o, n, p, r

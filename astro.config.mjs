@@ -42,6 +42,7 @@ export default defineConfig({
   server: {
     port: 3000,
   },
+  session: false,
   site: GLOBAL_CONFIG.site.origin,
   trailingSlash: 'never',
   vite: {

@@ -40,11 +40,16 @@ const linkList = [
   })) || []),
 ]
 
-const introParagraphs = intro?.split('\n\n').map(paragraph => paragraph.trim()).filter(Boolean)
+const introParagraphs = intro
+  ?.split('\n\n')
+  .map((paragraph) => paragraph.trim())
+  .filter(Boolean)
 ---
 
 <header>
-  <div class="flex flex-col sm:flex-row gap-4 sm:items-baseline print:flex-col print:items-start justify-between">
+  <div
+    class="flex flex-col justify-between gap-4 sm:flex-row sm:items-baseline print:flex-col print:items-start"
+  >
     <h1 class="mb-0 shrink-0">
       <a
         class="not-prose no-underline hover:underline"
@@ -55,18 +60,34 @@ const introParagraphs = intro?.split('\n\n').map(paragraph => paragraph.trim()).
     </h1>
 
     <dl class="not-prose flex flex-wrap gap-x-3 sm:gap-x-5 print:block">
-      {linkList.map((link) => (
-        <dt class="sr-only">{link.label}</dt>
-        <dd class="flex items-center gap-2">
-          <link.icon class="size-4" />
-          <a class="print:hidden" href={link.href}>{link.label}</a>
-          <code class="hidden print:block print:text-xs">{link.href}</code>
-        </dd>
-      ))}
+      {
+        linkList.map((link) => (
+          <>
+            <dt class="sr-only">{link.label}</dt>
+            <dd class="flex items-center gap-2">
+              <link.icon class="size-4" />
+              <a
+                class="print:hidden"
+                href={link.href}
+              >
+                {link.label}
+              </a>
+              <code class="hidden print:block print:text-xs">{link.href}</code>
+            </dd>
+          </>
+        ))
+      }
     </dl>
   </div>
 
-  {subtitle && <h2 class="mt-12 mb-4 font-semibold print:mt-6" set:html={subtitle} />}
+  {
+    subtitle && (
+      <h2
+        class="mt-12 mb-4 font-semibold print:mt-6"
+        set:html={subtitle}
+      />
+    )
+  }
 
-  {introParagraphs?.map(paragraph => <p set:html={paragraph} />)}
+  {introParagraphs?.map((paragraph) => <p set:html={paragraph} />)}
 </header>
