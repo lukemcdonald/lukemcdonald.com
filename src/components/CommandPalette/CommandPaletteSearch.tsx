@@ -3,12 +3,14 @@ import type { RefObject } from 'react'
 import { Search } from 'lucide-react'
 
 type CommandPaletteSearchProps = {
+  onEnter: () => void
   onQueryChange: (query: string) => void
   query: string
   searchInputRef: RefObject<HTMLInputElement | null>
 }
 
 export function CommandPaletteSearch({
+  onEnter,
   onQueryChange,
   query,
   searchInputRef,
@@ -24,6 +26,14 @@ export function CommandPaletteSearch({
         type="text"
         value={query}
         onChange={(event) => onQueryChange(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key !== 'Enter') {
+            return
+          }
+
+          event.preventDefault()
+          onEnter()
+        }}
       />
       <kbd className="hidden rounded border border-primary-300 px-2 py-1 text-xs text-primary-800 sm:inline-block dark:border-primary-600 dark:text-primary-400">
         ESC

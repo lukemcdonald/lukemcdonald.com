@@ -8,12 +8,26 @@ import { MODE_LABELS, THEME_MODES } from './constants'
 import { MODE_ICONS } from './icons'
 import { getThemeMode, setThemeMode } from './utils'
 
-export function ThemeModePicker() {
+type ThemeModePickerProps = {
+  highlightedMode?: ThemeMode
+  isOpen?: boolean
+  preferenceEpoch?: number
+}
+
+export function ThemeModePicker({
+  highlightedMode,
+  isOpen,
+  preferenceEpoch,
+}: ThemeModePickerProps) {
   const [selectedMode, setSelectedMode] = useState<ThemeMode>('system')
 
   useEffect(() => {
+    if (isOpen === false) {
+      return
+    }
+
     setSelectedMode(getThemeMode())
-  }, [])
+  }, [isOpen, preferenceEpoch])
 
   const handleModeChange = (mode: ThemeMode) => {
     setThemeMode(mode)
@@ -24,6 +38,7 @@ export function ThemeModePicker() {
     <div className="flex flex-wrap gap-2">
       {THEME_MODES.map((mode) => {
         const Icon = MODE_ICONS[mode]
+        const isHighlighted = mode === highlightedMode
         const isSelected = selectedMode === mode
 
         return (
@@ -31,7 +46,7 @@ export function ThemeModePicker() {
             key={mode}
             aria-label={`Select ${MODE_LABELS[mode]} mode`}
             className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 ${
-              isSelected ?
+              isHighlighted || isSelected ?
                 'bg-primary-100 text-primary-900 dark:bg-primary-800 dark:text-primary-100'
               : 'text-primary-700 hover:bg-primary-100 dark:text-primary-300 dark:hover:bg-primary-800'
             }`}
