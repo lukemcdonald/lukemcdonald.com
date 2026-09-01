@@ -1,7 +1,6 @@
 import type { ExperienceItem } from '@/features/resume/resume.types'
 
-import { compareDesc } from 'date-fns'
-
+import { compareNullableDateDesc } from './compareNullableDateDesc'
 import { toDate } from './toDate'
 
 /**
@@ -24,33 +23,18 @@ export function sortExperienceByEndDate(items: ExperienceItem[]): ExperienceItem
     const aIsPresent = isPresent(a.endDate)
     const bIsPresent = isPresent(b.endDate)
 
-    // Present positions come first
-    if (aIsPresent && !bIsPresent) {
-      return -1
-    }
-    if (!aIsPresent && bIsPresent) {
+    if (aIsPresent !== bIsPresent) {
+      if (aIsPresent) {
+        return -1
+      }
+
       return 1
     }
 
-    // If both are present, maintain original order
-    if (aIsPresent && bIsPresent) {
+    if (aIsPresent) {
       return 0
     }
 
-    // Both have end dates - sort by endDate descending
-    const aDate = toDate(a.endDate)
-    const bDate = toDate(b.endDate)
-
-    if (!aDate && !bDate) {
-      return 0
-    }
-    if (!aDate) {
-      return 1
-    }
-    if (!bDate) {
-      return -1
-    }
-
-    return compareDesc(aDate, bDate)
+    return compareNullableDateDesc(toDate(a.endDate), toDate(b.endDate))
   })
 }

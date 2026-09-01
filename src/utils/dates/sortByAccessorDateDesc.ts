@@ -1,7 +1,6 @@
 import type { DateLike } from './index'
 
-import { compareDesc } from 'date-fns'
-
+import { compareNullableDateDesc } from './compareNullableDateDesc'
 import { toDate } from './toDate'
 
 /**
@@ -12,17 +11,6 @@ import { toDate } from './toDate'
  */
 export function sortByAccessorDateDesc<T>(items: T[], accessor: (item: T) => DateLike): T[] {
   return [...items].sort((a, b) => {
-    const ad = toDate(accessor(a))
-    const bd = toDate(accessor(b))
-    if (!ad && !bd) {
-      return 0
-    }
-    if (!ad) {
-      return 1
-    }
-    if (!bd) {
-      return -1
-    }
-    return compareDesc(ad, bd)
+    return compareNullableDateDesc(toDate(accessor(a)), toDate(accessor(b)))
   })
 }
