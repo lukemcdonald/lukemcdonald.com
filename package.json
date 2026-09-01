@@ -20,8 +20,9 @@
     "preinstall": "npx only-allow pnpm",
     "preview": "netlify deploy --build --message \"preview $(git rev-parse --short HEAD)\"",
     "reinstall": "pnpm run clean && pnpm install --frozen-lockfile",
+    "test": "node --test --experimental-strip-types src/**/*.test.ts",
     "typecheck": "tsc --noEmit",
-    "validate": "pnpm run -s lint && pnpm run -s format:check && pnpm run -s check"
+    "validate": "pnpm run -s lint && pnpm run -s format:check && pnpm run -s check && pnpm run -s test"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
