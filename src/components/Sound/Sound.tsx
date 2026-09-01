@@ -6,7 +6,12 @@ import { useEffect, useState } from 'react'
 
 import { getSoundPreference, setSoundPreference } from './utils'
 
-export function SoundToggle() {
+type SoundToggleProps = {
+  isHighlighted?: boolean
+  isOpen?: boolean
+}
+
+export function SoundToggle({ isHighlighted = false, isOpen }: SoundToggleProps) {
   const [preference, setPreference] = useState<SoundPreference>('off')
 
   // Read the stored preference after mount (not as a lazy useState
@@ -14,8 +19,12 @@ export function SoundToggle() {
   // hydration pass agree — the same reason ThemeModePicker does this
   // in a useEffect rather than at construction time.
   useEffect(() => {
+    if (isOpen === false) {
+      return
+    }
+
     setPreference(getSoundPreference())
-  }, [])
+  }, [isOpen])
 
   const handleClick = () => {
     const next: SoundPreference = preference === 'on' ? 'off' : 'on'
@@ -36,7 +45,7 @@ export function SoundToggle() {
       aria-label={isOn ? 'Disable interaction sounds' : 'Enable interaction sounds'}
       aria-pressed={isOn}
       className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 ${
-        isOn ?
+        isHighlighted || isOn ?
           'bg-primary-100 text-primary-900 dark:bg-primary-800 dark:text-primary-100'
         : 'text-primary-700 hover:bg-primary-100 dark:text-primary-300 dark:hover:bg-primary-800'
       }`}

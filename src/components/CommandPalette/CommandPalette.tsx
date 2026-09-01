@@ -1,14 +1,20 @@
 import type { CommandPaletteProps } from './types'
 
+import { play } from 'cuelume'
+
 import { SoundToggle } from '@/components/Sound'
+import { getSoundPreference, setSoundPreference } from '@/components/Sound/utils'
 import { ThemeColorPicker } from '@/components/ThemeColor'
+import { setThemeColor } from '@/components/ThemeColor/utils'
 import { ThemeModePicker } from '@/components/ThemeMode'
+import { setThemeMode } from '@/components/ThemeMode/utils'
 
 import { CommandPaletteDialog } from './CommandPaletteDialog'
 import { CommandPaletteNav } from './CommandPaletteNav'
 import { CommandPaletteSearch } from './CommandPaletteSearch'
 import { CommandPaletteSection } from './CommandPaletteSection'
 import { CommandPaletteTrigger } from './CommandPaletteTrigger'
+import { getHighlightedCommand } from './getHighlightedCommand'
 import { useCommandPalette } from './useCommandPalette'
 
 export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
@@ -17,15 +23,37 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
   const filteredNavItems = navigationItems.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase()),
   )
-  const highlightedHref = searchQuery.trim() === '' ? undefined : filteredNavItems[0]?.href
+  const highlightedCommand = getHighlightedCommand(navigationItems, searchQuery)
+  const highlightedHref = highlightedCommand?.type === 'nav' ? highlightedCommand.href : undefined
 
   const selectHighlightedItem = () => {
-    if (!highlightedHref) {
+    if (!highlightedCommand) {
       return
     }
 
+    if (highlightedCommand.type === 'nav') {
+      close()
+      window.location.assign(highlightedCommand.href)
+      return
+    }
+
+    if (highlightedCommand.type === 'color') {
+      setThemeColor(highlightedCommand.color)
+      close()
+      return
+    }
+
+    if (highlightedCommand.type === 'mode') {
+      setThemeMode(highlightedCommand.mode)
+      close()
+      return
+    }
+
+    const nextSound = getSoundPreference() === 'on' ? 'off' : 'on'
+
+    setSoundPreference(nextSound)
+    play('toggle')
     close()
-    window.location.assign(highlightedHref)
   }
 
   return (
@@ -52,14 +80,27 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
             className="mb-6"
             title="Theme Color"
           >
-            <ThemeColorPicker />
+            <ThemeColorPicker
+              highlightedColor={
+                highlightedCommand?.type === 'color' ? highlightedCommand.color : undefined
+              }
+              isOpen={isOpen}
+            />
           </CommandPaletteSection>
           <div className="flex flex-wrap gap-x-10 gap-y-6">
             <CommandPaletteSection title="Appearance">
-              <ThemeModePicker />
+              <ThemeModePicker
+                highlightedMode={
+                  highlightedCommand?.type === 'mode' ? highlightedCommand.mode : undefined
+                }
+                isOpen={isOpen}
+              />
             </CommandPaletteSection>
             <CommandPaletteSection title="Sound">
-              <SoundToggle />
+              <SoundToggle
+                isHighlighted={highlightedCommand?.type === 'sound'}
+                isOpen={isOpen}
+              />
             </CommandPaletteSection>
           </div>
         </div>

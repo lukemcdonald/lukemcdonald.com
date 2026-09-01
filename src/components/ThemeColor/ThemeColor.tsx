@@ -13,7 +13,12 @@ interface SwatchShades {
   light: string
 }
 
-export function ThemeColorPicker() {
+type ThemeColorPickerProps = {
+  highlightedColor?: ThemeColor
+  isOpen?: boolean
+}
+
+export function ThemeColorPicker({ highlightedColor, isOpen }: ThemeColorPickerProps) {
   const [selectedColor, setSelectedColor] = useState<ThemeColor>('default')
   const [resolvedColors, setResolvedColors] = useState<Partial<Record<ThemeColor, SwatchShades>>>(
     {},
@@ -21,8 +26,12 @@ export function ThemeColorPicker() {
   const buttonRefs = useRef<Partial<Record<ThemeColor, HTMLButtonElement | null>>>({})
 
   useEffect(() => {
+    if (isOpen === false) {
+      return
+    }
+
     setSelectedColor(getThemeColor())
-  }, [])
+  }, [isOpen])
 
   useEffect(() => {
     // This picker persists across Astro view transitions (see Header.astro's
@@ -57,6 +66,7 @@ export function ThemeColorPicker() {
   return (
     <div className="grid grid-cols-4 gap-4 px-2 sm:grid-cols-7">
       {THEME_COLORS.map((color) => {
+        const isHighlighted = color === highlightedColor
         const isSelected = selectedColor === color
         const { dark, light } = resolvedColors[color] ?? {
           dark: SWATCH_DARK_VAR,
@@ -70,7 +80,9 @@ export function ThemeColorPicker() {
               buttonRefs.current[color] = el
             }}
             aria-label={`Select ${THEME_LABELS[color]} theme`}
-            className="relative h-10 w-full transition-opacity hover:opacity-80 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+            className={`relative h-10 w-full transition-opacity hover:opacity-80 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 ${
+              isHighlighted ? 'ring-2 ring-primary-500 ring-offset-2' : ''
+            }`}
             data-cuelume-hover="droplet"
             data-theme={color}
             style={{
