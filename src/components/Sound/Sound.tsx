@@ -1,10 +1,9 @@
 import type { SoundPreference } from './types'
 
-import { play } from 'cuelume'
 import { Volume2, VolumeX } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
-import { getSoundPreference, setSoundPreference } from './utils'
+import { getSoundPreference, toggleSoundPreference } from './utils'
 
 type SoundToggleProps = {
   isHighlighted?: boolean
@@ -28,14 +27,7 @@ export function SoundToggle({ isHighlighted = false, isOpen, preferenceEpoch }: 
   }, [isOpen, preferenceEpoch])
 
   const handleClick = () => {
-    const next: SoundPreference = preference === 'on' ? 'off' : 'on'
-
-    // Apply the preference first, then play imperatively (not via
-    // data-cuelume-toggle) — play() is a no-op once disabled, so this
-    // sequencing is correct on both the enabling and disabling click.
-    setSoundPreference(next)
-    play('toggle')
-    setPreference(next)
+    setPreference(toggleSoundPreference())
   }
 
   const isOn = preference === 'on'
@@ -50,7 +42,6 @@ export function SoundToggle({ isHighlighted = false, isOpen, preferenceEpoch }: 
           'bg-primary-100 text-primary-900 dark:bg-primary-800 dark:text-primary-100'
         : 'text-primary-700 hover:bg-primary-100 dark:text-primary-300 dark:hover:bg-primary-800'
       }`}
-      data-cuelume-hover="tick"
       type="button"
       onClick={handleClick}
     >

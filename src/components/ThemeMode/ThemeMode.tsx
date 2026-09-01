@@ -2,7 +2,7 @@ import type { ThemeMode } from './types'
 
 import { useEffect, useState } from 'react'
 
-import { TICK_CUE_PROPS } from '@/components/Sound'
+import { TOGGLE_CUE_PROPS } from '@/components/Sound'
 
 import { MODE_LABELS, THEME_MODES } from './constants'
 import { MODE_ICONS } from './icons'
@@ -52,7 +52,7 @@ export function ThemeModePicker({
             }`}
             type="button"
             onClick={() => handleModeChange(mode)}
-            {...TICK_CUE_PROPS}
+            {...TOGGLE_CUE_PROPS}
           >
             <Icon className="h-5 w-5" />
             {MODE_LABELS[mode]}

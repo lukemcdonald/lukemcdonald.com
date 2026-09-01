@@ -1,6 +1,6 @@
 import type { CommandPaletteNavItem } from './types'
 
-import { TICK_CUE_PROPS } from '@/components/Sound'
+import { HOVER_NAV_CUE_PROPS } from '@/components/Sound'
 
 import { CommandPaletteSection } from './CommandPaletteSection'
 
@@ -34,7 +34,7 @@ export function CommandPaletteNav({ highlightedHref, items, onNavigate }: Comman
               }`}
               href={item.href}
               onClick={onNavigate}
-              {...TICK_CUE_PROPS}
+              {...HOVER_NAV_CUE_PROPS}
             >
               {item.name}
             </a>

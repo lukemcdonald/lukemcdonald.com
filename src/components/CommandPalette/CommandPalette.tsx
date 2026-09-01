@@ -4,7 +4,7 @@ import { play } from 'cuelume'
 import { useState } from 'react'
 
 import { SoundToggle } from '@/components/Sound'
-import { getSoundPreference, setSoundPreference } from '@/components/Sound/utils'
+import { toggleSoundPreference } from '@/components/Sound/utils'
 import { ThemeColorPicker } from '@/components/ThemeColor'
 import { setThemeColor } from '@/components/ThemeColor/utils'
 import { ThemeModePicker } from '@/components/ThemeMode'
@@ -33,16 +33,17 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
   }
 
   const toggleSound = () => {
-    const nextSound = getSoundPreference() === 'on' ? 'off' : 'on'
-
-    setSoundPreference(nextSound)
-    play('toggle')
+    toggleSoundPreference()
   }
 
   const selectHighlightedItem = () => {
+    if (highlightedCommand?.type === 'color' || highlightedCommand?.type === 'mode') {
+      play('toggle')
+    }
+
     applyHighlightedCommand(
       {
-        close,
+        close: () => close({ silent: true }),
         navigate: (href) => {
           window.location.assign(href)
         },
@@ -59,7 +60,7 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
     <>
       <CommandPaletteTrigger onOpen={open} />
       <CommandPaletteDialog
-        onClose={close}
+        onClose={() => close()}
         open={isOpen}
         searchInputRef={searchInputRef}
       >
@@ -73,7 +74,7 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
           <CommandPaletteNav
             highlightedHref={highlightedHref}
             items={filteredNavItems}
-            onNavigate={close}
+            onNavigate={() => close({ silent: true })}
           />
           <CommandPaletteSection
             className="mb-6"

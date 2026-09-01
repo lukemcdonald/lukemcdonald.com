@@ -51,13 +51,14 @@ const meta: SeoMeta = {
 
     <!-- Theme initialization, system preference watcher, and sound bootstrap -->
     <script>
-      import { initializeSound } from '@/components/Sound/utils'
+      import { initializeSound, playPageArrival } from '@/components/Sound/utils'
       import { getThemeColor } from '@/components/ThemeColor/utils'
       import { getEffectiveThemeMode } from '@/components/ThemeMode/utils'
       import { watchSystemPreference } from '@/components/ThemeMode/utils'
       import { applyThemeColor, applyThemeMode } from '@/utils/theme'
 
       let cleanupWatcher: (() => void) | null = null
+      let isFirstAstroPageLoad = true
 
       function setupTheme() {
         // Initialize theme first to set the correct mode from localStorage
@@ -76,6 +77,17 @@ const meta: SeoMeta = {
       function setup() {
         setupTheme()
         initializeSound()
+      }
+
+      function onAstroPageLoad() {
+        setup()
+
+        if (isFirstAstroPageLoad) {
+          isFirstAstroPageLoad = false
+          return
+        }
+
+        playPageArrival()
       }
 
       // Initialize theme and sound on page load (backup for inline script)
@@ -98,7 +110,7 @@ const meta: SeoMeta = {
       // concern, so it only needs to run once per navigation rather than
       // on both view-transition events.
       document.addEventListener('astro:after-swap', setupTheme)
-      document.addEventListener('astro:page-load', setup)
+      document.addEventListener('astro:page-load', onAstroPageLoad)
     </script>
   </body>
 </html>

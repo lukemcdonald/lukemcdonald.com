@@ -3,6 +3,8 @@ import type { HTMLAttributes } from 'astro/types'
 
 import PrinterIcon from '@lucide/astro/icons/printer'
 
+import { PRESS_CUE_PROPS } from '@/components/Sound'
+
 const sizes = {
   lg: 'px-5 py-3 rounded-lg',
   md: 'px-3 py-2 rounded-md',
@@ -32,6 +34,7 @@ const { class: className, size = 'md' } = Astro.props satisfies Props
     className,
   ]}
   onclick="window.print()"
+  {...PRESS_CUE_PROPS}
 >
   <PrinterIcon class={iconSizes[size]} />
 </button>

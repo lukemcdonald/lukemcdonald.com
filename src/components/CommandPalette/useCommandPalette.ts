@@ -1,11 +1,16 @@
 import { play } from 'cuelume'
 import { useEffect, useRef, useState } from 'react'
 
+type CloseOptions = {
+  silent?: boolean
+}
+
 export function useCommandPalette() {
   const [isOpen, setIsOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const isFirstRender = useRef(true)
   const searchInputRef = useRef<HTMLInputElement>(null)
+  const skipCloseSound = useRef(false)
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -13,7 +18,12 @@ export function useCommandPalette() {
       return
     }
 
-    play(isOpen ? 'chime' : 'whisper')
+    if (!isOpen && skipCloseSound.current) {
+      skipCloseSound.current = false
+      return
+    }
+
+    play(isOpen ? 'bloom' : 'droplet')
   }, [isOpen])
 
   useEffect(() => {
@@ -29,7 +39,11 @@ export function useCommandPalette() {
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [])
 
-  const close = () => {
+  const close = (options?: CloseOptions) => {
+    if (options?.silent) {
+      skipCloseSound.current = true
+    }
+
     setIsOpen(false)
     setSearchQuery('')
   }
