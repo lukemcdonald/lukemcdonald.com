@@ -10,6 +10,7 @@ import { setThemeColor } from '@/components/ThemeColor/utils'
 import { ThemeModePicker } from '@/components/ThemeMode'
 import { setThemeMode } from '@/components/ThemeMode/utils'
 
+import { applyHighlightedCommand } from './applyHighlightedCommand'
 import { CommandPaletteDialog } from './CommandPaletteDialog'
 import { CommandPaletteNav } from './CommandPaletteNav'
 import { CommandPaletteSearch } from './CommandPaletteSearch'
@@ -32,34 +33,27 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
     setPreferenceEpoch((epoch) => epoch + 1)
   }
 
-  const selectHighlightedItem = () => {
-    if (!highlightedCommand) {
-      return
-    }
-
-    if (highlightedCommand.type === 'nav') {
-      close()
-      window.location.assign(highlightedCommand.href)
-      return
-    }
-
-    if (highlightedCommand.type === 'color') {
-      setThemeColor(highlightedCommand.color)
-      syncPreferences()
-      return
-    }
-
-    if (highlightedCommand.type === 'mode') {
-      setThemeMode(highlightedCommand.mode)
-      syncPreferences()
-      return
-    }
-
+  const toggleSound = () => {
     const nextSound = getSoundPreference() === 'on' ? 'off' : 'on'
 
     setSoundPreference(nextSound)
     play('toggle')
-    syncPreferences()
+  }
+
+  const selectHighlightedItem = () => {
+    applyHighlightedCommand(
+      {
+        close,
+        navigate: (href) => {
+          window.location.assign(href)
+        },
+        onPreferenceApplied: syncPreferences,
+        setThemeColor,
+        setThemeMode,
+        toggleSound,
+      },
+      highlightedCommand,
+    )
   }
 
   return (
