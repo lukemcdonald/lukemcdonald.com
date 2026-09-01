@@ -45,10 +45,10 @@ export function ThemeModePicker({
           <button
             key={mode}
             aria-label={`Select ${MODE_LABELS[mode]} mode`}
-            className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 ${
+            className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-800 dark:focus-visible:ring-primary-400 ${
               isHighlighted || isSelected ?
-                'bg-primary-100 text-primary-900 dark:bg-primary-800 dark:text-primary-100'
-              : 'text-primary-700 hover:bg-primary-100 dark:text-primary-300 dark:hover:bg-primary-800'
+                'bg-primary-200 text-primary-900 dark:bg-primary-800 dark:text-primary-100'
+              : 'text-primary-900 hover:bg-primary-200 dark:text-primary-100 dark:hover:bg-primary-800'
             }`}
             type="button"
             onClick={() => handleModeChange(mode)}

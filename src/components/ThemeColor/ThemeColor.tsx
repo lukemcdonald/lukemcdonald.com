@@ -85,8 +85,8 @@ export function ThemeColorPicker({
               buttonRefs.current[color] = el
             }}
             aria-label={`Select ${THEME_LABELS[color]} theme`}
-            className={`relative h-10 w-full transition-opacity hover:opacity-80 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 ${
-              isHighlighted ? 'ring-2 ring-primary-500 ring-offset-2' : ''
+            className={`relative h-10 w-full transition-opacity hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-800 dark:focus-visible:ring-primary-400 ${
+              isHighlighted ? 'ring-2 ring-primary-800 dark:ring-primary-400' : ''
             }`}
             data-theme={color}
             style={{
