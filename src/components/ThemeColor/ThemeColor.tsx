@@ -3,7 +3,8 @@ import type { ThemeColor } from './types'
 import { Check } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
-import { PRESS_CUE_PROPS } from '@/components/Sound'
+import { PALETTE_CHROME } from '@/components/CommandPalette/chrome'
+import { TOGGLE_CUE_PROPS } from '@/components/Sound'
 
 import { SWATCH_DARK_VAR, SWATCH_LIGHT_VAR, THEME_COLORS, THEME_LABELS } from './constants'
 import { getThemeColor, setThemeColor } from './utils'
@@ -85,10 +86,9 @@ export function ThemeColorPicker({
               buttonRefs.current[color] = el
             }}
             aria-label={`Select ${THEME_LABELS[color]} theme`}
-            className={`relative h-10 w-full transition-opacity hover:opacity-80 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 ${
-              isHighlighted ? 'ring-2 ring-primary-500 ring-offset-2' : ''
+            className={`relative h-10 w-full transition-opacity hover:opacity-80 ${PALETTE_CHROME.focusRing} ${
+              isHighlighted ? PALETTE_CHROME.swatchRing : ''
             }`}
-            data-cuelume-hover="droplet"
             data-theme={color}
             style={{
               background: `linear-gradient(135deg, ${light} 50%, ${dark} 50%)`,
@@ -96,7 +96,7 @@ export function ThemeColorPicker({
             title={THEME_LABELS[color]}
             type="button"
             onClick={() => handleColorChange(color)}
-            {...PRESS_CUE_PROPS}
+            {...TOGGLE_CUE_PROPS}
           >
             {isSelected && (
               <span

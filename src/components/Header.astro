@@ -1,25 +1,9 @@
 ---
-import { CommandPalette } from '@/components/CommandPalette'
+import CommandPaletteHost from '@/components/CommandPalette/CommandPaletteHost.astro'
 import Logo from '@/components/Logo.astro'
 import Navigation from '@/components/Nav/Nav.astro'
 import Text from '@/components/Text.astro'
 import { GLOBAL_CONFIG } from '@/configs/global'
-import { getPublishedPages } from '@/features/pages/pages.server'
-
-// Gather all navigation items for command palette
-const livePages = await getPublishedPages({
-  include: ['i-am-a'],
-  sortBy: 'order',
-})
-
-const navigationItems = [
-  { href: '/resume', name: 'Resume' },
-  { href: '/tread-talks', name: 'TREAD Talks' },
-  ...livePages.map((page) => ({
-    href: `/${page.id}`,
-    name: page.data.title,
-  })),
-]
 ---
 
 <header
@@ -27,6 +11,7 @@ const navigationItems = [
 >
   <a
     class="group peer relative z-10 inline-flex items-center text-white no-underline hover:shadow-lg"
+    data-cuelume-hover="tick"
     href="/"
   >
     <Logo class="h-16 w-16 bg-primary-900 fill-current p-4" />
@@ -44,10 +29,5 @@ const navigationItems = [
 
   <Navigation />
 
-  <CommandPalette
-    client:media="(hover: hover) and (pointer: fine)"
-    transition:name="command-palette"
-    transition:persist
-    navigationItems={navigationItems}
-  />
+  <CommandPaletteHost />
 </header>

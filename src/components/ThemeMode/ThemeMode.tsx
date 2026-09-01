@@ -2,7 +2,8 @@ import type { ThemeMode } from './types'
 
 import { useEffect, useState } from 'react'
 
-import { TICK_CUE_PROPS } from '@/components/Sound'
+import { PALETTE_CHROME } from '@/components/CommandPalette/chrome'
+import { TOGGLE_CUE_PROPS } from '@/components/Sound'
 
 import { MODE_LABELS, THEME_MODES } from './constants'
 import { MODE_ICONS } from './icons'
@@ -45,14 +46,12 @@ export function ThemeModePicker({
           <button
             key={mode}
             aria-label={`Select ${MODE_LABELS[mode]} mode`}
-            className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 ${
-              isHighlighted || isSelected ?
-                'bg-primary-100 text-primary-900 dark:bg-primary-800 dark:text-primary-100'
-              : 'text-primary-700 hover:bg-primary-100 dark:text-primary-300 dark:hover:bg-primary-800'
+            className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${PALETTE_CHROME.focusRing} ${PALETTE_CHROME.ink} ${
+              isHighlighted || isSelected ? PALETTE_CHROME.activeFill : PALETTE_CHROME.hoverFill
             }`}
             type="button"
             onClick={() => handleModeChange(mode)}
-            {...TICK_CUE_PROPS}
+            {...TOGGLE_CUE_PROPS}
           >
             <Icon className="h-5 w-5" />
             {MODE_LABELS[mode]}

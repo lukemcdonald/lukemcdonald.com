@@ -1,6 +1,6 @@
 import type { SoundPreference } from './types'
 
-import { bind, setEnabled } from 'cuelume'
+import { bind, play, setEnabled, setVolume } from 'cuelume'
 
 import { SOUND_CONFIG } from '@/configs/sound'
 
@@ -29,11 +29,34 @@ export function setSoundPreference(preference: SoundPreference): void {
   setEnabled(preference === 'on')
 }
 
+export function toggleSoundPreference(): SoundPreference {
+  const next: SoundPreference = getSoundPreference() === 'on' ? 'off' : 'on'
+
+  if (next === 'off') {
+    play('toggle')
+    setSoundPreference(next)
+  } else {
+    setSoundPreference(next)
+    play('toggle')
+  }
+
+  return next
+}
+
 export function initializeSound(): void {
   if (typeof window === 'undefined' || !SOUND_CONFIG.enableSounds) {
     return
   }
 
+  bind()
   setEnabled(getSoundPreference() === 'on')
-  bind(document)
+  setVolume(SOUND_CONFIG.volume)
+}
+
+export function playPageArrival(): void {
+  if (typeof window === 'undefined' || !SOUND_CONFIG.enableSounds) {
+    return
+  }
+
+  play('arrival')
 }

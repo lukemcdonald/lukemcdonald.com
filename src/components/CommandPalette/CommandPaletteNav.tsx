@@ -1,7 +1,8 @@
 import type { CommandPaletteNavItem } from './types'
 
-import { TICK_CUE_PROPS } from '@/components/Sound'
+import { HOVER_NAV_CUE_PROPS } from '@/components/Sound'
 
+import { PALETTE_CHROME } from './chrome'
 import { CommandPaletteSection } from './CommandPaletteSection'
 
 type CommandPaletteNavProps = {
@@ -27,14 +28,12 @@ export function CommandPaletteNav({ highlightedHref, items, onNavigate }: Comman
           return (
             <a
               key={item.href}
-              className={`block rounded-lg px-3 py-2 text-sm transition-colors ${
-                isHighlighted ?
-                  'bg-primary-100 text-primary-900 dark:bg-primary-800 dark:text-primary-100'
-                : 'text-primary-900 hover:bg-primary-100 dark:text-primary-100 dark:hover:bg-primary-800'
+              className={`block rounded-lg px-3 py-2 text-sm transition-colors ${PALETTE_CHROME.ink} ${
+                isHighlighted ? PALETTE_CHROME.activeFill : PALETTE_CHROME.hoverFill
               }`}
               href={item.href}
               onClick={onNavigate}
-              {...TICK_CUE_PROPS}
+              {...HOVER_NAV_CUE_PROPS}
             >
               {item.name}
             </a>

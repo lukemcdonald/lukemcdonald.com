@@ -1,0 +1,25 @@
+---
+import { CommandPalette } from '@/components/CommandPalette'
+import { getPublishedPages } from '@/features/pages/pages.server'
+
+const livePages = await getPublishedPages({
+  include: ['i-am-a'],
+  sortBy: 'order',
+})
+
+const navigationItems = [
+  { href: '/resume', name: 'Resume' },
+  { href: '/tread-talks', name: 'TREAD Talks' },
+  ...livePages.map((page) => ({
+    href: `/${page.id}`,
+    name: page.data.title,
+  })),
+]
+---
+
+<CommandPalette
+  client:media="(hover: hover) and (pointer: fine)"
+  transition:name="command-palette"
+  transition:persist
+  navigationItems={navigationItems}
+/>

@@ -2,6 +2,8 @@ import type { ReactNode } from 'react'
 
 import { DialogTitle } from '@headlessui/react'
 
+import { PALETTE_CHROME } from './chrome'
+
 type CommandPaletteSectionProps = {
   children: ReactNode
   className?: string
@@ -11,7 +13,9 @@ type CommandPaletteSectionProps = {
 export function CommandPaletteSection({ children, className, title }: CommandPaletteSectionProps) {
   return (
     <div className={className}>
-      <DialogTitle className="mb-3 px-2 text-xs font-semibold tracking-wider text-primary-800 uppercase dark:text-primary-400">
+      <DialogTitle
+        className={`mb-3 px-2 text-xs font-semibold tracking-wider uppercase ${PALETTE_CHROME.muted}`}
+      >
         {title}
       </DialogTitle>
       {children}
