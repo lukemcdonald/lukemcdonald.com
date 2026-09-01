@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-
-# Allow all search engines to crawl the entire site
-# Sitemap location
-Sitemap: https://lukemcdonald.com/sitemap-index.xml

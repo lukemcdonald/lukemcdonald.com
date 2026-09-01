@@ -33,3 +33,6 @@ pnpm-debug.log*
 
 # pnpm
 .pnpm-store/
+
+# git worktrees
+.worktrees/

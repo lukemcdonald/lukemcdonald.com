@@ -59,11 +59,6 @@ export default [
       'perfectionist/sort-imports': [
         'error',
         {
-          type: 'natural',
-          order: 'asc',
-          ignoreCase: true,
-          newlinesBetween: 'always',
-          internalPattern: ['^@/'],
           groups: [
             'type',
             'side-effect',
@@ -71,9 +66,13 @@ export default [
             'external',
             'internal',
             ['parent', 'sibling', 'index'],
-            'object',
             'unknown',
           ],
+          ignoreCase: true,
+          internalPattern: ['^@/'],
+          newlinesBetween: 1,
+          order: 'asc',
+          type: 'natural',
         },
       ],
       'perfectionist/sort-named-imports': [
