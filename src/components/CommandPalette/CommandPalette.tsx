@@ -19,6 +19,15 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
   )
   const highlightedHref = searchQuery.trim() === '' ? undefined : filteredNavItems[0]?.href
 
+  const selectHighlightedItem = () => {
+    if (!highlightedHref) {
+      return
+    }
+
+    close()
+    window.location.assign(highlightedHref)
+  }
+
   return (
     <>
       <CommandPaletteTrigger onOpen={open} />
@@ -28,9 +37,10 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
         searchInputRef={searchInputRef}
       >
         <CommandPaletteSearch
+          onEnter={selectHighlightedItem}
+          onQueryChange={setSearchQuery}
           query={searchQuery}
           searchInputRef={searchInputRef}
-          onQueryChange={setSearchQuery}
         />
         <div className="max-h-96 overflow-y-auto p-4">
           <CommandPaletteNav
