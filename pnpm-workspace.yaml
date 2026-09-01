@@ -14,3 +14,7 @@ onlyBuiltDependencies:
   - '@tailwindcss/oxide'
   - esbuild
   - sharp
+publicHoistPattern:
+  - '*astro*'
+  - '*eslint*'
+  - '*typescript*'
