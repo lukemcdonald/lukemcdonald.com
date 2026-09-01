@@ -1,6 +1,8 @@
+import type { ImageMetadata } from 'astro'
+
 import { z } from 'astro/zod'
 
-export function createPagesSchema(image: () => z.ZodTypeAny) {
+export function createPagesSchema(image: () => z.ZodType<ImageMetadata>) {
   return z
     .object({
       date: z.coerce.date().optional(),

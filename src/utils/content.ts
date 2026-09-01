@@ -3,7 +3,7 @@
  * @param id - The content id to strip
  * @returns The content id without the `.yaml` extension
  */
-export function stripDataExtension(id: string): string {
+function stripDataExtension(id: string): string {
   return id.replace(/\.(ya?ml)$/i, '')
 }
 

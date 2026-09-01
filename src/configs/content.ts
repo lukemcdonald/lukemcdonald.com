@@ -14,5 +14,3 @@ export const CONTENT_CONFIG = {
     enableDrafts: false,
   },
 } as const
-
-export type ContentConfig = typeof CONTENT_CONFIG

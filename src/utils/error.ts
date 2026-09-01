@@ -1,9 +1,14 @@
-import type { Props as EntryProps } from '@/components/Entry/Entry.astro'
+import type { ImageMetadata } from 'astro'
 
 import notFoundImage from '@/assets/images/not-found.jpg'
 
-export interface ErrorData extends EntryProps {
+export interface ErrorData {
+  description?: string
   html?: string
+  image?: ImageMetadata | string
+  imageAlt?: string
+  subtitle?: string
+  title: string
 }
 
 export function createErrorData(status: number, errorMessage?: string): ErrorData {
@@ -23,7 +28,7 @@ export function createErrorData(status: number, errorMessage?: string): ErrorDat
   return baseData
 }
 
-export const ERROR_TYPES = {
+const ERROR_TYPES = {
   401: {
     description: 'Oops! Looks like you tried to visit a page that you do not have access to.',
     statusText: 'Unauthorized',

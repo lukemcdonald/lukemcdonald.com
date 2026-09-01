@@ -2,9 +2,7 @@ import type { ThemeColor } from '@/components/ThemeColor/types'
 import type { EffectiveMode } from '@/components/ThemeMode/types'
 
 import { DEFAULT_THEME_COLOR } from '@/components/ThemeColor/constants'
-import { getThemeColor } from '@/components/ThemeColor/utils'
 import { DEFAULT_THEME_MODE } from '@/components/ThemeMode/constants'
-import { getEffectiveThemeMode } from '@/components/ThemeMode/utils'
 
 function getHtmlElement(): HTMLElement | null {
   if (typeof window === 'undefined') {
@@ -75,16 +73,4 @@ export function getThemeInitScript(): string {
   }
 })();
 `.trim()
-}
-
-export function initializeTheme(): void {
-  if (typeof window === 'undefined') {
-    return
-  }
-
-  const color = getThemeColor()
-  const effectiveMode = getEffectiveThemeMode()
-
-  applyThemeColor(color)
-  applyThemeMode(effectiveMode)
 }

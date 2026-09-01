@@ -30,3 +30,6 @@ pnpm-debug.log*
 .netlify
 
 .playwright-mcp
+
+# pnpm
+.pnpm-store/
