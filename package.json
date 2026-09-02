@@ -24,7 +24,9 @@
     "preview": "netlify deploy --build --message \"preview $(git rev-parse --short HEAD)\"",
     "reinstall": "pnpm run clean && pnpm install --frozen-lockfile",
     "test": "tsx --test 'src/**/*.test.ts'",
-    "typecheck": "astro sync && tsc --noEmit",
+    "typecheck": "astro sync && npx tsc --noEmit",
+    "typecheck:fast": "astro sync && npx tsc --noEmit --checkers 8",
+    "typecheck:watch": "astro sync && npx tsc --noEmit --watch",
     "validate": "pnpm run -s lint && pnpm run -s format:check && pnpm run -s check && pnpm run -s test"
   },
   "dependencies": {
@@ -45,6 +47,7 @@
     "@tailwindcss/vite": "^4.3.3",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.5",
+    "@typescript/native": "npm:typescript@^7.0.2",
     "astro": "^7.2.10",
     "eslint": "^10.9.1",
     "eslint-plugin-astro": "^3.1.0",
@@ -56,7 +59,7 @@
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.13",
-    "typescript": "^6.0.3",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
     "typescript-eslint": "^8.69.0"
   },
   "packageManager": "pnpm@11.24.0"
