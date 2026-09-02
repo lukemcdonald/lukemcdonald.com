@@ -1,11 +1,12 @@
 ---
 import { getPublishedPages } from '@/features/pages/pages.server'
 
+import MobileMenu from './MobileMenu.astro'
 import NavMenu from './NavMenu'
 
 type MenuLinkItem = {
-  name: string
   href: string
+  name: string
 }
 
 interface MenuLink extends MenuLinkItem {
@@ -31,15 +32,34 @@ const menuLinks: MenuLink[] = [
   { href: '#', links: playLinks, name: 'Play' },
   { href: '#', links: liveLinks, name: 'Live' },
 ]
+
+const overlayGroups = menuLinks.flatMap((menuLink) => {
+  if (!menuLink.links?.length) {
+    return []
+  }
+
+  return [
+    {
+      links: menuLink.links,
+      name: menuLink.name,
+    },
+  ]
+})
 ---
 
-<nav class="grow duration-200 peer-hover:opacity-0 peer-hover:delay-0 peer-hover:duration-0">
-  {
-    menuLinks.map((menuLink) => (
-      <NavMenu
-        client:idle
-        link={menuLink}
-      />
-    ))
-  }
+<nav
+  class="flex grow items-center duration-200 peer-hover:opacity-0 peer-hover:delay-0 peer-hover:duration-0"
+>
+  <div class="hidden [@media(hover:hover)_and_(pointer:fine)]:contents">
+    {
+      menuLinks.map((menuLink) => (
+        <NavMenu
+          client:media="(hover: hover) and (pointer: fine)"
+          link={menuLink}
+        />
+      ))
+    }
+  </div>
+
+  <MobileMenu groups={overlayGroups} />
 </nav>

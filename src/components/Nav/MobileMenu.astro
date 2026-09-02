@@ -1,0 +1,149 @@
+---
+import MenuIcon from '@lucide/astro/icons/menu'
+import XIcon from '@lucide/astro/icons/x'
+
+import { HOVER_NAV_CUE_PROPS, TOGGLE_CUE_PROPS } from '@/components/Sound'
+import { THEME_COLORS, THEME_LABELS } from '@/components/ThemeColor/constants'
+import { MODE_LABELS, THEME_MODES } from '@/components/ThemeMode/constants'
+
+type DestinationLink = {
+  href: string
+  name: string
+}
+
+export interface Props {
+  groups: {
+    links: DestinationLink[]
+    name: string
+  }[]
+}
+
+const { groups } = Astro.props
+---
+
+<div
+  class="ml-auto [@media(hover:hover)_and_(pointer:fine)]:hidden"
+  data-mobile-menu
+>
+  <button
+    aria-controls="mobile-menu-dialog"
+    aria-expanded="false"
+    aria-haspopup="dialog"
+    aria-label="Open menu"
+    class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md bg-black/0 text-primary-900 hover:bg-black/5 focus:outline-hidden"
+    data-mobile-menu-trigger
+    type="button"
+    {...TOGGLE_CUE_PROPS}
+  >
+    <MenuIcon
+      aria-hidden="true"
+      class="h-6 w-6"
+    />
+  </button>
+
+  <dialog
+    aria-labelledby="mobile-menu-title"
+    class="mt-auto mb-0 max-h-[min(92dvh,100%)] w-full max-w-none overflow-auto overscroll-contain rounded-t-2xl border-0 bg-white p-0 text-primary-900 shadow-2xl backdrop:bg-black/40 dark:bg-primary-900 dark:text-primary-50"
+    data-mobile-menu-dialog
+    id="mobile-menu-dialog"
+  >
+    <div class="flex flex-col gap-6 px-5 py-4">
+      <div class="flex items-center justify-between gap-3">
+        <h2
+          class="text-lg font-semibold tracking-wide uppercase"
+          id="mobile-menu-title"
+        >
+          Menu
+        </h2>
+
+        <button
+          aria-label="Close menu"
+          autofocus
+          class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md hover:bg-black/5 focus:outline-hidden"
+          data-mobile-menu-close
+          type="button"
+          {...TOGGLE_CUE_PROPS}
+        >
+          <XIcon
+            aria-hidden="true"
+            class="h-6 w-6"
+          />
+        </button>
+      </div>
+
+      <nav
+        aria-label="Destinations"
+        class="flex flex-col gap-5"
+      >
+        {
+          groups.map((group) => (
+            <section class="flex flex-col">
+              <h3 class="px-2 text-sm font-semibold tracking-wide text-primary-900/70 uppercase dark:text-primary-50/70">
+                {group.name}
+              </h3>
+
+              <ul>
+                {group.links.map((link) => (
+                  <li>
+                    <a
+                      class="flex min-h-11 items-center rounded-md px-2 text-base font-semibold tracking-wide uppercase hover:bg-black/5"
+                      data-mobile-menu-link
+                      href={link.href}
+                      {...HOVER_NAV_CUE_PROPS}
+                    >
+                      {link.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))
+        }
+      </nav>
+
+      <div class="flex flex-col gap-4 border-t border-primary-200 pt-4 dark:border-primary-700">
+        <label
+          class="flex min-h-11 flex-col justify-center gap-1 text-sm font-semibold tracking-wide uppercase"
+        >
+          Theme
+          <select
+            class="min-h-11 rounded-md border border-primary-200 bg-white px-3 text-base font-normal tracking-normal text-primary-900 normal-case dark:border-primary-700 dark:bg-primary-900 dark:text-primary-50"
+            data-mobile-menu-theme
+            name="theme"
+          >
+            {THEME_COLORS.map((color) => <option value={color}>{THEME_LABELS[color]}</option>)}
+          </select>
+        </label>
+
+        <label
+          class="flex min-h-11 flex-col justify-center gap-1 text-sm font-semibold tracking-wide uppercase"
+        >
+          Appearance
+          <select
+            class="min-h-11 rounded-md border border-primary-200 bg-white px-3 text-base font-normal tracking-normal text-primary-900 normal-case dark:border-primary-700 dark:bg-primary-900 dark:text-primary-50"
+            data-mobile-menu-mode
+            name="appearance"
+          >
+            {THEME_MODES.map((mode) => <option value={mode}>{MODE_LABELS[mode]}</option>)}
+          </select>
+        </label>
+
+        <label
+          class="flex min-h-11 items-center gap-3 text-sm font-semibold tracking-wide uppercase"
+        >
+          <input
+            class="h-5 w-5 accent-primary-700"
+            data-mobile-menu-sound
+            name="sound"
+            type="checkbox"
+          />
+          Sound
+        </label>
+      </div>
+    </div>
+  </dialog>
+</div>
+
+<script>
+  import './mobile-menu'
+</script>
