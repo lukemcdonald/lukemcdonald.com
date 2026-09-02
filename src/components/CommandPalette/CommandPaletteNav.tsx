@@ -12,10 +12,6 @@ type CommandPaletteNavProps = {
 }
 
 export function CommandPaletteNav({ highlightedHref, items, onNavigate }: CommandPaletteNavProps) {
-  if (items.length === 0) {
-    return null
-  }
-
   return (
     <CommandPaletteSection
       className="mb-5"

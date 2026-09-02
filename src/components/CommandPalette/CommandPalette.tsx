@@ -59,6 +59,7 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
   return (
     <>
       <CommandPaletteTrigger onOpen={open} />
+
       <CommandPaletteDialog
         onClose={() => close()}
         open={isOpen}
@@ -70,12 +71,16 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
           query={searchQuery}
           searchInputRef={searchInputRef}
         />
+
         <div className="max-h-96 overflow-y-auto p-4">
-          <CommandPaletteNav
-            highlightedHref={highlightedHref}
-            items={filteredNavItems}
-            onNavigate={() => close({ silent: true })}
-          />
+          {filteredNavItems.length > 0 && (
+            <CommandPaletteNav
+              highlightedHref={highlightedHref}
+              items={filteredNavItems}
+              onNavigate={() => close({ silent: true })}
+            />
+          )}
+
           <CommandPaletteSection
             className="mb-5"
             title="Theme Color"
@@ -88,6 +93,7 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
               preferenceEpoch={preferenceEpoch}
             />
           </CommandPaletteSection>
+
           <div className="flex flex-wrap gap-x-10 gap-y-6">
             <CommandPaletteSection title="Appearance">
               <ThemeModePicker
