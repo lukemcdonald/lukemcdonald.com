@@ -30,8 +30,8 @@ export function CommandPaletteDialog({
         transition
       />
 
-      <div className="fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6 md:p-20">
-        <div className="flex min-h-full items-start justify-center">
+      <div className="fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6">
+        <div className="flex min-h-full items-center justify-center">
           <DialogPanel
             className="relative w-full max-w-2xl transform rounded-xl bg-white shadow-2xl transition-all data-closed:scale-95 data-closed:opacity-0 dark:bg-primary-900"
             transition

@@ -12,34 +12,28 @@ type CommandPaletteNavProps = {
 }
 
 export function CommandPaletteNav({ highlightedHref, items, onNavigate }: CommandPaletteNavProps) {
-  if (items.length === 0) {
-    return null
-  }
-
   return (
     <CommandPaletteSection
-      className="mb-6"
+      className="mb-5"
       title="Navigation"
     >
-      <div className="space-y-1">
-        {items.map((item) => {
-          const isHighlighted = item.href === highlightedHref
+      {items.map((item) => {
+        const isHighlighted = item.href === highlightedHref
 
-          return (
-            <a
-              key={item.href}
-              className={`block rounded-lg px-3 py-2 text-sm transition-colors ${PALETTE_CHROME.ink} ${
-                isHighlighted ? PALETTE_CHROME.activeFill : PALETTE_CHROME.hoverFill
-              }`}
-              href={item.href}
-              onClick={onNavigate}
-              {...HOVER_NAV_CUE_PROPS}
-            >
-              {item.name}
-            </a>
-          )
-        })}
-      </div>
+        return (
+          <a
+            key={item.href}
+            className={`-mx-2 block rounded-lg px-2 py-1.5 text-base transition-colors ${PALETTE_CHROME.ink} ${
+              isHighlighted ? PALETTE_CHROME.activeFill : PALETTE_CHROME.hoverFill
+            }`}
+            href={item.href}
+            onClick={onNavigate}
+            {...HOVER_NAV_CUE_PROPS}
+          >
+            {item.name}
+          </a>
+        )
+      })}
     </CommandPaletteSection>
   )
 }
