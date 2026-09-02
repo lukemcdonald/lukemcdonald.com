@@ -77,7 +77,7 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
             onNavigate={() => close({ silent: true })}
           />
           <CommandPaletteSection
-            className="mb-6"
+            className="mb-5"
             title="Theme Color"
           >
             <ThemeColorPicker

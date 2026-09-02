@@ -14,7 +14,7 @@ export function CommandPaletteSection({ children, className, title }: CommandPal
   return (
     <div className={className}>
       <DialogTitle
-        className={`mb-3 px-2 text-xs font-semibold tracking-wider uppercase ${PALETTE_CHROME.muted}`}
+        className={`mb-2 text-xs font-medium tracking-wider uppercase ${PALETTE_CHROME.muted}`}
       >
         {title}
       </DialogTitle>

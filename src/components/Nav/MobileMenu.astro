@@ -1,4 +1,5 @@
 ---
+import ChevronDownIcon from '@lucide/astro/icons/chevron-down'
 import MenuIcon from '@lucide/astro/icons/menu'
 import XIcon from '@lucide/astro/icons/x'
 
@@ -19,6 +20,9 @@ export interface Props {
 }
 
 const { groups } = Astro.props
+
+const selectClass =
+  'min-h-11 w-full appearance-none rounded-lg border border-black/10 bg-white py-2 pr-10 pl-3 text-base font-normal tracking-normal text-primary-900 normal-case dark:border-white/15 dark:bg-primary-900 dark:text-primary-50'
 ---
 
 <div
@@ -30,7 +34,7 @@ const { groups } = Astro.props
     aria-expanded="false"
     aria-haspopup="dialog"
     aria-label="Open menu"
-    class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md bg-black/0 text-primary-900 hover:bg-black/5 focus:outline-hidden"
+    class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md bg-black/0 text-primary-900 transition-transform hover:bg-black/5 focus:outline-hidden active:scale-[0.96]"
     data-mobile-menu-trigger
     type="button"
     {...TOGGLE_CUE_PROPS}
@@ -43,102 +47,114 @@ const { groups } = Astro.props
 
   <dialog
     aria-labelledby="mobile-menu-title"
-    class="mt-auto mb-0 max-h-[min(92dvh,100%)] w-full max-w-none overflow-auto overscroll-contain rounded-t-2xl border-0 bg-white p-0 text-primary-900 shadow-2xl backdrop:bg-black/40 dark:bg-primary-900 dark:text-primary-50"
+    class="inset-0 m-0 h-dvh max-h-dvh w-full max-w-none overflow-auto overscroll-contain rounded-none border-0 bg-white p-0 text-primary-900 backdrop:bg-black/40 dark:bg-primary-900 dark:text-primary-50"
     data-mobile-menu-dialog
     id="mobile-menu-dialog"
   >
-    <div class="flex flex-col gap-6 px-5 py-4">
-      <div class="flex items-center justify-between gap-3">
-        <h2
-          class="text-lg font-semibold tracking-wide uppercase"
-          id="mobile-menu-title"
-        >
-          Menu
-        </h2>
-
-        <button
-          aria-label="Close menu"
-          autofocus
-          class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md hover:bg-black/5 focus:outline-hidden"
-          data-mobile-menu-close
-          type="button"
-          {...TOGGLE_CUE_PROPS}
-        >
-          <XIcon
-            aria-hidden="true"
-            class="h-6 w-6"
-          />
-        </button>
-      </div>
-
-      <nav
-        aria-label="Destinations"
-        class="flex flex-col gap-5"
+    <div class="relative flex min-h-full flex-col">
+      <h2
+        class="sr-only"
+        id="mobile-menu-title"
       >
-        {
-          groups.map((group) => (
-            <section class="flex flex-col">
-              <h3 class="px-2 text-sm font-semibold tracking-wide text-primary-900/70 uppercase dark:text-primary-50/70">
-                {group.name}
-              </h3>
+        Menu
+      </h2>
 
-              <ul>
-                {group.links.map((link) => (
-                  <li>
-                    <a
-                      class="flex min-h-11 items-center rounded-md px-2 text-base font-semibold tracking-wide uppercase hover:bg-black/5"
-                      data-mobile-menu-link
-                      href={link.href}
-                      {...HOVER_NAV_CUE_PROPS}
-                    >
-                      {link.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          ))
-        }
-      </nav>
+      <button
+        aria-label="Close menu"
+        autofocus
+        class="absolute top-[max(0.5rem,env(safe-area-inset-top))] right-3 z-10 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-primary-900 transition-transform hover:bg-black/5 focus:outline-hidden active:scale-[0.96] dark:text-primary-50"
+        data-mobile-menu-close
+        type="button"
+        {...TOGGLE_CUE_PROPS}
+      >
+        <XIcon
+          aria-hidden="true"
+          class="h-6 w-6"
+        />
+      </button>
 
-      <div class="flex flex-col gap-4 border-t border-primary-200 pt-4 dark:border-primary-700">
-        <label
-          class="flex min-h-11 flex-col justify-center gap-1 text-sm font-semibold tracking-wide uppercase"
+      <div class="flex flex-1 flex-col gap-8 px-5 pt-5 pb-10">
+        <nav
+          aria-label="Destinations"
+          class="flex flex-col gap-6"
         >
-          Theme
-          <select
-            class="min-h-11 rounded-md border border-primary-200 bg-white px-3 text-base font-normal tracking-normal text-primary-900 normal-case dark:border-primary-700 dark:bg-primary-900 dark:text-primary-50"
-            data-mobile-menu-theme
-            name="theme"
+          {
+            groups.map((group) => (
+              <section class="flex flex-col gap-1">
+                <h3 class="text-xs font-medium tracking-wider text-black/50 uppercase dark:text-white/50">
+                  {group.name}
+                </h3>
+
+                <ul>
+                  {group.links.map((link) => (
+                    <li>
+                      <a
+                        class="flex items-center py-1.5 text-base font-medium tracking-wide uppercase transition-colors hover:bg-primary-200 dark:hover:bg-white/10"
+                        data-mobile-menu-link
+                        href={link.href}
+                        {...HOVER_NAV_CUE_PROPS}
+                      >
+                        {link.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))
+          }
+        </nav>
+
+        <div class="flex flex-col gap-5 border-t border-black/10 pt-6 dark:border-white/15">
+          <label
+            class="flex flex-col gap-1.5 text-xs font-medium tracking-wider text-black/50 uppercase dark:text-white/50"
           >
-            {THEME_COLORS.map((color) => <option value={color}>{THEME_LABELS[color]}</option>)}
-          </select>
-        </label>
+            Theme
+            <span class="relative block">
+              <select
+                class={selectClass}
+                data-mobile-menu-theme
+                name="theme"
+              >
+                {THEME_COLORS.map((color) => <option value={color}>{THEME_LABELS[color]}</option>)}
+              </select>
+              <ChevronDownIcon
+                aria-hidden="true"
+                class="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-primary-900 dark:text-primary-50"
+              />
+            </span>
+          </label>
 
-        <label
-          class="flex min-h-11 flex-col justify-center gap-1 text-sm font-semibold tracking-wide uppercase"
-        >
-          Appearance
-          <select
-            class="min-h-11 rounded-md border border-primary-200 bg-white px-3 text-base font-normal tracking-normal text-primary-900 normal-case dark:border-primary-700 dark:bg-primary-900 dark:text-primary-50"
-            data-mobile-menu-mode
-            name="appearance"
+          <label
+            class="flex flex-col gap-1.5 text-xs font-medium tracking-wider text-black/50 uppercase dark:text-white/50"
           >
-            {THEME_MODES.map((mode) => <option value={mode}>{MODE_LABELS[mode]}</option>)}
-          </select>
-        </label>
+            Appearance
+            <span class="relative block">
+              <select
+                class={selectClass}
+                data-mobile-menu-mode
+                name="appearance"
+              >
+                {THEME_MODES.map((mode) => <option value={mode}>{MODE_LABELS[mode]}</option>)}
+              </select>
+              <ChevronDownIcon
+                aria-hidden="true"
+                class="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-primary-900 dark:text-primary-50"
+              />
+            </span>
+          </label>
 
-        <label
-          class="flex min-h-11 items-center gap-3 text-sm font-semibold tracking-wide uppercase"
-        >
-          <input
-            class="h-5 w-5 accent-primary-700"
-            data-mobile-menu-sound
-            name="sound"
-            type="checkbox"
-          />
-          Sound
-        </label>
+          <label
+            class="flex min-h-11 items-center gap-3 text-xs font-medium tracking-wider text-black/50 uppercase dark:text-white/50"
+          >
+            <input
+              class="h-5 w-5 accent-primary-700"
+              data-mobile-menu-sound
+              name="sound"
+              type="checkbox"
+            />
+            Sound
+          </label>
+        </div>
       </div>
     </div>
   </dialog>

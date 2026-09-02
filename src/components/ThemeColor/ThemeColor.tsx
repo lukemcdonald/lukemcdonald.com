@@ -70,7 +70,7 @@ export function ThemeColorPicker({
   }
 
   return (
-    <div className="grid grid-cols-4 gap-4 px-2 sm:grid-cols-7">
+    <div className="grid grid-cols-4 gap-4 sm:grid-cols-7">
       {THEME_COLORS.map((color) => {
         const isHighlighted = color === highlightedColor
         const isSelected = selectedColor === color

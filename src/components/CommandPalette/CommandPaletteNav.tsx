@@ -18,17 +18,17 @@ export function CommandPaletteNav({ highlightedHref, items, onNavigate }: Comman
 
   return (
     <CommandPaletteSection
-      className="mb-6"
+      className="mb-5"
       title="Navigation"
     >
-      <div className="space-y-1">
+      <div>
         {items.map((item) => {
           const isHighlighted = item.href === highlightedHref
 
           return (
             <a
               key={item.href}
-              className={`block rounded-lg px-3 py-2 text-sm transition-colors ${PALETTE_CHROME.ink} ${
+              className={`-mx-2 block rounded-lg px-2 py-1.5 text-base transition-colors ${PALETTE_CHROME.ink} ${
                 isHighlighted ? PALETTE_CHROME.activeFill : PALETTE_CHROME.hoverFill
               }`}
               href={item.href}
