@@ -1,0 +1,16 @@
+{
+  "name": "lukemcdonald.com",
+  "install": "export NVM_DIR=\"$HOME/.nvm\"; . \"$NVM_DIR/nvm.sh\"; nvm install 24; export PATH=\"$NVM_DIR/versions/node/$(nvm version 24)/bin:$PATH\"; hash -r; corepack enable; corepack prepare pnpm@11.24.0 --activate; pnpm install --frozen-lockfile",
+  "terminals": [
+    {
+      "name": "dev",
+      "command": "export NVM_DIR=\"$HOME/.nvm\"; . \"$NVM_DIR/nvm.sh\"; export PATH=\"$NVM_DIR/versions/node/$(nvm version 24)/bin:$PATH\"; hash -r; corepack enable >/dev/null 2>&1; pnpm run dev"
+    }
+  ],
+  "ports": [
+    {
+      "name": "dev server",
+      "port": 3000
+    }
+  ]
+}
