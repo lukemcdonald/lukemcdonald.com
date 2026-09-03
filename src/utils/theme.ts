@@ -84,32 +84,54 @@ function canvasColorToHex(color: string): string | null {
 function resolveChromeColor(): string | null {
   const html = getHtmlElement()
 
-  if (!html || typeof getComputedStyle !== 'function') {
+  if (
+    !html ||
+    typeof document.createElement !== 'function' ||
+    typeof getComputedStyle !== 'function'
+  ) {
     return null
   }
 
-  const value = getComputedStyle(html).getPropertyValue(CHROME_COLOR_VAR).trim()
+  const token = getComputedStyle(html).getPropertyValue(CHROME_COLOR_VAR).trim()
 
-  if (!value) {
+  if (!token) {
     return null
   }
 
-  return cssColorToHex(value)
+  const probe = document.createElement('span')
+  probe.style.color = `var(${CHROME_COLOR_VAR})`
+  html.appendChild(probe)
+
+  const resolved = getComputedStyle(probe).color
+  probe.remove()
+
+  return cssColorToHex(resolved) ?? cssColorToHex(token)
 }
 
 export function syncBrowserThemeColor(): void {
-  if (typeof document === 'undefined' || typeof document.querySelector !== 'function') {
+  if (typeof document === 'undefined' || !document.head) {
     return
   }
 
-  const meta = document.querySelector<HTMLMetaElement>(`meta[name="${THEME_COLOR_META_NAME}"]`)
   const color = resolveChromeColor()
 
-  if (!meta || !color) {
+  if (!color) {
     return
   }
 
+  const existing = document.querySelector<HTMLMetaElement>(`meta[name="${THEME_COLOR_META_NAME}"]`)
+
+  if (existing?.content.toLowerCase() === color.toLowerCase()) {
+    return
+  }
+
+  // Safari often ignores in-place content updates, so replace the tag.
+  existing?.remove()
+
+  const meta = document.createElement('meta')
   meta.content = color
+  meta.name = THEME_COLOR_META_NAME
+  document.head.appendChild(meta)
 }
 
 export function applyThemeColor(color: ThemeColor): void {

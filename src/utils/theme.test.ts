@@ -47,10 +47,29 @@ describe('cssColorToHex', () => {
   })
 })
 
-function installDom(chromeColor = 'rgb(180, 159, 206)') {
+type ThemeColorMeta = {
+  content: string
+  name: string
+  remove: () => void
+}
+
+function installDom(options: { computedColor?: string; token?: string } = {}) {
+  const computedColor = options.computedColor ?? 'rgb(180, 159, 206)'
+  const token = options.token ?? 'oklch(73.7% 0.07 305)'
+
   const attributes = new Map<string, string>()
-  const meta = { content: '#abab9d', name: 'theme-color' }
+  let themeColorMeta: ThemeColorMeta | null = {
+    content: '#abab9d',
+    name: 'theme-color',
+    remove() {
+      themeColorMeta = null
+    },
+  }
+
   const html = {
+    appendChild(node: unknown) {
+      return node
+    },
     classList: {
       toggle() {},
     },
@@ -73,21 +92,48 @@ function installDom(chromeColor = 'rgb(180, 159, 206)') {
 
   Object.assign(globalThis, {
     document: {
+      createElement(tag: string) {
+        if (tag === 'meta') {
+          return {
+            content: '',
+            name: '',
+            remove() {
+              if (themeColorMeta === this) {
+                themeColorMeta = null
+              }
+            },
+          } satisfies ThemeColorMeta
+        }
+
+        return {
+          remove() {},
+          style: {
+            color: '',
+          },
+        }
+      },
       documentElement: html,
+      head: {
+        appendChild(el: ThemeColorMeta) {
+          themeColorMeta = el
+
+          return el
+        },
+      },
       querySelector(selector: string) {
-        return selector === 'meta[name="theme-color"]' ? meta : null
+        return selector === 'meta[name="theme-color"]' ? themeColorMeta : null
       },
     },
     getComputedStyle(el: unknown) {
       if (el === html) {
         return {
           getPropertyValue(name: string) {
-            return name === '--chrome-color' ? chromeColor : ''
+            return name === '--chrome-color' ? token : ''
           },
         }
       }
 
-      return { color: '' }
+      return { color: computedColor }
     },
     window: globalThis,
   })
@@ -100,7 +146,7 @@ function installDom(chromeColor = 'rgb(180, 159, 206)') {
       Object.assign(globalThis, previous)
     },
     get themeColor() {
-      return meta.content
+      return themeColorMeta?.content ?? null
     },
   }
 }
@@ -113,7 +159,7 @@ describe('syncBrowserThemeColor', () => {
     restore = undefined
   })
 
-  test('writes --chrome-color to the theme-color meta tag', () => {
+  test('replaces the theme-color meta tag with the resolved chrome color', () => {
     const dom = installDom()
     restore = () => {
       dom.restore()
@@ -125,7 +171,7 @@ describe('syncBrowserThemeColor', () => {
   })
 
   test('keeps the fallback when --chrome-color has not loaded', () => {
-    const dom = installDom('')
+    const dom = installDom({ token: '' })
     restore = () => {
       dom.restore()
     }
@@ -145,7 +191,7 @@ describe('applyThemeColor', () => {
   })
 
   test('sets data-theme and syncs the browser chrome color', () => {
-    const dom = installDom('rgb(207, 255, 3)')
+    const dom = installDom({ computedColor: 'rgb(207, 255, 3)' })
     restore = () => {
       dom.restore()
     }
@@ -166,7 +212,7 @@ describe('applyThemeMode', () => {
   })
 
   test('syncs browser chrome color after toggling mode', () => {
-    const dom = installDom('rgb(10, 20, 30)')
+    const dom = installDom({ computedColor: 'rgb(10, 20, 30)' })
     restore = () => {
       dom.restore()
     }
