@@ -1,27 +1,24 @@
 import assert from 'node:assert/strict'
 import { afterEach, describe, test } from 'node:test'
 
-import { applyThemeColor, cssColorToHex, syncBrowserThemeColor } from './theme.ts'
+import {
+  applyThemeColor,
+  cssColorToHex,
+  getBrowserThemeColor,
+  syncBrowserThemeColor,
+} from './theme.ts'
 
 describe('cssColorToHex', () => {
-  test('normalizes hex colors to #rrggbb', () => {
+  test('passes hex through and expands #rgb', () => {
     assert.equal(cssColorToHex('#b49fce'), '#b49fce')
     assert.equal(cssColorToHex('#ABC'), '#aabbcc')
-    assert.equal(cssColorToHex('#cfff03ff'), '#cfff03')
   })
 
-  test('converts comma-separated rgb and rgba values', () => {
+  test('converts rgb() from getComputedStyle', () => {
     assert.equal(cssColorToHex('rgb(180, 159, 206)'), '#b49fce')
     assert.equal(cssColorToHex('rgba(207, 255, 3, 1)'), '#cfff03')
-  })
-
-  test('converts space-separated rgb values', () => {
     assert.equal(cssColorToHex('rgb(171 171 157)'), '#abab9d')
     assert.equal(cssColorToHex('rgb(144 173 204 / 1)'), '#90adcc')
-  })
-
-  test('converts percentage rgb channels', () => {
-    assert.equal(cssColorToHex('rgb(100%, 0%, 0%)'), '#ff0000')
   })
 
   test('returns null for unrecognized colors', () => {
@@ -30,22 +27,25 @@ describe('cssColorToHex', () => {
   })
 })
 
+describe('getBrowserThemeColor', () => {
+  test('returns a hex fallback when CSS is unavailable', () => {
+    assert.equal(getBrowserThemeColor('#abab9d'), '#abab9d')
+    assert.equal(getBrowserThemeColor('#ABC'), '#aabbcc')
+  })
+})
+
 type ThemeColorMeta = {
   content: string
   name: string
-  remove: () => void
 }
 
 function installDom(options: { computedColor?: string; token?: string } = {}) {
   const { computedColor = 'rgb(180, 159, 206)', token = 'oklch(73.7% 0.07 305)' } = options
 
   const attributes = new Map<string, string>()
-  let themeColorMeta: ThemeColorMeta | null = {
-    content: '#122023',
+  const themeColorMeta: ThemeColorMeta = {
+    content: '#abab9d',
     name: 'theme-color',
-    remove() {
-      themeColorMeta = null
-    },
   }
 
   const html = {
@@ -67,35 +67,15 @@ function installDom(options: { computedColor?: string; token?: string } = {}) {
   }
 
   const document = {
-    createElement(tag: string) {
-      if (tag === 'meta') {
-        return {
-          content: '',
-          name: '',
-          remove() {
-            if (themeColorMeta === this) {
-              themeColorMeta = null
-            }
-          },
-        } satisfies ThemeColorMeta
-      }
-
+    createElement() {
       return {
         remove() {},
-        setAttribute() {},
         style: {
-          cssText: '',
+          color: '',
         },
       }
     },
     documentElement: html,
-    head: {
-      appendChild(el: ThemeColorMeta) {
-        themeColorMeta = el
-
-        return el
-      },
-    },
     querySelector(selector: string) {
       if (selector === 'meta[name="theme-color"]') {
         return themeColorMeta
@@ -113,7 +93,7 @@ function installDom(options: { computedColor?: string; token?: string } = {}) {
 
   Object.assign(globalThis, {
     document,
-    getComputedStyle(el: { style?: { cssText?: string } }) {
+    getComputedStyle(el: { style?: { color?: string } }) {
       if (el === html) {
         return {
           getPropertyValue(name: string) {
@@ -137,7 +117,7 @@ function installDom(options: { computedColor?: string; token?: string } = {}) {
       Object.assign(globalThis, previous)
     },
     get themeColor() {
-      return themeColorMeta?.content ?? null
+      return themeColorMeta.content
     },
   }
 }
@@ -150,7 +130,7 @@ describe('syncBrowserThemeColor', () => {
     restore = undefined
   })
 
-  test('replaces the theme-color meta tag with the resolved header color', () => {
+  test('updates the theme-color meta tag from --color-primary-500', () => {
     const dom = installDom()
     restore = () => {
       dom.restore()
@@ -161,7 +141,7 @@ describe('syncBrowserThemeColor', () => {
     assert.equal(dom.themeColor, '#b49fce')
   })
 
-  test('does nothing when the primary token has not loaded', () => {
+  test('keeps the fallback when the primary token has not loaded', () => {
     const dom = installDom({ token: '' })
     restore = () => {
       dom.restore()
@@ -169,7 +149,7 @@ describe('syncBrowserThemeColor', () => {
 
     syncBrowserThemeColor()
 
-    assert.equal(dom.themeColor, '#122023')
+    assert.equal(dom.themeColor, '#abab9d')
   })
 })
 

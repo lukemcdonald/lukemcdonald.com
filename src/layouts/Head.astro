@@ -8,7 +8,7 @@ import PostHog from '@/components/PostHog.astro'
 import { GLOBAL_CONFIG, IS_PROD } from '@/configs/global'
 import { buildGraphJsonLd, buildSocialMetaTags } from '@/utils/seo'
 import { stripHtmlAndTruncate } from '@/utils/text'
-import { getThemeInitScript } from '@/utils/theme'
+import { getBrowserThemeColor, getThemeInitScript } from '@/utils/theme'
 
 export interface Props {
   generator?: string
@@ -192,10 +192,10 @@ const socialMetaTags = buildSocialMetaTags(metaForSeo)
     set:html={JSON.stringify(structuredData)}
   />
 
-  <!-- Theme color: fallback until JS syncs --color-primary-500 (entry header) -->
+  <!-- Theme color: --color-primary-500, or GLOBAL_CONFIG.themeColor before CSS/JS -->
   <meta
     name="theme-color"
-    content={GLOBAL_CONFIG.themeColor}
+    content={getBrowserThemeColor(GLOBAL_CONFIG.themeColor)}
   />
 
   <!-- Prefetch resume page for snappier nav -->

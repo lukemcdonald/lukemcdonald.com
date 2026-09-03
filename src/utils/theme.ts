@@ -16,57 +16,48 @@ function getHtmlElement(): HTMLElement | null {
 }
 
 /**
- * Normalize a computed CSS color to #rrggbb for `<meta name="theme-color">`.
- * Safari is most reliable with hex; getComputedStyle typically returns rgb().
+ * Normalize a CSS color to #rrggbb. Hex passes through; rgb() from
+ * getComputedStyle is converted. oklch and other spaces need the browser to
+ * resolve them first (see getBrowserThemeColor).
  */
 export function cssColorToHex(color: string): string | null {
   const value = color.trim()
 
-  if (/^#(?:[0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(value)) {
-    if (value.length === 4 || value.length === 5) {
-      const [, r, g, b] = value
-
-      return `#${r}${r}${g}${g}${b}${b}`.toLowerCase()
-    }
-
-    return value.slice(0, 7).toLowerCase()
+  if (/^#[0-9a-f]{6}$/i.test(value)) {
+    return value.toLowerCase()
   }
 
-  const commaMatch = value.match(/^rgba?\(\s*([\d.]+%?)\s*,\s*([\d.]+%?)\s*,\s*([\d.]+%?)/i)
-  const spaceMatch = value.match(/^rgba?\(\s*([\d.]+%?)\s+([\d.]+%?)\s+([\d.]+%?)/i)
-  const match = commaMatch ?? spaceMatch
+  if (/^#[0-9a-f]{3}$/i.test(value)) {
+    const [, r, g, b] = value.toLowerCase()
 
-  if (!match) {
+    return `#${r}${r}${g}${g}${b}${b}`
+  }
+
+  const rgb = value.match(/^rgba?\(\s*([\d.]+)(?:\s*,\s*|\s+)([\d.]+)(?:\s*,\s*|\s+)([\d.]+)/i)
+
+  if (!rgb) {
     return null
   }
 
-  const channels = [match[1], match[2], match[3]].map((channel) => {
-    if (!channel) {
-      return '00'
-    }
+  const hex = [rgb[1], rgb[2], rgb[3]]
+    .map((channel) => {
+      return Math.round(Number(channel)).toString(16).padStart(2, '0')
+    })
+    .join('')
 
-    const isPercent = channel.endsWith('%')
-    const n = Number.parseFloat(channel)
-    const byte = isPercent ? (n / 100) * 255 : n
-    const clamped = Math.min(255, Math.max(0, Math.round(byte)))
-
-    return clamped.toString(16).padStart(2, '0')
-  })
-
-  return `#${channels.join('')}`
+  return `#${hex}`
 }
 
-function resolveBrowserThemeColor(): string | null {
-  const html = getHtmlElement()
-
+function readPrimaryColor(): string | null {
   if (
-    !html ||
+    typeof document === 'undefined' ||
     typeof document.createElement !== 'function' ||
     typeof getComputedStyle !== 'function'
   ) {
     return null
   }
 
+  const html = document.documentElement
   const token = getComputedStyle(html).getPropertyValue(BROWSER_THEME_COLOR_VAR).trim()
 
   if (!token) {
@@ -74,54 +65,40 @@ function resolveBrowserThemeColor(): string | null {
   }
 
   const probe = document.createElement('span')
-  probe.setAttribute('aria-hidden', 'true')
-  probe.style.cssText = `color:var(${BROWSER_THEME_COLOR_VAR});height:0;overflow:hidden;pointer-events:none;position:absolute;width:0`
+  probe.style.color = `var(${BROWSER_THEME_COLOR_VAR})`
   html.appendChild(probe)
 
   const resolved = getComputedStyle(probe).color
-
-  if (typeof probe.remove === 'function') {
-    probe.remove()
-  }
+  probe.remove()
 
   if (!resolved || resolved === 'rgba(0, 0, 0, 0)' || resolved === 'transparent') {
     return null
   }
 
-  return cssColorToHex(resolved) ?? resolved
+  return resolved
 }
 
 /**
- * Keep Safari/Chrome UI chrome in sync with the entry header (`bg-primary-500`).
- * iOS Safari often ignores in-place `content` updates, so the tag is replaced.
+ * Resolve the browser chrome color from `--color-primary-500`, falling back
+ * to `fallback` (typically GLOBAL_CONFIG.themeColor). Meta tags cannot use
+ * CSS variables, so this returns a hex string.
  */
+export function getBrowserThemeColor(fallback: string): string {
+  return cssColorToHex(readPrimaryColor() ?? fallback) ?? fallback
+}
+
 export function syncBrowserThemeColor(): void {
-  if (
-    typeof document === 'undefined' ||
-    typeof document.createElement !== 'function' ||
-    !document.head
-  ) {
+  if (typeof document === 'undefined' || typeof document.querySelector !== 'function') {
     return
   }
 
-  const color = resolveBrowserThemeColor()
+  const meta = document.querySelector<HTMLMetaElement>(`meta[name="${THEME_COLOR_META_NAME}"]`)
 
-  if (!color) {
+  if (!meta) {
     return
   }
 
-  const existing = document.querySelector<HTMLMetaElement>(`meta[name="${THEME_COLOR_META_NAME}"]`)
-
-  if (existing?.content.toLowerCase() === color.toLowerCase()) {
-    return
-  }
-
-  existing?.remove()
-
-  const meta = document.createElement('meta')
-  meta.content = color
-  meta.name = THEME_COLOR_META_NAME
-  document.head.appendChild(meta)
+  meta.content = getBrowserThemeColor(meta.content)
 }
 
 export function applyThemeColor(color: ThemeColor): void {
