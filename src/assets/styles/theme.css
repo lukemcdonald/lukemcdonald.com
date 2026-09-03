@@ -1,24 +1,5 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
-/*
- * Safari cannot use var() in <meta name="theme-color">.
- * JS reads --chrome-color and writes hex. CSS picks the token:
- * below lg the entry header (500), at lg+ the padded shell (50 / 900).
- */
-:root {
-  --chrome-color: var(--color-primary-500);
-}
-
-@media (width >= theme(--breakpoint-lg)) {
-  :root {
-    --chrome-color: var(--color-primary-50);
-  }
-
-  :root.dark {
-    --chrome-color: var(--color-primary-900);
-  }
-}
-
 @theme {
   --breakpoint-xl: 1280px;
   --breakpoint-lg: 1080px;

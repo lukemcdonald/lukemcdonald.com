@@ -20,7 +20,6 @@ export const GLOBAL_CONFIG = {
   lang: 'en',
   name: SITE_NAME,
   site: SITE_URLS,
-  // Fallback theme-color until JS reads --chrome-color.
-  themeColor: '#abab9d',
+  themeColor: '#122023',
   timezone: 'America/Chicago',
 } as const
