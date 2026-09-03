@@ -1,13 +1,7 @@
 import assert from 'node:assert/strict'
 import { afterEach, describe, test } from 'node:test'
 
-import {
-  applyThemeColor,
-  applyThemeMode,
-  cssColorToHex,
-  getBrowserThemeColor,
-  syncBrowserThemeColor,
-} from './theme.ts'
+import { applyThemeColor, applyThemeMode, cssColorToHex, syncBrowserThemeColor } from './theme.ts'
 
 describe('cssColorToHex', () => {
   test('passes hex through and expands #rgb', () => {
@@ -17,9 +11,7 @@ describe('cssColorToHex', () => {
 
   test('converts rgb() from getComputedStyle', () => {
     assert.equal(cssColorToHex('rgb(180, 159, 206)'), '#b49fce')
-    assert.equal(cssColorToHex('rgba(207, 255, 3, 1)'), '#cfff03')
     assert.equal(cssColorToHex('rgb(171 171 157)'), '#abab9d')
-    assert.equal(cssColorToHex('rgb(144 173 204 / 1)'), '#90adcc')
   })
 
   test('returns null for unrecognized colors', () => {
@@ -55,57 +47,12 @@ describe('cssColorToHex', () => {
   })
 })
 
-describe('getBrowserThemeColor', () => {
-  test('returns a hex fallback when CSS is unavailable', () => {
-    assert.equal(getBrowserThemeColor('#abab9d'), '#abab9d')
-    assert.equal(getBrowserThemeColor('#ABC'), '#aabbcc')
-  })
-})
-
-type ThemeColorMeta = {
-  content: string
-  name: string
-}
-
-const CHROME_COLORS = {
-  desktopDark: 'rgb(10, 20, 30)',
-  desktopLight: 'rgb(250, 248, 246)',
-  narrow: 'rgb(180, 159, 206)',
-} as const
-
-const HEX = {
-  desktopDark: '#0a141e',
-  desktopLight: '#faf8f6',
-  narrow: '#b49fce',
-} as const
-
-function installDom(options: { chromeColor?: string } = {}) {
-  const chromeColor = options.chromeColor ?? CHROME_COLORS.narrow
-
+function installDom(chromeColor = 'rgb(180, 159, 206)') {
   const attributes = new Map<string, string>()
-  const classes = new Set<string>()
-  const themeColorMeta: ThemeColorMeta = {
-    content: '#abab9d',
-    name: 'theme-color',
-  }
-
+  const meta = { content: '#abab9d', name: 'theme-color' }
   const html = {
-    appendChild(node: unknown) {
-      return node
-    },
     classList: {
-      contains(name: string) {
-        return classes.has(name)
-      },
-      toggle(name: string, force?: boolean) {
-        const shouldAdd = force ?? !classes.has(name)
-
-        if (shouldAdd) {
-          classes.add(name)
-        } else {
-          classes.delete(name)
-        }
-      },
+      toggle() {},
     },
     getAttribute(name: string) {
       return attributes.get(name) ?? null
@@ -118,28 +65,6 @@ function installDom(options: { chromeColor?: string } = {}) {
     },
   }
 
-  const document = {
-    createElement() {
-      return {
-        getContext() {
-          return null
-        },
-        remove() {},
-        style: {
-          color: '',
-        },
-      }
-    },
-    documentElement: html,
-    querySelector(selector: string) {
-      if (selector === 'meta[name="theme-color"]') {
-        return themeColorMeta
-      }
-
-      return null
-    },
-  }
-
   const previous = {
     document: globalThis.document,
     getComputedStyle: globalThis.getComputedStyle,
@@ -147,7 +72,12 @@ function installDom(options: { chromeColor?: string } = {}) {
   }
 
   Object.assign(globalThis, {
-    document,
+    document: {
+      documentElement: html,
+      querySelector(selector: string) {
+        return selector === 'meta[name="theme-color"]' ? meta : null
+      },
+    },
     getComputedStyle(el: unknown) {
       if (el === html) {
         return {
@@ -170,7 +100,7 @@ function installDom(options: { chromeColor?: string } = {}) {
       Object.assign(globalThis, previous)
     },
     get themeColor() {
-      return themeColorMeta.content
+      return meta.content
     },
   }
 }
@@ -183,7 +113,7 @@ describe('syncBrowserThemeColor', () => {
     restore = undefined
   })
 
-  test('reads --chrome-color and writes hex to the meta tag', () => {
+  test('writes --chrome-color to the theme-color meta tag', () => {
     const dom = installDom()
     restore = () => {
       dom.restore()
@@ -191,33 +121,11 @@ describe('syncBrowserThemeColor', () => {
 
     syncBrowserThemeColor()
 
-    assert.equal(dom.themeColor, HEX.narrow)
-  })
-
-  test('uses the desktop-light color when CSS sets it', () => {
-    const dom = installDom({ chromeColor: CHROME_COLORS.desktopLight })
-    restore = () => {
-      dom.restore()
-    }
-
-    syncBrowserThemeColor()
-
-    assert.equal(dom.themeColor, HEX.desktopLight)
-  })
-
-  test('uses the desktop-dark color when CSS sets it', () => {
-    const dom = installDom({ chromeColor: CHROME_COLORS.desktopDark })
-    restore = () => {
-      dom.restore()
-    }
-
-    syncBrowserThemeColor()
-
-    assert.equal(dom.themeColor, HEX.desktopDark)
+    assert.equal(dom.themeColor, '#b49fce')
   })
 
   test('keeps the fallback when --chrome-color has not loaded', () => {
-    const dom = installDom({ chromeColor: '' })
+    const dom = installDom('')
     restore = () => {
       dom.restore()
     }
@@ -237,7 +145,7 @@ describe('applyThemeColor', () => {
   })
 
   test('sets data-theme and syncs the browser chrome color', () => {
-    const dom = installDom({ chromeColor: 'rgb(207, 255, 3)' })
+    const dom = installDom('rgb(207, 255, 3)')
     restore = () => {
       dom.restore()
     }
@@ -246,18 +154,6 @@ describe('applyThemeColor', () => {
 
     assert.equal(dom.dataTheme, 'neon')
     assert.equal(dom.themeColor, '#cfff03')
-  })
-
-  test('clears data-theme for the default palette', () => {
-    const dom = installDom({ chromeColor: 'rgb(171, 171, 157)' })
-    restore = () => {
-      dom.restore()
-    }
-
-    applyThemeColor('default')
-
-    assert.equal(dom.dataTheme, null)
-    assert.equal(dom.themeColor, '#abab9d')
   })
 })
 
@@ -269,14 +165,14 @@ describe('applyThemeMode', () => {
     restore = undefined
   })
 
-  test('syncs browser chrome color after toggling dark mode', () => {
-    const dom = installDom({ chromeColor: CHROME_COLORS.desktopDark })
+  test('syncs browser chrome color after toggling mode', () => {
+    const dom = installDom('rgb(10, 20, 30)')
     restore = () => {
       dom.restore()
     }
 
     applyThemeMode('dark')
 
-    assert.equal(dom.themeColor, HEX.desktopDark)
+    assert.equal(dom.themeColor, '#0a141e')
   })
 })

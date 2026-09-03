@@ -1,19 +1,15 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * --chrome-color drives <meta name="theme-color"> via JS.
- * Safari refuses var() in that meta tag, so JS reads this variable,
- * converts it to hex via canvas, then writes the meta content.
- * CSS owns the breakpoint logic; JS only does the hex conversion.
- *
- * Below lg: entry header (bg-primary-500) — same for light and dark.
- * At lg+:   padded shell bg — primary-50 light, primary-900 dark.
+ * Safari cannot use var() in <meta name="theme-color">.
+ * JS reads --chrome-color and writes hex. CSS picks the token:
+ * below lg the entry header (500), at lg+ the padded shell (50 / 900).
  */
 :root {
   --chrome-color: var(--color-primary-500);
 }
 
-@media (min-width: theme(--breakpoint-lg)) {
+@media (width >= theme(--breakpoint-lg)) {
   :root {
     --chrome-color: var(--color-primary-50);
   }

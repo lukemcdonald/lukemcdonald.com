@@ -20,7 +20,7 @@ export const GLOBAL_CONFIG = {
   lang: 'en',
   name: SITE_NAME,
   site: SITE_URLS,
-  // Default --color-primary-500 (narrow / entry header). Client JS replaces this.
+  // Fallback theme-color until JS reads --chrome-color.
   themeColor: '#abab9d',
   timezone: 'America/Chicago',
 } as const

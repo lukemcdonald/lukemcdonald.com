@@ -16,8 +16,8 @@ function getHtmlElement(): HTMLElement | null {
 }
 
 /**
- * Normalize a CSS color to #rrggbb. Hex passes through; rgb() from
- * getComputedStyle is converted. oklch and other spaces use a canvas.
+ * Normalize a CSS color to #rrggbb for `<meta name="theme-color">`.
+ * Hex passes through; rgb() is parsed; oklch and similar use a canvas.
  */
 export function cssColorToHex(color: string): string | null {
   const value = color.trim()
@@ -34,17 +34,17 @@ export function cssColorToHex(color: string): string | null {
 
   const rgb = value.match(/^rgba?\(\s*([\d.]+)(?:\s*,\s*|\s+)([\d.]+)(?:\s*,\s*|\s+)([\d.]+)/i)
 
-  if (!rgb) {
-    return canvasColorToHex(value)
+  if (rgb) {
+    const hex = [rgb[1], rgb[2], rgb[3]]
+      .map((channel) => {
+        return Math.round(Number(channel)).toString(16).padStart(2, '0')
+      })
+      .join('')
+
+    return `#${hex}`
   }
 
-  const hex = [rgb[1], rgb[2], rgb[3]]
-    .map((channel) => {
-      return Math.round(Number(channel)).toString(16).padStart(2, '0')
-    })
-    .join('')
-
-  return `#${hex}`
+  return canvasColorToHex(value)
 }
 
 function canvasColorToHex(color: string): string | null {
@@ -81,7 +81,7 @@ function canvasColorToHex(color: string): string | null {
   return `#${[r, g, b].map((channel) => channel.toString(16).padStart(2, '0')).join('')}`
 }
 
-function readChromeColor(): string | null {
+function resolveChromeColor(): string | null {
   const html = getHtmlElement()
 
   if (!html || typeof getComputedStyle !== 'function') {
@@ -94,16 +94,7 @@ function readChromeColor(): string | null {
     return null
   }
 
-  return value
-}
-
-/**
- * Resolve the browser chrome color from `--chrome-color`, falling back
- * to `fallback` (typically GLOBAL_CONFIG.themeColor). Meta tags cannot use
- * CSS variables, so this returns a hex string.
- */
-export function getBrowserThemeColor(fallback: string): string {
-  return cssColorToHex(readChromeColor() ?? fallback) ?? fallback
+  return cssColorToHex(value)
 }
 
 export function syncBrowserThemeColor(): void {
@@ -112,12 +103,13 @@ export function syncBrowserThemeColor(): void {
   }
 
   const meta = document.querySelector<HTMLMetaElement>(`meta[name="${THEME_COLOR_META_NAME}"]`)
+  const color = resolveChromeColor()
 
-  if (!meta) {
+  if (!meta || !color) {
     return
   }
 
-  meta.content = getBrowserThemeColor(meta.content)
+  meta.content = color
 }
 
 export function applyThemeColor(color: ThemeColor): void {
