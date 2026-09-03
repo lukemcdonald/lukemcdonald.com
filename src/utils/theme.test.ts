@@ -3,6 +3,7 @@ import { afterEach, describe, test } from 'node:test'
 
 import {
   applyThemeColor,
+  applyThemeMode,
   cssColorToHex,
   getBrowserThemeColor,
   syncBrowserThemeColor,
@@ -22,8 +23,35 @@ describe('cssColorToHex', () => {
   })
 
   test('returns null for unrecognized colors', () => {
-    assert.equal(cssColorToHex('oklch(73.7% 0.07 305)'), null)
     assert.equal(cssColorToHex(''), null)
+  })
+
+  test('converts oklch through a canvas when the browser can rasterize it', () => {
+    const previous = globalThis.document
+
+    Object.assign(globalThis, {
+      document: {
+        createElement() {
+          return {
+            getContext() {
+              return {
+                fillRect() {},
+                fillStyle: '',
+                getImageData() {
+                  return { data: [18, 16, 0, 255] }
+                },
+              }
+            },
+          }
+        },
+      },
+    })
+
+    try {
+      assert.equal(cssColorToHex('oklch(17.1% 0.035 105)'), '#121000')
+    } finally {
+      globalThis.document = previous
+    }
   })
 })
 
@@ -39,10 +67,23 @@ type ThemeColorMeta = {
   name: string
 }
 
-function installDom(options: { computedColor?: string; token?: string } = {}) {
-  const { computedColor = 'rgb(180, 159, 206)', token = 'oklch(73.7% 0.07 305)' } = options
+const CHROME_COLORS = {
+  desktopDark: 'rgb(10, 20, 30)',
+  desktopLight: 'rgb(250, 248, 246)',
+  narrow: 'rgb(180, 159, 206)',
+} as const
+
+const HEX = {
+  desktopDark: '#0a141e',
+  desktopLight: '#faf8f6',
+  narrow: '#b49fce',
+} as const
+
+function installDom(options: { chromeColor?: string } = {}) {
+  const chromeColor = options.chromeColor ?? CHROME_COLORS.narrow
 
   const attributes = new Map<string, string>()
+  const classes = new Set<string>()
   const themeColorMeta: ThemeColorMeta = {
     content: '#abab9d',
     name: 'theme-color',
@@ -53,7 +94,18 @@ function installDom(options: { computedColor?: string; token?: string } = {}) {
       return node
     },
     classList: {
-      toggle() {},
+      contains(name: string) {
+        return classes.has(name)
+      },
+      toggle(name: string, force?: boolean) {
+        const shouldAdd = force ?? !classes.has(name)
+
+        if (shouldAdd) {
+          classes.add(name)
+        } else {
+          classes.delete(name)
+        }
+      },
     },
     getAttribute(name: string) {
       return attributes.get(name) ?? null
@@ -69,6 +121,9 @@ function installDom(options: { computedColor?: string; token?: string } = {}) {
   const document = {
     createElement() {
       return {
+        getContext() {
+          return null
+        },
         remove() {},
         style: {
           color: '',
@@ -93,18 +148,16 @@ function installDom(options: { computedColor?: string; token?: string } = {}) {
 
   Object.assign(globalThis, {
     document,
-    getComputedStyle(el: { style?: { color?: string } }) {
+    getComputedStyle(el: unknown) {
       if (el === html) {
         return {
           getPropertyValue(name: string) {
-            return name === '--color-primary-500' ? token : ''
+            return name === '--chrome-color' ? chromeColor : ''
           },
         }
       }
 
-      return {
-        color: computedColor,
-      }
+      return { color: '' }
     },
     window: globalThis,
   })
@@ -130,7 +183,7 @@ describe('syncBrowserThemeColor', () => {
     restore = undefined
   })
 
-  test('updates the theme-color meta tag from --color-primary-500', () => {
+  test('reads --chrome-color and writes hex to the meta tag', () => {
     const dom = installDom()
     restore = () => {
       dom.restore()
@@ -138,11 +191,33 @@ describe('syncBrowserThemeColor', () => {
 
     syncBrowserThemeColor()
 
-    assert.equal(dom.themeColor, '#b49fce')
+    assert.equal(dom.themeColor, HEX.narrow)
   })
 
-  test('keeps the fallback when the primary token has not loaded', () => {
-    const dom = installDom({ token: '' })
+  test('uses the desktop-light color when CSS sets it', () => {
+    const dom = installDom({ chromeColor: CHROME_COLORS.desktopLight })
+    restore = () => {
+      dom.restore()
+    }
+
+    syncBrowserThemeColor()
+
+    assert.equal(dom.themeColor, HEX.desktopLight)
+  })
+
+  test('uses the desktop-dark color when CSS sets it', () => {
+    const dom = installDom({ chromeColor: CHROME_COLORS.desktopDark })
+    restore = () => {
+      dom.restore()
+    }
+
+    syncBrowserThemeColor()
+
+    assert.equal(dom.themeColor, HEX.desktopDark)
+  })
+
+  test('keeps the fallback when --chrome-color has not loaded', () => {
+    const dom = installDom({ chromeColor: '' })
     restore = () => {
       dom.restore()
     }
@@ -162,7 +237,7 @@ describe('applyThemeColor', () => {
   })
 
   test('sets data-theme and syncs the browser chrome color', () => {
-    const dom = installDom({ computedColor: 'rgb(207, 255, 3)' })
+    const dom = installDom({ chromeColor: 'rgb(207, 255, 3)' })
     restore = () => {
       dom.restore()
     }
@@ -174,7 +249,7 @@ describe('applyThemeColor', () => {
   })
 
   test('clears data-theme for the default palette', () => {
-    const dom = installDom({ computedColor: 'rgb(171, 171, 157)' })
+    const dom = installDom({ chromeColor: 'rgb(171, 171, 157)' })
     restore = () => {
       dom.restore()
     }
@@ -183,5 +258,25 @@ describe('applyThemeColor', () => {
 
     assert.equal(dom.dataTheme, null)
     assert.equal(dom.themeColor, '#abab9d')
+  })
+})
+
+describe('applyThemeMode', () => {
+  let restore: (() => void) | undefined
+
+  afterEach(() => {
+    restore?.()
+    restore = undefined
+  })
+
+  test('syncs browser chrome color after toggling dark mode', () => {
+    const dom = installDom({ chromeColor: CHROME_COLORS.desktopDark })
+    restore = () => {
+      dom.restore()
+    }
+
+    applyThemeMode('dark')
+
+    assert.equal(dom.themeColor, HEX.desktopDark)
   })
 })

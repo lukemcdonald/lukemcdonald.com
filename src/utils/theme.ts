@@ -4,7 +4,7 @@ import type { EffectiveMode } from '@/components/ThemeMode/types'
 import { DEFAULT_THEME_COLOR } from '@/components/ThemeColor/constants'
 import { DEFAULT_THEME_MODE } from '@/components/ThemeMode/constants'
 
-const BROWSER_THEME_COLOR_VAR = '--color-primary-500'
+const CHROME_COLOR_VAR = '--chrome-color'
 const THEME_COLOR_META_NAME = 'theme-color'
 
 function getHtmlElement(): HTMLElement | null {
@@ -17,8 +17,7 @@ function getHtmlElement(): HTMLElement | null {
 
 /**
  * Normalize a CSS color to #rrggbb. Hex passes through; rgb() from
- * getComputedStyle is converted. oklch and other spaces need the browser to
- * resolve them first (see getBrowserThemeColor).
+ * getComputedStyle is converted. oklch and other spaces use a canvas.
  */
 export function cssColorToHex(color: string): string | null {
   const value = color.trim()
@@ -36,7 +35,7 @@ export function cssColorToHex(color: string): string | null {
   const rgb = value.match(/^rgba?\(\s*([\d.]+)(?:\s*,\s*|\s+)([\d.]+)(?:\s*,\s*|\s+)([\d.]+)/i)
 
   if (!rgb) {
-    return null
+    return canvasColorToHex(value)
   }
 
   const hex = [rgb[1], rgb[2], rgb[3]]
@@ -48,43 +47,63 @@ export function cssColorToHex(color: string): string | null {
   return `#${hex}`
 }
 
-function readPrimaryColor(): string | null {
+function canvasColorToHex(color: string): string | null {
   if (
     typeof document === 'undefined' ||
     typeof document.createElement !== 'function' ||
-    typeof getComputedStyle !== 'function'
+    !/^(?:oklch|oklab|lab|lch|hwb|color)\(/i.test(color)
   ) {
     return null
   }
 
-  const html = document.documentElement
-  const token = getComputedStyle(html).getPropertyValue(BROWSER_THEME_COLOR_VAR).trim()
+  const canvas = document.createElement('canvas')
 
-  if (!token) {
+  if (typeof canvas.getContext !== 'function') {
     return null
   }
 
-  const probe = document.createElement('span')
-  probe.style.color = `var(${BROWSER_THEME_COLOR_VAR})`
-  html.appendChild(probe)
+  canvas.height = 1
+  canvas.width = 1
+  const ctx = canvas.getContext('2d')
 
-  const resolved = getComputedStyle(probe).color
-  probe.remove()
-
-  if (!resolved || resolved === 'rgba(0, 0, 0, 0)' || resolved === 'transparent') {
+  if (!ctx) {
     return null
   }
 
-  return resolved
+  ctx.fillStyle = color
+  ctx.fillRect(0, 0, 1, 1)
+  const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data
+
+  if (a === 0 || r === undefined || g === undefined || b === undefined) {
+    return null
+  }
+
+  return `#${[r, g, b].map((channel) => channel.toString(16).padStart(2, '0')).join('')}`
+}
+
+function readChromeColor(): string | null {
+  const html = getHtmlElement()
+
+  if (!html || typeof getComputedStyle !== 'function') {
+    return null
+  }
+
+  const value = getComputedStyle(html).getPropertyValue(CHROME_COLOR_VAR).trim()
+
+  if (!value) {
+    return null
+  }
+
+  return value
 }
 
 /**
- * Resolve the browser chrome color from `--color-primary-500`, falling back
+ * Resolve the browser chrome color from `--chrome-color`, falling back
  * to `fallback` (typically GLOBAL_CONFIG.themeColor). Meta tags cannot use
  * CSS variables, so this returns a hex string.
  */
 export function getBrowserThemeColor(fallback: string): string {
-  return cssColorToHex(readPrimaryColor() ?? fallback) ?? fallback
+  return cssColorToHex(readChromeColor() ?? fallback) ?? fallback
 }
 
 export function syncBrowserThemeColor(): void {
@@ -125,6 +144,7 @@ export function applyThemeMode(mode: EffectiveMode): void {
   }
 
   html.classList.toggle('dark', mode === 'dark')
+  syncBrowserThemeColor()
 }
 
 /**
