@@ -20,6 +20,7 @@ export const GLOBAL_CONFIG = {
   lang: 'en',
   name: SITE_NAME,
   site: SITE_URLS,
-  themeColor: '#122023',
+  // Default --color-primary-500. Client JS replaces this with the active theme.
+  themeColor: '#abab9d',
   timezone: 'America/Chicago',
 } as const
