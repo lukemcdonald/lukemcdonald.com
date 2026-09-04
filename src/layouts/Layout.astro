@@ -38,7 +38,6 @@ const meta: SeoMeta = {
 
 <!doctype html>
 <html
-  class="bg-primary-500 lg:bg-primary-50 lg:dark:bg-primary-900"
   dir={dir}
   lang={lang}
 >
@@ -47,9 +46,7 @@ const meta: SeoMeta = {
     meta={meta}
   />
 
-  <body
-    class:list={[!bodyClass && 'bg-primary-500 lg:bg-primary-50 lg:dark:bg-primary-900', bodyClass]}
-  >
+  <body class:list={{ [bodyClass!]: Boolean(bodyClass) }}>
     <slot />
 
     <!-- Theme initialization, system preference watcher, and sound bootstrap -->
