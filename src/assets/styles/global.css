@@ -6,3 +6,31 @@
 :root {
   @apply transition-colors;
 }
+
+html:has(dialog[open]),
+html:has(dialog[open]) body {
+  @apply overflow-hidden overscroll-none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-mobile-menu-dialog] {
+    transition:
+      display 200ms allow-discrete,
+      overlay 200ms allow-discrete;
+  }
+
+  [data-mobile-menu-sheet] {
+    translate: 0 100%;
+    transition: translate 200ms ease-out;
+  }
+
+  [data-mobile-menu-dialog][open] [data-mobile-menu-sheet] {
+    translate: 0 0;
+  }
+
+  @starting-style {
+    [data-mobile-menu-dialog][open] [data-mobile-menu-sheet] {
+      translate: 0 100%;
+    }
+  }
+}

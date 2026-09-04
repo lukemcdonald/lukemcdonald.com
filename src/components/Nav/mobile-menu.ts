@@ -1,12 +1,7 @@
-import { getSoundPreference } from '@/components/Sound/utils'
 import { getThemeColor } from '@/components/ThemeColor/utils'
 import { getThemeMode } from '@/components/ThemeMode/utils'
 
-import {
-  applySoundSelection,
-  applyThemeColorSelection,
-  applyThemeModeSelection,
-} from './mobile-menu-prefs'
+import { applyThemeColorSelection, applyThemeModeSelection } from './mobile-menu-prefs'
 
 const binders = new WeakMap<Element, AbortController>()
 
@@ -16,17 +11,20 @@ function closeOpenMenus() {
       dialog.close()
     }
   })
+
+  document.querySelectorAll('header[data-mobile-menu-open]').forEach((header) => {
+    header.removeAttribute('data-mobile-menu-open')
+  })
 }
 
 function bindMenu(root: Element) {
-  const closeButton = root.querySelector<HTMLButtonElement>('[data-mobile-menu-close]')
   const dialog = root.querySelector<HTMLDialogElement>('[data-mobile-menu-dialog]')
+  const header = root.closest('header')
   const modeSelect = root.querySelector<HTMLSelectElement>('[data-mobile-menu-mode]')
-  const soundInput = root.querySelector<HTMLInputElement>('[data-mobile-menu-sound]')
   const themeSelect = root.querySelector<HTMLSelectElement>('[data-mobile-menu-theme]')
   const trigger = root.querySelector<HTMLButtonElement>('[data-mobile-menu-trigger]')
 
-  if (!closeButton || !dialog || !trigger) {
+  if (!dialog || !trigger) {
     return
   }
 
@@ -37,16 +35,16 @@ function bindMenu(root: Element) {
 
   binders.set(root, controller)
 
-  const syncTrigger = () => {
-    trigger.setAttribute('aria-expanded', dialog.open ? 'true' : 'false')
+  const syncChrome = (isOpen: boolean) => {
+    header?.toggleAttribute('data-mobile-menu-open', isOpen)
+    trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false')
+    trigger.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu')
   }
 
   const closeDialog = () => {
     if (dialog.open) {
       dialog.close()
     }
-
-    syncTrigger()
   }
 
   trigger.addEventListener(
@@ -57,21 +55,19 @@ function bindMenu(root: Element) {
       }
 
       dialog.showModal()
-      syncTrigger()
+      dialog.focus({ preventScroll: true })
+      syncChrome(true)
     },
     { signal },
   )
 
-  closeButton.addEventListener(
-    'click',
+  dialog.addEventListener(
+    'close',
     () => {
-      closeDialog()
+      syncChrome(false)
     },
     { signal },
   )
-
-  dialog.addEventListener('close', syncTrigger, { signal })
-  dialog.addEventListener('toggle', syncTrigger, { signal })
 
   dialog.addEventListener(
     'click',
@@ -91,19 +87,7 @@ function bindMenu(root: Element) {
           return
         }
 
-        const destination = new URL(link.href, window.location.href)
-        const samePage =
-          destination.pathname === window.location.pathname &&
-          destination.search === window.location.search
-
-        if (samePage) {
-          closeDialog()
-          return
-        }
-
-        window.setTimeout(() => {
-          closeDialog()
-        }, 0)
+        closeDialog()
       },
       { signal },
     )
@@ -131,18 +115,7 @@ function bindMenu(root: Element) {
     )
   }
 
-  if (soundInput) {
-    soundInput.checked = getSoundPreference() === 'on'
-    soundInput.addEventListener(
-      'change',
-      () => {
-        applySoundSelection(soundInput.checked)
-      },
-      { signal },
-    )
-  }
-
-  syncTrigger()
+  syncChrome(dialog.open)
 }
 
 function bindMobileMenus() {
