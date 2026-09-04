@@ -47,6 +47,18 @@ const meta: SeoMeta = {
   />
 
   <body class:list={{ [bodyClass!]: Boolean(bodyClass) }}>
+    <!-- iOS 26 Safari samples fixed edges for chrome. A few px is enough to tint; 0 is not. -->
+    <div
+      aria-hidden="true"
+      class="pointer-events-none fixed inset-x-0 top-0 z-50 h-1.5 bg-primary-500 lg:hidden"
+    >
+    </div>
+    <div
+      aria-hidden="true"
+      class="pointer-events-none fixed inset-x-0 bottom-0 z-50 h-1.5 bg-primary-50 lg:hidden dark:bg-primary-900"
+    >
+    </div>
+
     <slot />
 
     <!-- Theme initialization, system preference watcher, and sound bootstrap -->
