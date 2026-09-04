@@ -48,13 +48,11 @@ const selectClass =
 
   <dialog
     aria-labelledby="mobile-menu-title"
-    class="inset-0 m-0 h-dvh max-h-dvh w-full max-w-none flex-col overflow-visible border-0 bg-transparent p-0 pt-14 text-primary-900 scheme-light backdrop:bg-black/30 open:flex"
+    class="inset-0 m-0 h-dvh max-h-dvh w-full max-w-none overflow-auto overscroll-contain rounded-none border-0 bg-primary-500 p-0 text-primary-900 scheme-light backdrop:bg-black/40"
     data-mobile-menu-dialog
     id="mobile-menu-dialog"
   >
-    <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-auto overscroll-contain rounded-t-3xl bg-primary-500 shadow-2xl"
-    >
+    <div class="relative flex min-h-full flex-col">
       <h2
         class="sr-only"
         id="mobile-menu-title"
@@ -65,7 +63,7 @@ const selectClass =
       <button
         aria-label="Close menu"
         autofocus
-        class="absolute top-3 right-3 z-10 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-primary-900 transition-transform hover:bg-primary-900/10 focus:outline-hidden active:scale-[0.96]"
+        class="absolute top-[max(0.5rem,env(safe-area-inset-top))] right-3 z-10 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-primary-900 transition-transform hover:bg-primary-900/10 focus:outline-hidden active:scale-[0.96]"
         data-mobile-menu-close
         type="button"
         {...TOGGLE_CUE_PROPS}
