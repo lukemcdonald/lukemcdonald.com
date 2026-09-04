@@ -33,6 +33,8 @@ function unlockPageScroll() {
     return
   }
 
+  const y = savedScrollY
+
   pageScrollLocked = false
   document.documentElement.style.overflow = ''
   document.documentElement.style.overscrollBehavior = ''
@@ -41,7 +43,12 @@ function unlockPageScroll() {
   document.body.style.overscrollBehavior = ''
   document.body.style.position = ''
   document.body.style.width = ''
-  window.scrollTo(0, savedScrollY)
+
+  window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(() => {
+      window.scrollTo(0, y)
+    })
+  })
 }
 
 function closeOpenMenus() {
