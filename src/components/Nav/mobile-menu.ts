@@ -1,18 +1,48 @@
-import { getSoundPreference } from '@/components/Sound/utils'
 import { getThemeColor } from '@/components/ThemeColor/utils'
 import { getThemeMode } from '@/components/ThemeMode/utils'
 
-import {
-  applySoundSelection,
-  applyThemeColorSelection,
-  applyThemeModeSelection,
-} from './mobile-menu-prefs'
+import { applyThemeColorSelection, applyThemeModeSelection } from './mobile-menu-prefs'
 
 const binders = new WeakMap<Element, AbortController>()
 const SHEET_MS = 200
 
+let pageScrollLocked = false
+let savedScrollY = 0
+
 function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
+function lockPageScroll() {
+  if (pageScrollLocked) {
+    return
+  }
+
+  pageScrollLocked = true
+  savedScrollY = window.scrollY
+  document.documentElement.style.overflow = 'hidden'
+  document.documentElement.style.overscrollBehavior = 'none'
+  document.body.style.inset = `-${savedScrollY}px 0 auto`
+  document.body.style.overflow = 'hidden'
+  document.body.style.overscrollBehavior = 'none'
+  document.body.style.position = 'fixed'
+  document.body.style.width = '100%'
+}
+
+function unlockPageScroll() {
+  if (!pageScrollLocked) {
+    return
+  }
+
+  pageScrollLocked = false
+  document.documentElement.style.overflow = ''
+  document.documentElement.style.overscrollBehavior = ''
+  document.body.style.inset = ''
+  document.body.style.overflow = ''
+  document.body.style.overscrollBehavior = ''
+  document.body.style.position = ''
+  document.body.style.width = ''
+  window.scrollTo(0, savedScrollY)
 }
 
 function closeOpenMenus() {
@@ -29,6 +59,8 @@ function closeOpenMenus() {
   document.querySelectorAll<HTMLElement>('[data-mobile-menu-sheet]').forEach((sheet) => {
     sheet.classList.add('translate-y-full')
   })
+
+  unlockPageScroll()
 }
 
 function bindMenu(root: Element) {
@@ -36,7 +68,6 @@ function bindMenu(root: Element) {
   const header = root.closest('header')
   const modeSelect = root.querySelector<HTMLSelectElement>('[data-mobile-menu-mode]')
   const sheet = root.querySelector<HTMLElement>('[data-mobile-menu-sheet]')
-  const soundInput = root.querySelector<HTMLInputElement>('[data-mobile-menu-sound]')
   const themeSelect = root.querySelector<HTMLSelectElement>('[data-mobile-menu-theme]')
   const trigger = root.querySelector<HTMLButtonElement>('[data-mobile-menu-trigger]')
 
@@ -85,6 +116,7 @@ function bindMenu(root: Element) {
     }
 
     syncChrome(false)
+    unlockPageScroll()
   }
 
   const openDialog = () => {
@@ -94,7 +126,9 @@ function bindMenu(root: Element) {
 
     settleSheet(false)
     dialog.showModal()
+    dialog.focus({ preventScroll: true })
     syncChrome(true)
+    lockPageScroll()
 
     if (!sheet || prefersReducedMotion()) {
       settleSheet(true)
@@ -160,6 +194,7 @@ function bindMenu(root: Element) {
       isClosing = false
       settleSheet(false)
       syncChrome(false)
+      unlockPageScroll()
     },
     { signal },
   )
@@ -215,17 +250,6 @@ function bindMenu(root: Element) {
       'change',
       () => {
         applyThemeModeSelection(modeSelect.value)
-      },
-      { signal },
-    )
-  }
-
-  if (soundInput) {
-    soundInput.checked = getSoundPreference() === 'on'
-    soundInput.addEventListener(
-      'change',
-      () => {
-        applySoundSelection(soundInput.checked)
       },
       { signal },
     )
