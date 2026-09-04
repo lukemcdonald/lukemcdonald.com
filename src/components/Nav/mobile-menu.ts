@@ -6,49 +6,8 @@ import { applyThemeColorSelection, applyThemeModeSelection } from './mobile-menu
 const binders = new WeakMap<Element, AbortController>()
 const SHEET_MS = 200
 
-let pageScrollLocked = false
-let savedScrollY = 0
-
 function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
-}
-
-function lockPageScroll() {
-  if (pageScrollLocked) {
-    return
-  }
-
-  pageScrollLocked = true
-  document.documentElement.style.overflow = 'hidden'
-  document.documentElement.style.overscrollBehavior = 'none'
-  document.body.style.inset = `-${savedScrollY}px 0 auto`
-  document.body.style.overflow = 'hidden'
-  document.body.style.overscrollBehavior = 'none'
-  document.body.style.position = 'fixed'
-  document.body.style.width = '100%'
-}
-
-function unlockPageScroll() {
-  if (!pageScrollLocked) {
-    return
-  }
-
-  const y = savedScrollY
-
-  pageScrollLocked = false
-  document.documentElement.style.overflow = ''
-  document.documentElement.style.overscrollBehavior = ''
-  document.body.style.inset = ''
-  document.body.style.overflow = ''
-  document.body.style.overscrollBehavior = ''
-  document.body.style.position = ''
-  document.body.style.width = ''
-
-  window.requestAnimationFrame(() => {
-    window.requestAnimationFrame(() => {
-      window.scrollTo(0, y)
-    })
-  })
 }
 
 function closeOpenMenus() {
@@ -65,8 +24,6 @@ function closeOpenMenus() {
   document.querySelectorAll<HTMLElement>('[data-mobile-menu-sheet]').forEach((sheet) => {
     sheet.classList.add('translate-y-full')
   })
-
-  unlockPageScroll()
 }
 
 function bindMenu(root: Element) {
@@ -122,7 +79,6 @@ function bindMenu(root: Element) {
     }
 
     syncChrome(false)
-    unlockPageScroll()
   }
 
   const openDialog = () => {
@@ -130,12 +86,10 @@ function bindMenu(root: Element) {
       return
     }
 
-    savedScrollY = window.scrollY
     settleSheet(false)
     dialog.showModal()
     dialog.focus({ preventScroll: true })
     syncChrome(true)
-    lockPageScroll()
 
     if (!sheet || prefersReducedMotion()) {
       settleSheet(true)
@@ -201,7 +155,6 @@ function bindMenu(root: Element) {
       isClosing = false
       settleSheet(false)
       syncChrome(false)
-      unlockPageScroll()
     },
     { signal },
   )

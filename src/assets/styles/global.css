@@ -6,3 +6,8 @@
 :root {
   @apply transition-colors;
 }
+
+html:has(dialog[open]),
+html:has(dialog[open]) body {
+  @apply overflow-hidden overscroll-none;
+}
