@@ -19,7 +19,6 @@ function lockPageScroll() {
   }
 
   pageScrollLocked = true
-  savedScrollY = window.scrollY
   document.documentElement.style.overflow = 'hidden'
   document.documentElement.style.overscrollBehavior = 'none'
   document.body.style.inset = `-${savedScrollY}px 0 auto`
@@ -124,6 +123,7 @@ function bindMenu(root: Element) {
       return
     }
 
+    savedScrollY = window.scrollY
     settleSheet(false)
     dialog.showModal()
     dialog.focus({ preventScroll: true })
