@@ -20,20 +20,12 @@ const resolvedDescription =
   Astro.slots.has('description') ? await Astro.slots.render('description') : description
 ---
 
-<article class="entry min-h-screen w-full bg-primary-800 lg:min-h-0">
-  <div class="relative">
-    <!-- iOS Safari samples this while the header is on screen, then falls back to html. -->
-    <div
-      aria-hidden="true"
-      class="pointer-events-none sticky top-0 z-20 -mb-1.5 h-1.5 bg-primary-500 lg:hidden"
-    >
-    </div>
-    <EntryHeader
-      description={resolvedDescription}
-      subtitle={subtitle}
-      title={title}
-    />
-  </div>
+<article class="entry min-h-screen w-full overflow-hidden bg-primary-800 lg:min-h-0">
+  <EntryHeader
+    description={resolvedDescription}
+    subtitle={subtitle}
+    title={title}
+  />
 
   <ContactInfo />
 
