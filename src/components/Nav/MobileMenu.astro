@@ -21,8 +21,9 @@ export interface Props {
 
 const { groups } = Astro.props
 
+const labelClass = 'text-xs font-medium tracking-wider text-primary-800 uppercase'
 const selectClass =
-  'min-h-11 w-full appearance-none rounded-lg border border-white/15 bg-primary-900 py-2 pr-10 pl-3 text-base font-normal tracking-normal text-primary-50 normal-case'
+  'min-h-11 w-full appearance-none rounded-lg border border-primary-900/20 bg-primary-900/10 py-2 pr-10 pl-3 text-base font-normal tracking-normal text-primary-900'
 ---
 
 <div
@@ -47,7 +48,7 @@ const selectClass =
 
   <dialog
     aria-labelledby="mobile-menu-title"
-    class="inset-0 m-0 h-dvh max-h-dvh w-full max-w-none overflow-auto overscroll-contain rounded-none border-0 bg-primary-900 p-0 text-primary-50 backdrop:bg-black/40"
+    class="inset-0 m-0 h-dvh max-h-dvh w-full max-w-none overflow-auto overscroll-contain rounded-none border-0 bg-primary-500 p-0 text-primary-900 scheme-light backdrop:bg-black/40"
     data-mobile-menu-dialog
     id="mobile-menu-dialog"
   >
@@ -62,7 +63,7 @@ const selectClass =
       <button
         aria-label="Close menu"
         autofocus
-        class="absolute top-[max(0.5rem,env(safe-area-inset-top))] right-3 z-10 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-primary-50 transition-transform hover:bg-white/5 focus:outline-hidden active:scale-[0.96]"
+        class="absolute top-[max(0.5rem,env(safe-area-inset-top))] right-3 z-10 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-primary-900 transition-transform hover:bg-primary-900/10 focus:outline-hidden active:scale-[0.96]"
         data-mobile-menu-close
         type="button"
         {...TOGGLE_CUE_PROPS}
@@ -81,15 +82,13 @@ const selectClass =
           {
             groups.map((group) => (
               <section class="flex flex-col gap-1">
-                <h3 class="text-xs font-medium tracking-wider text-white/50 uppercase">
-                  {group.name}
-                </h3>
+                <h3 class={labelClass}>{group.name}</h3>
 
                 <ul>
                   {group.links.map((link) => (
                     <li>
                       <a
-                        class="flex items-center py-1.5 text-base font-medium tracking-wide uppercase transition-colors hover:bg-white/10"
+                        class="flex items-center py-2 text-xl font-semibold tracking-tight transition-colors hover:bg-primary-900/10"
                         data-mobile-menu-link
                         href={link.href}
                         {...HOVER_NAV_CUE_PROPS}
@@ -104,50 +103,50 @@ const selectClass =
           }
         </nav>
 
-        <div class="flex flex-col gap-5 border-t border-white/15 pt-6">
-          <label
-            class="flex flex-col gap-1.5 text-xs font-medium tracking-wider text-white/50 uppercase"
-          >
-            Theme
-            <span class="relative block">
-              <select
-                class={selectClass}
-                data-mobile-menu-theme
-                name="theme"
-              >
-                {THEME_COLORS.map((color) => <option value={color}>{THEME_LABELS[color]}</option>)}
-              </select>
-              <ChevronDownIcon
-                aria-hidden="true"
-                class="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-primary-50"
-              />
-            </span>
-          </label>
+        <div class="flex flex-col gap-5 border-t border-primary-900/15 pt-6">
+          <div class="grid grid-cols-2 gap-3">
+            <label class={`flex flex-col gap-1.5 ${labelClass}`}>
+              Theme
+              <span class="relative block">
+                <select
+                  class={selectClass}
+                  data-mobile-menu-theme
+                  name="theme"
+                >
+                  {
+                    THEME_COLORS.map((color) => (
+                      <option value={color}>{THEME_LABELS[color]}</option>
+                    ))
+                  }
+                </select>
+                <ChevronDownIcon
+                  aria-hidden="true"
+                  class="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-primary-900"
+                />
+              </span>
+            </label>
 
-          <label
-            class="flex flex-col gap-1.5 text-xs font-medium tracking-wider text-white/50 uppercase"
-          >
-            Appearance
-            <span class="relative block">
-              <select
-                class={selectClass}
-                data-mobile-menu-mode
-                name="appearance"
-              >
-                {THEME_MODES.map((mode) => <option value={mode}>{MODE_LABELS[mode]}</option>)}
-              </select>
-              <ChevronDownIcon
-                aria-hidden="true"
-                class="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-primary-50"
-              />
-            </span>
-          </label>
+            <label class={`flex flex-col gap-1.5 ${labelClass}`}>
+              Appearance
+              <span class="relative block">
+                <select
+                  class={selectClass}
+                  data-mobile-menu-mode
+                  name="appearance"
+                >
+                  {THEME_MODES.map((mode) => <option value={mode}>{MODE_LABELS[mode]}</option>)}
+                </select>
+                <ChevronDownIcon
+                  aria-hidden="true"
+                  class="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-primary-900"
+                />
+              </span>
+            </label>
+          </div>
 
-          <label
-            class="flex min-h-11 items-center gap-3 text-xs font-medium tracking-wider text-white/50 uppercase"
-          >
+          <label class={`flex min-h-11 items-center gap-3 ${labelClass}`}>
             <input
-              class="h-5 w-5 accent-primary-700"
+              class="h-5 w-5 accent-primary-900"
               data-mobile-menu-sound
               name="sound"
               type="checkbox"
