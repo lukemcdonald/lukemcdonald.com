@@ -4,8 +4,8 @@ import type { EffectiveMode } from '@/components/ThemeMode/types'
 import { DEFAULT_THEME_COLOR } from '@/components/ThemeColor/constants'
 import { DEFAULT_THEME_MODE } from '@/components/ThemeMode/constants'
 
-const CHROME_TOP_VAR = '--color-chrome-top'
 const THEME_COLOR_META_NAME = 'theme-color'
+const THEME_COLOR_VAR = '--color-primary-500'
 
 function getHtmlElement(): HTMLElement | null {
   if (typeof window === 'undefined') {
@@ -81,7 +81,7 @@ function canvasColorToHex(color: string): string | null {
   return `#${[r, g, b].map((channel) => channel.toString(16).padStart(2, '0')).join('')}`
 }
 
-function resolveChromeTopColor(): string | null {
+function resolveHeaderColor(): string | null {
   const html = getHtmlElement()
 
   if (
@@ -92,14 +92,14 @@ function resolveChromeTopColor(): string | null {
     return null
   }
 
-  const token = getComputedStyle(html).getPropertyValue(CHROME_TOP_VAR).trim()
+  const token = getComputedStyle(html).getPropertyValue(THEME_COLOR_VAR).trim()
 
   if (!token) {
     return null
   }
 
   const probe = document.createElement('span')
-  probe.style.color = `var(${CHROME_TOP_VAR})`
+  probe.style.color = `var(${THEME_COLOR_VAR})`
   html.appendChild(probe)
 
   const resolved = getComputedStyle(probe).color
@@ -108,13 +108,16 @@ function resolveChromeTopColor(): string | null {
   return cssColorToHex(resolved) ?? cssColorToHex(token)
 }
 
-/** Write `--color-chrome-top` to `<meta name="theme-color">` for Safari. */
+/**
+ * Tint Safari's top chrome from the entry header. Leave html/body unpainted
+ * so the bottom of the page keeps its default (dark) color.
+ */
 export function syncBrowserThemeColor(): void {
   if (typeof document === 'undefined' || !document.head) {
     return
   }
 
-  const color = resolveChromeTopColor()
+  const color = resolveHeaderColor()
 
   if (!color) {
     return
@@ -159,7 +162,6 @@ export function applyThemeMode(mode: EffectiveMode): void {
   }
 
   html.classList.toggle('dark', mode === 'dark')
-  syncBrowserThemeColor()
 }
 
 /**

@@ -20,7 +20,6 @@ export const GLOBAL_CONFIG = {
   lang: 'en',
   name: SITE_NAME,
   site: SITE_URLS,
-  // SSR fallback for <meta name="theme-color"> until --color-chrome-top applies.
   themeColor: '#122023',
   timezone: 'America/Chicago',
 } as const
