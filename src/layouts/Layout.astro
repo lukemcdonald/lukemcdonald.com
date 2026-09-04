@@ -48,13 +48,6 @@ const meta: SeoMeta = {
   />
 
   <body class:list={{ [bodyClass!]: Boolean(bodyClass) }}>
-    <!-- iOS 26 Safari samples this for the top chrome. Header on small screens, shell on lg+. -->
-    <div
-      aria-hidden="true"
-      class="pointer-events-none fixed inset-x-0 top-0 z-50 h-1.5 bg-primary-500 lg:bg-primary-50 lg:dark:bg-primary-900"
-    >
-    </div>
-
     <slot />
 
     <!-- Theme initialization, system preference watcher, and sound bootstrap -->
