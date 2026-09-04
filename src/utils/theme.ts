@@ -12,6 +12,40 @@ function getHtmlElement(): HTMLElement | null {
   return document.documentElement
 }
 
+function refreshSafariChromeSample() {
+  if (typeof document === 'undefined' || typeof document.querySelectorAll !== 'function') {
+    return
+  }
+
+  const samplers = document.querySelectorAll<HTMLElement>('[data-safari-chrome]')
+
+  if (samplers.length === 0) {
+    return
+  }
+
+  samplers.forEach((sampler) => {
+    sampler.style.display = 'none'
+  })
+
+  samplers.forEach((sampler) => {
+    sampler.offsetHeight
+  })
+
+  const showSamplers = () => {
+    samplers.forEach((sampler) => {
+      sampler.style.display = ''
+    })
+  }
+
+  if (typeof requestAnimationFrame === 'function') {
+    requestAnimationFrame(showSamplers)
+
+    return
+  }
+
+  showSamplers()
+}
+
 export function applyThemeColor(color: ThemeColor): void {
   const html = getHtmlElement()
 
@@ -19,11 +53,20 @@ export function applyThemeColor(color: ThemeColor): void {
     return
   }
 
-  if (color === 'default') {
+  const currentTheme = html.getAttribute?.('data-theme') ?? null
+  const nextTheme = color === 'default' ? null : color
+
+  if (currentTheme === nextTheme) {
+    return
+  }
+
+  if (nextTheme === null) {
     html.removeAttribute('data-theme')
   } else {
-    html.setAttribute('data-theme', color)
+    html.setAttribute('data-theme', nextTheme)
   }
+
+  refreshSafariChromeSample()
 }
 
 export function applyThemeMode(mode: EffectiveMode): void {
