@@ -21,9 +21,10 @@ export interface Props {
 
 const { groups } = Astro.props
 
-const labelClass = 'text-xs font-medium tracking-wider text-primary-800 uppercase'
+const labelClass =
+  'text-xs font-medium tracking-wider text-primary-800 uppercase dark:text-white/50'
 const selectClass =
-  'min-h-11 w-full appearance-none rounded-lg border border-primary-900/20 bg-primary-900/10 py-2 pr-10 pl-3 text-base font-normal tracking-normal text-primary-900'
+  'min-h-11 w-full appearance-none rounded-lg border border-black/15 bg-black/[0.04] py-2 pr-10 pl-3 text-base font-normal tracking-normal text-primary-900 dark:border-white/15 dark:bg-white/10 dark:text-primary-50'
 ---
 
 <div
@@ -48,11 +49,13 @@ const selectClass =
 
   <dialog
     aria-labelledby="mobile-menu-title"
-    class="inset-0 m-0 h-dvh max-h-dvh w-full max-w-none overflow-auto overscroll-contain rounded-none border-0 bg-primary-500 p-0 text-primary-900 scheme-light backdrop:bg-black/40"
+    class="inset-0 m-0 h-dvh max-h-dvh w-full max-w-none flex-col overflow-visible border-0 bg-transparent p-0 pt-14 text-primary-900 scheme-light backdrop:bg-black/30 open:flex dark:text-primary-50 dark:scheme-dark"
     data-mobile-menu-dialog
     id="mobile-menu-dialog"
   >
-    <div class="relative flex min-h-full flex-col">
+    <div
+      class="relative flex min-h-0 flex-1 flex-col overflow-auto overscroll-contain rounded-t-3xl bg-white shadow-2xl dark:bg-primary-900"
+    >
       <h2
         class="sr-only"
         id="mobile-menu-title"
@@ -63,7 +66,7 @@ const selectClass =
       <button
         aria-label="Close menu"
         autofocus
-        class="absolute top-[max(0.5rem,env(safe-area-inset-top))] right-3 z-10 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-primary-900 transition-transform hover:bg-primary-900/10 focus:outline-hidden active:scale-[0.96]"
+        class="absolute top-3 right-3 z-10 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-primary-900 transition-transform hover:bg-black/5 focus:outline-hidden active:scale-[0.96] dark:text-primary-50 dark:hover:bg-white/10"
         data-mobile-menu-close
         type="button"
         {...TOGGLE_CUE_PROPS}
@@ -88,7 +91,7 @@ const selectClass =
                   {group.links.map((link) => (
                     <li>
                       <a
-                        class="flex items-center py-2 text-xl font-semibold tracking-tight transition-colors hover:bg-primary-900/10"
+                        class="flex items-center py-2 text-xl font-semibold tracking-tight transition-colors hover:bg-black/5 dark:hover:bg-white/10"
                         data-mobile-menu-link
                         href={link.href}
                         {...HOVER_NAV_CUE_PROPS}
@@ -103,7 +106,7 @@ const selectClass =
           }
         </nav>
 
-        <div class="flex flex-col gap-5 border-t border-primary-900/15 pt-6">
+        <div class="flex flex-col gap-5 border-t border-black/10 pt-6 dark:border-white/15">
           <div class="grid grid-cols-2 gap-3">
             <label class={`flex flex-col gap-1.5 ${labelClass}`}>
               Theme
@@ -121,7 +124,7 @@ const selectClass =
                 </select>
                 <ChevronDownIcon
                   aria-hidden="true"
-                  class="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-primary-900"
+                  class="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-primary-900 dark:text-primary-50"
                 />
               </span>
             </label>
@@ -138,7 +141,7 @@ const selectClass =
                 </select>
                 <ChevronDownIcon
                   aria-hidden="true"
-                  class="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-primary-900"
+                  class="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-primary-900 dark:text-primary-50"
                 />
               </span>
             </label>
@@ -146,7 +149,7 @@ const selectClass =
 
           <label class={`flex min-h-11 items-center gap-3 ${labelClass}`}>
             <input
-              class="h-5 w-5 accent-primary-900"
+              class="h-5 w-5 accent-primary-700"
               data-mobile-menu-sound
               name="sound"
               type="checkbox"
