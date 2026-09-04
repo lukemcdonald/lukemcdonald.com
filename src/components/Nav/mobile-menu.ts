@@ -19,14 +19,13 @@ function closeOpenMenus() {
 }
 
 function bindMenu(root: Element) {
-  const closeButton = root.querySelector<HTMLButtonElement>('[data-mobile-menu-close]')
   const dialog = root.querySelector<HTMLDialogElement>('[data-mobile-menu-dialog]')
   const modeSelect = root.querySelector<HTMLSelectElement>('[data-mobile-menu-mode]')
   const soundInput = root.querySelector<HTMLInputElement>('[data-mobile-menu-sound]')
   const themeSelect = root.querySelector<HTMLSelectElement>('[data-mobile-menu-theme]')
   const trigger = root.querySelector<HTMLButtonElement>('[data-mobile-menu-trigger]')
 
-  if (!closeButton || !dialog || !trigger) {
+  if (!dialog || !trigger) {
     return
   }
 
@@ -39,6 +38,7 @@ function bindMenu(root: Element) {
 
   const syncTrigger = () => {
     trigger.setAttribute('aria-expanded', dialog.open ? 'true' : 'false')
+    trigger.setAttribute('aria-label', dialog.open ? 'Close menu' : 'Open menu')
   }
 
   const closeDialog = () => {
@@ -58,14 +58,6 @@ function bindMenu(root: Element) {
 
       dialog.showModal()
       syncTrigger()
-    },
-    { signal },
-  )
-
-  closeButton.addEventListener(
-    'click',
-    () => {
-      closeDialog()
     },
     { signal },
   )

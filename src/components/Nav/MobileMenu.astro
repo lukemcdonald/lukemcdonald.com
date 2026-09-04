@@ -36,20 +36,25 @@ const selectClass =
     aria-expanded="false"
     aria-haspopup="dialog"
     aria-label="Open menu"
-    class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md bg-black/0 text-primary-900 transition-transform hover:bg-black/5 focus:outline-hidden active:scale-[0.96]"
+    class="group inline-flex min-h-11 min-w-11 items-center justify-center rounded-md bg-black/0 text-primary-900 transition-transform hover:bg-black/5 focus:outline-hidden active:scale-[0.96]"
     data-mobile-menu-trigger
     type="button"
     {...TOGGLE_CUE_PROPS}
   >
     <MenuIcon
       aria-hidden="true"
-      class="h-6 w-6"
+      class="h-6 w-6 group-aria-expanded:hidden"
+    />
+    <XIcon
+      aria-hidden="true"
+      class="hidden h-6 w-6 group-aria-expanded:block"
     />
   </button>
 
+  <!-- Sheet starts below the header logo: p-5 + h-16 + p-5 -->
   <dialog
     aria-labelledby="mobile-menu-title"
-    class="inset-0 m-0 h-dvh max-h-dvh w-full max-w-none flex-col overflow-visible border-0 bg-transparent p-0 pt-14 text-primary-900 scheme-light backdrop:bg-transparent open:flex dark:text-primary-50 dark:scheme-dark"
+    class="inset-0 m-0 h-dvh max-h-dvh w-full max-w-none flex-col overflow-visible border-0 bg-transparent p-0 pt-26 text-primary-900 scheme-light backdrop:bg-transparent open:flex dark:text-primary-50 dark:scheme-dark"
     data-mobile-menu-dialog
     id="mobile-menu-dialog"
   >
@@ -62,20 +67,6 @@ const selectClass =
       >
         Menu
       </h2>
-
-      <button
-        aria-label="Close menu"
-        autofocus
-        class="absolute top-3 right-3 z-10 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-primary-900 transition-transform hover:bg-black/5 focus:outline-hidden active:scale-[0.96] dark:text-primary-50 dark:hover:bg-white/10"
-        data-mobile-menu-close
-        type="button"
-        {...TOGGLE_CUE_PROPS}
-      >
-        <XIcon
-          aria-hidden="true"
-          class="h-6 w-6"
-        />
-      </button>
 
       <div
         class="flex min-h-0 flex-1 flex-col gap-8 overflow-auto overscroll-contain px-5 pt-5 pb-10"
