@@ -1,5 +1,19 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
+/*
+ * Mobile browser chrome. Change these two tokens to restyle later.
+ * --color-chrome-top: Safari status bar (<meta name="theme-color">, set in JS).
+ * --color-chrome-bottom: page overscroll / html background.
+ */
+:root {
+  --color-chrome-bottom: var(--color-primary-800);
+  --color-chrome-top: var(--color-primary-500);
+}
+
+html {
+  background-color: var(--color-chrome-bottom);
+}
+
 @theme {
   --breakpoint-xl: 1280px;
   --breakpoint-lg: 1080px;

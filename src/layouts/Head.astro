@@ -192,7 +192,7 @@ const socialMetaTags = buildSocialMetaTags(metaForSeo)
     set:html={JSON.stringify(structuredData)}
   />
 
-  <!-- Theme color: dark fallback; JS sets this to --color-primary-500 for the top chrome -->
+  <!-- Theme color: fallback until JS writes --color-chrome-top -->
   <meta
     name="theme-color"
     content={GLOBAL_CONFIG.themeColor}

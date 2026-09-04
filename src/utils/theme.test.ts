@@ -100,7 +100,7 @@ function installDom(options: { computedColor?: string; token?: string } = {}) {
       if (el === html) {
         return {
           getPropertyValue(name: string) {
-            return name === '--color-primary-500' ? token : ''
+            return name === '--color-chrome-top' ? token : ''
           },
         }
       }
@@ -131,7 +131,7 @@ describe('syncBrowserThemeColor', () => {
     restore = undefined
   })
 
-  test('replaces the theme-color meta tag with the header color', () => {
+  test('writes --color-chrome-top to the theme-color meta tag', () => {
     const dom = installDom()
     restore = () => {
       dom.restore()
@@ -142,7 +142,7 @@ describe('syncBrowserThemeColor', () => {
     assert.equal(dom.themeColor, '#b49fce')
   })
 
-  test('keeps the dark fallback when the header token has not loaded', () => {
+  test('keeps the fallback when --color-chrome-top has not loaded', () => {
     const dom = installDom({ token: '' })
     restore = () => {
       dom.restore()
