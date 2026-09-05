@@ -4,6 +4,7 @@ import { Volume2, VolumeX } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 import { PALETTE_CHROME } from '@/components/CommandPalette/chrome'
+
 import { getSoundPreference, toggleSoundPreference } from './utils'
 
 type SoundToggleProps = {
