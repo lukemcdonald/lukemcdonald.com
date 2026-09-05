@@ -27,6 +27,7 @@ export interface ExperienceItem {
   company: string
   endDate?: string | null
   highlights?: string[]
+  id?: string
   location?: string
   position: string
   startDate: string
