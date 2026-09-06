@@ -1,5 +1,6 @@
 import type { CommandPaletteProps } from './types'
 
+import { navigate } from 'astro:transitions/client'
 import { play } from 'cuelume'
 import { useState } from 'react'
 
@@ -45,7 +46,7 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
       {
         close: () => close({ silent: true }),
         navigate: (href) => {
-          window.location.assign(href)
+          navigate(href)
         },
         onPreferenceApplied: syncPreferences,
         setThemeColor,
