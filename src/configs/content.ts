@@ -9,8 +9,4 @@ export const CONTENT_CONFIG = {
       path: 'src/content/resume',
     },
   },
-  settings: {
-    defaultLocale: 'en',
-    enableDrafts: false,
-  },
 } as const
