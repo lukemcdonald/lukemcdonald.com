@@ -25,5 +25,8 @@ pnpm-lock.yaml
 .DS_Store
 Thumbs.db
 
+# Planning docs should not gate format checks
+docs/
+
 # Git
 .git/
