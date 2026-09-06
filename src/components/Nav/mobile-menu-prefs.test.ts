@@ -1,15 +1,10 @@
 import assert from 'node:assert/strict'
 import { afterEach, before, describe, test } from 'node:test'
 
-import { getSoundPreference } from '@/components/Sound/utils'
 import { getThemeColor } from '@/components/ThemeColor/utils'
 import { getThemeMode } from '@/components/ThemeMode/utils'
 
-import {
-  applySoundSelection,
-  applyThemeColorSelection,
-  applyThemeModeSelection,
-} from './mobile-menu-prefs.ts'
+import { applyThemeColorSelection, applyThemeModeSelection } from './mobile-menu-prefs.ts'
 
 const store = new Map<string, string>()
 
@@ -88,23 +83,5 @@ describe('applyThemeModeSelection', () => {
 
     assert.equal(applied, false)
     assert.equal(getThemeMode(), 'light')
-  })
-})
-
-describe('applySoundSelection', () => {
-  test('checking sound on sets preference to on', () => {
-    const preference = applySoundSelection(true)
-
-    assert.equal(preference, 'on')
-    assert.equal(getSoundPreference(), 'on')
-  })
-
-  test('unchecking sound sets preference to off', () => {
-    applySoundSelection(true)
-
-    const preference = applySoundSelection(false)
-
-    assert.equal(preference, 'off')
-    assert.equal(getSoundPreference(), 'off')
   })
 })
