@@ -103,39 +103,52 @@ const selectClass =
           }
         </nav>
 
-        <div class="grid grid-cols-2 gap-3 border-t border-black/10 pt-6 dark:border-white/15">
-          <label class={`flex flex-col gap-1.5 ${labelClass}`}>
-            Theme
-            <span class="relative block">
-              <select
-                class={selectClass}
-                data-mobile-menu-theme
-                name="theme"
-              >
-                {THEME_COLORS.map((color) => <option value={color}>{THEME_LABELS[color]}</option>)}
-              </select>
-              <ChevronDownIcon
-                aria-hidden="true"
-                class="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-primary-900 dark:text-primary-50"
-              />
-            </span>
-          </label>
+        <div class="flex flex-col gap-3 border-t border-black/10 pt-6 dark:border-white/15">
+          <div class="grid grid-cols-2 gap-3">
+            <label class={`flex flex-col gap-1.5 ${labelClass}`}>
+              Theme
+              <span class="relative block">
+                <select
+                  class={selectClass}
+                  data-mobile-menu-theme
+                  name="theme"
+                >
+                  {THEME_COLORS.map((color) => <option value={color}>{THEME_LABELS[color]}</option>)}
+                </select>
+                <ChevronDownIcon
+                  aria-hidden="true"
+                  class="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-primary-900 dark:text-primary-50"
+                />
+              </span>
+            </label>
 
-          <label class={`flex flex-col gap-1.5 ${labelClass}`}>
-            Appearance
-            <span class="relative block">
-              <select
-                class={selectClass}
-                data-mobile-menu-mode
-                name="appearance"
-              >
-                {THEME_MODES.map((mode) => <option value={mode}>{MODE_LABELS[mode]}</option>)}
-              </select>
-              <ChevronDownIcon
-                aria-hidden="true"
-                class="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-primary-900 dark:text-primary-50"
-              />
-            </span>
+            <label class={`flex flex-col gap-1.5 ${labelClass}`}>
+              Appearance
+              <span class="relative block">
+                <select
+                  class={selectClass}
+                  data-mobile-menu-mode
+                  name="appearance"
+                >
+                  {THEME_MODES.map((mode) => <option value={mode}>{MODE_LABELS[mode]}</option>)}
+                </select>
+                <ChevronDownIcon
+                  aria-hidden="true"
+                  class="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-primary-900 dark:text-primary-50"
+                />
+              </span>
+            </label>
+          </div>
+
+          <label class={`flex min-h-11 items-center gap-3 ${labelClass}`}>
+            Sound
+            <input
+              class="h-5 w-5 accent-primary-700"
+              data-mobile-menu-sound
+              name="sound"
+              type="checkbox"
+              {...TOGGLE_CUE_PROPS}
+            />
           </label>
         </div>
       </div>

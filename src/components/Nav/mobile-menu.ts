@@ -1,7 +1,12 @@
+import { getSoundPreference } from '@/components/Sound/utils'
 import { getThemeColor } from '@/components/ThemeColor/utils'
 import { getThemeMode } from '@/components/ThemeMode/utils'
 
-import { applyThemeColorSelection, applyThemeModeSelection } from './mobile-menu-prefs'
+import {
+  applySoundSelection,
+  applyThemeColorSelection,
+  applyThemeModeSelection,
+} from './mobile-menu-prefs'
 
 const binders = new WeakMap<Element, AbortController>()
 
@@ -21,6 +26,7 @@ function bindMenu(root: Element) {
   const dialog = root.querySelector<HTMLDialogElement>('[data-mobile-menu-dialog]')
   const header = root.closest('header')
   const modeSelect = root.querySelector<HTMLSelectElement>('[data-mobile-menu-mode]')
+  const soundInput = root.querySelector<HTMLInputElement>('[data-mobile-menu-sound]')
   const themeSelect = root.querySelector<HTMLSelectElement>('[data-mobile-menu-theme]')
   const trigger = root.querySelector<HTMLButtonElement>('[data-mobile-menu-trigger]')
 
@@ -110,6 +116,17 @@ function bindMenu(root: Element) {
       'change',
       () => {
         applyThemeModeSelection(modeSelect.value)
+      },
+      { signal },
+    )
+  }
+
+  if (soundInput) {
+    soundInput.checked = getSoundPreference() === 'on'
+    soundInput.addEventListener(
+      'change',
+      () => {
+        applySoundSelection(soundInput.checked)
       },
       { signal },
     )
