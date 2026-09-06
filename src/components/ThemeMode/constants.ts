@@ -4,6 +4,8 @@ export const THEME_MODES: readonly ThemeMode[] = ['light', 'dark', 'system'] as 
 
 export const DEFAULT_THEME_MODE: ThemeMode = 'system'
 
+export const THEME_MODE_STORAGE_KEY = 'theme-mode'
+
 export const MODE_LABELS: Record<ThemeMode, string> = {
   dark: 'Dark',
   light: 'Light',

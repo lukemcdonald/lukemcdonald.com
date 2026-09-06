@@ -12,6 +12,8 @@ export const THEME_COLORS: readonly ThemeColor[] = [
 
 export const DEFAULT_THEME_COLOR: ThemeColor = 'default'
 
+export const THEME_COLOR_STORAGE_KEY = 'theme-color'
+
 export const THEME_LABELS: Record<ThemeColor, string> = {
   blue: 'Blue',
   default: 'Default',

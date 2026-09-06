@@ -2,24 +2,21 @@ import type { ThemeColor } from './types'
 
 import { applyThemeColor } from '@/utils/theme'
 
-import { DEFAULT_THEME_COLOR } from './constants'
+import { DEFAULT_THEME_COLOR, THEME_COLOR_STORAGE_KEY, THEME_COLORS } from './constants'
 
-const STORAGE_KEY = 'theme-color'
+export function isThemeColor(value: string): value is ThemeColor {
+  return (THEME_COLORS as readonly string[]).includes(value)
+}
 
 function getStoredColor(): ThemeColor {
   if (typeof window === 'undefined') {
     return DEFAULT_THEME_COLOR
   }
 
-  const stored = localStorage.getItem(STORAGE_KEY)
+  const stored = localStorage.getItem(THEME_COLOR_STORAGE_KEY)
 
-  if (
-    stored &&
-    (['default', 'blue', 'purple', 'yellow', 'green', 'orange', 'neon'] as ThemeColor[]).includes(
-      stored as ThemeColor,
-    )
-  ) {
-    return stored as ThemeColor
+  if (stored && isThemeColor(stored)) {
+    return stored
   }
 
   return DEFAULT_THEME_COLOR
@@ -30,7 +27,7 @@ function setStoredColor(color: ThemeColor): void {
     return
   }
 
-  localStorage.setItem(STORAGE_KEY, color)
+  localStorage.setItem(THEME_COLOR_STORAGE_KEY, color)
 }
 
 export function getThemeColor(): ThemeColor {

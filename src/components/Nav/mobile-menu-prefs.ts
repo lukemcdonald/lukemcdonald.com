@@ -1,18 +1,5 @@
-import type { ThemeColor } from '@/components/ThemeColor/types'
-import type { ThemeMode } from '@/components/ThemeMode/types'
-
-import { THEME_COLORS } from '@/components/ThemeColor/constants'
-import { setThemeColor } from '@/components/ThemeColor/utils'
-import { THEME_MODES } from '@/components/ThemeMode/constants'
-import { setThemeMode } from '@/components/ThemeMode/utils'
-
-export function isThemeColor(value: string): value is ThemeColor {
-  return (THEME_COLORS as readonly string[]).includes(value)
-}
-
-export function isThemeMode(value: string): value is ThemeMode {
-  return (THEME_MODES as readonly string[]).includes(value)
-}
+import { isThemeColor, setThemeColor } from '@/components/ThemeColor/utils'
+import { isThemeMode, setThemeMode } from '@/components/ThemeMode/utils'
 
 export function applyThemeColorSelection(value: string): boolean {
   if (!isThemeColor(value)) {
