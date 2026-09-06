@@ -2,10 +2,7 @@
 import { getNavigationGroups } from '@/features/navigation/navigation.server'
 
 const groups = await getNavigationGroups()
-const liveLinks =
-  groups.find((group) => {
-    return group.name === 'Live'
-  })?.links ?? []
+const liveLinks = groups.find((group) => group.name === 'Live')?.links ?? []
 
 const linkStyles =
   'relative flex items-center rounded-sm bg-black/0 bg-transparent p-1.5 pr-3 leading-none transition hover:bg-black/5'
