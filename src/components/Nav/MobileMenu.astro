@@ -113,7 +113,11 @@ const selectClass =
                   data-mobile-menu-theme
                   name="theme"
                 >
-                  {THEME_COLORS.map((color) => <option value={color}>{THEME_LABELS[color]}</option>)}
+                  {
+                    THEME_COLORS.map((color) => (
+                      <option value={color}>{THEME_LABELS[color]}</option>
+                    ))
+                  }
                 </select>
                 <ChevronDownIcon
                   aria-hidden="true"
