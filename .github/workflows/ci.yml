@@ -25,7 +25,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - run: git fetch --depth=1 --no-tags origin main
+        with:
+          fetch-depth: 0
+      - run: git fetch --no-tags origin main
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v5
         with:
