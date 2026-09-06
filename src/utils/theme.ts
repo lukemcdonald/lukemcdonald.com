@@ -1,8 +1,8 @@
 import type { ThemeColor } from '@/components/ThemeColor/types'
 import type { EffectiveMode } from '@/components/ThemeMode/types'
 
-import { DEFAULT_THEME_COLOR } from '@/components/ThemeColor/constants'
-import { DEFAULT_THEME_MODE } from '@/components/ThemeMode/constants'
+import { DEFAULT_THEME_COLOR, THEME_COLOR_STORAGE_KEY } from '@/components/ThemeColor/constants'
+import { DEFAULT_THEME_MODE, THEME_MODE_STORAGE_KEY } from '@/components/ThemeMode/constants'
 
 function getHtmlElement(): HTMLElement | null {
   if (typeof window === 'undefined') {
@@ -43,7 +43,7 @@ export function getThemeInitScript(): string {
   return `
 (function() {
   try {
-    const STORAGE_KEYS = { color: 'theme-color', mode: 'theme-mode' };
+    const STORAGE_KEYS = { color: '${THEME_COLOR_STORAGE_KEY}', mode: '${THEME_MODE_STORAGE_KEY}' };
     const DEFAULT_THEME_COLOR = '${DEFAULT_THEME_COLOR}';
     const DEFAULT_THEME_MODE = '${DEFAULT_THEME_MODE}';
 

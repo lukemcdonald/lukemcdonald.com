@@ -2,9 +2,11 @@ import type { EffectiveMode, ThemeMode } from './types'
 
 import { applyThemeMode } from '@/utils/theme'
 
-import { DEFAULT_THEME_MODE } from './constants'
+import { DEFAULT_THEME_MODE, THEME_MODE_STORAGE_KEY, THEME_MODES } from './constants'
 
-const STORAGE_KEY = 'theme-mode'
+export function isThemeMode(value: string): value is ThemeMode {
+  return (THEME_MODES as readonly string[]).includes(value)
+}
 
 function getSystemPreference(): EffectiveMode {
   if (typeof window === 'undefined') {
@@ -19,10 +21,10 @@ function getStoredMode(): ThemeMode {
     return DEFAULT_THEME_MODE
   }
 
-  const stored = localStorage.getItem(STORAGE_KEY)
+  const stored = localStorage.getItem(THEME_MODE_STORAGE_KEY)
 
-  if (stored && (['light', 'dark', 'system'] as ThemeMode[]).includes(stored as ThemeMode)) {
-    return stored as ThemeMode
+  if (stored && isThemeMode(stored)) {
+    return stored
   }
 
   return DEFAULT_THEME_MODE
@@ -33,7 +35,7 @@ function setStoredMode(mode: ThemeMode): void {
     return
   }
 
-  localStorage.setItem(STORAGE_KEY, mode)
+  localStorage.setItem(THEME_MODE_STORAGE_KEY, mode)
 }
 
 function getEffectiveMode(mode: ThemeMode = getStoredMode()): EffectiveMode {
