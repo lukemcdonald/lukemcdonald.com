@@ -1,6 +1,6 @@
 import type { CommandPaletteNavItem } from './types'
 
-import { HOVER_NAV_CUE_PROPS } from '@/components/Sound'
+import { LINK_CUE_PROPS } from '@/components/Sound'
 
 import { PALETTE_CHROME } from './chrome'
 import { CommandPaletteSection } from './CommandPaletteSection'
@@ -28,7 +28,7 @@ export function CommandPaletteNav({ highlightedHref, items, onNavigate }: Comman
             }`}
             href={item.href}
             onClick={onNavigate}
-            {...HOVER_NAV_CUE_PROPS}
+            {...LINK_CUE_PROPS}
           >
             {item.name}
           </a>

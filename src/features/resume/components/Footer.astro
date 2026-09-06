@@ -1,4 +1,6 @@
 ---
+import { SOFT_LINK_CUE_PROPS } from '@/components/Sound'
+
 const endpoints = [
   '/api/resume.json',
   '/api/resume/awards.json',
@@ -16,9 +18,9 @@ const endpoints = [
     {
       endpoints.map((endpoint) => (
         <a
-          data-cuelume-hover="whisper"
           href={endpoint}
           rel="nofollow noindex"
+          {...SOFT_LINK_CUE_PROPS}
         >
           {endpoint}
         </a>

@@ -2,7 +2,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 
 import ChevronDownIcon from '@/components/Nav/icons/ChevronDown'
 import ExternalLinkIcon from '@/components/Nav/icons/ExternalLink'
-import { HOVER_NAV_CUE_PROPS, TOGGLE_CUE_PROPS } from '@/components/Sound'
+import { LINK_CUE_PROPS, TOGGLE_CUE_PROPS } from '@/components/Sound'
 
 interface LinkItem {
   href: string
@@ -50,7 +50,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ link }) => {
                   href={item.href}
                   target={isExternal ? '_blank' : undefined}
                   rel={isExternal ? 'noopener noreferrer' : undefined}
-                  {...HOVER_NAV_CUE_PROPS}
+                  {...LINK_CUE_PROPS}
                 >
                   {item.name}
                   {isExternal && (

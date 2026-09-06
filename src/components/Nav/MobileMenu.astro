@@ -3,7 +3,7 @@ import ChevronDownIcon from '@lucide/astro/icons/chevron-down'
 import MenuIcon from '@lucide/astro/icons/menu'
 import XIcon from '@lucide/astro/icons/x'
 
-import { HOVER_NAV_CUE_PROPS, TOGGLE_CUE_PROPS } from '@/components/Sound'
+import { LINK_CUE_PROPS, TOGGLE_CUE_PROPS } from '@/components/Sound'
 import { THEME_COLORS, THEME_LABELS } from '@/components/ThemeColor/constants'
 import { MODE_LABELS, THEME_MODES } from '@/components/ThemeMode/constants'
 
@@ -91,7 +91,7 @@ const selectClass =
                         class="inline-flex w-fit items-center py-2 text-xl font-semibold tracking-tight transition-colors hover:bg-black/5 dark:hover:bg-white/10"
                         data-mobile-menu-link
                         href={link.href}
-                        {...HOVER_NAV_CUE_PROPS}
+                        {...LINK_CUE_PROPS}
                       >
                         {link.name}
                       </a>

@@ -2,6 +2,7 @@
 import CommandPaletteHost from '@/components/CommandPalette/CommandPaletteHost.astro'
 import Logo from '@/components/Logo.astro'
 import Navigation from '@/components/Nav/Nav.astro'
+import { LINK_CUE_PROPS } from '@/components/Sound'
 import Text from '@/components/Text.astro'
 import { GLOBAL_CONFIG } from '@/configs/global'
 ---
@@ -11,8 +12,8 @@ import { GLOBAL_CONFIG } from '@/configs/global'
 >
   <a
     class="group peer relative z-10 inline-flex items-center text-white no-underline hover:shadow-lg"
-    data-cuelume-hover="tick"
     href="/"
+    {...LINK_CUE_PROPS}
   >
     <Logo class="h-16 w-16 bg-primary-900 fill-current p-4" />
 

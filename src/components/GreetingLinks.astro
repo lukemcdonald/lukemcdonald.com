@@ -1,4 +1,5 @@
 ---
+import { LINK_CUE_PROPS } from '@/components/Sound'
 import { getNavigationGroups } from '@/features/navigation/navigation.server'
 
 const groups = await getNavigationGroups()
@@ -19,8 +20,8 @@ const linkNumberStyles =
           <li>
             <a
               class={`${linkStyles} ${linkNumberStyles}`}
-              data-cuelume-hover="tick"
               href={link.href}
+              {...LINK_CUE_PROPS}
             >
               {link.name}
             </a>

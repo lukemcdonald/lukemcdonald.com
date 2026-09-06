@@ -4,8 +4,19 @@ export const SOUND_STORAGE_KEY = 'sound-enabled'
 
 export const DEFAULT_SOUND_PREFERENCE: SoundPreference = 'off'
 
-export const HOVER_NAV_CUE_PROPS = {
+/**
+ * Destination links. Cuelume hover is mouse-only; toggle follows native
+ * click, so the same props work on hover, tap, and keyboard.
+ */
+export const LINK_CUE_PROPS = {
   'data-cuelume-hover': 'tick',
+  'data-cuelume-toggle': true,
+} as const
+
+/** Quiet destination links (secondary / footer lists). */
+export const SOFT_LINK_CUE_PROPS = {
+  'data-cuelume-hover': 'whisper',
+  'data-cuelume-toggle': true,
 } as const
 
 export const PRESS_CUE_PROPS = {
