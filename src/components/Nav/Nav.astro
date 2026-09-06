@@ -1,50 +1,22 @@
 ---
-import { getPublishedPages } from '@/features/pages/pages.server'
+import type { MenuLink } from '@/features/navigation/navigation.types'
+
+import { getNavigationGroups } from '@/features/navigation/navigation.server'
 
 import MobileMenu from './MobileMenu.astro'
 import NavMenu from './NavMenu'
 
-type MenuLinkItem = {
-  href: string
-  name: string
-}
+const groups = await getNavigationGroups()
 
-interface MenuLink extends MenuLinkItem {
-  links?: MenuLinkItem[]
-}
-
-const workLinks: MenuLink[] = [{ href: '/resume', name: 'Resume' }]
-
-const playLinks: MenuLink[] = [{ href: '/tread-talks', name: 'TREAD Talks' }]
-
-const livePages = await getPublishedPages({
-  include: ['i-am-a'],
-  sortBy: 'order',
-})
-
-const liveLinks: MenuLink[] = livePages.map((page) => ({
-  href: `/${page.id}`,
-  name: page.data.title,
-}))
-
-const menuLinks: MenuLink[] = [
-  { href: '#', links: workLinks, name: 'Work' },
-  { href: '#', links: playLinks, name: 'Play' },
-  { href: '#', links: liveLinks, name: 'Live' },
-]
-
-const overlayGroups = menuLinks.flatMap((menuLink) => {
-  if (!menuLink.links?.length) {
-    return []
+const menuLinks: MenuLink[] = groups.map((group) => {
+  return {
+    href: '#',
+    links: group.links,
+    name: group.name,
   }
-
-  return [
-    {
-      links: menuLink.links,
-      name: menuLink.name,
-    },
-  ]
 })
+
+const overlayGroups = groups
 ---
 
 <nav

@@ -1,20 +1,9 @@
 ---
 import { CommandPalette } from '@/components/CommandPalette'
-import { getPublishedPages } from '@/features/pages/pages.server'
+import { getNavigationGroups } from '@/features/navigation/navigation.server'
 
-const livePages = await getPublishedPages({
-  include: ['i-am-a'],
-  sortBy: 'order',
-})
-
-const navigationItems = [
-  { href: '/resume', name: 'Resume' },
-  { href: '/tread-talks', name: 'TREAD Talks' },
-  ...livePages.map((page) => ({
-    href: `/${page.id}`,
-    name: page.data.title,
-  })),
-]
+const groups = await getNavigationGroups()
+const navigationItems = groups.flatMap((group) => group.links)
 ---
 
 <CommandPalette

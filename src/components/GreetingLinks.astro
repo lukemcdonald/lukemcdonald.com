@@ -1,12 +1,11 @@
 ---
-import { getPublishedPages } from '@/features/pages/pages.server'
+import { getNavigationGroups } from '@/features/navigation/navigation.server'
 
-const INCLUDE_PAGES = ['i-am-a']
-
-const pages = await getPublishedPages({
-  include: INCLUDE_PAGES,
-  sortBy: 'order',
-})
+const groups = await getNavigationGroups()
+const liveLinks =
+  groups.find((group) => {
+    return group.name === 'Live'
+  })?.links ?? []
 
 const linkStyles =
   'relative flex items-center rounded-sm bg-black/0 bg-transparent p-1.5 pr-3 leading-none transition hover:bg-black/5'
@@ -18,15 +17,15 @@ const linkNumberStyles =
 <nav>
   <ol class="inline-flex flex-col numbered-list">
     {
-      pages.map((page) => {
+      liveLinks.map((link) => {
         return (
           <li>
             <a
               class={`${linkStyles} ${linkNumberStyles}`}
               data-cuelume-hover="tick"
-              href={`/${page.id}`}
+              href={link.href}
             >
-              {page.data.title}
+              {link.name}
             </a>
           </li>
         )
