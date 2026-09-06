@@ -1,8 +1,6 @@
-import type { SoundPreference } from '@/components/Sound/types'
 import type { ThemeColor } from '@/components/ThemeColor/types'
 import type { ThemeMode } from '@/components/ThemeMode/types'
 
-import { setSoundPreference } from '@/components/Sound/utils'
 import { THEME_COLORS } from '@/components/ThemeColor/constants'
 import { setThemeColor } from '@/components/ThemeColor/utils'
 import { THEME_MODES } from '@/components/ThemeMode/constants'
@@ -34,12 +32,4 @@ export function applyThemeModeSelection(value: string): boolean {
   setThemeMode(value)
 
   return true
-}
-
-export function applySoundSelection(checked: boolean): SoundPreference {
-  const preference: SoundPreference = checked ? 'on' : 'off'
-
-  setSoundPreference(preference)
-
-  return preference
 }
