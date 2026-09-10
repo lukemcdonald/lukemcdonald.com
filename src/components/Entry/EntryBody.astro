@@ -24,13 +24,13 @@ const { image, imageAlt } = Astro.props
   {
     image && (
       <figure
-        class="entry__media relative isolate bg-primary-500 mix-blend-lighten"
+        class="entry__media relative isolate overflow-hidden bg-primary-500"
         transition:animate={fade({ duration: ENTRY_MEDIA_FADE_MS })}
         transition:name="entry-media"
       >
         <Image
           alt={imageAlt || ''}
-          class="block h-full w-full grayscale xs:object-cover"
+          class="block h-full w-full mix-blend-lighten grayscale xs:object-cover"
           decoding="async"
           fetchpriority="high"
           fit={ENTRY_IMAGE_FIT}

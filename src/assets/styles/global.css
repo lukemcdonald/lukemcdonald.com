@@ -2,6 +2,7 @@
 @import './theme.css';
 @import './typography.css';
 @import './layout.css';
+@import './transitions.css';
 
 :root {
   @apply transition-colors;

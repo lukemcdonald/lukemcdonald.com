@@ -1,0 +1,39 @@
+/* Opaque group backdrops so dissolving entry regions never punch through to the white card. */
+::view-transition-group(entry-content) {
+  background-color: var(--color-primary-900);
+}
+
+::view-transition-group(entry-header),
+::view-transition-group(entry-media) {
+  background-color: var(--color-primary-500);
+  overflow: hidden;
+}
+
+::view-transition-group(resume-main) {
+  background-color: var(--color-primary-50);
+}
+
+.dark::view-transition-group(resume-main) {
+  background-color: var(--color-primary-900);
+}
+
+::view-transition-old(entry-content),
+::view-transition-new(entry-content),
+::view-transition-old(entry-header),
+::view-transition-new(entry-header),
+::view-transition-old(entry-media),
+::view-transition-new(entry-media),
+::view-transition-old(resume-main),
+::view-transition-new(resume-main) {
+  mix-blend-mode: plus-lighter;
+}
+
+[data-mobile-menu-dialog][data-instant-close] {
+  display: none !important;
+  transition: none !important;
+}
+
+[data-mobile-menu-dialog][data-instant-close] [data-mobile-menu-sheet] {
+  translate: 0 100%;
+  transition: none !important;
+}

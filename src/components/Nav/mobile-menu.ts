@@ -5,8 +5,12 @@ import { applyThemeColorSelection, applyThemeModeSelection } from './mobile-menu
 
 const binders = new WeakMap<Element, AbortController>()
 
-function closeOpenMenus() {
+function closeOpenMenus(instant = false) {
   document.querySelectorAll<HTMLDialogElement>('[data-mobile-menu-dialog]').forEach((dialog) => {
+    if (instant) {
+      dialog.setAttribute('data-instant-close', '')
+    }
+
     if (dialog.open) {
       dialog.close()
     }
@@ -64,6 +68,7 @@ function bindMenu(root: Element) {
   dialog.addEventListener(
     'close',
     () => {
+      dialog.removeAttribute('data-instant-close')
       syncChrome(false)
     },
     { signal },
@@ -87,6 +92,7 @@ function bindMenu(root: Element) {
           return
         }
 
+        dialog.setAttribute('data-instant-close', '')
         closeDialog()
       },
       { signal },
@@ -122,5 +128,10 @@ function bindMobileMenus() {
   document.querySelectorAll('[data-mobile-menu]').forEach(bindMenu)
 }
 
-document.addEventListener('astro:before-preparation', closeOpenMenus)
+document.addEventListener('astro:before-preparation', () => {
+  closeOpenMenus(true)
+})
+document.addEventListener('astro:before-swap', () => {
+  closeOpenMenus(true)
+})
 document.addEventListener('astro:page-load', bindMobileMenus)
