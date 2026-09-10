@@ -2,14 +2,15 @@
 import type { ImageMetadata } from 'astro'
 
 import { Image } from 'astro:assets'
+import { fade } from 'astro:transitions'
 
 import {
   ENTRY_IMAGE_FIT,
   ENTRY_IMAGE_QUALITY,
   ENTRY_IMAGE_SIZES,
   ENTRY_IMAGE_WIDTHS,
-  getEntryImageTransitionName,
 } from '@/features/pages/pages.images'
+import { ENTRY_COPY_FADE_MS, ENTRY_MEDIA_FADE_MS } from '@/features/pages/pages.transitions'
 
 export interface Props {
   image?: ImageMetadata
@@ -24,8 +25,8 @@ const { image, imageAlt } = Astro.props
     image && (
       <figure
         class="entry__media relative isolate bg-primary-500 mix-blend-lighten"
-        transition:animate="fade"
-        transition:name={getEntryImageTransitionName(image)}
+        transition:animate={fade({ duration: ENTRY_MEDIA_FADE_MS })}
+        transition:name="entry-media"
       >
         <Image
           alt={imageAlt || ''}
@@ -45,6 +46,8 @@ const { image, imageAlt } = Astro.props
 
   <div
     class="entry__content relative z-10 flex flex-col justify-center bg-primary-900 px-5 py-10 text-lg leading-normal text-pretty wrap-break-word text-white xs:px-10"
+    transition:animate={fade({ duration: ENTRY_COPY_FADE_MS })}
+    transition:name="entry-content"
   >
     <slot />
   </div>

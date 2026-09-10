@@ -3,14 +3,28 @@ import Background from '@/components/Background/Background.astro'
 import Header from '@/components/Header.astro'
 ---
 
-<div class="bg-primary-50 lg:grid dark:bg-primary-900">
-  <Background />
+<div
+  class="bg-primary-50 lg:grid dark:bg-primary-900"
+  transition:animate="none"
+  transition:name="site-shell"
+>
+  <div
+    class="contents"
+    transition:animate="none"
+    transition:persist="site-background"
+  >
+    <Background />
+  </div>
 
   <div
     class="place-items-center text-primary-900 lg:relative lg:flex lg:min-h-screen lg:items-center lg:justify-center"
     style="grid-area: 1/1"
   >
-    <div class="site relative m-auto bg-white lg:max-h-site lg:w-11/12 lg:max-w-7xl lg:shadow-2xl">
+    <div
+      class="site relative m-auto bg-white lg:max-h-site lg:w-11/12 lg:max-w-7xl lg:shadow-2xl"
+      transition:animate="none"
+      transition:name="site-card"
+    >
       <Header />
       <main class="lg:flex lg:h-screen lg:max-h-site">
         <slot />

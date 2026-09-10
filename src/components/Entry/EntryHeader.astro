@@ -1,7 +1,10 @@
 ---
+import { fade } from 'astro:transitions'
+
 import Heading from '@/components/Heading.astro'
 import Mountains from '@/components/Mountains.astro'
 import Text from '@/components/Text.astro'
+import { ENTRY_COPY_FADE_MS } from '@/features/pages/pages.transitions'
 
 export interface Props {
   description?: string
@@ -16,6 +19,8 @@ const hasDescription = Boolean(description)
 
 <header
   class="entry__header relative flex grow flex-col justify-center overflow-hidden bg-primary-500 px-5 pt-32 pb-30vw text-primary-900 sm:px-10 lg:grow-0 lg:pb-10 xl:py-20"
+  transition:animate={fade({ duration: ENTRY_COPY_FADE_MS })}
+  transition:name="entry-header"
 >
   <div class="relative z-10">
     {

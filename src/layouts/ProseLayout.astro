@@ -1,5 +1,8 @@
 ---
+import { fade } from 'astro:transitions'
+
 import Prose from '@/components/Prose.astro'
+import { ENTRY_COPY_FADE_MS } from '@/features/pages/pages.transitions'
 
 import Layout from './Layout.astro'
 
@@ -11,7 +14,11 @@ const { description, title } = Astro.props
   description={description}
   bodyClass="bg-white text-primary-900 dark:bg-primary-900 dark:text-primary-50"
 >
-  <main class="px-4 py-6">
+  <main
+    class="px-4 py-6"
+    transition:animate={fade({ duration: ENTRY_COPY_FADE_MS })}
+    transition:name="resume-main"
+  >
     <slot name="before-prose" />
     <Prose
       as="article"
