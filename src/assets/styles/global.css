@@ -33,4 +33,34 @@ html:has(dialog[open]) body {
       translate: 0 100%;
     }
   }
+
+  [data-nav-menu-panel] {
+    transform-origin: top left;
+    transition:
+      display 100ms allow-discrete,
+      opacity 100ms ease-out,
+      overlay 100ms allow-discrete,
+      transform 100ms ease-out;
+  }
+
+  [data-nav-menu-panel]:not(:popover-open) {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  @starting-style {
+    [data-nav-menu-panel]:popover-open {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+  }
+}
+
+[data-nav-menu-panel] {
+  inset: unset;
+  left: calc(anchor(left) - 0.375rem);
+  margin: 0;
+  overflow: visible;
+  position: absolute;
+  top: calc(anchor(bottom) + 0.375rem);
 }

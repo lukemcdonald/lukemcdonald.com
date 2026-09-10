@@ -1,7 +1,15 @@
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
-import { buildNavigationGroups, PLAY_LINKS, toLiveLinks, WORK_LINKS } from './navigation.utils.ts'
+import {
+  buildNavigationGroups,
+  getExternalLinkAttrs,
+  isExternalHref,
+  PLAY_LINKS,
+  toLiveLinks,
+  toNavMenuId,
+  WORK_LINKS,
+} from './navigation.utils.ts'
 
 describe('toLiveLinks', () => {
   test('maps published pages to href and title', () => {
@@ -46,5 +54,42 @@ describe('buildNavigationGroups', () => {
       buildNavigationGroups(liveLinks).flatMap((group) => group.links),
       [...WORK_LINKS, ...PLAY_LINKS, ...liveLinks],
     )
+  })
+})
+
+describe('isExternalHref', () => {
+  test('treats http(s) URLs as external', () => {
+    assert.equal(isExternalHref('https://gettreadtalks.com'), true)
+    assert.equal(isExternalHref('http://example.com'), true)
+  })
+
+  test('treats site paths as internal', () => {
+    assert.equal(isExternalHref('/resume'), false)
+    assert.equal(isExternalHref('/i-am-a/father'), false)
+  })
+})
+
+describe('getExternalLinkAttrs', () => {
+  test('adds blank target and rel for external hrefs', () => {
+    assert.deepEqual(getExternalLinkAttrs('https://gettreadtalks.com'), {
+      rel: 'noopener noreferrer',
+      target: '_blank',
+    })
+  })
+
+  test('returns an empty object for internal hrefs', () => {
+    assert.deepEqual(getExternalLinkAttrs('/resume'), {})
+  })
+})
+
+describe('toNavMenuId', () => {
+  test('prefixes a slugified group name', () => {
+    assert.equal(toNavMenuId('Work'), 'nav-menu-work')
+    assert.equal(toNavMenuId('Play'), 'nav-menu-play')
+    assert.equal(toNavMenuId('Live'), 'nav-menu-live')
+  })
+
+  test('collapses extra characters into a single hyphen', () => {
+    assert.equal(toNavMenuId('  TREAD Talks  '), 'nav-menu-tread-talks')
   })
 })

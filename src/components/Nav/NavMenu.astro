@@ -1,0 +1,79 @@
+---
+import type { NavigationGroup } from '@/features/navigation/navigation.types'
+
+import ChevronDownIcon from '@lucide/astro/icons/chevron-down'
+import ExternalLinkIcon from '@lucide/astro/icons/external-link'
+
+import { HOVER_NAV_CUE_PROPS, TOGGLE_CUE_PROPS } from '@/components/Sound'
+import { getExternalLinkAttrs, toNavMenuId } from '@/features/navigation/navigation.utils'
+
+interface Props {
+  group: NavigationGroup
+}
+
+const { group } = Astro.props
+const popoverId = toNavMenuId(group.name)
+---
+
+<div
+  class="relative inline-block text-left"
+  data-nav-menu
+>
+  <button
+    aria-controls={popoverId}
+    aria-expanded="false"
+    aria-haspopup="true"
+    class="inline-flex justify-center rounded-md bg-black/0 px-2.5 py-2 text-base font-semibold tracking-wide text-primary-900 uppercase hover:bg-black/5 focus:outline-hidden sm:px-3"
+    data-nav-menu-trigger
+    popovertarget={popoverId}
+    popovertargetaction="show"
+    style={`anchor-name: --${popoverId}`}
+    type="button"
+    {...TOGGLE_CUE_PROPS}
+  >
+    <span>{group.name}</span>
+    <ChevronDownIcon
+      aria-hidden="true"
+      class="mt-px h-6 w-6 text-primary-900"
+    />
+  </button>
+
+  <div
+    class="absolute z-20 w-44 rounded-md bg-white px-1 py-1 shadow-lg"
+    data-nav-menu-panel
+    id={popoverId}
+    popover
+    style={`position-anchor: --${popoverId}`}
+  >
+    <ul>
+      {
+        group.links.map((item) => {
+          const externalAttrs = getExternalLinkAttrs(item.href)
+
+          return (
+            <li>
+              <a
+                class="group flex w-full items-center rounded-sm px-3 py-2 text-base text-primary-900 hover:bg-primary-200 focus-visible:bg-primary-200"
+                href={item.href}
+                {...externalAttrs}
+                {...HOVER_NAV_CUE_PROPS}
+              >
+                {item.name}
+                {externalAttrs.target === '_blank' && (
+                  <ExternalLinkIcon
+                    aria-hidden="true"
+                    class="ml-2 h-4 w-4 opacity-40"
+                  />
+                )}
+              </a>
+            </li>
+          )
+        })
+      }
+    </ul>
+  </div>
+</div>
+
+<script>
+  import './nav-menu'
+</script>

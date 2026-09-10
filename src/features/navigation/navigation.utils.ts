@@ -20,3 +20,25 @@ export function buildNavigationGroups(liveLinks: MenuLinkItem[]): NavigationGrou
     { links: liveLinks, name: 'Live' },
   ]
 }
+
+export function isExternalHref(href: string): boolean {
+  return href.startsWith('http://') || href.startsWith('https://')
+}
+
+export function getExternalLinkAttrs(href: string): { rel?: string; target?: string } {
+  if (!isExternalHref(href)) {
+    return {}
+  }
+
+  return {
+    rel: 'noopener noreferrer',
+    target: '_blank',
+  }
+}
+
+export function toNavMenuId(name: string): string {
+  return `nav-menu-${name
+    .trim()
+    .toLowerCase()
+    .replaceAll(/[^a-z0-9]+/g, '-')}`
+}
