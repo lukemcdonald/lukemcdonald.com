@@ -4,6 +4,7 @@ import { getImage } from 'astro:assets'
 import { getNavigationGroups } from '@/features/navigation/navigation.server'
 import { getInternalPrefetchHrefs } from '@/features/navigation/navigation.utils'
 import {
+  ENTRY_IMAGE_FIT,
   ENTRY_IMAGE_QUALITY,
   ENTRY_IMAGE_SIZES,
   ENTRY_IMAGE_WIDTHS,
@@ -26,6 +27,7 @@ const imageLinks = (
       }
 
       const optimized = await getImage({
+        fit: ENTRY_IMAGE_FIT,
         quality: ENTRY_IMAGE_QUALITY,
         src: image,
         widths: ENTRY_IMAGE_WIDTHS,

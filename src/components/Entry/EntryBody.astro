@@ -4,6 +4,7 @@ import type { ImageMetadata } from 'astro'
 import { Image } from 'astro:assets'
 
 import {
+  ENTRY_IMAGE_FIT,
   ENTRY_IMAGE_QUALITY,
   ENTRY_IMAGE_SIZES,
   ENTRY_IMAGE_WIDTHS,
@@ -31,6 +32,7 @@ const { image, imageAlt } = Astro.props
           class="block h-full w-full grayscale xs:object-cover"
           decoding="async"
           fetchpriority="high"
+          fit={ENTRY_IMAGE_FIT}
           loading="eager"
           quality={ENTRY_IMAGE_QUALITY}
           sizes={ENTRY_IMAGE_SIZES}
