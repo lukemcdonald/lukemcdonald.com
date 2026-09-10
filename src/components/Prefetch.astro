@@ -1,0 +1,65 @@
+---
+import { getImage } from 'astro:assets'
+
+import { getNavigationGroups } from '@/features/navigation/navigation.server'
+import { getInternalPrefetchHrefs } from '@/features/navigation/navigation.utils'
+import {
+  ENTRY_IMAGE_QUALITY,
+  ENTRY_IMAGE_SIZES,
+  ENTRY_IMAGE_WIDTHS,
+  toPageHref,
+} from '@/features/pages/pages.images'
+import { getPublishedPages } from '@/features/pages/pages.server'
+
+const groups = await getNavigationGroups()
+const pageHrefs = getInternalPrefetchHrefs(groups)
+const pages = await getPublishedPages()
+const currentPath = Astro.url.pathname
+
+const imageLinks = (
+  await Promise.all(
+    pages.map(async (page) => {
+      const image = page.data.image
+
+      if (!image) {
+        return
+      }
+
+      const optimized = await getImage({
+        quality: ENTRY_IMAGE_QUALITY,
+        src: image,
+        widths: ENTRY_IMAGE_WIDTHS,
+      })
+      const href = toPageHref(page.id)
+
+      return {
+        href: optimized.src,
+        isCurrent: currentPath === href,
+        srcSet: optimized.srcSet.attribute,
+      }
+    }),
+  )
+).filter((link) => link !== undefined)
+---
+
+{
+  pageHrefs.map((href) => (
+    <link
+      href={href}
+      rel="prefetch"
+    />
+  ))
+}
+
+{
+  imageLinks.map(({ href, isCurrent, srcSet }) => (
+    <link
+      as="image"
+      fetchpriority={isCurrent ? 'high' : undefined}
+      href={href}
+      imagesizes={ENTRY_IMAGE_SIZES}
+      imagesrcset={srcSet}
+      rel={isCurrent ? 'preload' : 'prefetch'}
+    />
+  ))
+}

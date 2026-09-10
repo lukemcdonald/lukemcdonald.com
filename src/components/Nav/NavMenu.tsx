@@ -47,9 +47,10 @@ const NavMenu: React.FC<NavMenuProps> = ({ link }) => {
               <MenuItem key={item.href}>
                 <a
                   className="group flex w-full items-center rounded-sm px-3 py-2 text-base text-primary-900 data-active:bg-primary-200"
+                  data-astro-prefetch={isExternal ? undefined : 'tap'}
                   href={item.href}
-                  target={isExternal ? '_blank' : undefined}
                   rel={isExternal ? 'noopener noreferrer' : undefined}
+                  target={isExternal ? '_blank' : undefined}
                   {...HOVER_NAV_CUE_PROPS}
                 >
                   {item.name}

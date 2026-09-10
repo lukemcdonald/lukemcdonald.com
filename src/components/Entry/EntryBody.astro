@@ -1,5 +1,19 @@
 ---
+import type { ImageMetadata } from 'astro'
+
 import { Image } from 'astro:assets'
+
+import {
+  ENTRY_IMAGE_QUALITY,
+  ENTRY_IMAGE_SIZES,
+  ENTRY_IMAGE_WIDTHS,
+  getEntryImageTransitionName,
+} from '@/features/pages/pages.images'
+
+export interface Props {
+  image?: ImageMetadata
+  imageAlt?: string
+}
 
 const { image, imageAlt } = Astro.props
 ---
@@ -7,13 +21,21 @@ const { image, imageAlt } = Astro.props
 <div class="entry__body bg-primary-900">
   {
     image && (
-      <figure class="entry__media relative bg-primary-500 mix-blend-lighten">
+      <figure
+        class="entry__media relative isolate bg-primary-500 mix-blend-lighten"
+        transition:animate="fade"
+        transition:name={getEntryImageTransitionName(image)}
+      >
         <Image
           alt={imageAlt || ''}
           class="block h-full w-full grayscale xs:object-cover"
-          decoding="sync"
+          decoding="async"
           fetchpriority="high"
+          loading="eager"
+          quality={ENTRY_IMAGE_QUALITY}
+          sizes={ENTRY_IMAGE_SIZES}
           src={image}
+          widths={ENTRY_IMAGE_WIDTHS}
         />
       </figure>
     )

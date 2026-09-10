@@ -5,6 +5,7 @@ import { GOOGLE_SITE_VERIFICATION } from 'astro:env/client'
 import { ClientRouter } from 'astro:transitions'
 
 import PostHog from '@/components/PostHog.astro'
+import Prefetch from '@/components/Prefetch.astro'
 import { GLOBAL_CONFIG, IS_PROD } from '@/configs/global'
 import { buildGraphJsonLd, buildSocialMetaTags } from '@/utils/seo'
 import { stripHtmlAndTruncate } from '@/utils/text'
@@ -198,11 +199,8 @@ const socialMetaTags = buildSocialMetaTags(metaForSeo)
     content={GLOBAL_CONFIG.themeColor}
   />
 
-  <!-- Prefetch resume page for snappier nav -->
-  <link
-    rel="prefetch"
-    href="/resume"
-  />
+  <!-- Prefetch in-site destinations and entry images for snappier nav -->
+  <Prefetch />
 
   <!-- PostHog Analytics -->
   {IS_PROD && <PostHog />}

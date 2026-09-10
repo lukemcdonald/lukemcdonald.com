@@ -5,7 +5,7 @@ import notFoundImage from '@/assets/images/not-found.jpg'
 export interface ErrorData {
   description?: string
   html?: string
-  image?: ImageMetadata | string
+  image?: ImageMetadata
   imageAlt?: string
   subtitle?: string
   title: string
