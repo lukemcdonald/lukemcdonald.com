@@ -86,8 +86,3 @@ import type { ReactNode } from 'react'
 - Runner: `pnpm test` (`tsx --test 'src/**/*.test.ts'`)
 - Use `node:test` and `node:assert/strict`
 - Colocate tests as `*.test.ts` next to the module
-- Never use computer use, browser tools, or screen capture unless I explicitly ask you to take a screenshot
-
-## Cursor Cloud specific instructions
-
-Never use computer use, browser tools, or screen capture unless I explicitly ask you to take a screenshot. Verify with `pnpm validate`, `pnpm typecheck`, tests, and logs.
