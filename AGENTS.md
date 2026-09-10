@@ -86,8 +86,8 @@ import type { ReactNode } from 'react'
 - Runner: `pnpm test` (`tsx --test 'src/**/*.test.ts'`)
 - Use `node:test` and `node:assert/strict`
 - Colocate tests as `*.test.ts` next to the module
-- Do not take screenshots, record the screen, or create walkthrough videos unless the user explicitly asks
+- Never use computer use, browser tools, or screen capture unless I explicitly ask you to take a screenshot
 
 ## Cursor Cloud specific instructions
 
-Do not capture screenshots or screen recordings, and do not create walkthrough artifacts, unless the user explicitly asks in that conversation. Prefer `pnpm validate`, `pnpm typecheck`, tests, and logs.
+Never use computer use, browser tools, or screen capture unless I explicitly ask you to take a screenshot. Verify with `pnpm validate`, `pnpm typecheck`, tests, and logs.
