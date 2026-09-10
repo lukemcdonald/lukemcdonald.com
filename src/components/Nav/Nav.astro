@@ -1,22 +1,10 @@
 ---
-import type { MenuLink } from '@/features/navigation/navigation.types'
-
 import { getNavigationGroups } from '@/features/navigation/navigation.server'
 
 import MobileMenu from './MobileMenu.astro'
-import NavMenu from './NavMenu'
+import NavMenu from './NavMenu.astro'
 
 const groups = await getNavigationGroups()
-
-const menuLinks: MenuLink[] = groups.map((group) => {
-  return {
-    href: '#',
-    links: group.links,
-    name: group.name,
-  }
-})
-
-const overlayGroups = groups
 ---
 
 <nav
@@ -24,14 +12,11 @@ const overlayGroups = groups
 >
   <div class="hidden [@media(hover:hover)_and_(pointer:fine)]:contents">
     {
-      menuLinks.map((menuLink) => (
-        <NavMenu
-          client:media="(hover: hover) and (pointer: fine)"
-          link={menuLink}
-        />
-      ))
+      groups.map((group) => {
+        return <NavMenu group={group} />
+      })
     }
   </div>
 
-  <MobileMenu groups={overlayGroups} />
+  <MobileMenu groups={groups} />
 </nav>
