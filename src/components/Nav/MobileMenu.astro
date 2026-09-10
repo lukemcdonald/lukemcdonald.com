@@ -53,16 +53,19 @@ const selectClass =
     </span>
   </button>
 
-  <!-- Sheet starts below the header logo: p-5 + h-16 + p-5 -->
+  <!--
+    Keep the sheet below the header (p-5 + h-16 + p-5) so the existing close
+    control stays visible. Short viewports use width and a pinned footer.
+  -->
   <dialog
     aria-labelledby="mobile-menu-title"
-    class="inset-0 m-0 h-dvh max-h-dvh w-full max-w-none touch-none flex-col overflow-visible overscroll-none border-0 bg-transparent p-0 pt-26 text-primary-900 scheme-light backdrop:bg-transparent open:flex focus:outline-hidden dark:text-primary-50 dark:scheme-dark"
+    class="inset-0 m-0 h-svh max-h-svh w-full max-w-none touch-none flex-col overflow-hidden overscroll-none border-0 bg-transparent p-0 pt-26 text-primary-900 scheme-light backdrop:bg-transparent open:flex focus:outline-hidden dark:text-primary-50 dark:scheme-dark"
     data-mobile-menu-dialog
     id="mobile-menu-dialog"
     tabindex="-1"
   >
     <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-visible rounded-t-3xl bg-white shadow-[0_-8px_24px_rgb(0_0_0_/_0.1)] dark:bg-primary-900 dark:shadow-[0_-10px_28px_rgb(0_0_0_/_0.45)]"
+      class="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-t-3xl bg-white shadow-[0_-8px_24px_rgb(0_0_0_/_0.1)] dark:bg-primary-900 dark:shadow-[0_-10px_28px_rgb(0_0_0_/_0.45)]"
       data-mobile-menu-sheet
     >
       <h2
@@ -72,72 +75,70 @@ const selectClass =
         Menu
       </h2>
 
-      <div
-        class="flex min-h-0 flex-1 touch-pan-y flex-col gap-8 overflow-auto overscroll-contain px-5 pt-5 pb-10"
+      <nav
+        aria-label="Destinations"
+        class="flex min-h-0 flex-1 touch-pan-y flex-col gap-6 overflow-auto overscroll-contain px-5 pt-5 compact-h:gap-4 compact-h:pt-4 compact-h-wide:grid compact-h-wide:grid-cols-[repeat(auto-fit,minmax(11rem,1fr))] compact-h-wide:gap-x-8 compact-h-wide:gap-y-3"
       >
-        <nav
-          aria-label="Destinations"
-          class="flex flex-col gap-6"
-        >
-          {
-            groups.map((group) => (
-              <section class="flex flex-col gap-1">
-                <h3 class={labelClass}>{group.name}</h3>
+        {
+          groups.map((group) => (
+            <section class="flex flex-col gap-1">
+              <h3 class={labelClass}>{group.name}</h3>
 
-                <ul>
-                  {group.links.map((link) => (
-                    <li>
-                      <a
-                        class="inline-flex w-fit items-center py-2 text-xl font-semibold tracking-tight transition-colors hover:bg-black/5 dark:hover:bg-white/10"
-                        data-mobile-menu-link
-                        href={link.href}
-                        {...HOVER_NAV_CUE_PROPS}
-                      >
-                        {link.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            ))
-          }
-        </nav>
+              <ul>
+                {group.links.map((link) => (
+                  <li>
+                    <a
+                      class="inline-flex w-fit items-center py-2 text-xl font-semibold tracking-tight transition-colors hover:bg-black/5 dark:hover:bg-white/10"
+                      data-mobile-menu-link
+                      href={link.href}
+                      {...HOVER_NAV_CUE_PROPS}
+                    >
+                      {link.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))
+        }
+      </nav>
 
-        <div class="grid grid-cols-2 gap-3 border-t border-black/10 pt-6 dark:border-white/15">
-          <label class={`flex flex-col gap-1.5 ${labelClass}`}>
-            Theme
-            <span class="relative block">
-              <select
-                class={selectClass}
-                data-mobile-menu-theme
-                name="theme"
-              >
-                {THEME_COLORS.map((color) => <option value={color}>{THEME_LABELS[color]}</option>)}
-              </select>
-              <ChevronDownIcon
-                aria-hidden="true"
-                class="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-primary-900 dark:text-primary-50"
-              />
-            </span>
-          </label>
+      <div
+        class="grid shrink-0 grid-cols-2 gap-3 border-t border-black/10 px-5 pt-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] dark:border-white/15 compact-h:pt-3"
+      >
+        <label class={`flex flex-col gap-1.5 ${labelClass}`}>
+          Theme
+          <span class="relative block">
+            <select
+              class={selectClass}
+              data-mobile-menu-theme
+              name="theme"
+            >
+              {THEME_COLORS.map((color) => <option value={color}>{THEME_LABELS[color]}</option>)}
+            </select>
+            <ChevronDownIcon
+              aria-hidden="true"
+              class="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-primary-900 dark:text-primary-50"
+            />
+          </span>
+        </label>
 
-          <label class={`flex flex-col gap-1.5 ${labelClass}`}>
-            Appearance
-            <span class="relative block">
-              <select
-                class={selectClass}
-                data-mobile-menu-mode
-                name="appearance"
-              >
-                {THEME_MODES.map((mode) => <option value={mode}>{MODE_LABELS[mode]}</option>)}
-              </select>
-              <ChevronDownIcon
-                aria-hidden="true"
-                class="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-primary-900 dark:text-primary-50"
-              />
-            </span>
-          </label>
-        </div>
+        <label class={`flex flex-col gap-1.5 ${labelClass}`}>
+          Appearance
+          <span class="relative block">
+            <select
+              class={selectClass}
+              data-mobile-menu-mode
+              name="appearance"
+            >
+              {THEME_MODES.map((mode) => <option value={mode}>{MODE_LABELS[mode]}</option>)}
+            </select>
+            <ChevronDownIcon
+              aria-hidden="true"
+              class="pointer-events-none absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 text-primary-900 dark:text-primary-50"
+            />
+          </span>
+        </label>
       </div>
     </div>
   </dialog>
