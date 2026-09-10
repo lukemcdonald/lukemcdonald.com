@@ -34,9 +34,12 @@ const imageLinks = (
       })
       const href = toPageHref(page.id)
 
+      if (currentPath === href) {
+        return
+      }
+
       return {
         href: optimized.src,
-        isCurrent: currentPath === href,
         srcSet: optimized.srcSet.attribute,
       }
     }),
@@ -54,14 +57,13 @@ const imageLinks = (
 }
 
 {
-  imageLinks.map(({ href, isCurrent, srcSet }) => (
+  imageLinks.map(({ href, srcSet }) => (
     <link
       as="image"
-      fetchpriority={isCurrent ? 'high' : undefined}
       href={href}
       imagesizes={ENTRY_IMAGE_SIZES}
       imagesrcset={srcSet}
-      rel={isCurrent ? 'preload' : 'prefetch'}
+      rel="prefetch"
     />
   ))
 }
