@@ -40,7 +40,7 @@ const popoverId = toNavMenuId(group.name)
   </button>
 
   <div
-    class="absolute z-20 w-44 rounded-md bg-white px-1 py-1 shadow-lg"
+    class="glass absolute z-20 w-44 rounded-md px-1 py-1"
     data-nav-menu-panel
     id={popoverId}
     popover
@@ -54,7 +54,7 @@ const popoverId = toNavMenuId(group.name)
           return (
             <li>
               <a
-                class="group flex w-full items-center rounded-sm px-3 py-2 text-base text-primary-900 hover:bg-primary-200 focus-visible:bg-primary-200"
+                class="group flex w-full items-center rounded-sm px-3 py-2 text-base text-primary-900 hover:bg-primary-200 focus-visible:bg-primary-200 dark:text-primary-50 dark:hover:bg-white/10 dark:focus-visible:bg-white/10"
                 href={item.href}
                 {...externalAttrs}
                 {...HOVER_NAV_CUE_PROPS}
