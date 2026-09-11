@@ -26,7 +26,7 @@ export function CommandPaletteDialog({
       onClose={onClose}
     >
       <DialogBackdrop
-        className="fixed inset-0 bg-black/25 transition-opacity data-closed:opacity-0"
+        className="fixed inset-0 bg-transparent transition-opacity data-closed:opacity-0"
         transition
       />
 
