@@ -18,6 +18,7 @@ function closeOpenMenus() {
 }
 
 function bindMenu(root: Element) {
+  const closeButton = root.querySelector<HTMLButtonElement>('[data-mobile-menu-close]')
   const dialog = root.querySelector<HTMLDialogElement>('[data-mobile-menu-dialog]')
   const header = root.closest('header')
   const modeSelect = root.querySelector<HTMLSelectElement>('[data-mobile-menu-mode]')
@@ -60,6 +61,8 @@ function bindMenu(root: Element) {
     },
     { signal },
   )
+
+  closeButton?.addEventListener('click', closeDialog, { signal })
 
   dialog.addEventListener(
     'close',

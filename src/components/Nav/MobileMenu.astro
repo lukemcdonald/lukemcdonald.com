@@ -54,18 +54,18 @@ const selectClass =
   </button>
 
   <!--
-    Keep the sheet below the header (p-5 + h-16 + p-5) so the existing close
-    control stays visible. Short viewports use width and a pinned footer.
+    Tall viewports: sheet below the header so the existing close control stays
+    visible. Short viewports: fullscreen sheet with its own close button.
   -->
   <dialog
     aria-labelledby="mobile-menu-title"
-    class="inset-0 m-0 h-svh max-h-svh w-full max-w-none touch-none flex-col overflow-hidden overscroll-none border-0 bg-transparent p-0 pt-26 text-primary-900 scheme-light backdrop:bg-transparent open:flex focus:outline-hidden dark:text-primary-50 dark:scheme-dark"
+    class="inset-0 m-0 h-svh max-h-svh w-full max-w-none touch-none flex-col overflow-hidden overscroll-none border-0 bg-transparent p-0 pt-26 text-primary-900 scheme-light backdrop:bg-transparent open:flex focus:outline-hidden dark:text-primary-50 dark:scheme-dark compact-h:pt-0"
     data-mobile-menu-dialog
     id="mobile-menu-dialog"
     tabindex="-1"
   >
     <div
-      class="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-t-3xl bg-white shadow-[0_-8px_24px_rgb(0_0_0_/_0.1)] dark:bg-primary-900 dark:shadow-[0_-10px_28px_rgb(0_0_0_/_0.45)]"
+      class="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-t-3xl bg-white shadow-[0_-8px_24px_rgb(0_0_0_/_0.1)] dark:bg-primary-900 dark:shadow-[0_-10px_28px_rgb(0_0_0_/_0.45)] compact-h:rounded-none compact-h:shadow-none"
       data-mobile-menu-sheet
     >
       <h2
@@ -75,9 +75,22 @@ const selectClass =
         Menu
       </h2>
 
+      <button
+        aria-label="Close menu"
+        class="absolute top-4 right-4 z-10 hidden min-h-11 min-w-11 items-center justify-center rounded-md bg-black/0 text-primary-900 transition-transform hover:bg-black/5 focus:outline-hidden active:scale-[0.96] compact-h:inline-flex"
+        data-mobile-menu-close
+        type="button"
+        {...TOGGLE_CUE_PROPS}
+      >
+        <XIcon
+          aria-hidden="true"
+          class="h-6 w-6"
+        />
+      </button>
+
       <nav
         aria-label="Destinations"
-        class="flex min-h-0 flex-1 touch-pan-y flex-col gap-6 overflow-auto overscroll-contain px-5 pt-5 compact-h:gap-4 compact-h:pt-4 compact-h-wide:grid compact-h-wide:grid-cols-[repeat(auto-fit,minmax(11rem,1fr))] compact-h-wide:gap-x-8 compact-h-wide:gap-y-3"
+        class="flex min-h-0 flex-1 touch-pan-y flex-col gap-6 overflow-auto overscroll-contain px-5 pt-5 compact-h:gap-4 compact-h:pt-4 compact-h:pr-16"
       >
         {
           groups.map((group) => (
