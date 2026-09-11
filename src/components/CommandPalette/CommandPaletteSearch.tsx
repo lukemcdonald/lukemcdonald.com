@@ -23,7 +23,7 @@ export function CommandPaletteSearch({
       <input
         ref={searchInputRef}
         autoComplete="off"
-        className={`w-full border-0 bg-transparent px-4 py-4 outline-none focus:ring-0 ${PALETTE_CHROME.ink} ${PALETTE_CHROME.placeholder}`}
+        className={`w-full border-0 bg-transparent px-4 py-3 outline-none focus:ring-0 ${PALETTE_CHROME.ink} ${PALETTE_CHROME.placeholder}`}
         placeholder="Search navigation..."
         type="text"
         value={query}
@@ -38,7 +38,7 @@ export function CommandPaletteSearch({
         }}
       />
       <kbd
-        className={`hidden rounded border px-2 py-1 text-xs sm:inline-block ${PALETTE_CHROME.border} ${PALETTE_CHROME.muted}`}
+        className={`hidden rounded border px-1.5 py-0.5 text-[10px] leading-none sm:inline-block ${PALETTE_CHROME.border} ${PALETTE_CHROME.muted}`}
       >
         ESC
       </kbd>
