@@ -26,14 +26,14 @@ export function CommandPaletteDialog({
       onClose={onClose}
     >
       <DialogBackdrop
-        className="fixed inset-0 bg-black/30 backdrop-blur-xs transition-opacity data-closed:opacity-0"
+        className="fixed inset-0 bg-black/25 transition-opacity data-closed:opacity-0"
         transition
       />
 
       <div className="fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6">
         <div className="flex min-h-full items-center justify-center">
           <DialogPanel
-            className="relative w-full max-w-2xl transform rounded-xl bg-white shadow-2xl transition-all data-closed:scale-95 data-closed:opacity-0 dark:bg-primary-900"
+            className="glass relative w-full max-w-2xl transform overflow-hidden rounded-xl transition-all data-closed:scale-95 data-closed:opacity-0"
             transition
           >
             {children}
