@@ -29,6 +29,7 @@ const popoverId = toNavMenuId(group.name)
     popovertargetaction="show"
     style={`anchor-name: --${popoverId}`}
     type="button"
+    {...HOVER_NAV_CUE_PROPS}
     {...TOGGLE_CUE_PROPS}
   >
     <span>{group.name}</span>
