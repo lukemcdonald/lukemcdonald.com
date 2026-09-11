@@ -33,7 +33,7 @@ export function CommandPaletteDialog({
       <div className="fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6">
         <div className="flex min-h-full items-center justify-center">
           <DialogPanel
-            className="glass relative w-full max-w-2xl transform overflow-hidden rounded-xl transition-all data-closed:scale-95 data-closed:opacity-0"
+            className="relative w-full max-w-2xl transform overflow-hidden rounded-xl glass transition-all data-closed:scale-95 data-closed:opacity-0"
             transition
           >
             {children}
