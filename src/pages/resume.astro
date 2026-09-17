@@ -15,7 +15,7 @@ const data = await getResumeData()
 
 <ProseLayout
   title="Resume"
-  description="The resume of Luke McDonald, a Software Engineer with a product mindset and an eye for design."
+  description={`The resume of ${data.basics.name}, ${data.basics.label}.`}
   bodyClass="bg-white text-primary-900 dark:bg-primary-900 dark:text-primary-50"
 >
   <PrintButton

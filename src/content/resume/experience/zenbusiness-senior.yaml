@@ -4,8 +4,7 @@ startDate: '2022-02'
 endDate: '2022-11'
 image: '@/assets/images/logo-zenbusiness.png'
 location: Remote
-summary: Early frontend platform and product engineering work across formations, compliance, and customer support experiences.
 website: 'https://www.zenbusiness.com/'
 highlights:
-  - Established reusable frontend component patterns that later informed the company-wide design system and accelerated delivery across multiple product squads.
-  - Delivered a React, Dialogflow CX, and GraphQL chatbot microservice, owning the architecture and core customer-facing flow.
+  - Established reusable component architecture that became the foundation for the company-wide design system and accelerated delivery across multiple product teams.
+  - Architected and built an end-to-end conversational product using React, GraphQL, and Dialogflow CX, owning the customer experience, application architecture, and service integration.

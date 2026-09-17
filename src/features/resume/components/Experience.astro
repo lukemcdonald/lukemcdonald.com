@@ -50,9 +50,8 @@ const { experience } = Astro.props
                   {endDateFormatted ?
                     <time datetime={item.endDate}>{endDateLabel}</time>
                   : <span>Present</span>}
-                  ,
                 </span>
-                {item.location}
+                {item.location ? `, ${item.location}` : ''}
               </p>
 
               {item.summary && (
@@ -65,7 +64,10 @@ const { experience } = Astro.props
               {item.highlights && (
                 <ul class="m-0!">
                   {item.highlights.map((highlight) => (
-                    <li set:html={highlight} />
+                    <li
+                      class="print:break-inside-avoid"
+                      set:html={highlight}
+                    />
                   ))}
                 </ul>
               )}

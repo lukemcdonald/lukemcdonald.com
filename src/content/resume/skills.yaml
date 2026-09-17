@@ -1,16 +1,45 @@
-- React
-- TypeScript
-- JavaScript
-- HTML
-- CSS
-- GraphQL
-- Node.js
-- Tailwind CSS
-- Design systems
-- Frontend architecture
-- Developer tooling
-- Agentic workflows
-- GitHub Actions
-- GCP
-- Sentry
-- Webpack/Vite
+- category: Frontend
+  items:
+    - React
+    - TypeScript
+    - JavaScript
+    - HTML
+    - CSS
+    - Tailwind
+    - Design Systems
+
+- category: Backend & Data
+  items:
+    - GraphQL
+    - REST APIs
+    - Node.js
+    - SQL
+    - PHP
+
+- category: AI Engineering
+  items:
+    - Claude Code
+    - Codex
+    - Cursor
+    - Agentic Workflows
+    - MCP
+    - Skills
+    - Multi-Agent Workflows
+
+- category: Integrations & Systems
+  items:
+    - Sentry
+    - GCP
+    - Linear
+    - Jira
+    - Confluence
+    - Event & Analytics Systems
+
+- category: Testing & Tooling
+  items:
+    - Jest
+    - React Testing Library
+    - Playwright
+    - Storybook
+    - GitHub Actions
+    - Webpack/Vite

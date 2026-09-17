@@ -35,11 +35,16 @@ export interface ExperienceItem {
   website?: string
 }
 
+export interface SkillCategory {
+  category: string
+  items: string[]
+}
+
 export interface ResumeData {
   awards: AwardItem[]
   basics: BasicsItem
   education: EducationItem[]
   experience: ExperienceItem[]
   personal: string[]
-  skills: string[]
+  skills: SkillCategory[]
 }
