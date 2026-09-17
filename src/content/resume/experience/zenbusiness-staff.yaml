@@ -1,15 +1,16 @@
 company: ZenBusiness
 position: Senior Staff Software Engineer, Technical Lead (Platform & Growth)
 startDate: '2023-05'
-endDate: '2026-06'
+endDate: '2026-07'
 image: '@/assets/images/logo-zenbusiness.png'
 location: Remote
-summary: Public Benefit Corp serving 850k+ entrepreneurs; tech lead for primary customer acquisition funnel.
+summary: Public Benefit Corp serving 950,000 businesses; tech lead for primary customer acquisition funnel.
 website: 'https://www.zenbusiness.com/'
 highlights:
-  - Cut cached CI builds by 85% and local builds by 97% by modernizing build infrastructure across 12+ frontend apps and resolving a circular dependency.
-  - Migrated analytics instrumentation from a third-party event platform to an internal eventing system across 12+ frontend apps, cutting vendor cost and fixing an SDK race that dropped early events.
-  - Led observability and error standardization across GraphQL and micro-frontends, introducing structured Sentry fingerprinting and custom error handling to accelerate root-cause analysis.
-  - Architected and built a company-wide React design system in 3 months, creating 180+ components, cutting duplicate UI code by 60%, and driving 90% adoption.
-  - Reduced new acquisition funnel delivery from 6 weeks to under 1 week by engineering a reusable skip-logic framework, saving ~100 developer-weeks annually.
-  - Improved purchase funnel LCP by 40% through Webpack tuning and tree shaking, reducing bundle size by 60%.
+  - Architected and built a company-wide React and TypeScript design system in 3 months, creating 180+ components, cutting duplicate UI code by 60%, and driving 90% adoption.
+  - Built an agentic health-check workflow across a multi-team engineering portfolio, orchestrating Sentry, GCP, Jira, and Confluence to correlate production issues, prioritize findings, and generate agent-ready tickets; saved 4+ engineering hours weekly while significantly increasing investigation depth.
+  - Designed and deployed an autonomous code-maintenance system across 3 production repositories, using configurable risk controls, organizational AI skills, and CI guardrails to identify improvements and generate low-risk PRs for testing, dead code, consistency, and code quality.
+  - Standardized error handling and observability across GraphQL and micro-frontends, introducing structured Sentry fingerprinting and enriched error context to improve root-cause analysis and enable automated cross-system health monitoring.
+  - Reduced new acquisition funnel delivery from 6 weeks to under 1 week by engineering a reusable, configuration-driven skip-logic framework, saving ~100 developer-weeks annually.
+  - Designed a versioned AI skills architecture distributed through shared npm packages, automatically providing coding agents with package-specific standards, patterns, and documentation across repositories.
+  - Cut cached CI builds by 85% and local builds by 97% by modernizing shared build infrastructure across 12+ applications and resolving a critical circular dependency.

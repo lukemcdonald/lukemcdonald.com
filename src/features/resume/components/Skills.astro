@@ -1,11 +1,13 @@
 ---
+import type { SkillCategory } from '@/features/resume/resume.types'
+
 import CheckIcon from '@lucide/astro/icons/check'
 import SkillsIcon from '@lucide/astro/icons/swords'
 
 import Section from '@/features/resume/components/ui/Section.astro'
 
 export interface Props {
-  skills: string[]
+  skills: SkillCategory[]
 }
 
 const { skills, ...delegated } = Astro.props satisfies Props
@@ -18,14 +20,16 @@ const { skills, ...delegated } = Astro.props satisfies Props
 >
   <ul class="list-none columns-2 px-0 sm:columns-3">
     {
-      skills.map((skill) => (
-        <li class="p-0 first:mt-0 last:mb-0">
-          <div class="flex items-center gap-2">
-            <CheckIcon class="size-4 text-primary-600" />
-            <span>{skill}</span>
-          </div>
-        </li>
-      ))
+      skills
+        .flatMap(({ items }) => items)
+        .map((skill) => (
+          <li class="break-inside-avoid p-0 first:mt-0 last:mb-0">
+            <div class="flex items-center gap-2">
+              <CheckIcon class="size-4 shrink-0 text-primary-600" />
+              <span>{skill}</span>
+            </div>
+          </li>
+        ))
     }
   </ul>
 </Section>

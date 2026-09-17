@@ -92,7 +92,7 @@ const basicsSchema = z.object({
  * - Education items (array or single object)
  * - Award items (array or single object)
  * - Basics (single object)
- * - Skills (array of strings)
+ * - Skills (array of categories with skill lists)
  * - Personal (array of strings)
  */
 export function createResumeSchema() {
@@ -101,6 +101,7 @@ export function createResumeSchema() {
     educationSchema,
     awardSchema,
     basicsSchema,
+    z.array(z.object({ category: z.string(), items: z.array(z.string()) })),
     z.array(educationSchema),
     z.array(awardSchema),
     z.array(z.string()),

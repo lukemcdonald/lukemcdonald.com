@@ -4,9 +4,9 @@ startDate: '2014-07'
 endDate: '2025-07'
 image: '@/assets/images/logo-blazer-six.png'
 location: Remote
-summary: Independent web studio and product shop; scaled to 12k+ customers, drove $2.5M+ in revenue, and successfully exited the business in 2025.
+summary: Independent web studio and product company successfully exited in 2025.
 website: 'https://www.blazersix.com/'
 highlights:
-  - Co-founded a digital product company (AudioTheme.com/Cedaro) and secured a strategic 10-year partnership with Automattic (WordPress.com) to scale distribution.
-  - Architected and launched a suite of commercial web products serving 12k+ customers, generating $2.5M+ in revenue.
-  - Streamlined the entire product lifecycle by automating deployments, version control, and support workflows, reducing time-to-market and improving stability.
+  - Co-founded and built AudioTheme/Cedaro, securing a strategic 10-year partnership with Automattic (WordPress.com) that expanded global distribution.
+  - Architected, built, and launched a suite of commercial web products serving 12k+ customers and generating $2.5M+ in revenue.
+  - Automated deployment, versioning, and support workflows across the product lifecycle, accelerating releases and improving operational reliability.
