@@ -2,32 +2,32 @@
   --glass-opacity: 64%;
   --glass-bg: color-mix(in oklab, white var(--glass-opacity), transparent);
   --glass-bg-fallback: white;
-  --glass-border: rgb(255 255 255 / 0.4);
-  --glass-highlight: rgb(255 255 255 / 0.75);
+  --glass-border: rgb(255 255 255 / 0.16);
+  --glass-highlight: rgb(255 255 255 / 0.18);
   --glass-shadow: 0 6px 6px rgb(0 0 0 / 0.2), 0 0 20px rgb(0 0 0 / 0.1);
 }
 
 .dark {
   --glass-bg: color-mix(in oklab, var(--color-primary-900) var(--glass-opacity), transparent);
   --glass-bg-fallback: var(--color-primary-900);
-  --glass-border: rgb(255 255 255 / 0.16);
-  --glass-highlight: rgb(255 255 255 / 0.3);
+  --glass-border: rgb(255 255 255 / 0.08);
+  --glass-highlight: rgb(255 255 255 / 0.1);
   --glass-shadow: 0 6px 6px rgb(0 0 0 / 0.3), 0 0 20px rgb(0 0 0 / 0.2);
 }
 
 [data-glass='clear'] {
   --glass-opacity: 32%;
-  --glass-border: rgb(255 255 255 / 0.16);
-  --glass-highlight: rgb(255 255 255 / 0.18);
-}
-
-.dark[data-glass='clear'] {
-  --glass-border: rgb(255 255 255 / 0.08);
-  --glass-highlight: rgb(255 255 255 / 0.1);
 }
 
 [data-glass='solid'] {
   --glass-opacity: 100%;
+  --glass-border: rgb(255 255 255 / 0.4);
+  --glass-highlight: rgb(255 255 255 / 0.75);
+}
+
+.dark[data-glass='solid'] {
+  --glass-border: rgb(255 255 255 / 0.16);
+  --glass-highlight: rgb(255 255 255 / 0.3);
 }
 
 @utility glass {
