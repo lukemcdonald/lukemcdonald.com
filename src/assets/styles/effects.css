@@ -17,6 +17,13 @@
 
 [data-glass='clear'] {
   --glass-opacity: 32%;
+  --glass-border: rgb(255 255 255 / 0.16);
+  --glass-highlight: rgb(255 255 255 / 0.18);
+}
+
+.dark[data-glass='clear'] {
+  --glass-border: rgb(255 255 255 / 0.08);
+  --glass-highlight: rgb(255 255 255 / 0.1);
 }
 
 [data-glass='solid'] {
