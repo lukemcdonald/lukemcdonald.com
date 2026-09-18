@@ -52,10 +52,41 @@ const meta: SeoMeta = {
     >
     </div>
 
+    <svg
+      aria-hidden="true"
+      class="pointer-events-none absolute h-0 w-0"
+      focusable="false"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <filter
+          height="100%"
+          id="glass-lens"
+          width="100%"
+          x="0%"
+          y="0%"
+        >
+          <feGaussianBlur
+            in="SourceAlpha"
+            result="blur"
+            stdDeviation="50"
+          ></feGaussianBlur>
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="blur"
+            scale="50"
+            xChannelSelector="A"
+            yChannelSelector="A"
+          ></feDisplacementMap>
+        </filter>
+      </defs>
+    </svg>
+
     <slot />
 
     <!-- Theme initialization, system preference watcher, and sound bootstrap -->
     <script>
+      import { applyGlassLevel, getGlassLevel } from '@/components/Glass/utils'
       import { initializeSound, playPageArrival } from '@/components/Sound/utils'
       import { getThemeColor } from '@/components/ThemeColor/utils'
       import { getEffectiveThemeMode } from '@/components/ThemeMode/utils'
@@ -66,6 +97,7 @@ const meta: SeoMeta = {
       let isFirstAstroPageLoad = true
 
       function setupTheme() {
+        applyGlassLevel(getGlassLevel())
         // Initialize theme first to set the correct mode from localStorage
         applyThemeColor(getThemeColor())
         applyThemeMode(getEffectiveThemeMode())

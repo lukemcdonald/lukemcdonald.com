@@ -1,5 +1,6 @@
 import type { HighlightedCommand } from './utils'
 
+import { GlassPicker } from '@/components/Glass/Glass'
 import { SoundToggle } from '@/components/Sound'
 import { ThemeColorPicker } from '@/components/ThemeColor'
 import { ThemeModePicker } from '@/components/ThemeMode'
@@ -31,6 +32,7 @@ export function CommandPalettePreferences({
           aria-hidden="true"
           className={`mr-1 h-5 border-l ${PALETTE_CHROME.border}`}
         />
+        <GlassPicker isOpen={isOpen} />
         <ThemeModePicker
           highlightedMode={command.type === 'mode' ? command.mode : undefined}
           isOpen={isOpen}
