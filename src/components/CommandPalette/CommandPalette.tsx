@@ -4,17 +4,15 @@ import { navigate } from 'astro:transitions/client'
 import { play } from 'cuelume'
 import { useState } from 'react'
 
-import { SoundToggle } from '@/components/Sound'
 import { toggleSoundPreference } from '@/components/Sound/utils'
-import { ThemeColorPicker } from '@/components/ThemeColor'
 import { setThemeColor } from '@/components/ThemeColor/utils'
-import { ThemeModePicker } from '@/components/ThemeMode'
 import { setThemeMode } from '@/components/ThemeMode/utils'
 
+import { PALETTE_CHROME } from './chrome'
 import { CommandPaletteDialog } from './CommandPaletteDialog'
 import { CommandPaletteNav } from './CommandPaletteNav'
+import { CommandPalettePreferences } from './CommandPalettePreferences'
 import { CommandPaletteSearch } from './CommandPaletteSearch'
-import { CommandPaletteSection } from './CommandPaletteSection'
 import { CommandPaletteTrigger } from './CommandPaletteTrigger'
 import { useCommandPalette } from './useCommandPalette'
 import { applyHighlightedCommand, getHighlightedCommand } from './utils'
@@ -73,47 +71,24 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
           searchInputRef={searchInputRef}
         />
 
-        <div className="max-h-96 overflow-y-auto p-4">
-          {filteredNavItems.length > 0 && (
+        <div className="max-h-[min(26rem,60dvh)] overflow-y-auto p-4">
+          {filteredNavItems.length > 0 ?
             <CommandPaletteNav
               highlightedHref={highlightedHref}
               items={filteredNavItems}
               onNavigate={() => close({ silent: true })}
             />
-          )}
-
-          <CommandPaletteSection
-            className="mb-5"
-            title="Theme Color"
-          >
-            <ThemeColorPicker
-              highlightedColor={
-                highlightedCommand?.type === 'color' ? highlightedCommand.color : undefined
-              }
-              isOpen={isOpen}
-              preferenceEpoch={preferenceEpoch}
-            />
-          </CommandPaletteSection>
-
-          <div className="flex flex-wrap gap-x-10 gap-y-6">
-            <CommandPaletteSection title="Appearance">
-              <ThemeModePicker
-                highlightedMode={
-                  highlightedCommand?.type === 'mode' ? highlightedCommand.mode : undefined
-                }
-                isOpen={isOpen}
-                preferenceEpoch={preferenceEpoch}
-              />
-            </CommandPaletteSection>
-            <CommandPaletteSection title="Sound">
-              <SoundToggle
-                isHighlighted={highlightedCommand?.type === 'sound'}
-                isOpen={isOpen}
-                preferenceEpoch={preferenceEpoch}
-              />
-            </CommandPaletteSection>
-          </div>
+          : <p className={`py-6 text-center text-sm ${PALETTE_CHROME.muted}`}>
+              {highlightedCommand ? 'Press Enter to apply' : 'No matching pages'}
+            </p>
+          }
         </div>
+
+        <CommandPalettePreferences
+          highlightedCommand={highlightedCommand}
+          isOpen={isOpen}
+          preferenceEpoch={preferenceEpoch}
+        />
       </CommandPaletteDialog>
     </>
   )

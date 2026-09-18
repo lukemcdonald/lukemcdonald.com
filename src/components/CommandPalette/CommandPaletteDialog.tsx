@@ -19,6 +19,7 @@ export function CommandPaletteDialog({
 }: CommandPaletteDialogProps) {
   return (
     <Dialog
+      aria-label="Site navigation and preferences"
       as="div"
       className="relative z-50"
       initialFocus={searchInputRef}

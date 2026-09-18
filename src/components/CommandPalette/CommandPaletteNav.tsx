@@ -14,7 +14,7 @@ type CommandPaletteNavProps = {
 export function CommandPaletteNav({ highlightedHref, items, onNavigate }: CommandPaletteNavProps) {
   return (
     <CommandPaletteSection
-      className="mb-5"
+      className=""
       title="Navigation"
     >
       {items.map((item) => {
