@@ -86,6 +86,7 @@ const meta: SeoMeta = {
 
     <!-- Theme initialization, system preference watcher, and sound bootstrap -->
     <script>
+      import { applyGlassLevel, getGlassLevel } from '@/components/Glass/utils'
       import { initializeSound, playPageArrival } from '@/components/Sound/utils'
       import { getThemeColor } from '@/components/ThemeColor/utils'
       import { getEffectiveThemeMode } from '@/components/ThemeMode/utils'
@@ -96,6 +97,7 @@ const meta: SeoMeta = {
       let isFirstAstroPageLoad = true
 
       function setupTheme() {
+        applyGlassLevel(getGlassLevel())
         // Initialize theme first to set the correct mode from localStorage
         applyThemeColor(getThemeColor())
         applyThemeMode(getEffectiveThemeMode())
