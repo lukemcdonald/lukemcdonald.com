@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from 'react'
 
 import { PALETTE_CHROME } from '@/components/CommandPalette/chrome'
 import { TOGGLE_CUE_PROPS } from '@/components/Sound'
-import { applyThemeColor } from '@/utils/theme'
 
 import { THEME_COLORS, THEME_LABELS } from './constants'
 import { ThemeLandscape } from './ThemeLandscape'
@@ -68,8 +67,6 @@ export function ThemeColorPicker({
     }
 
     setResolvedColors(resolved)
-
-    return () => applyThemeColor(getThemeColor())
   }, [])
 
   const handleColorChange = (color: ThemeColor) => {
@@ -102,14 +99,10 @@ export function ThemeColorPicker({
             style={resolvedColors[color]}
             title={THEME_LABELS[color]}
             type="button"
-            onBlur={() => applyThemeColor(getThemeColor())}
             onClick={() => handleColorChange(color)}
             onFocus={(event) => {
               event.currentTarget.scrollIntoView({ block: 'nearest', inline: 'nearest' })
-              applyThemeColor(color)
             }}
-            onMouseEnter={() => applyThemeColor(color)}
-            onMouseLeave={() => applyThemeColor(getThemeColor())}
             {...TOGGLE_CUE_PROPS}
           >
             <span className="block h-full overflow-hidden rounded-md">
