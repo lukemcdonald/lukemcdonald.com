@@ -1,39 +1,62 @@
 :root {
-  --glass-bg: color-mix(in oklab, white 72%, transparent);
+  --glass-bg: rgb(255 255 255 / 0.64);
   --glass-bg-fallback: white;
-  --glass-border: color-mix(in oklab, white 55%, transparent);
-  --glass-highlight: rgb(255 255 255 / 0.5);
-  --glass-shadow: 0 12px 40px rgb(0 0 0 / 0.16);
+  --glass-border: rgb(255 255 255 / 0.4);
+  --glass-highlight: rgb(255 255 255 / 0.75);
+  --glass-shadow: 0 6px 6px rgb(0 0 0 / 0.2), 0 0 20px rgb(0 0 0 / 0.1);
 }
 
 .dark {
   --glass-bg: color-mix(in oklab, var(--color-primary-900) 64%, transparent);
   --glass-bg-fallback: var(--color-primary-900);
-  --glass-border: color-mix(in oklab, white 14%, transparent);
-  --glass-highlight: rgb(255 255 255 / 0.1);
-  --glass-shadow: 0 12px 40px rgb(0 0 0 / 0.45);
-}
-
-@media (prefers-reduced-transparency: reduce) {
-  :root,
-  .dark {
-    --glass-bg: var(--glass-bg-fallback);
-  }
+  --glass-border: rgb(255 255 255 / 0.16);
+  --glass-highlight: rgb(255 255 255 / 0.3);
+  --glass-shadow: 0 6px 6px rgb(0 0 0 / 0.3), 0 0 20px rgb(0 0 0 / 0.2);
 }
 
 @utility glass {
-  background-color: var(--glass-bg);
+  isolation: isolate;
+  background-color: transparent;
   border: 1px solid var(--glass-border);
-  box-shadow:
-    var(--glass-shadow),
-    inset 0 1px 0 var(--glass-highlight);
-  -webkit-backdrop-filter: blur(20px) saturate(1.8);
-  backdrop-filter: blur(20px) saturate(1.8);
+  box-shadow: var(--glass-shadow);
+
+  &::before,
+  &::after {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    content: '';
+    pointer-events: none;
+  }
+
+  &::before {
+    z-index: -2;
+    background-color: var(--glass-bg-fallback);
+  }
+
+  &::after {
+    z-index: -1;
+    background-color: var(--glass-bg);
+    box-shadow:
+      inset 1px 1px 0 var(--glass-highlight),
+      inset 0 0 5px var(--glass-highlight);
+  }
+
+  @supports (backdrop-filter: blur(4px)) or (-webkit-backdrop-filter: blur(4px)) {
+    &::before {
+      background-color: transparent;
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      filter: url('#glass-lens') saturate(1.2) brightness(1.15);
+    }
+  }
 }
 
 @media (prefers-reduced-transparency: reduce) {
-  .glass {
+  .glass::before {
+    background-color: var(--glass-bg-fallback);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
+    filter: none;
   }
 }
