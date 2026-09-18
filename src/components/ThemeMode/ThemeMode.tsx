@@ -2,8 +2,7 @@ import type { ThemeMode } from './types'
 
 import { useEffect, useState } from 'react'
 
-import { PALETTE_CHROME } from '@/components/CommandPalette/chrome'
-import { TOGGLE_CUE_PROPS } from '@/components/Sound'
+import { PreferencePicker } from '@/components/PreferencePicker'
 
 import { MODE_LABELS, THEME_MODES } from './constants'
 import { MODE_ICONS } from './icons'
@@ -35,31 +34,34 @@ export function ThemeModePicker({
     setSelectedMode(mode)
   }
 
-  return (
-    <div className="flex gap-1">
-      {THEME_MODES.map((mode) => {
-        const Icon = MODE_ICONS[mode]
-        const isHighlighted = mode === highlightedMode
-        const isSelected = selectedMode === mode
+  const SelectedIcon = MODE_ICONS[selectedMode]
 
-        return (
-          <button
-            key={mode}
-            aria-label={`Select ${MODE_LABELS[mode]} mode`}
-            aria-pressed={isSelected}
-            title={MODE_LABELS[mode]}
-            className={`flex min-h-11 items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${PALETTE_CHROME.focusRing} ${PALETTE_CHROME.ink} ${
-              isHighlighted || isSelected ? PALETTE_CHROME.activeFill : PALETTE_CHROME.hoverFill
-            }`}
-            type="button"
-            onClick={() => handleModeChange(mode)}
-            {...TOGGLE_CUE_PROPS}
-          >
-            <Icon className="h-5 w-5" />
-            <span className="sr-only">{MODE_LABELS[mode]}</span>
-          </button>
-        )
+  return (
+    <PreferencePicker
+      highlightedValue={highlightedMode}
+      icon={
+        <SelectedIcon
+          aria-hidden="true"
+          className="h-5 w-5"
+        />
+      }
+      label={`Appearance: ${MODE_LABELS[selectedMode]}`}
+      options={THEME_MODES.map((mode) => {
+        const Icon = MODE_ICONS[mode]
+
+        return {
+          icon: (
+            <Icon
+              aria-hidden="true"
+              className="h-5 w-5"
+            />
+          ),
+          label: MODE_LABELS[mode],
+          value: mode,
+        }
       })}
-    </div>
+      value={selectedMode}
+      onChange={handleModeChange}
+    />
   )
 }
