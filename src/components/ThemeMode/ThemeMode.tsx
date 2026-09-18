@@ -36,7 +36,7 @@ export function ThemeModePicker({
   }
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex gap-1">
       {THEME_MODES.map((mode) => {
         const Icon = MODE_ICONS[mode]
         const isHighlighted = mode === highlightedMode
@@ -46,7 +46,9 @@ export function ThemeModePicker({
           <button
             key={mode}
             aria-label={`Select ${MODE_LABELS[mode]} mode`}
-            className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${PALETTE_CHROME.focusRing} ${PALETTE_CHROME.ink} ${
+            aria-pressed={isSelected}
+            title={MODE_LABELS[mode]}
+            className={`flex min-h-11 items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${PALETTE_CHROME.focusRing} ${PALETTE_CHROME.ink} ${
               isHighlighted || isSelected ? PALETTE_CHROME.activeFill : PALETTE_CHROME.hoverFill
             }`}
             type="button"
@@ -54,7 +56,7 @@ export function ThemeModePicker({
             {...TOGGLE_CUE_PROPS}
           >
             <Icon className="h-5 w-5" />
-            {MODE_LABELS[mode]}
+            <span className="sr-only">{MODE_LABELS[mode]}</span>
           </button>
         )
       })}

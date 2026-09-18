@@ -33,20 +33,22 @@ export function SoundToggle({ isHighlighted = false, isOpen, preferenceEpoch }: 
   }
 
   const isOn = preference === 'on'
+  const label = isOn ? 'Sounds on' : 'Sounds off'
   const Icon = isOn ? Volume2 : VolumeX
 
   return (
     <button
       aria-label={isOn ? 'Disable interaction sounds' : 'Enable interaction sounds'}
       aria-pressed={isOn}
-      className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${PALETTE_CHROME.focusRing} ${PALETTE_CHROME.ink} ${
+      title={label}
+      className={`flex min-h-11 items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${PALETTE_CHROME.focusRing} ${PALETTE_CHROME.ink} ${
         isHighlighted ? PALETTE_CHROME.activeFill : PALETTE_CHROME.hoverFill
       }`}
       type="button"
       onClick={handleClick}
     >
       <Icon className="h-5 w-5" />
-      {isOn ? 'Sounds on' : 'Sounds off'}
+      <span className="sr-only">{label}</span>
     </button>
   )
 }

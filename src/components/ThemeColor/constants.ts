@@ -23,10 +23,3 @@ export const THEME_LABELS: Record<ThemeColor, string> = {
   purple: 'Purple',
   yellow: 'Yellow',
 }
-
-// Swatches preview each theme's --color-primary-400/800 (defined once in
-// theme.css) by scoping a `data-theme` attribute locally rather than
-// duplicating the oklch values here — see the comment above the
-// `[data-theme]` rules in theme.css.
-export const SWATCH_LIGHT_VAR = 'var(--color-primary-400)'
-export const SWATCH_DARK_VAR = 'var(--color-primary-800)'
