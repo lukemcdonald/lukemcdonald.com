@@ -4,7 +4,7 @@
   --glass-bg-fallback: white;
   --glass-border: rgb(255 255 255 / 0.16);
   --glass-highlight: rgb(255 255 255 / 0.18);
-  --glass-shadow: 0 6px 6px rgb(0 0 0 / 0.2), 0 0 20px rgb(0 0 0 / 0.1);
+  --glass-shadow: 0 4px 12px rgb(0 0 0 / 0.08), 0 12px 32px rgb(0 0 0 / 0.06);
 }
 
 .dark,
@@ -13,7 +13,7 @@
   --glass-bg-fallback: var(--color-primary-900);
   --glass-border: rgb(0 0 0 / 0.2);
   --glass-highlight: transparent;
-  --glass-shadow: 0 6px 6px rgb(0 0 0 / 0.3), 0 0 20px rgb(0 0 0 / 0.2);
+  --glass-shadow: 0 4px 12px rgb(0 0 0 / 0.14), 0 12px 32px rgb(0 0 0 / 0.1);
 }
 
 [data-glass='clear'] {
@@ -77,5 +77,38 @@
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
     filter: none;
+  }
+}
+
+/* Fade the layers separately so the panel never becomes a backdrop root during entry. */
+@utility glass-dialog {
+  transition:
+    border-color 150ms ease-out,
+    box-shadow 150ms ease-out;
+
+  &::before,
+  &::after,
+  & > div {
+    transition: opacity 150ms ease-out;
+  }
+
+  &[data-closed] {
+    border-color: transparent;
+    box-shadow: none;
+
+    &::before,
+    &::after,
+    & > div {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &,
+    &::before,
+    &::after,
+    & > div {
+      transition: none;
+    }
   }
 }
