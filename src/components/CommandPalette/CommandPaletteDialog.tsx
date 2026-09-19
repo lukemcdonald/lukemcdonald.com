@@ -34,16 +34,18 @@ export function CommandPaletteDialog({
       <div className="fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6">
         <div className="flex min-h-full items-center justify-center">
           <DialogPanel
-            className="glass relative w-full max-w-2xl transform overflow-hidden rounded-xl transition-all data-closed:scale-95 data-closed:opacity-0"
+            className="glass relative w-full max-w-2xl overflow-hidden rounded-xl glass-dialog"
             transition
           >
-            {children}
-            <div
-              className={`border-t px-4 py-3 text-xs ${PALETTE_CHROME.border} ${PALETTE_CHROME.muted}`}
-            >
-              <div className="flex items-center justify-between">
-                <span>Press ESC to close</span>
-                <span className="hidden sm:inline">⌘K to toggle</span>
+            <div>
+              {children}
+              <div
+                className={`border-t px-4 py-3 text-xs ${PALETTE_CHROME.border} ${PALETTE_CHROME.muted}`}
+              >
+                <div className="flex items-center justify-between">
+                  <span>Press ESC to close</span>
+                  <span className="hidden sm:inline">⌘K to toggle</span>
+                </div>
               </div>
             </div>
           </DialogPanel>
