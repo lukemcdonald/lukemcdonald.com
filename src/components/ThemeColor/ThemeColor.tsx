@@ -77,7 +77,7 @@ export function ThemeColorPicker({
   return (
     <div
       aria-label="Theme colors"
-      className="flex min-w-0 gap-1 overflow-x-auto overscroll-x-contain p-1"
+      className="flex min-w-0 grow gap-1 overflow-x-auto overscroll-x-contain p-1"
       role="group"
     >
       {THEME_COLORS.map((color) => {
