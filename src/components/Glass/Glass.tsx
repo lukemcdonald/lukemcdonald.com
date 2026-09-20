@@ -1,6 +1,6 @@
 import type { GlassLevel } from './constants'
 
-import { Blend, Layers2, Square } from 'lucide-react'
+import { Copy } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 import { PreferencePicker } from '@/components/PreferencePicker'
@@ -11,7 +11,7 @@ import { getGlassLevel, setGlassLevel } from './utils'
 const GLASS_OPTIONS = {
   clear: {
     icon: (
-      <Layers2
+      <Copy
         aria-hidden="true"
         className="h-5 w-5"
       />
@@ -20,18 +20,18 @@ const GLASS_OPTIONS = {
   },
   solid: {
     icon: (
-      <Square
+      <Copy
         aria-hidden="true"
-        className="h-5 w-5"
+        className="h-5 w-5 [&_rect]:fill-current"
       />
     ),
     label: 'Solid',
   },
   tinted: {
     icon: (
-      <Blend
+      <Copy
         aria-hidden="true"
-        className="h-5 w-5"
+        className="h-5 w-5 [&_rect]:fill-current/30"
       />
     ),
     label: 'Tinted',
