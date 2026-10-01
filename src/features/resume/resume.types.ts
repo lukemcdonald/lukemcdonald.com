@@ -18,7 +18,7 @@ export interface BasicsItem {
 }
 
 export interface CommunityItem {
-  description: string
+  description?: string
   title: string
 }
 
@@ -51,6 +51,5 @@ export interface ResumeData {
   community: CommunityItem[]
   education: EducationItem[]
   experience: ExperienceItem[]
-  personal: string[]
   skills: SkillCategory[]
 }
