@@ -58,7 +58,7 @@ const awardSchema = z.object({
  * Community item schema
  */
 const communitySchema = z.object({
-  description: z.string(),
+  description: z.string().optional(),
   title: z.string(),
 })
 
@@ -102,7 +102,6 @@ const basicsSchema = z.object({
  * - Basics (single object)
  * - Skills (array of categories with skill lists)
  * - Community items (array)
- * - Personal (array of strings)
  */
 export function createResumeSchema() {
   return z.union([
@@ -114,6 +113,5 @@ export function createResumeSchema() {
     z.array(educationSchema),
     z.array(awardSchema),
     z.array(communitySchema),
-    z.array(z.string()),
   ])
 }

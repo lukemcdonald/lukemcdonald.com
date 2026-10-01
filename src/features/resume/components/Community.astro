@@ -20,7 +20,11 @@ const { community } = Astro.props
     {
       community.map((item) => (
         <li class="p-0 first:mt-0 last:mb-0">
-          <strong>{item.title}</strong> — {item.description}
+          {item.description ?
+            <>
+              <strong>{item.title}</strong> — {item.description}
+            </>
+          : item.title}
         </li>
       ))
     }
