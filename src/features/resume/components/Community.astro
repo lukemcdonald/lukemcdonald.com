@@ -1,0 +1,28 @@
+---
+import type { CommunityItem } from '@/features/resume/resume.types'
+
+import CommunityIcon from '@lucide/astro/icons/users'
+
+import Section from '@/features/resume/components/ui/Section.astro'
+
+export interface Props {
+  community: CommunityItem[]
+}
+
+const { community } = Astro.props
+---
+
+<Section
+  title="Community"
+  icon={CommunityIcon}
+>
+  <ul class="list-none px-0">
+    {
+      community.map((item) => (
+        <li class="p-0 first:mt-0 last:mb-0">
+          <strong>{item.title}</strong> — {item.description}
+        </li>
+      ))
+    }
+  </ul>
+</Section>
