@@ -5,6 +5,7 @@ import Education from '@/features/resume/components/Education.astro'
 import Experience from '@/features/resume/components/Experience.astro'
 import Footer from '@/features/resume/components/Footer.astro'
 import Header from '@/features/resume/components/Header.astro'
+import Personal from '@/features/resume/components/Personal.astro'
 import Skills from '@/features/resume/components/Skills.astro'
 import PrintButton from '@/features/resume/components/ui/PrintButton.astro'
 import { getResumeData } from '@/features/resume/resume.server'
@@ -29,5 +30,6 @@ const data = await getResumeData()
   <Awards awards={data.awards} />
   <Education education={data.education} />
   <Community community={data.community} />
+  <Personal personal={data.personal} />
   <Footer />
 </ProseLayout>
