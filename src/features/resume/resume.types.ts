@@ -17,6 +17,11 @@ export interface BasicsItem {
   website?: string
 }
 
+export interface CommunityItem {
+  description: string
+  title: string
+}
+
 export interface EducationItem {
   area?: string
   institution: string
@@ -43,6 +48,7 @@ export interface SkillCategory {
 export interface ResumeData {
   awards: AwardItem[]
   basics: BasicsItem
+  community: CommunityItem[]
   education: EducationItem[]
   experience: ExperienceItem[]
   personal: string[]

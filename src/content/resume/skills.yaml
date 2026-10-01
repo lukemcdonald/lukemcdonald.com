@@ -26,14 +26,15 @@
     - Skills
     - Multi-Agent Workflows
 
-- category: Integrations & Systems
+- category: Cloud & Integrations
   items:
-    - Sentry
+    - AWS
     - GCP
-    - Linear
-    - Jira
-    - Confluence
-    - Event & Analytics Systems
+    - Shopify
+    - Segment
+    - RudderStack
+    - Sentry
+    - LaunchDarkly
 
 - category: Testing & Tooling
   items:

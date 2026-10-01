@@ -1,11 +1,5 @@
 company: ZenBusiness
-position: Senior Staff Software Engineer, Technical Lead (Platform & Growth)
-startDate: '2023-05'
-endDate: '2026-07'
-image: '@/assets/images/logo-zenbusiness.png'
-location: Remote
-summary: Public Benefit Corp serving 950,000 businesses; tech lead for primary customer acquisition funnel.
-website: 'https://www.zenbusiness.com/'
+endDate: '2026-06'
 highlights:
   - Architected and built a company-wide React and TypeScript design system in 3 months, creating 180+ components, cutting duplicate UI code by 60%, and driving 90% adoption.
   - Built an agentic health-check workflow across a multi-team engineering portfolio, orchestrating Sentry, GCP, Jira, and Confluence to correlate production issues, prioritize findings, and generate agent-ready tickets; saved 4+ engineering hours weekly while significantly increasing investigation depth.
@@ -14,3 +8,9 @@ highlights:
   - Reduced new acquisition funnel delivery from 6 weeks to under 1 week by engineering a reusable, configuration-driven skip-logic framework, saving ~100 developer-weeks annually.
   - Designed a versioned AI skills architecture distributed through shared npm packages, automatically providing coding agents with package-specific standards, patterns, and documentation across repositories.
   - Cut cached CI builds by 85% and local builds by 97% by modernizing shared build infrastructure across 12+ applications and resolving a critical circular dependency.
+image: '@/assets/images/logo-zenbusiness.png'
+location: Remote
+position: Staff / Senior Staff Software Engineer, Technical Lead (Platform & Growth)
+startDate: '2023-05'
+summary: Public Benefit Corp serving 950,000 businesses; tech lead for primary customer acquisition funnel. Selected as Technical Lead shortly after joining; promoted to Senior Staff Engineer in 2026.
+website: 'https://www.zenbusiness.com/'

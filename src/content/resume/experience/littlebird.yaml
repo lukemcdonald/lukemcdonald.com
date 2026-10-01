@@ -1,0 +1,11 @@
+company: Littlebird
+endDate: '2026-08'
+highlights:
+  - Standardized engineering foundations across 3 frontend applications, unifying testing, shared patterns, AI skills, and code-quality tooling; deployed autonomous Cursor agents to monitor Sentry, investigate production issues, and generate remediation PRs.
+  - Rebuilt and shipped the e-commerce platform in 2 weeks, migrating production checkout to headless Shopify with dynamic products and pricing, backend plan integration, mobile purchase handoffs, and Segment analytics.
+  - Cut JavaScript bundle size by ~50% while improving Lighthouse performance, accessibility, SEO, and maintainability across desktop and mobile.
+location: Remote
+position: Frontend Software Engineer
+startDate: '2026-07'
+summary: Consumer IoT startup building a screen-free safety wearable for kids, pioneering Amazon Sidewalk.
+website: 'https://www.littlebird.care/'

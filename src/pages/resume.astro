@@ -1,5 +1,6 @@
 ---
 import Awards from '@/features/resume/components/Awards.astro'
+import Community from '@/features/resume/components/Community.astro'
 import Education from '@/features/resume/components/Education.astro'
 import Experience from '@/features/resume/components/Experience.astro'
 import Footer from '@/features/resume/components/Footer.astro'
@@ -28,6 +29,7 @@ const data = await getResumeData()
   <Experience experience={data.experience} />
   <Awards awards={data.awards} />
   <Education education={data.education} />
+  <Community community={data.community} />
   <Personal personal={data.personal} />
   <Footer />
 </ProseLayout>
