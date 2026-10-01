@@ -1,0 +1,14 @@
+src/features/resume/components/ui/Section.astro
+  h_b34f5996212cca 15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6ef096ecb87e9fa8ec77bd3977e0661b383ee186",
+  "prompts": {},
+  "humans": {
+    "h_b34f5996212cca": {
+      "author": "Luke McDonald <thelukemcdonald@gmail.com>"
+    }
+  }
+}
