@@ -51,5 +51,6 @@ export interface ResumeData {
   community: CommunityItem[]
   education: EducationItem[]
   experience: ExperienceItem[]
+  personal: string[]
   skills: SkillCategory[]
 }
