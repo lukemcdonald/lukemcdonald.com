@@ -55,12 +55,15 @@ const awardSchema = z.object({
 })
 
 /**
- * Community item schema
+ * Community item schema.
+ * Strict so award items with date/org cannot match this branch and lose fields.
  */
-const communitySchema = z.object({
-  description: z.string().optional(),
-  title: z.string(),
-})
+const communitySchema = z
+  .object({
+    description: z.string().optional(),
+    title: z.string(),
+  })
+  .strict()
 
 /**
  * Profile schema for basics
@@ -112,8 +115,8 @@ export function createResumeSchema() {
     basicsSchema,
     z.array(z.object({ category: z.string(), items: z.array(z.string()) })),
     z.array(educationSchema),
-    z.array(awardSchema),
     z.array(communitySchema),
+    z.array(awardSchema),
     z.array(z.string()),
   ])
 }
