@@ -51,4 +51,11 @@ describe('renderOgPng', () => {
     assert.equal(png.subarray(0, 8).equals(PNG_MAGIC), true)
     assert.ok(png.byteLength > 1024)
   })
+
+  test('different titles produce different images', () => {
+    const father = renderOgPng({ title: 'Father' })
+    const resume = renderOgPng({ title: 'Resume' })
+
+    assert.equal(father.equals(resume), false)
+  })
 })
