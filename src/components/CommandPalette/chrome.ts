@@ -1,8 +1,7 @@
 export const PALETTE_CHROME = {
   activeFill: 'bg-primary-900/8 dark:bg-white/10',
   border: 'border-black/10 dark:border-white/15',
-  focusRing:
-    'focus:outline-none focus-visible:ring-2 focus-visible:ring-black/25 dark:focus-visible:ring-white/40',
+  focusRing: 'focus-ring',
   hoverFill: 'hover:bg-primary-900/8 dark:hover:bg-white/10',
   ink: 'text-primary-900 dark:text-white',
   muted: 'text-black/50 dark:text-white/50',

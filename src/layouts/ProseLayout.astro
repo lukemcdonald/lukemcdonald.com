@@ -11,7 +11,11 @@ const { description, title } = Astro.props
   description={description}
   bodyClass="bg-white text-primary-900 dark:bg-primary-900 dark:text-primary-50"
 >
-  <main class="px-4 py-6">
+  <main
+    class="px-4 py-6"
+    id="main"
+    tabindex="-1"
+  >
     <slot name="before-prose" />
     <Prose
       as="article"

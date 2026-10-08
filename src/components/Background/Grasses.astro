@@ -1,13 +1,9 @@
 ---
 import Grass from '@/components/Background/Grass.astro'
+import { pickGrassId } from '@/components/Background/utils'
 
-function getRandomGrassId(excludeId?: string) {
-  const ids = ['1', '2', '3', '4']
-  return ids.filter((id) => id !== excludeId)[Math.floor(Math.random() * ids.length)]
-}
-
-const leftGrassId = getRandomGrassId()
-const rightGrassId = getRandomGrassId(leftGrassId)
+const leftGrassId = pickGrassId()
+const rightGrassId = pickGrassId({ excludeId: leftGrassId })
 ---
 
 <Grass

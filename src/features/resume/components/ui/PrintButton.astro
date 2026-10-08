@@ -26,15 +26,18 @@ const { class: className, size = 'md' } = Astro.props satisfies Props
 ---
 
 <button
+  aria-label="Print"
   class:list={[
-    'bg-primary-700 font-medium text-primary-50 shadow-sm transition-colors',
-    'hover:bg-primary-700/80',
-    'print:hidden',
+    'bg-primary-700 font-medium text-primary-50 shadow-sm focus-ring transition-colors hover:bg-primary-700/80 print:hidden',
     sizes[size],
     className,
   ]}
   onclick="window.print()"
+  type="button"
   {...PRESS_CUE_PROPS}
 >
-  <PrinterIcon class={iconSizes[size]} />
+  <PrinterIcon
+    aria-hidden="true"
+    class={iconSizes[size]}
+  />
 </button>

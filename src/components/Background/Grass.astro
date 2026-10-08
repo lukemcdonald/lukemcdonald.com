@@ -1,4 +1,6 @@
 ---
+import type { GrassId } from '@/components/Background/utils'
+
 import { Image } from 'astro:assets'
 
 import leaf1 from '@/assets/images/grass/grass-1.svg'
@@ -9,7 +11,7 @@ import leaf4 from '@/assets/images/grass/grass-4.svg'
 export type Props = {
   alt?: string
   class?: string
-  id: string
+  id: GrassId
   position: 'left' | 'right'
 }
 
@@ -39,7 +41,7 @@ const positionClasses = {
 ---
 
 <Image
-  alt={alt || 'grass'}
+  alt={alt ?? ''}
   class:list={[
     'overlay pointer-events-none fixed -bottom-4 hidden dark:invert',
     `z-0 w-[50dvh] opacity-4`,

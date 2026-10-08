@@ -23,7 +23,7 @@ const popoverId = toNavMenuId(group.name)
     aria-controls={popoverId}
     aria-expanded="false"
     aria-haspopup="true"
-    class="inline-flex justify-center rounded-md bg-black/0 px-2.5 py-2 text-base font-semibold tracking-wide text-primary-900 uppercase hover:bg-black/5 focus:outline-hidden sm:px-3"
+    class="inline-flex justify-center rounded-md bg-black/0 px-2.5 py-2 text-base font-semibold tracking-wide text-primary-900 uppercase focus-ring hover:bg-black/5 sm:px-3"
     data-nav-menu-trigger
     popovertarget={popoverId}
     popovertargetaction="show"
@@ -54,7 +54,7 @@ const popoverId = toNavMenuId(group.name)
           return (
             <li>
               <a
-                class="group flex w-full items-center rounded-sm px-3 py-2 text-base text-primary-900 hover:bg-primary-900/8 focus-visible:bg-primary-900/8 dark:text-primary-50 dark:hover:bg-white/10 dark:focus-visible:bg-white/10"
+                class="group flex w-full items-center rounded-sm px-3 py-2 text-base text-primary-900 focus-ring hover:bg-primary-900/8 focus-visible:bg-primary-900/8 dark:text-primary-50 dark:hover:bg-white/10 dark:focus-visible:bg-white/10"
                 href={item.href}
                 {...externalAttrs}
                 {...HOVER_NAV_CUE_PROPS}

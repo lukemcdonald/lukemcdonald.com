@@ -46,6 +46,13 @@ const meta: SeoMeta = {
   />
 
   <body class:list={{ [bodyClass!]: Boolean(bodyClass) }}>
+    <a
+      class="sr-only no-underline focus-ring transition-none focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-100 focus:rounded-md focus:bg-primary-900 focus:px-4 focus:py-2 focus:font-semibold focus:text-primary-50 dark:focus:bg-primary-50 dark:focus:text-primary-900"
+      href="#main"
+    >
+      Skip to content
+    </a>
+
     <EasterEggs />
 
     <!-- iOS 26 Safari samples this for the top chrome. Header on small screens, shell on lg+. -->
