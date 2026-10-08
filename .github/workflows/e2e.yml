@@ -1,4 +1,4 @@
-name: E2E
+name: End-to-end tests
 
 on:
   workflow_call:
@@ -26,6 +26,7 @@ jobs:
   e2e:
     env:
       E2E_BROWSERS: ${{ inputs.browsers }}
+    name: Playwright
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

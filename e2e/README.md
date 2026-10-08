@@ -132,16 +132,17 @@ UI mode is the best authoring loop. For a CI failure, download the `playwright-r
 
 ```yaml
 e2e:
+  name: End-to-end tests
   uses: ./.github/workflows/e2e.yml
   with:
     browsers: pr # or full
 ```
 
-CI passes `pr` on pull requests and `full` on pushes to `main`. The called job sets `E2E_BROWSERS` to that value, installs Chromium only for `pr` (or every browser for `full`), and runs `pnpm test:e2e`. Playwright reads the same env, so the matrix matches the install. GitHub reports the CI check as `e2e / e2e` (caller job / callee job). A manual run of this workflow is labeled `E2E / e2e`.
+CI passes `pr` on pull requests and `full` on pushes to `main`. The called job sets `E2E_BROWSERS` to that value, installs Chromium only for `pr` (or every browser for `full`), and runs `pnpm test:e2e`. Playwright reads the same env, so the matrix matches the install. GitHub reports the CI check as `CI / End-to-end tests / Playwright` (caller job / callee job). A manual run of this workflow is labeled `End-to-end tests / Playwright`.
 
 ### Manual run
 
-1. Actions → **E2E** → **Run workflow**.
+1. Actions → **End-to-end tests** → **Run workflow**.
 2. Pick the branch and browser set (`pr` is the default; `full` is the main matrix).
 3. Run. Failures upload `playwright-report` (HTML report plus traces).
 
@@ -154,6 +155,7 @@ Copy `.github/workflows/e2e.yml` into that repo (it expects pnpm, `.nvmrc`, `pnp
 ```yaml
 jobs:
   e2e:
+    name: End-to-end tests
     uses: ./.github/workflows/e2e.yml
     with:
       browsers: pr
