@@ -41,6 +41,14 @@ function sortByTitle(pages: PageEntry[]) {
   return [...pages].sort(compareByTitle)
 }
 
+function firstPresent(...values: Array<string | undefined>) {
+  for (const value of values) {
+    if (value) {
+      return value
+    }
+  }
+}
+
 const SORT_BY_FIELD = {
   order: sortByOrder,
   title: sortByTitle,
@@ -56,12 +64,12 @@ export function resolvePageSeo(page: {
   data: Pick<PageEntry['data'], 'description' | 'seo' | 'title'>
   rendered?: { html?: string } | null
 }) {
-  const { description, seo, title } = page.data
+  const seo = page.data.seo || {}
 
   return {
-    description: seo?.description || description || page.rendered?.html,
-    ogImage: seo?.ogImage,
-    title: seo?.title || title,
+    description: firstPresent(seo.description, page.data.description, page.rendered?.html),
+    ogImage: seo.ogImage,
+    title: seo.title || page.data.title,
   }
 }
 
