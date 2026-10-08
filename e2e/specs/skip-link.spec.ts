@@ -30,8 +30,7 @@ test.describe('skip link', { tag: '@a11y' }, () => {
   test('still moves focus to main after ClientRouter navigation', async ({ homePage }) => {
     await homePage.goto()
     await homePage.greetingLink('/i-am-a/christian').click()
-    await homePage.page.waitForURL('/i-am-a/christian')
-    await homePage.main.waitFor({ state: 'visible' })
+    await homePage.waitForPath('/i-am-a/christian')
 
     await homePage.skipLink.tabTo()
     await expect(homePage.skipLink.root).toBeFocused()

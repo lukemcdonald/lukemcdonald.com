@@ -10,6 +10,7 @@ test.describe('theme', { tag: '@smoke' }, () => {
     if (isMobile) {
       await homePage.header.nav.openMobileMenu()
       await homePage.header.nav.mobileAppearance.selectOption('dark')
+      await homePage.header.nav.closeMobileMenu()
     } else {
       await homePage.header.commandPalette.openWithKeyboard()
       await homePage.header.commandPalette.themeToggle.select('dark')
@@ -20,7 +21,7 @@ test.describe('theme', { tag: '@smoke' }, () => {
     await expect.poll(() => homePage.storedThemeMode()).toBe('dark')
 
     await homePage.greetingLink('/i-am-a/christian').click()
-    await homePage.page.waitForURL('/i-am-a/christian')
+    await homePage.waitForPath('/i-am-a/christian')
     await expect.poll(() => homePage.isDarkMode()).toBe(true)
     await expect.poll(() => homePage.storedThemeMode()).toBe('dark')
 

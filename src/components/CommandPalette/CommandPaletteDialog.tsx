@@ -22,7 +22,6 @@ export function CommandPaletteDialog({
       aria-label="Site navigation and preferences"
       as="div"
       className="relative z-50"
-      data-testid="command-palette"
       initialFocus={searchInputRef}
       open={open}
       onClose={onClose}
@@ -36,6 +35,7 @@ export function CommandPaletteDialog({
         <div className="flex min-h-full items-center justify-center">
           <DialogPanel
             className="glass relative w-full max-w-2xl overflow-hidden rounded-xl glass-dialog"
+            data-testid="command-palette"
             transition
           >
             <div>

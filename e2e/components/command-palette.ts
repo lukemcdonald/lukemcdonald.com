@@ -20,11 +20,11 @@ export class CommandPalette {
 
   async closeWithKeyboard() {
     await this.page.keyboard.press('Escape')
-    await this.dialog.waitFor({ state: 'hidden' })
+    await this.input.waitFor({ state: 'hidden' })
   }
 
   async openWithKeyboard() {
     await this.page.keyboard.press('ControlOrMeta+k')
-    await this.dialog.waitFor({ state: 'visible' })
+    await this.input.waitFor({ state: 'visible' })
   }
 }

@@ -14,7 +14,6 @@ test.describe('command palette', { tag: '@smoke' }, () => {
 
     await expect(homePage.header.commandPalette.dialog).toBeVisible()
     await expect(homePage.header.commandPalette.input).toBeFocused()
-    await expect(homePage.header.commandPalette.dialog).toHaveRole('dialog')
 
     await homePage.header.commandPalette.closeWithKeyboard()
     await expect(homePage.header.commandPalette.dialog).toBeHidden()

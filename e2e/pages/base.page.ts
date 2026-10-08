@@ -47,4 +47,12 @@ export class BasePage {
       return localStorage.getItem(key)
     }, THEME_MODE_STORAGE_KEY)
   }
+
+  async waitForPath(path: string) {
+    await this.page.waitForURL(path)
+    await this.main.waitFor({ state: 'visible' })
+    await this.page.waitForFunction(() => {
+      return !document.documentElement.hasAttribute('data-astro-transition')
+    })
+  }
 }
