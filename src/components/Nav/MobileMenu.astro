@@ -6,6 +6,7 @@ import XIcon from '@lucide/astro/icons/x'
 import { HOVER_NAV_CUE_PROPS, TOGGLE_CUE_PROPS } from '@/components/Sound'
 import { THEME_COLORS, THEME_LABELS } from '@/components/ThemeColor/constants'
 import { MODE_LABELS, THEME_MODES } from '@/components/ThemeMode/constants'
+import { FOCUS_RING } from '@/utils/focus'
 
 type DestinationLink = {
   href: string
@@ -23,8 +24,10 @@ const { groups } = Astro.props
 
 const labelClass =
   'text-xs font-medium tracking-wider text-primary-800 uppercase dark:text-white/50'
-const selectClass =
-  'min-h-11 w-full appearance-none rounded-lg border border-primary-950/15 bg-black/[0.04] py-2 pr-10 pl-3 text-base font-normal tracking-normal text-primary-900 dark:border-white/15 dark:bg-white/10 dark:text-primary-50'
+const selectClass = [
+  'min-h-11 w-full appearance-none rounded-lg border border-primary-950/15 bg-black/[0.04] py-2 pr-10 pl-3 text-base font-normal tracking-normal text-primary-900 dark:border-white/15 dark:bg-white/10 dark:text-primary-50',
+  FOCUS_RING,
+]
 ---
 
 <div
@@ -36,7 +39,10 @@ const selectClass =
     aria-expanded="false"
     aria-haspopup="dialog"
     aria-label="Open menu"
-    class="group relative z-20 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md bg-black/0 text-primary-900 transition-transform hover:bg-black/5 focus:outline-hidden active:scale-[0.96]"
+    class:list={[
+      'group relative z-20 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md bg-black/0 text-primary-900 transition-transform hover:bg-black/5 active:scale-[0.96]',
+      FOCUS_RING,
+    ]}
     data-mobile-menu-trigger
     type="button"
     {...TOGGLE_CUE_PROPS}
@@ -88,7 +94,10 @@ const selectClass =
                   {group.links.map((link) => (
                     <li>
                       <a
-                        class="inline-flex w-fit items-center py-2 text-xl font-semibold tracking-tight transition-colors hover:bg-black/5 dark:hover:bg-white/10"
+                        class:list={[
+                          'inline-flex w-fit items-center py-2 text-xl font-semibold tracking-tight transition-colors hover:bg-black/5 dark:hover:bg-white/10',
+                          FOCUS_RING,
+                        ]}
                         data-mobile-menu-link
                         href={link.href}
                         {...HOVER_NAV_CUE_PROPS}
@@ -108,7 +117,7 @@ const selectClass =
             Theme
             <span class="relative block">
               <select
-                class={selectClass}
+                class:list={selectClass}
                 data-mobile-menu-theme
                 name="theme"
               >
@@ -125,7 +134,7 @@ const selectClass =
             Appearance
             <span class="relative block">
               <select
-                class={selectClass}
+                class:list={selectClass}
                 data-mobile-menu-mode
                 name="appearance"
               >

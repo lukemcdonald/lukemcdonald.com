@@ -12,7 +12,11 @@ import Header from '@/components/Header.astro'
   >
     <div class="site relative m-auto bg-white lg:max-h-site lg:w-11/12 lg:max-w-7xl lg:shadow-2xl">
       <Header />
-      <main class="lg:flex lg:h-screen lg:max-h-site">
+      <main
+        class="lg:flex lg:h-screen lg:max-h-site"
+        id="main"
+        tabindex="-1"
+      >
         <slot />
       </main>
     </div>

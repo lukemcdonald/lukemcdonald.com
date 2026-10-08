@@ -45,6 +45,14 @@ const meta: SeoMeta = {
   />
 
   <body class:list={{ [bodyClass!]: Boolean(bodyClass) }}>
+    <a
+      class="sr-only rounded-md bg-primary-900 font-semibold text-primary-50 no-underline focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-2 focus:ring-2 focus:ring-primary-50 focus:ring-offset-2 focus:ring-offset-primary-900 focus:outline-none dark:bg-primary-50 dark:text-primary-900 dark:focus:ring-primary-900 dark:focus:ring-offset-primary-50"
+      data-skip-to-content
+      href="#main"
+    >
+      Skip to content
+    </a>
+
     <!-- iOS 26 Safari samples this for the top chrome. Header on small screens, shell on lg+. -->
     <div
       aria-hidden="true"
@@ -95,6 +103,23 @@ const meta: SeoMeta = {
 
       let cleanupWatcher: (() => void) | null = null
       let isFirstAstroPageLoad = true
+
+      document.addEventListener('click', (event) => {
+        const target = event.target
+
+        if (!(target instanceof Element) || !target.closest('[data-skip-to-content]')) {
+          return
+        }
+
+        const main = document.getElementById('main')
+
+        if (!main) {
+          return
+        }
+
+        event.preventDefault()
+        main.focus()
+      })
 
       function setupTheme() {
         applyGlassLevel(getGlassLevel())
