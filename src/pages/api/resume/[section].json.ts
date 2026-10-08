@@ -45,5 +45,9 @@ export const GET: APIRoute = async ({ params }) => {
     return new Response(null, { status: 404 })
   }
 
-  return new Response(JSON.stringify(payload))
+  return new Response(JSON.stringify(payload), {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
 }
