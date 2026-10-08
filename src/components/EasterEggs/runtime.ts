@@ -157,7 +157,12 @@ function prefersReducedMotion() {
 }
 
 function remountActiveEgg() {
-  activeEgg?.onActivate?.()
+  if (!activeEgg) {
+    return
+  }
+
+  document.documentElement.setAttribute(EASTER_EGG_ATTRIBUTE, activeEgg.id)
+  activeEgg.onActivate?.()
 }
 
 function restoreStoredEgg() {
