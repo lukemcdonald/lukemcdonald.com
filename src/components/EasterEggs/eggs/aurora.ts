@@ -45,10 +45,10 @@ function mountAuroraFireflies() {
     node.style.setProperty('--aurora-firefly-delay', firefly.delay)
     node.style.setProperty('--dx', wanderPx())
     node.style.setProperty('--dy', wanderPx())
-    node.style.setProperty('--wander-delay-x', `-${rand(0, 12).toFixed(1)}s`)
-    node.style.setProperty('--wander-delay-y', `-${rand(0, 16).toFixed(1)}s`)
-    node.style.setProperty('--wander-x', `${rand(8, 14).toFixed(1)}s`)
-    node.style.setProperty('--wander-y', `${rand(11, 18).toFixed(1)}s`)
+    node.style.setProperty('--wander-delay-x', `-${rand(0, 8).toFixed(1)}s`)
+    node.style.setProperty('--wander-delay-y', `-${rand(0, 11).toFixed(1)}s`)
+    node.style.setProperty('--wander-x', `${rand(6, 10).toFixed(1)}s`)
+    node.style.setProperty('--wander-y', `${rand(8, 13).toFixed(1)}s`)
     node.style.top = firefly.top
     document.body.append(node)
   }

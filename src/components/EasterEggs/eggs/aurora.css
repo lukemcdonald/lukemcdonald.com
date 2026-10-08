@@ -63,7 +63,7 @@ html[data-easter-egg='aurora'] [data-aurora-firefly] {
   animation-delay:
     var(--aurora-firefly-delay, 0s), var(--wander-delay-x, -4s), var(--wander-delay-y, -7s);
   animation-direction: normal, alternate, alternate;
-  animation-duration: var(--aurora-firefly-blink, 3s), var(--wander-x, 11s), var(--wander-y, 15s);
+  animation-duration: var(--aurora-firefly-blink, 3s), var(--wander-x, 8s), var(--wander-y, 11s);
   animation-iteration-count: infinite;
   animation-name: aurora-firefly-blink, aurora-firefly-wander-x, aurora-firefly-wander-y;
   animation-timing-function: ease-in-out;
