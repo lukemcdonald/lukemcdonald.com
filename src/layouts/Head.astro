@@ -2,6 +2,7 @@
 import type { SeoMeta } from '@/utils/seo'
 
 import { GOOGLE_SITE_VERIFICATION, PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN } from 'astro:env/client'
+import { CONTEXT } from 'astro:env/server'
 import { ClientRouter } from 'astro:transitions'
 
 import { getEasterEggInitScript } from '@/components/EasterEggs/easter-eggs'
@@ -203,7 +204,7 @@ const socialMetaTags = buildSocialMetaTags(metaForSeo)
   />
 
   {
-    process.env.CONTEXT === 'production' && PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN && (
+    CONTEXT === 'production' && PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN && (
       <script
         data-cf-beacon={JSON.stringify({ token: PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN })}
         defer
