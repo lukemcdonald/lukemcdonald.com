@@ -137,7 +137,7 @@ e2e:
     browsers: pr # or full
 ```
 
-CI passes `pr` on pull requests and `full` on pushes to `main`. The called job sets `E2E_BROWSERS` to that value, installs Chromium only for `pr` (or every browser for `full`), and runs `pnpm test:e2e`. Playwright reads the same env, so the matrix matches the install. The check shows up on the PR or main commit as `e2e / e2e`.
+CI passes `pr` on pull requests and `full` on pushes to `main`. The called job sets `E2E_BROWSERS` to that value, installs Chromium only for `pr` (or every browser for `full`), and runs `pnpm test:e2e`. Playwright reads the same env, so the matrix matches the install. GitHub reports the CI check as `e2e / e2e` (caller job / callee job). A manual run of this workflow is labeled `E2E / e2e`.
 
 ### Manual run
 
