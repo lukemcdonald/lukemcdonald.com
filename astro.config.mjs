@@ -12,6 +12,17 @@ import { ENV_SCHEMA } from './src/configs/env.js'
 // Sitemap exclusions
 const SITEMAP_EXCLUSIONS = new Set([`${GLOBAL_CONFIG.site.origin}/index`])
 
+function resolveSiteUrl() {
+  const context = process.env.CONTEXT
+  const deployPrimeUrl = process.env.DEPLOY_PRIME_URL
+
+  if (deployPrimeUrl && (context === 'deploy-preview' || context === 'branch-deploy')) {
+    return deployPrimeUrl
+  }
+
+  return GLOBAL_CONFIG.site.origin
+}
+
 // https://astro.build/config
 export default defineConfig({
   adapter: netlify(),
@@ -46,9 +57,12 @@ export default defineConfig({
     port: 3000,
   },
   session: false,
-  site: GLOBAL_CONFIG.site.origin,
+  site: resolveSiteUrl(),
   trailingSlash: 'never',
   vite: {
     plugins: [tailwindcss()],
+    ssr: {
+      external: ['@resvg/resvg-js'],
+    },
   },
 })
