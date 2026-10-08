@@ -2,8 +2,7 @@ import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
 import { EASTER_EGG_CONFIG } from './config.ts'
-import { auroraEgg } from './eggs/aurora/egg.ts'
-import { KONAMI_SEQUENCE } from './eggs/aurora/sequence.ts'
+import { auroraEgg, KONAMI_SEQUENCE } from './eggs/aurora/index.ts'
 import { EASTER_EGGS } from './registry.ts'
 
 describe('easter egg registry', () => {

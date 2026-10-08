@@ -3,8 +3,14 @@ import type { EasterEggKeyInput, EasterEggTarget } from './types.ts'
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
+import { auroraEgg } from './eggs/aurora/egg.ts'
 import { KONAMI_SEQUENCE } from './eggs/aurora/sequence.ts'
-import { advanceSequenceProgress, shouldIgnoreEasterEggInput } from './input.ts'
+import {
+  advanceSequenceProgress,
+  collectCompletedSequenceEggs,
+  shouldIgnoreEasterEggInput,
+  stepSequence,
+} from './input.ts'
 
 function keyEvent(overrides: Partial<EasterEggKeyInput> = {}): EasterEggKeyInput {
   return {
@@ -59,6 +65,42 @@ describe('advanceSequenceProgress', () => {
     }, 0)
 
     assert.equal(progress, KONAMI_SEQUENCE.length)
+  })
+})
+
+describe('stepSequence', () => {
+  test('marks the sequence complete and resets progress', () => {
+    assert.deepEqual(stepSequence(KONAMI_SEQUENCE.length - 1, 'KeyA', KONAMI_SEQUENCE), {
+      completed: true,
+      progress: 0,
+    })
+  })
+
+  test('keeps partial progress', () => {
+    assert.deepEqual(stepSequence(0, 'ArrowUp', KONAMI_SEQUENCE), {
+      completed: false,
+      progress: 1,
+    })
+  })
+})
+
+describe('collectCompletedSequenceEggs', () => {
+  test('returns the egg and clears progress when the sequence finishes', () => {
+    const progressById = new Map([['aurora', KONAMI_SEQUENCE.length - 1]])
+    const result = collectCompletedSequenceEggs([auroraEgg], progressById, 'KeyA')
+
+    assert.deepEqual(result.completed, [auroraEgg])
+    assert.equal(result.progress.has('aurora'), false)
+  })
+
+  test('stores partial progress and clears a reset', () => {
+    const started = collectCompletedSequenceEggs([auroraEgg], new Map(), 'ArrowUp')
+    assert.deepEqual(started.completed, [])
+    assert.equal(started.progress.get('aurora'), 1)
+
+    const reset = collectCompletedSequenceEggs([auroraEgg], started.progress, 'KeyB')
+    assert.deepEqual(reset.completed, [])
+    assert.equal(reset.progress.has('aurora'), false)
   })
 })
 

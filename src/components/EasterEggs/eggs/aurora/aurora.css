@@ -48,10 +48,11 @@ html[data-easter-egg='aurora']::before {
 }
 
 html[data-easter-egg='aurora'] [data-aurora-firefly] {
-  animation:
-    aurora-firefly-blink var(--aurora-firefly-blink, 3s) ease-in-out infinite,
-    aurora-firefly-drift-a var(--aurora-firefly-drift, 11s) ease-in-out infinite;
   animation-delay: var(--aurora-firefly-delay, 0s);
+  animation-duration: var(--aurora-firefly-blink, 3s), var(--aurora-firefly-drift, 11s);
+  animation-iteration-count: infinite;
+  animation-name: aurora-firefly-blink, aurora-firefly-drift-a;
+  animation-timing-function: ease-in-out;
   background: color-mix(in oklab, var(--color-secondary-base) 85%, white);
   border-radius: 999px;
   box-shadow: 0 0 8px 2px color-mix(in oklab, var(--color-secondary-base) 55%, transparent);

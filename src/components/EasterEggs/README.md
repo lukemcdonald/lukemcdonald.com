@@ -7,7 +7,7 @@ Small, removable visual extras. The runtime installs one document key listener a
 1. Create `src/components/EasterEggs/eggs/<id>/`.
 2. Export an `EasterEgg` from `egg.ts` (id, name, mode, trigger, optional duration, sounds, and hooks). Re-export it from `index.ts` without importing CSS so Node tests stay CSS-free.
 3. Keep egg CSS in that folder as `*.css`, scoped to `html[data-easter-egg='<id>']`. `EasterEggs.astro` picks those files up automatically so restored eggs do not flash unstyled.
-4. Register it in `registry.ts`.
+4. Register it in `registry.ts` by importing from `./eggs/<id>`.
 
 Triggers are data. `sequence` (a list of `event.code` values) is implemented; other kinds can be added to `EasterEggTrigger` later.
 

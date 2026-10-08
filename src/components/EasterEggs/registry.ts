@@ -1,3 +1,3 @@
-import { auroraEgg } from './eggs/aurora/egg'
+import { auroraEgg } from './eggs/aurora'
 
 export const EASTER_EGGS = [auroraEgg]

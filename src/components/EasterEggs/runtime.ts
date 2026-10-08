@@ -1,56 +1,107 @@
+import type { CompletedEggDecision } from './decide'
 import type { EasterEgg, EasterEggKeyInput, EasterEggTarget } from './types'
+import type { SoundName } from 'cuelume'
 
 import { play } from 'cuelume'
 
 import { EASTER_EGG_CONFIG } from './config'
+import { EASTER_EGG_ATTRIBUTE, EASTER_EGG_IDLE_RESET_MS } from './constants'
+import { decideCompletedEggs, escapeDismissesEgg } from './decide'
+import { collectCompletedSequenceEggs, shouldIgnoreEasterEggInput } from './input'
 import {
-  EASTER_EGG_ATTRIBUTE,
-  EASTER_EGG_DURATION_MS,
-  EASTER_EGG_DURATION_REDUCED_MS,
-  EASTER_EGG_IDLE_RESET_MS,
-} from './constants'
-import { advanceSequenceProgress, shouldIgnoreEasterEggInput } from './input'
+  eggDurationMs,
+  eggSoundName,
+  shouldPersistEgg,
+  shouldReplaceActiveEgg,
+  shouldScheduleHide,
+} from './lifecycle'
 import { clearStoredEasterEggs, getStoredEasterEggId, persistEasterEggId } from './persist'
-import { pickEgg } from './pick'
 import { EASTER_EGGS } from './registry'
-import { resolveEggActivation } from './toggle'
 
 let activeEgg: EasterEgg | null = null
 let hideTimer: ReturnType<typeof setTimeout> | null = null
 let idleTimer: ReturnType<typeof setTimeout> | null = null
-const progressById = new Map<string, number>()
+let progressById = new Map<string, number>()
 let started = false
 
 function activateEgg(egg: EasterEgg, options: { silent?: boolean } = {}) {
-  if (activeEgg && activeEgg.id !== egg.id) {
-    dismissEgg({ silent: true })
+  dismissIfReplacing(egg)
+  presentEgg(egg)
+  playNamedSound(eggSoundName(Boolean(options.silent), egg.soundOn))
+}
+
+function applyCompletedDecision(decision: CompletedEggDecision) {
+  if (decision.kind === 'deactivate') {
+    dismissEgg()
+    return
   }
+
+  if (decision.kind === 'activate') {
+    activateEgg(decision.egg)
+  }
+}
+
+function applySequenceKey(code: string) {
+  if (isTimedActive()) {
+    return
+  }
+
+  settleSequenceKey(code)
+}
+
+function currentPickOptions() {
+  return {
+    date: new Date(),
+    random: Math.random,
+    staticId: EASTER_EGG_CONFIG.staticId,
+    strategy: EASTER_EGG_CONFIG.strategy,
+  }
+}
+
+function isTimedActive() {
+  return activeEgg?.mode === 'timed'
+}
+
+function settleSequenceDecision(decision: CompletedEggDecision) {
+  if (decision.kind === 'idle') {
+    scheduleIdleReset()
+    return
+  }
+
+  resetProgress()
+  applyCompletedDecision(decision)
+}
+
+function settleSequenceKey(code: string) {
+  const stepped = collectCompletedSequenceEggs(sequenceEggs(), progressById, code)
+  progressById = stepped.progress
+  settleSequenceDecision(
+    decideCompletedEggs(activeEgg?.id, stepped.completed, currentPickOptions()),
+  )
+}
+
+function armTimedEgg(egg: EasterEgg) {
+  if (!shouldScheduleHide(egg.mode)) {
+    return
+  }
+
+  const duration = eggDurationMs(egg.durationMs, prefersReducedMotion())
+  document.documentElement.style.setProperty('--easter-egg-duration', `${duration}ms`)
+  hideTimer = setTimeout(() => {
+    dismissEgg()
+  }, duration)
+}
+
+function clearActiveEgg() {
+  const egg = activeEgg
 
   clearHideTimer()
-  activeEgg = egg
-  document.documentElement.setAttribute(EASTER_EGG_ATTRIBUTE, egg.id)
+  activeEgg = null
+  document.documentElement.removeAttribute(EASTER_EGG_ATTRIBUTE)
+  document.documentElement.style.removeProperty('--easter-egg-duration')
+  writeStorage(clearStoredEasterEggs)
 
-  if (egg.mode === 'toggle') {
-    writeStorage((storage) => persistEasterEggId(storage, egg.id))
-  }
-
-  if (egg.mode === 'timed') {
-    const duration =
-      prefersReducedMotion() ?
-        EASTER_EGG_DURATION_REDUCED_MS
-      : (egg.durationMs ?? EASTER_EGG_DURATION_MS)
-
-    document.documentElement.style.setProperty('--easter-egg-duration', `${duration}ms`)
-    hideTimer = setTimeout(() => {
-      dismissEgg()
-    }, duration)
-  }
-
-  egg.onActivate?.()
-
-  if (!options.silent && egg.soundOn) {
-    play(egg.soundOn)
-  }
+  return egg
 }
 
 function clearHideTimer() {
@@ -72,18 +123,17 @@ function clearIdleTimer() {
 }
 
 function dismissEgg(options: { silent?: boolean } = {}) {
-  const egg = activeEgg
-
-  clearHideTimer()
-  activeEgg = null
-  document.documentElement.removeAttribute(EASTER_EGG_ATTRIBUTE)
-  document.documentElement.style.removeProperty('--easter-egg-duration')
-  writeStorage(clearStoredEasterEggs)
+  const egg = clearActiveEgg()
   egg?.onDismiss?.()
+  playNamedSound(eggSoundName(Boolean(options.silent), egg?.soundOff))
+}
 
-  if (!options.silent && egg?.soundOff) {
-    play(egg.soundOff)
+function dismissIfReplacing(egg: EasterEgg) {
+  if (!shouldReplaceActiveEgg(activeEgg?.id, egg.id)) {
+    return
   }
+
+  dismissEgg({ silent: true })
 }
 
 function getEggTarget(target: EventTarget | null): EasterEggTarget | null {
@@ -98,6 +148,16 @@ function getEggTarget(target: EventTarget | null): EasterEggTarget | null {
   }
 }
 
+function handleEscape() {
+  resetProgress()
+
+  if (!escapeDismissesEgg(activeEgg?.mode)) {
+    return
+  }
+
+  dismissEgg()
+}
+
 function onKeyDown(event: KeyboardEvent) {
   const input = toKeyInput(event)
   const target = getEggTarget(event.target)
@@ -106,54 +166,41 @@ function onKeyDown(event: KeyboardEvent) {
     return
   }
 
-  if (event.key === 'Escape') {
-    progressById.clear()
-    clearIdleTimer()
-
-    if (activeEgg?.mode === 'timed') {
-      dismissEgg()
-    }
-
+  if (input.key === 'Escape') {
+    handleEscape()
     return
   }
 
-  if (activeEgg?.mode === 'timed') {
+  applySequenceKey(input.code)
+}
+
+function persistToggleEgg(egg: EasterEgg) {
+  if (!shouldPersistEgg(egg.mode)) {
     return
   }
 
-  const completed = takeCompletedEggs(event.code)
+  writeStorage((storage) => persistEasterEggId(storage, egg.id))
+}
 
-  if (completed.length === 0) {
-    scheduleIdleReset()
+function playNamedSound(name: SoundName | undefined) {
+  if (!name) {
     return
   }
 
-  progressById.clear()
-  clearIdleTimer()
-
-  const chosen = pickEgg(completed, {
-    date: new Date(),
-    random: Math.random,
-    staticId: EASTER_EGG_CONFIG.staticId,
-    strategy: EASTER_EGG_CONFIG.strategy,
-  })
-
-  if (!chosen) {
-    return
-  }
-
-  const action = resolveEggActivation(activeEgg?.id, chosen)
-
-  if (action === 'deactivate') {
-    dismissEgg()
-    return
-  }
-
-  activateEgg(chosen)
+  play(name)
 }
 
 function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
+function presentEgg(egg: EasterEgg) {
+  clearHideTimer()
+  activeEgg = egg
+  document.documentElement.setAttribute(EASTER_EGG_ATTRIBUTE, egg.id)
+  persistToggleEgg(egg)
+  armTimedEgg(egg)
+  egg.onActivate?.()
 }
 
 function remountActiveEgg() {
@@ -163,6 +210,11 @@ function remountActiveEgg() {
 
   document.documentElement.setAttribute(EASTER_EGG_ATTRIBUTE, activeEgg.id)
   activeEgg.onActivate?.()
+}
+
+function resetProgress() {
+  progressById = new Map()
+  clearIdleTimer()
 }
 
 function restoreStoredEgg() {
@@ -190,35 +242,13 @@ function readStorage() {
 function scheduleIdleReset() {
   clearIdleTimer()
   idleTimer = setTimeout(() => {
-    progressById.clear()
+    progressById = new Map()
     idleTimer = null
   }, EASTER_EGG_IDLE_RESET_MS)
 }
 
 function sequenceEggs() {
   return EASTER_EGGS.filter((egg) => egg.trigger.type === 'sequence')
-}
-
-function takeCompletedEggs(code: string) {
-  const completed: EasterEgg[] = []
-
-  for (const egg of sequenceEggs()) {
-    const next = advanceSequenceProgress(progressById.get(egg.id) ?? 0, code, egg.trigger.codes)
-
-    if (next >= egg.trigger.codes.length) {
-      progressById.delete(egg.id)
-      completed.push(egg)
-      continue
-    }
-
-    if (next === 0) {
-      progressById.delete(egg.id)
-    } else {
-      progressById.set(egg.id, next)
-    }
-  }
-
-  return completed
 }
 
 function toKeyInput(event: KeyboardEvent): EasterEggKeyInput {

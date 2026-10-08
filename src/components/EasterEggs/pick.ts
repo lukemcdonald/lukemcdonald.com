@@ -1,5 +1,12 @@
 import type { EasterEgg, PickStrategy, Season } from './types'
 
+export type PickOptions = {
+  date?: Date
+  random?: () => number
+  staticId?: string
+  strategy: PickStrategy
+}
+
 const SEASON_MONTHS: Record<Season, readonly number[]> = {
   autumn: [9, 10, 11],
   spring: [3, 4, 5],
@@ -7,28 +14,20 @@ const SEASON_MONTHS: Record<Season, readonly number[]> = {
   winter: [12, 1, 2],
 }
 
-export function pickEgg(
-  eggs: readonly EasterEgg[],
-  options: {
-    date?: Date
-    random?: () => number
-    staticId?: string
-    strategy: PickStrategy
-  },
-): EasterEgg | undefined {
+type EggPicker = (eggs: readonly EasterEgg[], options: PickOptions) => EasterEgg | undefined
+
+const PICKERS: Record<PickStrategy, EggPicker> = {
+  random: (eggs, options) => pickRandom(eggs, options.random ?? Math.random),
+  schedule: (eggs, options) => pickScheduled(eggs, options.date ?? new Date()),
+  static: (eggs, options) => pickStatic(eggs, options.staticId),
+}
+
+export function pickEgg(eggs: readonly EasterEgg[], options: PickOptions): EasterEgg | undefined {
   if (eggs.length === 0) {
     return undefined
   }
 
-  if (options.strategy === 'static') {
-    return pickStatic(eggs, options.staticId)
-  }
-
-  if (options.strategy === 'random') {
-    return pickRandom(eggs, options.random ?? Math.random)
-  }
-
-  return pickScheduled(eggs, options.date ?? new Date())
+  return PICKERS[options.strategy](eggs, options)
 }
 
 export function matchesSchedule(egg: EasterEgg, date: Date): boolean {
