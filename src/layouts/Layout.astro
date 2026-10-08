@@ -46,8 +46,7 @@ const meta: SeoMeta = {
 
   <body class:list={{ [bodyClass!]: Boolean(bodyClass) }}>
     <a
-      class="skip-link"
-      data-skip-to-content
+      class="sr-only no-underline focus-ring transition-none focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-100 focus:rounded-md focus:bg-primary-900 focus:px-4 focus:py-2 focus:font-semibold focus:text-primary-50 dark:focus:bg-primary-50 dark:focus:text-primary-900"
       href="#main"
     >
       Skip to content
@@ -103,23 +102,6 @@ const meta: SeoMeta = {
 
       let cleanupWatcher: (() => void) | null = null
       let isFirstAstroPageLoad = true
-
-      document.addEventListener('click', (event) => {
-        const target = event.target
-
-        if (!(target instanceof Element) || !target.closest('[data-skip-to-content]')) {
-          return
-        }
-
-        const main = document.getElementById('main')
-
-        if (!main) {
-          return
-        }
-
-        event.preventDefault()
-        main.focus()
-      })
 
       function setupTheme() {
         applyGlassLevel(getGlassLevel())

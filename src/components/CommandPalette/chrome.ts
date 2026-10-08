@@ -1,9 +1,7 @@
-import { FOCUS_RING } from '@/utils/focus'
-
 export const PALETTE_CHROME = {
   activeFill: 'bg-primary-900/8 dark:bg-white/10',
   border: 'border-black/10 dark:border-white/15',
-  focusRing: FOCUS_RING,
+  focusRing: 'focus-ring',
   hoverFill: 'hover:bg-primary-900/8 dark:hover:bg-white/10',
   ink: 'text-primary-900 dark:text-white',
   muted: 'text-black/50 dark:text-white/50',

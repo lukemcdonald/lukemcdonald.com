@@ -72,64 +72,7 @@
 }
 
 @utility focus-ring {
-  &:focus {
-    outline: none;
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--color-primary-900);
-    outline-offset: 2px;
-  }
-
-  @variant dark {
-    &:focus-visible {
-      outline-color: var(--color-primary-50);
-    }
-  }
-}
-
-@utility skip-link {
-  transition: none;
-  position: absolute;
-  inset-inline-start: 0.75rem;
-  top: 0.75rem;
-  z-index: 100;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-  border-radius: 0.375rem;
-  background-color: var(--color-primary-900);
-  color: var(--color-primary-50);
-  font-weight: 600;
-  text-decoration: none;
-
-  &:focus,
-  &:focus-visible {
-    position: fixed;
-    width: auto;
-    height: auto;
-    padding: 0.5rem 1rem;
-    margin: 0;
-    overflow: visible;
-    clip: auto;
-    outline: 2px solid var(--color-primary-900);
-    outline-offset: 2px;
-  }
-
-  @variant dark {
-    background-color: var(--color-primary-50);
-    color: var(--color-primary-900);
-
-    &:focus,
-    &:focus-visible {
-      outline-color: var(--color-primary-50);
-    }
-  }
+  @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-900 focus-visible:outline-solid dark:focus-visible:outline-primary-50;
 }
 
 @media (prefers-reduced-transparency: reduce) {
