@@ -8,7 +8,7 @@ My personal website re-built with [Astro](https://astro.build). This is my playg
 
 - **[Astro](https://astro.build)** - Static site generator with partial hydration
 - **[Netlify](https://netlify.com)** - Deployment and hosting
-- **[PostHog](https://posthog.com)** - Analytics
+- **[Cloudflare Web Analytics](https://www.cloudflare.com/web-analytics/)** - Analytics. Token from Cloudflare dashboard, Analytics & Logs, Web Analytics, Add a site; set `PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN` as a Netlify environment variable.
 - **[React](https://react.dev)** - Interactive components
 - **[TailwindCSS](https://tailwindcss.com)** - Utility-first CSS framework
 - **[TypeScript](https://typescriptlang.org)** - Type-safe development
