@@ -13,6 +13,15 @@ import {
   persistEasterEggId,
 } from './persist.ts'
 
+function createDocumentElement() {
+  return {
+    attributes: {} as Record<string, string>,
+    setAttribute(name: string, value: string) {
+      this.attributes[name] = value
+    },
+  }
+}
+
 function createMemoryStorage(initial: Record<string, string> = {}): StorageLike & {
   data: Record<string, string>
 } {
@@ -36,6 +45,17 @@ function createMemoryStorage(initial: Record<string, string> = {}): StorageLike 
       data[key] = value
     },
   }
+}
+
+function runInitScript(storage: StorageLike) {
+  const html = createDocumentElement()
+
+  vm.runInNewContext(getEasterEggInitScript(), {
+    document: { documentElement: html },
+    localStorage: storage,
+  })
+
+  return html
 }
 
 describe('easter egg persistence', () => {
@@ -72,21 +92,28 @@ describe('easter egg persistence', () => {
   })
 
   test('init script restores the stored egg attribute from localStorage', () => {
-    const html = {
-      attributes: {} as Record<string, string>,
-      setAttribute(name: string, value: string) {
-        this.attributes[name] = value
-      },
-    }
-    const storage = createMemoryStorage({
-      [eggStorageKey('aurora')]: 'on',
-    })
-
-    vm.runInNewContext(getEasterEggInitScript(), {
-      document: { documentElement: html },
-      localStorage: storage,
-    })
+    const html = runInitScript(
+      createMemoryStorage({
+        [eggStorageKey('aurora')]: 'on',
+      }),
+    )
 
     assert.equal(html.attributes[EASTER_EGG_ATTRIBUTE], 'aurora')
+  })
+
+  test('init script does not set the egg attribute when storage is empty', () => {
+    const html = runInitScript(createMemoryStorage())
+
+    assert.equal(html.attributes[EASTER_EGG_ATTRIBUTE], undefined)
+  })
+
+  test('init script does not set the egg attribute when stored value is off', () => {
+    const html = runInitScript(
+      createMemoryStorage({
+        [eggStorageKey('aurora')]: 'off',
+      }),
+    )
+
+    assert.equal(html.attributes[EASTER_EGG_ATTRIBUTE], undefined)
   })
 })
