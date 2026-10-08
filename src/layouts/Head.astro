@@ -203,7 +203,7 @@ const socialMetaTags = buildSocialMetaTags(metaForSeo)
   />
 
   {
-    PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN && (
+    process.env.CONTEXT === 'production' && PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN && (
       <script
         data-cf-beacon={JSON.stringify({ token: PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN })}
         defer
