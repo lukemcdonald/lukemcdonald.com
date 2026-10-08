@@ -117,7 +117,7 @@
     margin: 0;
     overflow: visible;
     clip: auto;
-    outline: 2px solid var(--color-primary-50);
+    outline: 2px solid var(--color-primary-900);
     outline-offset: 2px;
   }
 
@@ -127,7 +127,7 @@
 
     &:focus,
     &:focus-visible {
-      outline-color: var(--color-primary-900);
+      outline-color: var(--color-primary-50);
     }
   }
 }
