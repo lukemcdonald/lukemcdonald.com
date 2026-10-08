@@ -58,5 +58,5 @@ export function playPageArrival(): void {
     return
   }
 
-  play('arrival')
+  play('navigate')
 }
