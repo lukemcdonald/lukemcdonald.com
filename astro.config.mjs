@@ -39,6 +39,9 @@ export default defineConfig({
       },
     }),
   ],
+  prefetch: {
+    prefetchAll: true,
+  },
   server: {
     port: 3000,
   },
