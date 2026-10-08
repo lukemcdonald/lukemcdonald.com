@@ -1,6 +1,6 @@
 # Security headers for all routes
+# Netlify already sends HSTS on the custom domain
 /*
-  Strict-Transport-Security: max-age=31536000
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: SAMEORIGIN
