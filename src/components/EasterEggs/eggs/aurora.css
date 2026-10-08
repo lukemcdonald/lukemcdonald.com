@@ -60,7 +60,8 @@ html[data-easter-egg='aurora']::before {
 }
 
 html[data-easter-egg='aurora'] [data-aurora-firefly] {
-  animation-delay: var(--aurora-firefly-delay, 0s), var(--wander-delay-x, -4s), var(--wander-delay-y, -7s);
+  animation-delay:
+    var(--aurora-firefly-delay, 0s), var(--wander-delay-x, -4s), var(--wander-delay-y, -7s);
   animation-direction: normal, alternate, alternate;
   animation-duration: var(--aurora-firefly-blink, 3s), var(--wander-x, 11s), var(--wander-y, 15s);
   animation-iteration-count: infinite;
