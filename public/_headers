@@ -5,3 +5,6 @@
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: SAMEORIGIN
   Content-Security-Policy: frame-ancestors 'self'
+
+/api/*
+  X-Robots-Tag: noindex
