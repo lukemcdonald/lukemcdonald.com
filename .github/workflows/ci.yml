@@ -12,6 +12,7 @@ concurrency:
 
 jobs:
   validate:
+    name: Validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -26,6 +27,7 @@ jobs:
 
   audit:
     continue-on-error: true
+    name: Code health
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -41,6 +43,7 @@ jobs:
       - run: pnpm exec fallow audit --base origin/main && pnpm exec fallow health --score --hotspots --summary
 
   e2e:
+    name: End-to-end tests
     uses: ./.github/workflows/e2e.yml
     with:
       browsers: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'full' || 'pr' }}
