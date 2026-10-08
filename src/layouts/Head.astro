@@ -4,6 +4,7 @@ import type { SeoMeta } from '@/utils/seo'
 import { GOOGLE_SITE_VERIFICATION } from 'astro:env/client'
 import { ClientRouter } from 'astro:transitions'
 
+import { getEasterEggInitScript } from '@/components/EasterEggs'
 import PostHog from '@/components/PostHog.astro'
 import { GLOBAL_CONFIG, IS_PROD } from '@/configs/global'
 import { buildGraphJsonLd, buildSocialMetaTags } from '@/utils/seo'
@@ -33,10 +34,14 @@ const socialMetaTags = buildSocialMetaTags(metaForSeo)
 ---
 
 <head>
-  <!-- Theme initialization script (prevents flash) - must run before any CSS -->
+  <!-- Theme and easter-egg initialization (prevents flash) - must run before any CSS -->
   <script
     is:inline
     set:html={getThemeInitScript()}
+  />
+  <script
+    is:inline
+    set:html={getEasterEggInitScript()}
   />
 
   <!-- Basic HTML Head Elements -->

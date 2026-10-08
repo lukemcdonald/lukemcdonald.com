@@ -3,6 +3,7 @@ import type { SeoMeta } from '@/utils/seo'
 
 import '@/assets/styles/global.css'
 
+import EasterEggs from '@/components/EasterEggs/EasterEggs.astro'
 import { GLOBAL_CONFIG } from '@/configs/global'
 import Head from '@/layouts/Head.astro'
 
@@ -45,6 +46,8 @@ const meta: SeoMeta = {
   />
 
   <body class:list={{ [bodyClass!]: Boolean(bodyClass) }}>
+    <EasterEggs />
+
     <!-- iOS 26 Safari samples this for the top chrome. Header on small screens, shell on lg+. -->
     <div
       aria-hidden="true"
@@ -84,10 +87,10 @@ const meta: SeoMeta = {
 
     <slot />
 
-    <!-- Theme initialization, system preference watcher, sound bootstrap, and Konami easter egg -->
+    <!-- Theme initialization, system preference watcher, sound bootstrap, and easter eggs -->
     <script>
+      import { initializeEasterEggs } from '@/components/EasterEggs'
       import { applyGlassLevel, getGlassLevel } from '@/components/Glass/utils'
-      import { initializeKonami } from '@/components/Konami'
       import { initializeSound, playPageArrival } from '@/components/Sound/utils'
       import { getThemeColor } from '@/components/ThemeColor/utils'
       import { getEffectiveThemeMode } from '@/components/ThemeMode/utils'
@@ -115,7 +118,7 @@ const meta: SeoMeta = {
       function setup() {
         setupTheme()
         initializeSound()
-        initializeKonami()
+        initializeEasterEggs()
       }
 
       function onAstroPageLoad() {
