@@ -120,8 +120,43 @@ pnpm exec playwright show-report
 pnpm exec playwright test --trace on
 ```
 
-Local and PR CI projects: Chromium and Pixel 5. Pushes to `main` also run Firefox and WebKit (without the axe sweep).
+Local default and the PR browser set (`E2E_BROWSERS=pr`, the default): Chromium and Pixel 5. `E2E_BROWSERS=full` adds Firefox and WebKit (without the axe sweep). CI passes that same env into `pnpm test:e2e`.
 
 `reuseExistingServer` is on locally. The suite listens on `E2E_PORT` (default `4173`), not the Astro dev port (`4321`), so a stray `astro dev` is not reused. If you already built and served that URL, the suite will reuse it. Otherwise `webServer` runs `pnpm build && pnpm preview:static`.
 
 UI mode is the best authoring loop. For a CI failure, download the `playwright-report` artifact (includes traces on retry) and open it with `pnpm exec playwright show-report`.
+
+## CI
+
+`.github/workflows/ci.yml` still runs on `pull_request` and `push` to `main`. It owns validate and audit, plus a workflow-level `concurrency` group that cancels superseded PR runs and never cancels `main`. Its `e2e` job calls the reusable workflow:
+
+```yaml
+e2e:
+  uses: ./.github/workflows/e2e.yml
+  with:
+    browsers: pr # or full
+```
+
+CI passes `pr` on pull requests and `full` on pushes to `main`. The called job sets `E2E_BROWSERS` to that value, installs Chromium only for `pr` (or every browser for `full`), and runs `pnpm test:e2e`. Playwright reads the same env, so the matrix matches the install. The check shows up on the PR or main commit as `e2e / e2e`.
+
+### Manual run
+
+1. Actions → **E2E** → **Run workflow**.
+2. Pick the branch and browser set (`pr` is the default; `full` is the main matrix).
+3. Run. Failures upload `playwright-report` (HTML report plus traces).
+
+Manual runs use a separate concurrency group (`e2e-workflow_dispatch-<ref>`) so they do not cancel, or get cancelled by, the CI caller.
+
+### Reuse on another site
+
+Copy `.github/workflows/e2e.yml` into that repo (it expects pnpm, `.nvmrc`, `pnpm test:e2e`, and a Playwright config that honors `E2E_BROWSERS=pr|full`). Then call it from that site's CI the same way:
+
+```yaml
+jobs:
+  e2e:
+    uses: ./.github/workflows/e2e.yml
+    with:
+      browsers: pr
+```
+
+Point `playwright.config.ts` at `process.env.E2E_BROWSERS === 'full'` for the full project list and treat every other value as the PR set, so Actions, `workflow_dispatch`, and a local `E2E_BROWSERS=full pnpm test:e2e` stay in lockstep.

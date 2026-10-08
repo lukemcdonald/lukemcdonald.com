@@ -1,9 +1,9 @@
 import { defineConfig, devices } from '@playwright/test'
 
+const e2eBrowsers = process.env.E2E_BROWSERS === 'full' ? 'full' : 'pr'
 const e2ePort = process.env.E2E_PORT || '4173'
 const baseURL = `http://127.0.0.1:${e2ePort}`
 const isCI = Boolean(process.env.CI)
-const isMainCI = isCI && process.env.GITHUB_REF === 'refs/heads/main'
 
 const chromiumProject = {
   name: 'chromium',
@@ -34,7 +34,7 @@ export default defineConfig({
   globalTimeout: 60 * 60 * 1000,
   outputDir: 'test-results',
   projects:
-    isMainCI ?
+    e2eBrowsers === 'full' ?
       [chromiumProject, firefoxProject, webkitProject, mobileProject]
     : [chromiumProject, mobileProject],
   reporter: isCI ? [['github'], ['html', { open: 'never' }]] : [['html', { open: 'on-failure' }]],
