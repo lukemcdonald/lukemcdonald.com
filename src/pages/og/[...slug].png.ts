@@ -31,7 +31,7 @@ export async function getStaticPaths() {
 export const GET: APIRoute = ({ props }) => {
   const png = renderOgPng({ title: props.title })
 
-  return new Response(png, {
+  return new Response(Uint8Array.from(png), {
     headers: {
       'Content-Type': 'image/png',
     },
