@@ -48,7 +48,7 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   webServer: {
-    command: `pnpm build && E2E_PORT=${e2ePort} pnpm preview:static`,
+    command: 'pnpm build && pnpm preview:static',
     reuseExistingServer: !isCI,
     timeout: 180 * 1000,
     url: baseURL,

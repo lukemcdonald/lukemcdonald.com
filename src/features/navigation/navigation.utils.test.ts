@@ -89,7 +89,7 @@ describe('toHrefTestId', () => {
     assert.equal(toHrefTestId('nav-link', '/resume'), 'nav-link-resume')
     assert.equal(
       toHrefTestId('greeting-link', '/i-am-a/christian'),
-      'greeting-link-i-am-a-christian',
+      'greeting-link-i-am-a--christian',
     )
   })
 
@@ -112,7 +112,13 @@ describe('toNavMenuId', () => {
 
 describe('toTestIdSlug', () => {
   test('strips a leading slash, lowercases, and hyphenates', () => {
-    assert.equal(toTestIdSlug('/i-am-a/christian'), 'i-am-a-christian')
+    assert.equal(toTestIdSlug('/i-am-a/christian'), 'i-am-a--christian')
     assert.equal(toTestIdSlug('  TREAD Talks  '), 'tread-talks')
+  })
+
+  test('keeps path separators distinct from hyphens in the slug', () => {
+    assert.equal(toTestIdSlug('/a/foo/bar'), 'a--foo--bar')
+    assert.equal(toTestIdSlug('/a/foo-bar'), 'a--foo-bar')
+    assert.notEqual(toTestIdSlug('/a/foo/bar'), toTestIdSlug('/a/foo-bar'))
   })
 })

@@ -49,6 +49,12 @@ export function toTestIdSlug(value: string): string {
     .trim()
     .replace(/^\//, '')
     .toLowerCase()
-    .replaceAll(/[^a-z0-9]+/g, '-')
-    .replaceAll(/^-+|-+$/g, '')
+    .split('/')
+    .map((segment) => {
+      return segment.replaceAll(/[^a-z0-9]+/g, '-').replaceAll(/^-+|-+$/g, '')
+    })
+    .filter((segment) => {
+      return segment !== ''
+    })
+    .join('--')
 }

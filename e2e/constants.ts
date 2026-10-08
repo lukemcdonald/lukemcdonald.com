@@ -32,6 +32,10 @@ export function greetingLinkTestId(href: string): string {
   return toHrefTestId('greeting-link', href)
 }
 
+export function navLinkTestId(href: string): string {
+  return toHrefTestId('nav-link', href)
+}
+
 export function navMenuTestId(name: string): string {
   return toNavMenuId(name)
 }
