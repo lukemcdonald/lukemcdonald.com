@@ -40,6 +40,7 @@ const positionClasses = {
 }
 ---
 
+<!-- Hidden on small screens; lazy keeps phones from downloading this. -->
 <Image
   alt={alt ?? ''}
   class:list={[
@@ -51,7 +52,6 @@ const positionClasses = {
   ]}
   fetchpriority="low"
   loading="lazy"
-  {/* Hidden on small screens; lazy keeps phones from downloading this. */}
   src={selectedSrc}
   {...delegated}
 />

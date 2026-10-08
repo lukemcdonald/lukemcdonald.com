@@ -5,13 +5,13 @@ import backgroundImage from '@/assets/images/landscape-tree-fog.jpg'
 import Grasses from '@/components/Background/Grasses.astro'
 ---
 
+<!-- Hidden on small screens; lazy keeps phones from downloading this. -->
 <Image
   alt=""
   class="absolute top-1/2 left-1/2 hidden h-full max-h-screen w-full -translate-x-1/2 -translate-y-1/2 transform overflow-hidden object-cover opacity-20 blur-xs grayscale lg:block dark:opacity-10"
   data-landscape
   fetchpriority="low"
   loading="lazy"
-  {/* Hidden on small screens; lazy keeps phones from downloading this. */}
   quality={70}
   src={backgroundImage}
   style="grid-area: 1/1"
