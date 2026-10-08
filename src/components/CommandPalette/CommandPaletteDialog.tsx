@@ -22,6 +22,7 @@ export function CommandPaletteDialog({
       aria-label="Site navigation and preferences"
       as="div"
       className="relative z-50"
+      data-testid="command-palette"
       initialFocus={searchInputRef}
       open={open}
       onClose={onClose}

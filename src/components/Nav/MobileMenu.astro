@@ -38,6 +38,7 @@ const selectClass =
     aria-label="Open menu"
     class="group relative z-20 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md bg-black/0 text-primary-900 focus-ring transition-transform hover:bg-black/5 active:scale-[0.96]"
     data-mobile-menu-trigger
+    data-testid="mobile-menu-trigger"
     type="button"
     {...TOGGLE_CUE_PROPS}
   >
@@ -90,6 +91,7 @@ const selectClass =
                       <a
                         class="inline-flex w-fit items-center py-2 text-xl font-semibold tracking-tight focus-ring transition-colors hover:bg-black/5 dark:hover:bg-white/10"
                         data-mobile-menu-link
+                        data-testid={`nav-link-${link.href.replace(/^\//, '').replaceAll('/', '-')}`}
                         href={link.href}
                         {...HOVER_NAV_CUE_PROPS}
                       >
@@ -127,6 +129,7 @@ const selectClass =
               <select
                 class:list={selectClass}
                 data-mobile-menu-mode
+                data-testid="mobile-appearance"
                 name="appearance"
               >
                 {THEME_MODES.map((mode) => <option value={mode}>{MODE_LABELS[mode]}</option>)}

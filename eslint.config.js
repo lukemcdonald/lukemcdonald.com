@@ -39,7 +39,7 @@ export default [
     },
   },
   {
-    files: ['src/**/*.{js,jsx,ts,tsx,astro}'],
+    files: ['e2e/**/*.ts', 'playwright.config.ts', 'src/**/*.{js,jsx,ts,tsx,astro}'],
     ignores: ['**/*.config.*'],
     plugins: {
       perfectionist,

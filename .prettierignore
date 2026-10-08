@@ -28,5 +28,10 @@ Thumbs.db
 # Planning docs should not gate format checks
 docs/
 
+# Playwright
+blob-report/
+playwright-report/
+test-results/
+
 # Git
 .git/

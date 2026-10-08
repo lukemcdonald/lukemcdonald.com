@@ -19,11 +19,16 @@ export function CommandPaletteSearch({
 }: CommandPaletteSearchProps) {
   return (
     <div className={`flex items-center border-b px-4 ${PALETTE_CHROME.border}`}>
-      <Search className={`h-5 w-5 ${PALETTE_CHROME.muted}`} />
+      <Search
+        aria-hidden="true"
+        className={`h-5 w-5 ${PALETTE_CHROME.muted}`}
+      />
       <input
         ref={searchInputRef}
+        aria-label="Search navigation"
         autoComplete="off"
         className={`w-full border-0 bg-transparent px-4 py-3 outline-none focus:ring-0 ${PALETTE_CHROME.ink} ${PALETTE_CHROME.placeholder}`}
+        data-testid="command-palette-input"
         placeholder="Search navigation..."
         type="text"
         value={query}

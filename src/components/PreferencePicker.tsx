@@ -11,7 +11,9 @@ type PreferencePickerProps<Value extends string> = {
   icon: ReactNode
   label: string
   onChange: (value: Value) => void
+  optionTestIdPrefix?: string
   options: readonly { icon: ReactNode; label: string; value: Value }[]
+  testId?: string
   value: Value
 }
 
@@ -21,6 +23,8 @@ export function PreferencePicker<Value extends string>({
   label,
   onChange,
   options,
+  optionTestIdPrefix,
+  testId,
   value,
 }: PreferencePickerProps<Value>) {
   return (
@@ -31,6 +35,7 @@ export function PreferencePicker<Value extends string>({
       <ListboxButton
         aria-label={label}
         className={`flex h-11 w-11 items-center justify-center rounded-lg transition-colors ${PALETTE_CHROME.focusRing} ${PALETTE_CHROME.ink} ${PALETTE_CHROME.hoverFill} ${highlightedValue ? PALETTE_CHROME.activeFill : ''}`}
+        data-testid={testId}
         title={label}
         {...TOGGLE_CUE_PROPS}
       >
@@ -46,6 +51,7 @@ export function PreferencePicker<Value extends string>({
           <ListboxOption
             key={option.value}
             className="group flex min-h-11 cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm select-none data-focus:bg-primary-900/8 dark:data-focus:bg-white/10"
+            data-testid={optionTestIdPrefix ? `${optionTestIdPrefix}-${option.value}` : undefined}
             value={option.value}
             {...TOGGLE_CUE_PROPS}
           >
