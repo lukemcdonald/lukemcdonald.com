@@ -1,11 +1,11 @@
 const FIREFLY_ATTR = 'data-aurora-firefly'
 
 const FIREFLIES = [
-  { blink: '3.1s', delay: '0s', drift: '11s', left: '12%', path: 'a', top: '86%' },
-  { blink: '2.4s', delay: '0.6s', drift: '13s', left: '28%', path: 'b', top: '93%' },
-  { blink: '3.8s', delay: '1.4s', drift: '9s', left: '47%', path: 'c', top: '95%' },
-  { blink: '2.7s', delay: '0.3s', drift: '14s', left: '63%', path: 'a', top: '88%' },
-  { blink: '3.4s', delay: '1.1s', drift: '10s', left: '81%', path: 'b', top: '91%' },
+  { blink: '3.1s', delay: '0s', left: '12%', path: 'a', top: '86%' },
+  { blink: '2.4s', delay: '0.6s', left: '28%', path: 'b', top: '93%' },
+  { blink: '3.8s', delay: '1.4s', left: '47%', path: 'c', top: '95%' },
+  { blink: '2.7s', delay: '0.3s', left: '63%', path: 'a', top: '88%' },
+  { blink: '3.4s', delay: '1.1s', left: '81%', path: 'b', top: '91%' },
 ] as const
 
 const KONAMI_SEQUENCE = [
@@ -43,14 +43,29 @@ function mountAuroraFireflies() {
     node.style.left = firefly.left
     node.style.setProperty('--aurora-firefly-blink', firefly.blink)
     node.style.setProperty('--aurora-firefly-delay', firefly.delay)
-    node.style.setProperty('--aurora-firefly-drift', firefly.drift)
+    node.style.setProperty('--dx', wanderPx())
+    node.style.setProperty('--dy', wanderPx())
+    node.style.setProperty('--wander-delay-x', `-${rand(0, 12).toFixed(1)}s`)
+    node.style.setProperty('--wander-delay-y', `-${rand(0, 16).toFixed(1)}s`)
+    node.style.setProperty('--wander-x', `${rand(8, 14).toFixed(1)}s`)
+    node.style.setProperty('--wander-y', `${rand(11, 18).toFixed(1)}s`)
     node.style.top = firefly.top
     document.body.append(node)
   }
+}
+
+function rand(min: number, max: number) {
+  return min + Math.random() * (max - min)
 }
 
 function unmountAuroraFireflies() {
   document.querySelectorAll(`[${FIREFLY_ATTR}]`).forEach((node) => {
     node.remove()
   })
+}
+
+function wanderPx() {
+  const magnitude = Math.round(rand(8, 20))
+
+  return `${Math.random() < 0.5 ? -magnitude : magnitude}px`
 }

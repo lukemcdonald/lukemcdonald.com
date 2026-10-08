@@ -47,11 +47,24 @@ html[data-easter-egg='aurora']::before {
   opacity: var(--aurora-landscape-opacity);
 }
 
+@property --tx {
+  inherits: false;
+  initial-value: 0px;
+  syntax: '<length>';
+}
+
+@property --ty {
+  inherits: false;
+  initial-value: 0px;
+  syntax: '<length>';
+}
+
 html[data-easter-egg='aurora'] [data-aurora-firefly] {
-  animation-delay: var(--aurora-firefly-delay, 0s);
-  animation-duration: var(--aurora-firefly-blink, 3s), var(--aurora-firefly-drift, 11s);
+  animation-delay: var(--aurora-firefly-delay, 0s), var(--wander-delay-x, -4s), var(--wander-delay-y, -7s);
+  animation-direction: normal, alternate, alternate;
+  animation-duration: var(--aurora-firefly-blink, 3s), var(--wander-x, 11s), var(--wander-y, 15s);
   animation-iteration-count: infinite;
-  animation-name: aurora-firefly-blink, aurora-firefly-drift-a;
+  animation-name: aurora-firefly-blink, aurora-firefly-wander-x, aurora-firefly-wander-y;
   animation-timing-function: ease-in-out;
   background: color-mix(in oklab, var(--color-secondary-base) 85%, white);
   border-radius: 999px;
@@ -59,17 +72,16 @@ html[data-easter-egg='aurora'] [data-aurora-firefly] {
   height: 5px;
   pointer-events: none;
   position: fixed;
+  translate: var(--tx) var(--ty);
   width: 5px;
   z-index: 2;
 }
 
 html[data-easter-egg='aurora'] [data-aurora-firefly='b'] {
-  animation-name: aurora-firefly-blink, aurora-firefly-drift-b;
   background: color-mix(in oklab, var(--color-primary-400) 80%, white);
 }
 
 html[data-easter-egg='aurora'] [data-aurora-firefly='c'] {
-  animation-name: aurora-firefly-blink, aurora-firefly-drift-c;
   background: color-mix(in oklab, var(--color-primary-300) 80%, white);
 }
 
@@ -101,52 +113,15 @@ html[data-easter-egg='aurora'] [data-aurora-firefly='c'] {
   }
 }
 
-@keyframes aurora-firefly-drift-a {
-  0%,
-  100% {
-    translate: 0 0;
-  }
-
-  30% {
-    translate: 14px -18px;
-  }
-
-  65% {
-    translate: -10px -8px;
+@keyframes aurora-firefly-wander-x {
+  to {
+    --tx: var(--dx, 16px);
   }
 }
 
-@keyframes aurora-firefly-drift-b {
-  0%,
-  100% {
-    translate: 0 0;
-  }
-
-  25% {
-    translate: -16px -12px;
-  }
-
-  55% {
-    translate: 8px -22px;
-  }
-
-  80% {
-    translate: -6px -4px;
-  }
-}
-
-@keyframes aurora-firefly-drift-c {
-  0%,
-  100% {
-    translate: 0 0;
-  }
-
-  35% {
-    translate: 10px -24px;
-  }
-
-  70% {
-    translate: -14px -10px;
+@keyframes aurora-firefly-wander-y {
+  to {
+    --ty: var(--dy, -14px);
   }
 }
 
