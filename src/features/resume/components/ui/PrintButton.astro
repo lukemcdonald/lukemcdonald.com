@@ -4,6 +4,7 @@ import type { HTMLAttributes } from 'astro/types'
 import PrinterIcon from '@lucide/astro/icons/printer'
 
 import { PRESS_CUE_PROPS } from '@/components/Sound'
+import { FOCUS_RING } from '@/utils/focus'
 
 const sizes = {
   lg: 'px-5 py-3 rounded-lg',
@@ -26,15 +27,21 @@ const { class: className, size = 'md' } = Astro.props satisfies Props
 ---
 
 <button
+  aria-label="Print"
   class:list={[
     'bg-primary-700 font-medium text-primary-50 shadow-sm transition-colors',
     'hover:bg-primary-700/80',
     'print:hidden',
+    FOCUS_RING,
     sizes[size],
     className,
   ]}
   onclick="window.print()"
+  type="button"
   {...PRESS_CUE_PROPS}
 >
-  <PrinterIcon class={iconSizes[size]} />
+  <PrinterIcon
+    aria-hidden="true"
+    class={iconSizes[size]}
+  />
 </button>
