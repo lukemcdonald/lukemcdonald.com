@@ -19,8 +19,24 @@ export function decideCompletedEggs(
     return { kind: 'idle' }
   }
 
-  const chosen = pickEgg(completed, pickOptions)
+  return decideMatchedEggs(activeId, completed, pickOptions)
+}
 
+export function escapeDismissesEgg(mode: EasterEggMode | undefined): boolean {
+  return mode === 'timed'
+}
+
+function completesActiveToggle(
+  activeId: string | undefined,
+  completed: readonly EasterEgg[],
+): boolean {
+  return completed.some((egg) => egg.id === activeId && egg.mode === 'toggle')
+}
+
+function decideChosenEgg(
+  activeId: string | undefined,
+  chosen: EasterEgg | undefined,
+): CompletedEggDecision {
   if (!chosen) {
     return { kind: 'ignore' }
   }
@@ -32,6 +48,14 @@ export function decideCompletedEggs(
   return { egg: chosen, kind: 'activate' }
 }
 
-export function escapeDismissesEgg(mode: EasterEggMode | undefined): boolean {
-  return mode === 'timed'
+function decideMatchedEggs(
+  activeId: string | undefined,
+  completed: readonly EasterEgg[],
+  pickOptions: PickOptions,
+): CompletedEggDecision {
+  if (completesActiveToggle(activeId, completed)) {
+    return { kind: 'deactivate' }
+  }
+
+  return decideChosenEgg(activeId, pickEgg(completed, pickOptions))
 }

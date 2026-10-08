@@ -86,7 +86,6 @@ function armTimedEgg(egg: EasterEgg) {
   }
 
   const duration = eggDurationMs(egg.durationMs, prefersReducedMotion())
-  document.documentElement.style.setProperty('--easter-egg-duration', `${duration}ms`)
   hideTimer = setTimeout(() => {
     dismissEgg()
   }, duration)
@@ -98,7 +97,6 @@ function clearActiveEgg() {
   clearHideTimer()
   activeEgg = null
   document.documentElement.removeAttribute(EASTER_EGG_ATTRIBUTE)
-  document.documentElement.style.removeProperty('--easter-egg-duration')
   writeStorage(clearStoredEasterEggs)
 
   return egg
@@ -271,7 +269,11 @@ function writeStorage(write: (storage: Storage) => void) {
     return
   }
 
-  write(storage)
+  try {
+    write(storage)
+  } catch {
+    return
+  }
 }
 
 /** Installs one document listener; later calls are no-ops across view transitions. */

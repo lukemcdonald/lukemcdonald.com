@@ -58,4 +58,11 @@ describe('decideCompletedEggs', () => {
       { egg: burst, kind: 'activate' },
     )
   })
+
+  test('deactivates an active toggle egg when its own trigger completes', () => {
+    assert.deepEqual(
+      decideCompletedEggs('aurora', [aurora, burst], { random: () => 0.99, strategy: 'random' }),
+      { kind: 'deactivate' },
+    )
+  })
 })

@@ -2,8 +2,9 @@ import type { StorageLike } from './types.ts'
 
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
+import vm from 'node:vm'
 
-import { EASTER_EGG_ATTRIBUTE, EASTER_EGG_STORAGE_PREFIX } from './constants.ts'
+import { EASTER_EGG_ATTRIBUTE } from './constants.ts'
 import {
   clearStoredEasterEggs,
   eggStorageKey,
@@ -71,10 +72,21 @@ describe('easter egg persistence', () => {
   })
 
   test('init script restores the stored egg attribute from localStorage', () => {
-    const script = getEasterEggInitScript()
+    const html = {
+      attributes: {} as Record<string, string>,
+      setAttribute(name: string, value: string) {
+        this.attributes[name] = value
+      },
+    }
+    const storage = createMemoryStorage({
+      [eggStorageKey('aurora')]: 'on',
+    })
 
-    assert.match(script, new RegExp(EASTER_EGG_STORAGE_PREFIX))
-    assert.match(script, new RegExp(EASTER_EGG_ATTRIBUTE))
-    assert.match(script, /localStorage/)
+    vm.runInNewContext(getEasterEggInitScript(), {
+      document: { documentElement: html },
+      localStorage: storage,
+    })
+
+    assert.equal(html.attributes[EASTER_EGG_ATTRIBUTE], 'aurora')
   })
 })

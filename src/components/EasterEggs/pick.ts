@@ -1,4 +1,4 @@
-import type { EasterEgg, PickStrategy, Season } from './types'
+import type { CalendarDay, EasterEgg, PickStrategy, Season } from './types'
 
 export type PickOptions = {
   date?: Date
@@ -54,8 +54,8 @@ export function matchesSchedule(egg: EasterEgg, date: Date): boolean {
 function isInCalendarRange(
   month: number,
   day: number,
-  start: { day: number; month: number },
-  end: { day: number; month: number },
+  start: CalendarDay,
+  end: CalendarDay,
 ): boolean {
   const cursor = month * 100 + day
   const from = start.month * 100 + start.day

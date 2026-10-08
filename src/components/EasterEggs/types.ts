@@ -9,7 +9,7 @@ export type PickStrategy = 'random' | 'schedule' | 'static'
 export type Season = 'autumn' | 'spring' | 'summer' | 'winter'
 
 export type SequenceTrigger = {
-  codes: readonly string[]
+  codes: readonly [string, ...string[]]
   type: 'sequence'
 }
 
