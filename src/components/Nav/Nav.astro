@@ -10,8 +10,12 @@ const groups = await getNavigationGroups()
 <nav
   aria-label="Primary"
   class="flex grow items-center duration-200 peer-hover:opacity-0 peer-hover:delay-0 peer-hover:duration-0"
+  data-testid="site-nav"
 >
-  <div class="hidden [@media(hover:hover)_and_(pointer:fine)]:contents">
+  <div
+    class="hidden [@media(hover:hover)_and_(pointer:fine)]:contents"
+    data-testid="desktop-nav"
+  >
     {
       groups.map((group) => {
         return <NavMenu group={group} />

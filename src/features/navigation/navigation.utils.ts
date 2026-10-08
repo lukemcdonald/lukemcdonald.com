@@ -36,9 +36,25 @@ export function getExternalLinkAttrs(href: string): { rel?: string; target?: str
   }
 }
 
+export function toHrefTestId(prefix: string, href: string): string {
+  return `${prefix}-${toTestIdSlug(href) || 'home'}`
+}
+
 export function toNavMenuId(name: string): string {
-  return `nav-menu-${name
+  return `nav-menu-${toTestIdSlug(name)}`
+}
+
+export function toTestIdSlug(value: string): string {
+  return value
     .trim()
+    .replace(/^\//, '')
     .toLowerCase()
-    .replaceAll(/[^a-z0-9]+/g, '-')}`
+    .split('/')
+    .map((segment) => {
+      return segment.replaceAll(/[^a-z0-9]+/g, '-').replaceAll(/^-+|-+$/g, '')
+    })
+    .filter((segment) => {
+      return segment !== ''
+    })
+    .join('--')
 }

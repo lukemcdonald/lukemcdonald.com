@@ -46,6 +46,8 @@ export function ThemeModePicker({
         />
       }
       label={`Appearance: ${MODE_LABELS[selectedMode]}`}
+      onChange={handleModeChange}
+      optionTestIdPrefix="theme-option"
       options={THEME_MODES.map((mode) => {
         const Icon = MODE_ICONS[mode]
 
@@ -60,8 +62,8 @@ export function ThemeModePicker({
           value: mode,
         }
       })}
+      testId="theme-toggle"
       value={selectedMode}
-      onChange={handleModeChange}
     />
   )
 }

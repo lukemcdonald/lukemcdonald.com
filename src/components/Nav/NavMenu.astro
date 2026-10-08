@@ -5,7 +5,11 @@ import ChevronDownIcon from '@lucide/astro/icons/chevron-down'
 import ExternalLinkIcon from '@lucide/astro/icons/external-link'
 
 import { HOVER_NAV_CUE_PROPS, TOGGLE_CUE_PROPS } from '@/components/Sound'
-import { getExternalLinkAttrs, toNavMenuId } from '@/features/navigation/navigation.utils'
+import {
+  getExternalLinkAttrs,
+  toHrefTestId,
+  toNavMenuId,
+} from '@/features/navigation/navigation.utils'
 
 interface Props {
   group: NavigationGroup
@@ -25,6 +29,7 @@ const popoverId = toNavMenuId(group.name)
     aria-haspopup="true"
     class="inline-flex justify-center rounded-md bg-black/0 px-2.5 py-2 text-base font-semibold tracking-wide text-primary-900 uppercase focus-ring hover:bg-black/5 sm:px-3"
     data-nav-menu-trigger
+    data-testid={popoverId}
     popovertarget={popoverId}
     popovertargetaction="show"
     style={`anchor-name: --${popoverId}`}
@@ -55,6 +60,7 @@ const popoverId = toNavMenuId(group.name)
             <li>
               <a
                 class="group flex w-full items-center rounded-sm px-3 py-2 text-base text-primary-900 focus-ring hover:bg-primary-900/8 focus-visible:bg-primary-900/8 dark:text-primary-50 dark:hover:bg-white/10 dark:focus-visible:bg-white/10"
+                data-testid={toHrefTestId('nav-link', item.href)}
                 href={item.href}
                 {...externalAttrs}
                 {...HOVER_NAV_CUE_PROPS}

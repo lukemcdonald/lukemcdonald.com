@@ -3,6 +3,55 @@ import globals from 'globals'
 import perfectionist from 'eslint-plugin-perfectionist'
 import tsEslint from 'typescript-eslint'
 
+const perfectionistRules = {
+  // Avoid inline (implicit) returns in arrow functions
+  // 'arrow-body-style': ['error', 'always'],
+  'perfectionist/sort-exports': [
+    'error',
+    {
+      ignoreCase: true,
+      order: 'asc',
+      type: 'natural',
+    },
+  ],
+  'perfectionist/sort-imports': [
+    'error',
+    {
+      groups: [
+        'type',
+        'side-effect',
+        'builtin',
+        'external',
+        'internal',
+        ['parent', 'sibling', 'index'],
+        'unknown',
+      ],
+      ignoreCase: true,
+      internalPattern: ['^@/'],
+      newlinesBetween: 1,
+      order: 'asc',
+      type: 'natural',
+    },
+  ],
+  'perfectionist/sort-named-imports': [
+    'error',
+    {
+      ignoreCase: true,
+      order: 'asc',
+      type: 'natural',
+    },
+  ],
+  'perfectionist/sort-objects': [
+    'error',
+    {
+      ignoreCase: true,
+      order: 'asc',
+      partitionByComment: 'keep-order',
+      type: 'alphabetical',
+    },
+  ],
+}
+
 export default [
   ...tsEslint.configs.recommended,
   ...eslintPluginAstro.configs.recommended,
@@ -29,9 +78,9 @@ export default [
         {
           paths: [
             {
-              name: '@lucide/astro',
               message:
                 'Do not import from "@lucide/astro". Use direct imports to improve dev performance e.g. import ChevronDown from "@lucide/astro/icons/chevron-down".',
+              name: '@lucide/astro',
             },
           ],
         },
@@ -39,58 +88,18 @@ export default [
     },
   },
   {
-    files: ['src/**/*.{js,jsx,ts,tsx,astro}'],
+    files: ['e2e/**/*.ts', 'src/**/*.{js,jsx,ts,tsx,astro}'],
     ignores: ['**/*.config.*'],
     plugins: {
       perfectionist,
     },
-    rules: {
-      // Avoid inline (implicit) returns in arrow functions
-      // 'arrow-body-style': ['error', 'always'],
-      'perfectionist/sort-objects': [
-        'error',
-        {
-          type: 'alphabetical',
-          order: 'asc',
-          ignoreCase: true,
-          partitionByComment: 'keep-order',
-        },
-      ],
-      'perfectionist/sort-imports': [
-        'error',
-        {
-          groups: [
-            'type',
-            'side-effect',
-            'builtin',
-            'external',
-            'internal',
-            ['parent', 'sibling', 'index'],
-            'unknown',
-          ],
-          ignoreCase: true,
-          internalPattern: ['^@/'],
-          newlinesBetween: 1,
-          order: 'asc',
-          type: 'natural',
-        },
-      ],
-      'perfectionist/sort-named-imports': [
-        'error',
-        {
-          type: 'natural',
-          order: 'asc',
-          ignoreCase: true,
-        },
-      ],
-      'perfectionist/sort-exports': [
-        'error',
-        {
-          type: 'natural',
-          order: 'asc',
-          ignoreCase: true,
-        },
-      ],
+    rules: perfectionistRules,
+  },
+  {
+    files: ['playwright.config.ts'],
+    plugins: {
+      perfectionist,
     },
+    rules: perfectionistRules,
   },
 ]

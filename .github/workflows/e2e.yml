@@ -1,0 +1,62 @@
+name: E2E
+
+on:
+  workflow_call:
+    inputs:
+      browsers:
+        default: pr
+        description: Browser set. pr is Chromium and Pixel 5; full adds Firefox and WebKit.
+        type: string
+  workflow_dispatch:
+    inputs:
+      browsers:
+        default: pr
+        description: Browser set. pr is Chromium and Pixel 5; full adds Firefox and WebKit.
+        options:
+          - full
+          - pr
+        type: choice
+
+# Manual runs only. workflow_call is cancelled by the caller's concurrency group.
+concurrency:
+  cancel-in-progress: ${{ github.event_name == 'workflow_dispatch' }}
+  group: e2e-${{ github.event_name }}-${{ github.ref }}
+
+jobs:
+  e2e:
+    env:
+      E2E_BROWSERS: ${{ inputs.browsers }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          cache: pnpm
+          node-version-file: .nvmrc
+      - run: pnpm install --frozen-lockfile
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          key: playwright-${{ runner.os }}-${{ inputs.browsers }}-${{ hashFiles('pnpm-lock.yaml') }}
+          path: ~/.cache/ms-playwright
+          restore-keys: |
+            playwright-${{ runner.os }}-${{ inputs.browsers }}-
+            playwright-${{ runner.os }}-
+      - name: Install Playwright browsers
+        run: |
+          if [ "${E2E_BROWSERS}" = "full" ]; then
+            pnpm exec playwright install --with-deps
+          else
+            pnpm exec playwright install --with-deps chromium
+          fi
+      - run: pnpm test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14

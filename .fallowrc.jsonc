@@ -1,5 +1,16 @@
 {
   "$schema": "./node_modules/fallow/schema.json",
+  "entry": ["scripts/preview-static.mjs"],
+  "framework": [
+    {
+      "configPatterns": ["playwright.config.ts"],
+      "enablers": ["@playwright/test"],
+      "entryPointRole": "test",
+      "entryPoints": ["e2e/**/*.spec.ts"],
+      "name": "playwright-e2e",
+      "toolingDependencies": ["@axe-core/playwright", "@playwright/test"],
+    },
+  ],
   "ignoreDependencies": [
     // Resolved by Tailwind's CSS/config pipeline rather than JS imports.
     "@tailwindcss/typography",
@@ -7,8 +18,8 @@
   ],
   "ignoreExports": [
     {
-      "file": "**/*.astro",
       "exports": ["Props"],
+      "file": "**/*.astro",
     },
   ],
 }

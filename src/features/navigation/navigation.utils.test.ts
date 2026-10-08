@@ -6,8 +6,10 @@ import {
   getExternalLinkAttrs,
   isExternalHref,
   PLAY_LINKS,
+  toHrefTestId,
   toLiveLinks,
   toNavMenuId,
+  toTestIdSlug,
   WORK_LINKS,
 } from './navigation.utils.ts'
 
@@ -82,6 +84,20 @@ describe('getExternalLinkAttrs', () => {
   })
 })
 
+describe('toHrefTestId', () => {
+  test('prefixes a slugified href', () => {
+    assert.equal(toHrefTestId('nav-link', '/resume'), 'nav-link-resume')
+    assert.equal(
+      toHrefTestId('greeting-link', '/i-am-a/christian'),
+      'greeting-link-i-am-a--christian',
+    )
+  })
+
+  test('uses home when the href slugs to empty', () => {
+    assert.equal(toHrefTestId('nav-link', '/'), 'nav-link-home')
+  })
+})
+
 describe('toNavMenuId', () => {
   test('prefixes a slugified group name', () => {
     assert.equal(toNavMenuId('Work'), 'nav-menu-work')
@@ -91,5 +107,18 @@ describe('toNavMenuId', () => {
 
   test('collapses extra characters into a single hyphen', () => {
     assert.equal(toNavMenuId('  TREAD Talks  '), 'nav-menu-tread-talks')
+  })
+})
+
+describe('toTestIdSlug', () => {
+  test('strips a leading slash, lowercases, and hyphenates', () => {
+    assert.equal(toTestIdSlug('/i-am-a/christian'), 'i-am-a--christian')
+    assert.equal(toTestIdSlug('  TREAD Talks  '), 'tread-talks')
+  })
+
+  test('keeps path separators distinct from hyphens in the slug', () => {
+    assert.equal(toTestIdSlug('/a/foo/bar'), 'a--foo--bar')
+    assert.equal(toTestIdSlug('/a/foo-bar'), 'a--foo-bar')
+    assert.notEqual(toTestIdSlug('/a/foo/bar'), toTestIdSlug('/a/foo-bar'))
   })
 })
