@@ -2,10 +2,16 @@ export const DEFAULT_OG_IMAGE_PATH = '/og/index.png'
 export const OG_IMAGE_HEIGHT = 630
 export const OG_IMAGE_MARK = 'lukemcdonald.com'
 export const OG_IMAGE_WIDTH = 1200
+export const OG_PHOTO_WIDTH = 520
 
 export type OgImageInput = {
   mark?: string
+  photoDataUri?: string
   title: string
+}
+
+export type OgImageSource = {
+  src: string
 }
 
 const BACKGROUND = '#122023'
@@ -19,6 +25,7 @@ const LOGO_PATHS = [
 
 const TITLE_LINE_HEIGHT = 88
 const TITLE_MAX_CHARS = 18
+const TITLE_MAX_CHARS_WITH_PHOTO = 12
 const TITLE_MAX_LINES = 3
 
 function escapeXml(value: string) {
@@ -29,7 +36,7 @@ function escapeXml(value: string) {
     .replaceAll('"', '&quot;')
 }
 
-function wrapTitle(title: string) {
+function wrapTitle(title: string, maxChars: number) {
   const words = title.trim().split(/\s+/).filter(Boolean)
   const lines: string[] = []
   let current = ''
@@ -37,7 +44,7 @@ function wrapTitle(title: string) {
   for (const word of words) {
     const next = current ? `${current} ${word}` : word
 
-    if (next.length > TITLE_MAX_CHARS && current) {
+    if (next.length > maxChars && current) {
       lines.push(current)
       current = word
       continue
@@ -67,8 +74,9 @@ export function getOgImagePath(pathname: string) {
   return `/og/${slug}.png`
 }
 
-export function buildOgSvg({ mark = OG_IMAGE_MARK, title }: OgImageInput) {
-  const lines = wrapTitle(title)
+export function buildOgSvg({ mark = OG_IMAGE_MARK, photoDataUri, title }: OgImageInput) {
+  const hasPhoto = Boolean(photoDataUri)
+  const lines = wrapTitle(title, hasPhoto ? TITLE_MAX_CHARS_WITH_PHOTO : TITLE_MAX_CHARS)
   const titleStartY = 318 - ((lines.length - 1) * TITLE_LINE_HEIGHT) / 2
   const titleMarkup = lines
     .map((line, index) => {
@@ -78,9 +86,14 @@ export function buildOgSvg({ mark = OG_IMAGE_MARK, title }: OgImageInput) {
     })
     .join('')
   const logoMarkup = LOGO_PATHS.map((d) => `<path d="${d}" />`).join('')
+  const photoMarkup =
+    photoDataUri ?
+      `<image href="${photoDataUri}" x="${OG_IMAGE_WIDTH - OG_PHOTO_WIDTH}" y="0" width="${OG_PHOTO_WIDTH}" height="${OG_IMAGE_HEIGHT}" preserveAspectRatio="xMidYMid slice" />`
+    : ''
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${OG_IMAGE_WIDTH}" height="${OG_IMAGE_HEIGHT}" viewBox="0 0 ${OG_IMAGE_WIDTH} ${OG_IMAGE_HEIGHT}">
   <rect width="${OG_IMAGE_WIDTH}" height="${OG_IMAGE_HEIGHT}" fill="${BACKGROUND}" />
+  ${photoMarkup}
   <rect x="0" y="0" width="12" height="${OG_IMAGE_HEIGHT}" fill="${MUTED}" />
   <g transform="translate(96 80) scale(0.75)" fill="${FOREGROUND}">${logoMarkup}</g>
   <text font-family="Inter" font-size="76" font-weight="600" fill="${FOREGROUND}">${titleMarkup}</text>

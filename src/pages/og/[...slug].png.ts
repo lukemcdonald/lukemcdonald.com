@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro'
 
 import { GLOBAL_CONFIG } from '@/configs/global'
 import { getPublishedPages } from '@/features/pages/pages.server'
-import { renderOgPng } from '@/utils/og.render'
+import { renderOgPng, resolveOgPhotoPath } from '@/utils/og.render'
 
 export const prerender = true
 
@@ -15,7 +15,10 @@ export async function getStaticPaths() {
 
     return {
       params: { slug },
-      props: { title },
+      props: {
+        image: page.data.image,
+        title,
+      },
     }
   })
 
@@ -29,7 +32,10 @@ export async function getStaticPaths() {
 }
 
 export const GET: APIRoute = ({ props }) => {
-  const png = renderOgPng({ title: props.title })
+  const png = renderOgPng({
+    photoPath: resolveOgPhotoPath(props.image),
+    title: props.title,
+  })
 
   return new Response(Uint8Array.from(png), {
     headers: {
