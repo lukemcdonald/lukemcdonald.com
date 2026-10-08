@@ -23,7 +23,7 @@ export function useCommandPalette() {
       return
     }
 
-    play(isOpen ? 'bloom' : 'droplet')
+    play(isOpen ? 'open' : 'close')
   }, [isOpen])
 
   useEffect(() => {
