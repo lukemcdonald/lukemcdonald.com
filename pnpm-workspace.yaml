@@ -5,10 +5,12 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - '@astrojs/internal-helpers@0.11.0'
   - '@astrojs/markdown-satteri@0.4.0'
-  - '@astrojs/netlify@8.2.5'
-  - '@astrojs/react@6.0.5'
+  - '@astrojs/netlify@8.2.8'
+  - '@astrojs/react@6.0.6'
   - '@astrojs/sitemap@3.7.4'
-  - astro@7.2.10
+  - '@lucide/astro@1.53.0'
+  - astro@7.3.7
+  - lucide-react@1.53.0
 onlyBuiltDependencies:
   - '@parcel/watcher'
   - '@tailwindcss/oxide'
