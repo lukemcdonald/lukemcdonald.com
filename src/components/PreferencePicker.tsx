@@ -11,8 +11,8 @@ type PreferencePickerProps<Value extends string> = {
   icon: ReactNode
   label: string
   onChange: (value: Value) => void
-  optionTestIdPrefix?: string
   options: readonly { icon: ReactNode; label: string; value: Value }[]
+  optionTestIdPrefix?: string
   testId?: string
   value: Value
 }
@@ -22,8 +22,8 @@ export function PreferencePicker<Value extends string>({
   icon,
   label,
   onChange,
-  optionTestIdPrefix,
   options,
+  optionTestIdPrefix,
   testId,
   value,
 }: PreferencePickerProps<Value>) {

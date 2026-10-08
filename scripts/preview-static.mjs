@@ -39,7 +39,11 @@ function existingFile(filePath) {
 }
 
 function decodeRequestPath(requestPath) {
-  return decodeURIComponent(requestPath.split('?')[0] ?? '/')
+  try {
+    return decodeURIComponent(requestPath.split('?')[0] ?? '/')
+  } catch {
+    return null
+  }
 }
 
 function resolveFile(decodedPath) {
@@ -67,12 +71,22 @@ function sendFile(res, status, file) {
   createReadStream(file).pipe(res)
 }
 
-const server = createServer((req, res) => {
-  let decodedPath
+function sendMissing(res) {
+  const notFound = existingFile(resolve(distDir, '404.html'))
 
-  try {
-    decodedPath = decodeRequestPath(req.url ?? '/')
-  } catch {
+  if (notFound) {
+    sendFile(res, 404, notFound)
+    return
+  }
+
+  res.writeHead(404)
+  res.end('Not Found')
+}
+
+function handleRequest(req, res) {
+  const decodedPath = decodeRequestPath(req.url ?? '/')
+
+  if (decodedPath === null) {
     res.writeHead(400)
     res.end('Bad Request')
     return
@@ -85,16 +99,10 @@ const server = createServer((req, res) => {
     return
   }
 
-  const notFound = existingFile(resolve(distDir, '404.html'))
+  sendMissing(res)
+}
 
-  if (notFound) {
-    sendFile(res, 404, notFound)
-    return
-  }
-
-  res.writeHead(404)
-  res.end('Not Found')
-})
+const server = createServer(handleRequest)
 
 server.listen(port, host, () => {
   process.stdout.write(`Previewing ${distDir} at http://${host}:${port}\n`)
