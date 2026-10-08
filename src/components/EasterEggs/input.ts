@@ -7,12 +7,14 @@ export function advanceSequenceProgress(
   code: string,
   sequence: readonly string[],
 ): number {
-  if (code === sequence[progress]) {
-    return progress + 1
-  }
+  const attempted = sequence.slice(0, progress).concat(code)
 
-  if (code === sequence[0]) {
-    return 1
+  for (let length = Math.min(attempted.length, sequence.length); length > 0; length -= 1) {
+    const suffix = attempted.slice(-length)
+
+    if (suffix.every((item, index) => item === sequence[index])) {
+      return length
+    }
   }
 
   return 0

@@ -36,12 +36,15 @@ html[data-easter-egg='aurora']::before {
   mix-blend-mode: screen;
 }
 
-[data-easter-egg='aurora'] [data-landscape] {
-  filter: none;
-  opacity: var(--aurora-landscape-opacity);
+[data-landscape] {
   transition:
     filter 700ms ease,
     opacity 700ms ease;
+}
+
+[data-easter-egg='aurora'] [data-landscape] {
+  filter: none;
+  opacity: var(--aurora-landscape-opacity);
 }
 
 html[data-easter-egg='aurora'] [data-aurora-firefly] {
@@ -168,7 +171,7 @@ html[data-easter-egg='aurora'] [data-aurora-firefly='c'] {
     animation-delay: var(--aurora-firefly-delay, 0s);
   }
 
-  [data-easter-egg='aurora'] [data-landscape] {
+  [data-landscape] {
     transition: none;
   }
 }

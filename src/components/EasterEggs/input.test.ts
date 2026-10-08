@@ -36,8 +36,8 @@ describe('advanceSequenceProgress', () => {
     assert.equal(advanceSequenceProgress(2, 'ArrowDown', KONAMI_SEQUENCE), 3)
   })
 
-  test('restarts when the mismatched code is the first step', () => {
-    assert.equal(advanceSequenceProgress(2, 'ArrowUp', KONAMI_SEQUENCE), 1)
+  test('keeps an overlapping prefix after a repeated first step', () => {
+    assert.equal(advanceSequenceProgress(2, 'ArrowUp', KONAMI_SEQUENCE), 2)
   })
 
   test('resets when the code is not next and not the first step', () => {
@@ -47,6 +47,14 @@ describe('advanceSequenceProgress', () => {
 
   test('completes the Konami sequence', () => {
     const progress = KONAMI_SEQUENCE.reduce((current, code) => {
+      return advanceSequenceProgress(current, code, KONAMI_SEQUENCE)
+    }, 0)
+
+    assert.equal(progress, KONAMI_SEQUENCE.length)
+  })
+
+  test('completes the Konami sequence after an extra leading ArrowUp', () => {
+    const progress = ['ArrowUp', ...KONAMI_SEQUENCE].reduce((current, code) => {
       return advanceSequenceProgress(current, code, KONAMI_SEQUENCE)
     }, 0)
 
