@@ -1,5 +1,6 @@
 ---
 import { getNavigationGroups } from '@/features/navigation/navigation.server'
+import { toHrefTestId } from '@/features/navigation/navigation.utils'
 
 const groups = await getNavigationGroups()
 const liveLinks = groups.find((group) => group.name === 'Live')?.links ?? []
@@ -20,7 +21,7 @@ const linkNumberStyles =
             <a
               class={`${linkStyles} ${linkNumberStyles}`}
               data-cuelume-hover="tick"
-              data-testid={`greeting-link-${link.href.replace(/^\//, '').replaceAll('/', '-')}`}
+              data-testid={toHrefTestId('greeting-link', link.href)}
               href={link.href}
             >
               {link.name}

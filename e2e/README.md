@@ -21,7 +21,6 @@ e2e/
   pages/                    One object per route family
     base.page.ts            Shared chrome: skip link, header, main, goto
     home.page.ts
-    resume.page.ts
   helpers/                  Assertion helpers (axe summaries, focus rings)
   specs/                    Specs by feature, not by page
     accessibility.spec.ts
@@ -38,11 +37,11 @@ scripts/preview-static.mjs
 
 ### Fixtures
 
-Specs import `test` and `expect` from `e2e/fixtures`, never from `@playwright/test`.
+Specs import `test` and `expect` from `../fixtures`, never from `@playwright/test`.
 
 `test.extend` injects:
 
-- Page objects (`homePage`, `resumePage`, `sitePage`)
+- Page objects (`homePage`, `sitePage`)
 - Component objects (`commandPalette`, `siteHeader`, `siteNav`, `skipLink`, `themeToggle`)
 - `makeAxeBuilder()` — Playwright's recommended factory fixture so every scan uses the same WCAG 2.x A/AA tags
 
@@ -54,7 +53,7 @@ Component objects are composed into `BasePage` (and `SiteHeader`) so pages do no
 - Route-specific pages add only the locators that route needs (`HomePage.greetingLink`).
 - Keep public methods limited to what specs call. Fallow reports unused exports and class members.
 
-`goto({ path, theme })` uses `addInitScript` to seed `localStorage` before the first document load so axe can sweep light and dark without driving the appearance UI.
+`goto({ path, theme })` uses a one-shot `addInitScript` to seed `localStorage` before the first document load so axe can sweep light and dark without driving the appearance UI. Later navigations in the same tab do not overwrite a choice the UI made.
 
 ### Routes
 
@@ -77,8 +76,8 @@ Naming:
 
 - kebab-case
 - Prefix by region: `site-header`, `site-nav`, `command-palette-input`
-- Generated IDs from hrefs: `nav-link-resume`, `greeting-link-i-am-a-christian`
-- Menu triggers reuse the existing `nav-menu-{group}` ids
+- Generated IDs from `toHrefTestId` / `toNavMenuId` in `src/features/navigation/navigation.utils.ts` (imported by components and e2e so the contract cannot drift): `nav-link-resume`, `greeting-link-i-am-a-christian`, `nav-menu-work`
+- Duplicate `nav-link-*` IDs exist in the desktop nav and mobile menu. Scope locators to `desktop-nav` or `mobile-menu`, do not filter on CSS visibility.
 
 Add the attribute on the Astro/React element the test actually uses. Do not sprinkle test IDs on purely decorative nodes.
 
@@ -86,9 +85,14 @@ Add the attribute on the Astro/React element the test actually uses. Do not spri
 
 Prefer web-first assertions (`toBeVisible`, `toBeFocused`, `toHaveURL`). Do not use `waitForTimeout`. Tests are isolated: each gets a fresh context, cookies, and storage.
 
-Tags: `@a11y` for accessibility, `@smoke` for navigation, theme, and command palette. Filter with `pnpm exec playwright test --grep @smoke`.
+Tags:
 
-The command palette hydrates only for hover-capable pointers (`client:media`). Those specs `test.skip` on the mobile project.
+- `@axe` — WCAG sweep. Chromium only; extra browsers and mobile skip it.
+- `@desktop` — command palette (`client:media` hover/fine pointer). Mobile skips it via `grepInvert`.
+- `@a11y` — skip-link and visible-focus specs
+- `@smoke` — navigation, theme, command palette
+
+Filter with `pnpm exec playwright test --grep @smoke`.
 
 ## Adding a page
 
@@ -102,7 +106,7 @@ The command palette hydrates only for hover-capable pointers (`client:media`). T
 1. Put it in `e2e/specs/{feature}.spec.ts` (skip link, theme, navigation, …), not `home.spec.ts`.
 2. Import `{ expect, test }` from `../fixtures`.
 3. Drive the UI through page/component objects.
-4. Tag with `@a11y` or `@smoke` when it fits.
+4. Tag with `@axe`, `@a11y`, `@desktop`, or `@smoke` when it fits.
 
 Do not cover the Konami / aurora easter eggs.
 
@@ -116,8 +120,8 @@ pnpm exec playwright show-report
 pnpm exec playwright test --trace on
 ```
 
-Local default projects: Chromium and Pixel 5. CI also runs Firefox and WebKit.
+Local and PR CI projects: Chromium and Pixel 5. Pushes to `main` also run Firefox and WebKit (without the axe sweep).
 
-`reuseExistingServer` is on locally. If you already built and served `http://127.0.0.1:4321`, the suite will reuse it. Otherwise `webServer` runs `pnpm build && pnpm preview:static`.
+`reuseExistingServer` is on locally. The suite listens on `E2E_PORT` (default `4173`), not the Astro dev port (`4321`), so a stray `astro dev` is not reused. If you already built and served that URL, the suite will reuse it. Otherwise `webServer` runs `pnpm build && pnpm preview:static`.
 
 UI mode is the best authoring loop. For a CI failure, download the `playwright-report` artifact (includes traces on retry) and open it with `pnpm exec playwright show-report`.

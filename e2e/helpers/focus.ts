@@ -5,22 +5,10 @@ export function readFocusRing(locator: Locator) {
     const style = getComputedStyle(element)
 
     return {
+      outlineColor: style.outlineColor,
       outlineStyle: style.outlineStyle,
       outlineWidth: Number.parseFloat(style.outlineWidth),
       position: style.position,
-    }
-  })
-}
-
-export function readBox(locator: Locator) {
-  return locator.evaluate((element) => {
-    const rect = element.getBoundingClientRect()
-
-    return {
-      height: rect.height,
-      width: rect.width,
-      x: rect.x,
-      y: rect.y,
     }
   })
 }

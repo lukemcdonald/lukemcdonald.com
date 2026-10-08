@@ -3,7 +3,7 @@ import type { Page } from '@playwright/test'
 
 import { SiteHeader } from '../components/site-header'
 import { SkipLink } from '../components/skip-link'
-import { TEST_ID, THEME_MODE_STORAGE_KEY } from '../constants'
+import { TEST_ID, THEME_MODE_STORAGE_KEY, THEME_SEED_LOCK_KEY } from '../constants'
 
 export class BasePage {
   readonly header: SiteHeader
@@ -25,10 +25,15 @@ export class BasePage {
 
     if (options.theme) {
       await this.page.addInitScript(
-        ({ key, theme }) => {
+        ({ key, lockKey, theme }) => {
+          if (sessionStorage.getItem(lockKey)) {
+            return
+          }
+
           localStorage.setItem(key, theme)
+          sessionStorage.setItem(lockKey, '1')
         },
-        { key: THEME_MODE_STORAGE_KEY, theme: options.theme },
+        { key: THEME_MODE_STORAGE_KEY, lockKey: THEME_SEED_LOCK_KEY, theme: options.theme },
       )
     }
 
@@ -39,6 +44,12 @@ export class BasePage {
   async isDarkMode() {
     return this.page.evaluate(() => {
       return document.documentElement.classList.contains('dark')
+    })
+  }
+
+  async markClientRouter() {
+    await this.page.evaluate(() => {
+      Object.assign(window, { __e2eClientRouter: true })
     })
   }
 
@@ -53,6 +64,12 @@ export class BasePage {
     await this.main.waitFor({ state: 'visible' })
     await this.page.waitForFunction(() => {
       return !document.documentElement.hasAttribute('data-astro-transition')
+    })
+  }
+
+  async wasClientRouterPreserved() {
+    return this.page.evaluate(() => {
+      return Object.prototype.hasOwnProperty.call(window, '__e2eClientRouter')
     })
   }
 }

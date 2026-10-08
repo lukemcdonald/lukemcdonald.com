@@ -1,11 +1,11 @@
 import { createReadStream, existsSync, statSync } from 'node:fs'
 import { createServer } from 'node:http'
-import { extname, join, normalize, resolve, sep } from 'node:path'
+import { extname, posix, resolve, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const distDir = resolve(fileURLToPath(new URL('../dist', import.meta.url)))
 const host = '127.0.0.1'
-const port = Number(process.env.E2E_PORT ?? 4321)
+const port = Number(process.env.E2E_PORT || 4173)
 
 const MIME = {
   '.css': 'text/css; charset=utf-8',
@@ -38,15 +38,23 @@ function existingFile(filePath) {
   return filePath
 }
 
-function resolveFile(requestPath) {
-  const relative = normalize(decodeURIComponent(requestPath.split('?')[0]))
-    .replaceAll(/^(\.\.(\/|\\|$))+/g, '')
+function decodeRequestPath(requestPath) {
+  return decodeURIComponent(requestPath.split('?')[0] ?? '/')
+}
+
+function resolveFile(decodedPath) {
+  const relative = posix
+    .normalize(decodedPath)
+    .replaceAll(/^(?:\.\.(?:\/|$))+/g, '')
     .replace(/^\//, '')
-  const candidate = resolve(distDir, relative)
+  const segments = relative.split('/').filter((segment) => {
+    return segment !== '' && segment !== '.' && segment !== '..'
+  })
+  const candidate = resolve(distDir, ...segments)
 
   return (
     existingFile(candidate) ??
-    existingFile(join(candidate, 'index.html')) ??
+    existingFile(resolve(candidate, 'index.html')) ??
     existingFile(`${candidate}.html`)
   )
 }
@@ -60,14 +68,24 @@ function sendFile(res, status, file) {
 }
 
 const server = createServer((req, res) => {
-  const filePath = resolveFile(req.url ?? '/')
+  let decodedPath
+
+  try {
+    decodedPath = decodeRequestPath(req.url ?? '/')
+  } catch {
+    res.writeHead(400)
+    res.end('Bad Request')
+    return
+  }
+
+  const filePath = resolveFile(decodedPath)
 
   if (filePath) {
     sendFile(res, 200, filePath)
     return
   }
 
-  const notFound = existingFile(join(distDir, '404.html'))
+  const notFound = existingFile(resolve(distDir, '404.html'))
 
   if (notFound) {
     sendFile(res, 404, notFound)

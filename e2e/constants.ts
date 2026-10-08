@@ -1,9 +1,13 @@
+import { toHrefTestId, toNavMenuId } from '../src/features/navigation/navigation.utils'
+
 export const TEST_ID = {
   commandPalette: 'command-palette',
   commandPaletteInput: 'command-palette-input',
   commandPaletteTrigger: 'command-palette-trigger',
+  desktopNav: 'desktop-nav',
   main: 'main',
   mobileAppearance: 'mobile-appearance',
+  mobileMenu: 'mobile-menu',
   mobileMenuTrigger: 'mobile-menu-trigger',
   siteHeader: 'site-header',
   siteHomeLink: 'site-home-link',
@@ -13,6 +17,7 @@ export const TEST_ID = {
 } as const
 
 export const THEME_MODE_STORAGE_KEY = 'theme-mode'
+export const THEME_SEED_LOCK_KEY = '__e2e-theme-seeded'
 
 export const WCAG_TAGS = [
   'wcag2a',
@@ -24,19 +29,11 @@ export const WCAG_TAGS = [
 ] as const
 
 export function greetingLinkTestId(href: string): string {
-  return `greeting-link-${hrefSlug(href)}`
-}
-
-export function hrefSlug(href: string): string {
-  return href.replace(/^\//, '').replaceAll('/', '-') || 'home'
-}
-
-export function navLinkTestId(href: string): string {
-  return `nav-link-${hrefSlug(href)}`
+  return toHrefTestId('greeting-link', href)
 }
 
 export function navMenuTestId(name: string): string {
-  return `nav-menu-${name.trim().toLowerCase()}`
+  return toNavMenuId(name)
 }
 
 export function themeOptionTestId(mode: string): string {

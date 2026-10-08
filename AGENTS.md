@@ -86,4 +86,4 @@ import type { ReactNode } from 'react'
 - Runner: `pnpm test` (`tsx --test 'src/**/*.test.ts'`)
 - Use `node:test` and `node:assert/strict`
 - Colocate tests as `*.test.ts` next to the module
-- End-to-end: Playwright in `e2e/` (`*.spec.ts`). Import `test`/`expect` from `e2e/fixtures`. See `e2e/README.md`.
+- End-to-end: Playwright in `e2e/` (`*.spec.ts`). Import `test`/`expect` from `../fixtures`. See `e2e/README.md`.

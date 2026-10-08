@@ -22,8 +22,8 @@ export function PreferencePicker<Value extends string>({
   icon,
   label,
   onChange,
-  options,
   optionTestIdPrefix,
+  options,
   testId,
   value,
 }: PreferencePickerProps<Value>) {
