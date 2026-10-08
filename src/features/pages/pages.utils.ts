@@ -52,6 +52,19 @@ export function buildPagesFilter(options: PageFilterOptions = {}) {
   return (entry: PageEntry) => matchesPageFilter(entry, included)
 }
 
+export function resolvePageSeo(page: {
+  data: Pick<PageEntry['data'], 'description' | 'seo' | 'title'>
+  rendered?: { html?: string } | null
+}) {
+  const { description, seo, title } = page.data
+
+  return {
+    description: seo?.description || description || page.rendered?.html,
+    ogImage: seo?.ogImage,
+    title: seo?.title || title,
+  }
+}
+
 export function sortPages(pages: PageEntry[], options: PageFilterOptions = {}): PageEntry[] {
   const { sortBy = 'title' } = options
 

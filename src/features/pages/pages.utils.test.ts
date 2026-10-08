@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
-import { buildPagesFilter, sortPages } from './pages.utils.ts'
+import { buildPagesFilter, resolvePageSeo, sortPages } from './pages.utils.ts'
 
 type PageStub = Parameters<typeof sortPages>[0][number]
 
@@ -42,6 +42,74 @@ describe('buildPagesFilter', () => {
       buildPagesFilter({ include: ['about.md'] })(page('about.md', { title: 'About' })),
       true,
     )
+  })
+})
+
+describe('resolvePageSeo', () => {
+  test('prefers seo.description over frontmatter description and rendered html', () => {
+    const seo = resolvePageSeo({
+      data: {
+        description: 'Frontmatter summary.',
+        seo: { description: 'SEO override.' },
+        title: 'About',
+      },
+      rendered: { html: '<p>Rendered body.</p>' },
+    })
+
+    assert.equal(seo.description, 'SEO override.')
+  })
+
+  test('prefers frontmatter description over rendered html', () => {
+    const seo = resolvePageSeo({
+      data: {
+        description: 'Frontmatter summary.',
+        title: 'About',
+      },
+      rendered: { html: '<p>Rendered body.</p>' },
+    })
+
+    assert.equal(seo.description, 'Frontmatter summary.')
+  })
+
+  test('falls back to rendered html when no description fields exist', () => {
+    const seo = resolvePageSeo({
+      data: { title: 'About' },
+      rendered: { html: '<p>Rendered body.</p>' },
+    })
+
+    assert.equal(seo.description, '<p>Rendered body.</p>')
+  })
+
+  test('prefers seo.title over the page title', () => {
+    const seo = resolvePageSeo({
+      data: {
+        seo: { title: 'Custom title' },
+        title: 'About',
+      },
+    })
+
+    assert.equal(seo.title, 'Custom title')
+  })
+
+  test('passes through seo.ogImage', () => {
+    const seo = resolvePageSeo({
+      data: {
+        seo: { ogImage: '/custom-share.jpg' },
+        title: 'About',
+      },
+    })
+
+    assert.equal(seo.ogImage, '/custom-share.jpg')
+  })
+
+  test('leaves ogImage undefined when omitted', () => {
+    const seo = resolvePageSeo({
+      data: { title: 'About' },
+    })
+
+    assert.equal(seo.ogImage, undefined)
+    assert.equal(seo.title, 'About')
+    assert.equal(seo.description, undefined)
   })
 })
 

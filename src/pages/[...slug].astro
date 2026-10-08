@@ -3,6 +3,7 @@ import { render } from 'astro:content'
 
 import Entry from '@/components/Entry/Entry.astro'
 import { getPublishedPages } from '@/features/pages/pages.server'
+import { resolvePageSeo } from '@/features/pages/pages.utils'
 import Layout from '@/layouts/Layout.astro'
 import Main from '@/layouts/Main.astro'
 
@@ -21,17 +22,16 @@ if (!page) {
   return new Response(null, { status: 404 })
 }
 
-const { description, image, imageAlt, modDate, pubDate, seo, subtitle, title } = page.data
+const { description, image, imageAlt, modDate, pubDate, subtitle, title } = page.data
 const { Content } = await render(page)
-
-const seoTitle = seo?.title || title
-const seoDescription = seo?.description || page.rendered?.html || description
+const { description: seoDescription, ogImage, title: seoTitle } = resolvePageSeo(page)
 ---
 
 <Layout
   contentType="page"
   description={seoDescription}
   modDate={modDate}
+  ogImage={ogImage}
   pubDate={pubDate}
   title={seoTitle}
 >
