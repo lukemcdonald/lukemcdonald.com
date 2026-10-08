@@ -1,5 +1,5 @@
 // Environment flags
-export const IS_PROD = import.meta.env.PROD
+export const IS_PROD = import.meta.env?.PROD ?? false
 
 const SITE_NAME = 'Luke McDonald'
 const DOMAIN = 'lukemcdonald.com'
