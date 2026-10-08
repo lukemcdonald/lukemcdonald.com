@@ -87,9 +87,8 @@ const meta: SeoMeta = {
 
     <slot />
 
-    <!-- Theme initialization, system preference watcher, sound bootstrap, and easter eggs -->
+    <!-- Theme initialization, system preference watcher, and sound bootstrap -->
     <script>
-      import { initializeEasterEggs } from '@/components/EasterEggs'
       import { applyGlassLevel, getGlassLevel } from '@/components/Glass/utils'
       import { initializeSound, playPageArrival } from '@/components/Sound/utils'
       import { getThemeColor } from '@/components/ThemeColor/utils'
@@ -118,7 +117,6 @@ const meta: SeoMeta = {
       function setup() {
         setupTheme()
         initializeSound()
-        initializeEasterEggs()
       }
 
       function onAstroPageLoad() {

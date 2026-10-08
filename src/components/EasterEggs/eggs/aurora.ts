@@ -8,7 +8,29 @@ const FIREFLIES = [
   { blink: '3.4s', delay: '1.1s', drift: '10s', left: '81%', path: 'b', top: '91%' },
 ] as const
 
-export function mountAuroraFireflies(): void {
+const KONAMI_SEQUENCE = [
+  'ArrowUp',
+  'ArrowUp',
+  'ArrowDown',
+  'ArrowDown',
+  'ArrowLeft',
+  'ArrowRight',
+  'ArrowLeft',
+  'ArrowRight',
+  'KeyB',
+  'KeyA',
+] as const
+
+export const auroraEgg = {
+  id: 'aurora',
+  onActivate: mountAuroraFireflies,
+  onDismiss: unmountAuroraFireflies,
+  sequence: KONAMI_SEQUENCE,
+  soundOff: 'close',
+  soundOn: 'success',
+} as const
+
+function mountAuroraFireflies() {
   if (document.querySelector(`[${FIREFLY_ATTR}]`)) {
     return
   }
@@ -27,7 +49,7 @@ export function mountAuroraFireflies(): void {
   }
 }
 
-export function unmountAuroraFireflies(): void {
+function unmountAuroraFireflies() {
   document.querySelectorAll(`[${FIREFLY_ATTR}]`).forEach((node) => {
     node.remove()
   })
