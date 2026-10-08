@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @import './theme.css';
 @import './effects.css';
+@import './konami.css';
 @import './typography.css';
 @import './layout.css';
 

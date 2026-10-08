@@ -84,9 +84,10 @@ const meta: SeoMeta = {
 
     <slot />
 
-    <!-- Theme initialization, system preference watcher, and sound bootstrap -->
+    <!-- Theme initialization, system preference watcher, sound bootstrap, and Konami easter egg -->
     <script>
       import { applyGlassLevel, getGlassLevel } from '@/components/Glass/utils'
+      import { initializeKonami } from '@/components/Konami'
       import { initializeSound, playPageArrival } from '@/components/Sound/utils'
       import { getThemeColor } from '@/components/ThemeColor/utils'
       import { getEffectiveThemeMode } from '@/components/ThemeMode/utils'
@@ -114,6 +115,7 @@ const meta: SeoMeta = {
       function setup() {
         setupTheme()
         initializeSound()
+        initializeKonami()
       }
 
       function onAstroPageLoad() {

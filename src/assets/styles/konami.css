@@ -1,0 +1,163 @@
+:root {
+  --konami-landscape-opacity: 0.42;
+}
+
+.dark {
+  --konami-landscape-opacity: 0.3;
+}
+
+html[data-konami] {
+  --konami-duration: 7s;
+}
+
+html[data-konami]::before {
+  animation-duration: var(--konami-duration);
+  animation-fill-mode: both;
+  animation-name: konami-aurora;
+  animation-timing-function: ease-in-out;
+  background:
+    radial-gradient(
+      ellipse 80% 50% at 18% 28%,
+      color-mix(in oklab, var(--color-secondary-base) 28%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      ellipse 70% 42% at 82% 18%,
+      color-mix(in oklab, var(--color-primary-400) 30%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 58% 38% at 52% 92%,
+      color-mix(in oklab, var(--color-primary-500) 22%, transparent),
+      transparent 55%
+    );
+  content: '';
+  inset: -18%;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+  position: fixed;
+  z-index: 1;
+}
+
+html[data-konami]::after {
+  animation-duration: var(--konami-duration);
+  animation-fill-mode: both;
+  animation-name: konami-fireflies;
+  animation-timing-function: ease-in-out;
+  background-image:
+    radial-gradient(
+      circle,
+      color-mix(in oklab, var(--color-secondary-base) 85%, white) 0 1.5px,
+      transparent 2.25px
+    ),
+    radial-gradient(
+      circle,
+      color-mix(in oklab, var(--color-primary-400) 80%, white) 0 1.25px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle,
+      color-mix(in oklab, var(--color-secondary-base) 70%, white) 0 1px,
+      transparent 1.75px
+    ),
+    radial-gradient(
+      circle,
+      color-mix(in oklab, var(--color-primary-300) 75%, white) 0 1.5px,
+      transparent 2.25px
+    ),
+    radial-gradient(
+      circle,
+      color-mix(in oklab, var(--color-primary-500) 70%, white) 0 1px,
+      transparent 1.75px
+    );
+  background-position:
+    12% 86%,
+    28% 93%,
+    63% 88%,
+    81% 91%,
+    47% 95%;
+  background-repeat: no-repeat;
+  background-size: 10px 10px;
+  content: '';
+  inset: 0;
+  pointer-events: none;
+  position: fixed;
+  z-index: 2;
+}
+
+html[data-konami] [data-landscape] {
+  filter: grayscale(0) blur(0);
+  opacity: var(--konami-landscape-opacity);
+  transition:
+    filter 700ms ease,
+    opacity 700ms ease;
+}
+
+@keyframes konami-aurora {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 6%, 0);
+  }
+
+  16% {
+    opacity: 1;
+  }
+
+  72% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -3%, 0);
+  }
+}
+
+@keyframes konami-fireflies {
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  18% {
+    opacity: 0.9;
+  }
+
+  38% {
+    opacity: 0.35;
+  }
+
+  58% {
+    opacity: 0.85;
+  }
+
+  78% {
+    opacity: 0.4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-konami]::before,
+  html[data-konami]::after {
+    animation: none;
+  }
+
+  html[data-konami]::before {
+    opacity: 0.45;
+  }
+
+  html[data-konami]::after {
+    opacity: 0.55;
+  }
+
+  html[data-konami] [data-landscape] {
+    transition: none;
+  }
+}
+
+@media print {
+  html[data-konami]::before,
+  html[data-konami]::after {
+    display: none;
+  }
+}

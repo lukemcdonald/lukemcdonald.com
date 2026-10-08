@@ -1,0 +1,1 @@
+export { initializeKonami } from './konami'
