@@ -1,0 +1,161 @@
+html[data-easter-egg='aurora'] {
+  --aurora-landscape-opacity: 0.42;
+}
+
+.dark[data-easter-egg='aurora'] {
+  --aurora-landscape-opacity: 0.3;
+}
+
+html[data-easter-egg='aurora']::before {
+  animation: aurora-wash 14s ease-in-out infinite;
+  background:
+    radial-gradient(
+      ellipse 80% 50% at 18% 28%,
+      color-mix(in oklab, var(--color-secondary-base) 42%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      ellipse 70% 42% at 82% 18%,
+      color-mix(in oklab, var(--color-primary-400) 46%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 58% 38% at 52% 92%,
+      color-mix(in oklab, var(--color-primary-500) 34%, transparent),
+      transparent 55%
+    );
+  content: '';
+  inset: -18%;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  position: fixed;
+  z-index: 1;
+}
+
+.dark[data-easter-egg='aurora']::before {
+  mix-blend-mode: screen;
+}
+
+[data-landscape] {
+  transition:
+    filter 700ms ease,
+    opacity 700ms ease;
+}
+
+[data-easter-egg='aurora'] [data-landscape] {
+  filter: none;
+  opacity: var(--aurora-landscape-opacity);
+}
+
+@property --tx {
+  inherits: false;
+  initial-value: 0px;
+  syntax: '<length>';
+}
+
+@property --ty {
+  inherits: false;
+  initial-value: 0px;
+  syntax: '<length>';
+}
+
+html[data-easter-egg='aurora'] [data-aurora-firefly] {
+  animation-delay:
+    var(--aurora-firefly-delay, 0s), var(--wander-delay-x, -4s), var(--wander-delay-y, -7s);
+  animation-direction: normal, alternate, alternate;
+  animation-duration: var(--aurora-firefly-blink, 3s), var(--wander-x, 8s), var(--wander-y, 11s);
+  animation-iteration-count: infinite;
+  animation-name: aurora-firefly-blink, aurora-firefly-wander-x, aurora-firefly-wander-y;
+  animation-timing-function: ease-in-out;
+  background: color-mix(in oklab, var(--color-secondary-base) 85%, white);
+  border-radius: 999px;
+  box-shadow: 0 0 8px 2px color-mix(in oklab, var(--color-secondary-base) 55%, transparent);
+  height: 5px;
+  pointer-events: none;
+  position: fixed;
+  translate: var(--tx) var(--ty);
+  width: 5px;
+  z-index: 2;
+}
+
+html[data-easter-egg='aurora'] [data-aurora-firefly='b'] {
+  background: color-mix(in oklab, var(--color-primary-400) 80%, white);
+}
+
+html[data-easter-egg='aurora'] [data-aurora-firefly='c'] {
+  background: color-mix(in oklab, var(--color-primary-300) 80%, white);
+}
+
+@keyframes aurora-wash {
+  0%,
+  100% {
+    opacity: 0.82;
+    transform: translate3d(0, 4%, 0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translate3d(0, -3%, 0);
+  }
+}
+
+@keyframes aurora-firefly-blink {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+
+  40% {
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes aurora-firefly-wander-x {
+  to {
+    --tx: var(--dx, 16px);
+  }
+}
+
+@keyframes aurora-firefly-wander-y {
+  to {
+    --ty: var(--dy, -14px);
+  }
+}
+
+@keyframes aurora-firefly-glow {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-easter-egg='aurora']::before {
+    animation: none;
+    opacity: 0.45;
+  }
+
+  html[data-easter-egg='aurora'] [data-aurora-firefly] {
+    animation: aurora-firefly-glow 4s ease-in-out infinite;
+    animation-delay: var(--aurora-firefly-delay, 0s);
+  }
+
+  [data-landscape] {
+    transition: none;
+  }
+}
+
+@media print {
+  html[data-easter-egg='aurora']::before,
+  [data-aurora-firefly] {
+    display: none;
+  }
+}
