@@ -33,6 +33,7 @@
   "dependencies": {
     "@headlessui/react": "^2.2.10",
     "@lucide/astro": "^1.53.0",
+    "@resvg/resvg-js": "^2.6.2",
     "cuelume": "0.2.4",
     "date-fns": "4.4.0",
     "lucide-react": "^1.53.0",
@@ -46,7 +47,6 @@
     "@astrojs/sitemap": "^3.7.4",
     "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.63.0",
-    "@resvg/resvg-js": "^2.6.2",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^26.6.4",
