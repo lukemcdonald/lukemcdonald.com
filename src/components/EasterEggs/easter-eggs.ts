@@ -24,6 +24,7 @@ type Egg = {
 const ATTRIBUTE = 'data-easter-egg'
 const CYCLE_STORAGE_KEY = 'easter-eggs:cycle'
 const EGGS: readonly Egg[] = [auroraEgg, hyruleEgg]
+const CYCLE_STEPS = EGGS.length + 1
 const IDLE_MS = 2500
 const STORAGE_ON = 'on'
 const STORAGE_PREFIX = 'easter-egg:'
@@ -141,11 +142,13 @@ function cycleEgg() {
   const index = pickCycleIndex()
   const egg = EGGS[index]
 
+  writeCycleIndex(nextCycleIndex(index))
+
   if (!egg) {
+    hideEgg()
     return
   }
 
-  writeCycleIndex(nextCycleIndex(index))
   showEgg(egg)
 }
 
@@ -210,7 +213,7 @@ function matchesPrefix(attempted: string[], length: number, sequence: readonly s
 }
 
 function nextCycleIndex(index: number) {
-  return (index + 1) % EGGS.length
+  return (index + 1) % CYCLE_STEPS
 }
 
 function onKeyDown(event: KeyboardEvent) {
@@ -233,14 +236,15 @@ function parseCycleIndex(stored: string | null) {
     return 0
   }
 
-  return index % EGGS.length
+  return index % CYCLE_STEPS
 }
 
 function pickCycleIndex() {
   const index = readCycleIndex()
   const egg = EGGS[index]
+  const alreadyThere = egg ? activeEgg?.id === egg.id : !activeEgg
 
-  if (egg && activeEgg?.id === egg.id) {
+  if (alreadyThere) {
     return nextCycleIndex(index)
   }
 
