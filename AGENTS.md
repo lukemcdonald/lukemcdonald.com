@@ -17,8 +17,17 @@ Use the Fallow skill for deeper audit and debug workflows.
 - Alphabetize: imports, object keys, destructured props, component prop lists
   - Exception: group related items together if alphabetical order hurts readability
 - Put `return` on its own line. Do not use inline returns.
-- Conventional commits without a scope and without a details body
 - When spreading leftover props onto a child, name the rest `delegated`
+
+## Commits and pull requests
+
+PRs are squash-merged, so the PR title becomes the commit on main. Use Conventional Commits for git commits and PR titles:
+
+`type: description`
+
+CI enforces that format on the PR title (types below, no scope). Append `[VOLTA-123]` when there is a Linear issue. No details body.
+
+Types: `build`, `chore`, `ci`, `docs`, `feat`, `fix`, `perf`, `refactor`, `revert`, `style`, `test`
 
 ## Code Comments
 
