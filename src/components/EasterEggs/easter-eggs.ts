@@ -138,6 +138,10 @@ function collectCompleted(code: string): Egg[] {
   return completed
 }
 
+function currentEggId() {
+  return storedEggId() ?? activeEgg?.id
+}
+
 function cycleEgg() {
   const index = pickCycleIndex()
   const egg = EGGS[index]
@@ -184,6 +188,10 @@ function hideEgg(silent = false) {
   writeStorage(clearStoredEggs)
   egg?.onDismiss?.()
   playSound(silent ? undefined : egg?.soundOff)
+}
+
+function isCurrentCycleStep(index: number) {
+  return EGGS[index]?.id === currentEggId()
 }
 
 function isCycleTrigger(egg: Egg) {
@@ -241,10 +249,8 @@ function parseCycleIndex(stored: string | null) {
 
 function pickCycleIndex() {
   const index = readCycleIndex()
-  const egg = EGGS[index]
-  const alreadyThere = egg ? activeEgg?.id === egg.id : !activeEgg
 
-  if (alreadyThere) {
+  if (isCurrentCycleStep(index)) {
     return nextCycleIndex(index)
   }
 
