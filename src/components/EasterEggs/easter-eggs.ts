@@ -199,7 +199,11 @@ function onKeyDown(event: KeyboardEvent) {
 
 function notifyKey(code: string) {
   for (const egg of EGGS) {
-    egg.onKey?.(code)
+    try {
+      egg.onKey?.(code)
+    } catch {
+      continue
+    }
   }
 }
 

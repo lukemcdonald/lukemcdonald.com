@@ -13,7 +13,7 @@ const NOTES: Record<string, number> = {
   KeyA: 523.25,
 }
 const RUPEE_CHANCE = 0.2
-const RUPEE_KEY = 'easter-egg:ocarina:rupees'
+const RUPEE_KEY = 'ocarina:rupees'
 const RUPEE_MARKUP =
   '<svg aria-hidden="true" viewBox="0 0 16 22"><polygon points="8,1 15,7.5 8,21 1,7.5"/><polygon fill="white" opacity="0.32" points="8,1 12,7.5 8,11 4,7.5"/></svg>'
 const SLASH_RADIUS = 44
