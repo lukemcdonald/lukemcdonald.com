@@ -14,7 +14,6 @@ const JINGLE = [
   { delay: 280, duration: 0.28, frequency: 830.61 },
 ] as const
 const MELODY = ['ArrowLeft', 'ArrowDown', 'KeyA', 'ArrowRight', 'ArrowUp', 'ArrowRight'] as const
-const SWING_MS = 280
 
 export const hyruleEgg = {
   id: 'hyrule',
@@ -34,7 +33,7 @@ function audioContext() {
   return audioCtx
 }
 
-function bindSwing() {
+function bindSlash() {
   if (listening) {
     return
   }
@@ -73,7 +72,7 @@ function mountHud() {
 
 function mountHyrule(silent = false) {
   mountHud()
-  bindSwing()
+  bindSlash()
 
   if (!silent) {
     playJingle()
@@ -85,7 +84,7 @@ function onPointerDown(event: PointerEvent) {
     return
   }
 
-  swingAt(event.clientX, event.clientY)
+  slashAt(event.clientX, event.clientY)
 }
 
 function playJingle() {
@@ -122,18 +121,18 @@ function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
-function swingAt(x: number, y: number) {
+function slashAt(x: number, y: number) {
   const slash = document.createElement('span')
 
-  slash.dataset.hyruleSwing = ''
+  slash.dataset.hyruleSlash = ''
   slash.setAttribute('aria-hidden', 'true')
   slash.style.left = `${x}px`
   slash.style.top = `${y}px`
+  slash.addEventListener('animationend', () => slash.remove(), { once: true })
   document.body.append(slash)
-  window.setTimeout(() => slash.remove(), SWING_MS)
 }
 
-function unbindSwing() {
+function unbindSlash() {
   if (!listening) {
     return
   }
@@ -143,8 +142,8 @@ function unbindSwing() {
 }
 
 function unmountHyrule() {
-  unbindSwing()
-  document.querySelectorAll('[data-hyrule-hud], [data-hyrule-swing]').forEach((node) => {
+  unbindSlash()
+  document.querySelectorAll('[data-hyrule-hud], [data-hyrule-slash]').forEach((node) => {
     node.remove()
   })
 }
