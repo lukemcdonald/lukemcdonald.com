@@ -1,7 +1,7 @@
 ---
 import type { SeoMeta } from '@/utils/seo'
 
-import { GOOGLE_SITE_VERIFICATION, PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN } from 'astro:env/client'
+import { CLOUDFLARE_ANALYTICS_TOKEN, GOOGLE_SITE_VERIFICATION } from 'astro:env/client'
 import { CONTEXT } from 'astro:env/server'
 import { ClientRouter } from 'astro:transitions'
 
@@ -212,9 +212,9 @@ const socialMetaTags = buildSocialMetaTags(metaForSeo, Astro.site ?? GLOBAL_CONF
   />
 
   {
-    CONTEXT === 'production' && PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN && (
+    CONTEXT === 'production' && CLOUDFLARE_ANALYTICS_TOKEN && (
       <script
-        data-cf-beacon={JSON.stringify({ token: PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN })}
+        data-cf-beacon={JSON.stringify({ token: CLOUDFLARE_ANALYTICS_TOKEN })}
         defer
         is:inline
         src="https://static.cloudflareinsights.com/beacon.min.js"
