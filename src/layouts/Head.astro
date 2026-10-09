@@ -30,7 +30,7 @@ const description = stripHtmlAndTruncate(inDescription, 160, '...')
 // Create JSON-LD graph ([WebSite, Page]) and social meta tags
 const metaForSeo: SeoMeta = { ...meta, description }
 const structuredData = buildGraphJsonLd(metaForSeo)
-const socialMetaTags = buildSocialMetaTags(metaForSeo)
+const socialMetaTags = buildSocialMetaTags(metaForSeo, Astro.site ?? GLOBAL_CONFIG.site.origin)
 ---
 
 <head>
@@ -146,6 +146,14 @@ const socialMetaTags = buildSocialMetaTags(metaForSeo)
   <meta
     property="og:image"
     content={socialMetaTags['og:image']}
+  />
+  <meta
+    property="og:image:width"
+    content={socialMetaTags['og:image:width']}
+  />
+  <meta
+    property="og:image:height"
+    content={socialMetaTags['og:image:height']}
   />
   <meta
     property="og:site_name"

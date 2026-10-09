@@ -4,11 +4,14 @@ import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
 import { GLOBAL_CONFIG } from '@/configs/global'
+import { DEFAULT_OG_IMAGE_PATH, OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH } from '@/utils/og'
 
 import { buildSocialMetaTags } from './social.ts'
 
 const origin = GLOBAL_CONFIG.site.origin
-const defaultImage = `${origin}/og-image.jpg`
+const defaultImage = `${origin}${DEFAULT_OG_IMAGE_PATH}`
+const imageHeight = String(OG_IMAGE_HEIGHT)
+const imageWidth = String(OG_IMAGE_WIDTH)
 
 function meta(overrides: Partial<SeoMeta> = {}): SeoMeta {
   return {
@@ -49,6 +52,21 @@ describe('buildSocialMetaTags', () => {
 
     assert.equal(tags['og:image'], ogImage)
     assert.equal(tags['twitter:image'], ogImage)
+  })
+
+  test('makes a relative ogImage absolute against the site origin', () => {
+    const tags = buildSocialMetaTags(meta({ ogImage: '/custom-share.jpg' }))
+
+    assert.equal(tags['og:image'], `${origin}/custom-share.jpg`)
+    assert.equal(tags['twitter:image'], `${origin}/custom-share.jpg`)
+  })
+
+  test('resolves relative ogImage against a passed site URL', () => {
+    const site = 'https://deploy-preview-1--example.netlify.app'
+    const tags = buildSocialMetaTags(meta({ ogImage: '/og/resume.png' }), site)
+
+    assert.equal(tags['og:image'], `${site}/og/resume.png`)
+    assert.equal(tags['twitter:image'], `${site}/og/resume.png`)
   })
 
   test('makes og:url and twitter:url absolute from a relative canonical path', () => {
@@ -118,6 +136,8 @@ describe('buildSocialMetaTags', () => {
     assert.deepEqual(tags, {
       'og:description': 'A page about fatherhood.',
       'og:image': defaultImage,
+      'og:image:height': imageHeight,
+      'og:image:width': imageWidth,
       'og:site_name': GLOBAL_CONFIG.name,
       'og:title': 'Father',
       'og:type': 'website',

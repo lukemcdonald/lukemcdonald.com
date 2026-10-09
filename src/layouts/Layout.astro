@@ -6,6 +6,7 @@ import '@/assets/styles/global.css'
 import EasterEggs from '@/components/EasterEggs/EasterEggs.astro'
 import { GLOBAL_CONFIG } from '@/configs/global'
 import Head from '@/layouts/Head.astro'
+import { getOgImagePath } from '@/utils/og'
 
 export interface Props extends SeoMeta {
   bodyClass?: string
@@ -20,6 +21,7 @@ const {
   bodyClass,
   dir = GLOBAL_CONFIG.dir,
   lang = GLOBAL_CONFIG.lang ?? 'en',
+  ogImage = getOgImagePath(url.pathname),
   title = GLOBAL_CONFIG.name,
   ...siteMeta
 } = props
@@ -29,6 +31,7 @@ const meta: SeoMeta = {
   canonicalUrl,
   dir,
   lang,
+  ogImage,
   title,
   ...siteMeta,
 }
