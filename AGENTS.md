@@ -7,7 +7,7 @@ Personal website built with Astro. Keep changes focused and match existing patte
 - Package manager: **pnpm**
 - Before marking any task complete: run `pnpm validate` and `pnpm typecheck`
 - After meaningful TypeScript or JavaScript changes, run `pnpm run audit:code`
-- Never run `pnpm dev` unless instructed
+- Start the dev server with `pnpm dev --background`. Check it with `pnpm astro dev status`. Stop it with `pnpm astro dev stop` when done.
 
 Use the Fallow skill for deeper audit and debug workflows.
 
