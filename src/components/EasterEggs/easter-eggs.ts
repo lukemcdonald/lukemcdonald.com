@@ -29,6 +29,8 @@ const STORAGE_ON = 'on'
 const STORAGE_PREFIX = 'easter-egg:'
 
 let activeEgg: Egg | undefined
+let cycleIndex = 0
+let cycleLoaded = false
 let idleTimer: ReturnType<typeof setTimeout> | undefined
 let progressById = new Map<string, number>()
 let started = false
@@ -137,7 +139,7 @@ function collectCompleted(code: string): Egg[] {
 }
 
 function cycleEgg() {
-  const index = readCycleIndex()
+  const index = pickCycleIndex()
   const egg = EGGS[index]
 
   if (!egg) {
@@ -202,6 +204,14 @@ function isTypingTarget(target: EventTarget | null): boolean {
   return Boolean(target.closest('input, select, textarea'))
 }
 
+function loadCycleIndex() {
+  try {
+    return parseCycleIndex(localStorage.getItem(CYCLE_STORAGE_KEY))
+  } catch {
+    return 0
+  }
+}
+
 function matchesPrefix(attempted: string[], length: number, sequence: readonly string[]): boolean {
   const suffix = attempted.slice(-length)
 
@@ -235,6 +245,17 @@ function parseCycleIndex(stored: string | null) {
   return index % EGGS.length
 }
 
+function pickCycleIndex() {
+  const index = readCycleIndex()
+  const egg = EGGS[index]
+
+  if (egg && activeEgg?.id === egg.id) {
+    return nextCycleIndex(index)
+  }
+
+  return index
+}
+
 function pickEgg(completed: readonly Egg[]): Egg | undefined {
   return completed[0]
 }
@@ -248,11 +269,12 @@ function playSound(name: SoundName | undefined) {
 }
 
 function readCycleIndex() {
-  try {
-    return parseCycleIndex(localStorage.getItem(CYCLE_STORAGE_KEY))
-  } catch {
-    return 0
+  if (!cycleLoaded) {
+    cycleIndex = loadCycleIndex()
+    cycleLoaded = true
   }
+
+  return cycleIndex
 }
 
 function readStoredEggId(): string | undefined {
@@ -385,6 +407,8 @@ function toggleEgg(egg: Egg | undefined) {
 }
 
 function writeCycleIndex(index: number) {
+  cycleIndex = index
+  cycleLoaded = true
   writeStorage(() => {
     localStorage.setItem(CYCLE_STORAGE_KEY, String(index))
   })

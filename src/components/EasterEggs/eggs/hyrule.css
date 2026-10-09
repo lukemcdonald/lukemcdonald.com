@@ -32,6 +32,12 @@ html[data-easter-egg='hyrule'] {
   line-height: 1.7;
 }
 
+html[data-easter-egg='hyrule'] :is(.cursor-pointer, a, button, label, summary, [role='button']) {
+  cursor:
+    var(--hyrule-sword) 30 2,
+    auto;
+}
+
 html[data-easter-egg='hyrule'] img,
 html[data-easter-egg='hyrule'] [data-landscape] {
   filter: url('#hyrule-pixel');
