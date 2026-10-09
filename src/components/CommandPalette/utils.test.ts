@@ -1,7 +1,12 @@
 import assert from 'node:assert/strict'
 import { afterEach, describe, mock, test } from 'node:test'
 
-import { applyHighlightedCommand, getHighlightedCommand } from './utils.ts'
+import {
+  applyHighlightedCommand,
+  getHighlightedCommand,
+  getSecretsProgressLabel,
+  getVisibleSecrets,
+} from './utils.ts'
 
 function createActions() {
   const calls: string[] = []
@@ -20,6 +25,9 @@ function createActions() {
   const mockSetThemeMode = mock.fn((mode: string) => {
     calls.push(`setThemeMode:${mode}`)
   })
+  const mockToggleEgg = mock.fn((id: string) => {
+    calls.push(`toggleEgg:${id}`)
+  })
   const mockToggleSound = mock.fn(() => {
     calls.push('toggleSound')
   })
@@ -31,6 +39,7 @@ function createActions() {
       onPreferenceApplied: mockOnPreferenceApplied,
       setThemeColor: mockSetThemeColor,
       setThemeMode: mockSetThemeMode,
+      toggleEgg: mockToggleEgg,
       toggleSound: mockToggleSound,
     },
     calls,
@@ -79,6 +88,24 @@ describe('getHighlightedCommand', () => {
       type: 'sound',
     })
   })
+
+  test('matches a found egg after nav items', () => {
+    assert.deepEqual(
+      getHighlightedCommand(navItems, 'aurora', [{ id: 'aurora', name: 'Aurora' }]),
+      {
+        eggId: 'aurora',
+        type: 'egg',
+      },
+    )
+  })
+
+  test('does not match an unfound egg', () => {
+    assert.equal(getHighlightedCommand(navItems, 'aurora'), undefined)
+    assert.equal(
+      getHighlightedCommand(navItems, 'aurora', [{ id: 'hyrule', name: 'Hyrule' }]),
+      undefined,
+    )
+  })
 })
 
 describe('applyHighlightedCommand', () => {
@@ -124,5 +151,52 @@ describe('applyHighlightedCommand', () => {
     applyHighlightedCommand(actions, { type: 'sound' })
 
     assert.deepEqual(calls, ['toggleSound', 'onPreferenceApplied'])
+  })
+
+  test('toggles a found egg without closing', () => {
+    const { actions, calls } = createActions()
+
+    applyHighlightedCommand(actions, { eggId: 'aurora', type: 'egg' })
+
+    assert.deepEqual(calls, ['toggleEgg:aurora', 'onPreferenceApplied'])
+  })
+})
+
+describe('getSecretsProgressLabel', () => {
+  test('counts found eggs until all are found', () => {
+    assert.equal(getSecretsProgressLabel(0, 2), 'Secrets: 0 of 2 found')
+    assert.equal(getSecretsProgressLabel(1, 2), 'Secrets: 1 of 2 found')
+    assert.equal(getSecretsProgressLabel(2, 2), 'All secrets found')
+  })
+})
+
+describe('getVisibleSecrets', () => {
+  const eggs = [
+    { id: 'aurora', name: 'Aurora' },
+    { id: 'hyrule', name: 'Hyrule' },
+  ]
+
+  test('hides unfound eggs and shows progress when the query is empty', () => {
+    const visible = getVisibleSecrets(eggs, ['aurora'], '')
+
+    assert.equal(visible.progressLabel, 'Secrets: 1 of 2 found')
+    assert.equal(visible.showProgress, true)
+    assert.equal(visible.showSecrets, true)
+    assert.deepEqual(visible.visibleFoundEggs, [{ id: 'aurora', name: 'Aurora' }])
+  })
+
+  test('does not make unfound eggs searchable', () => {
+    const visible = getVisibleSecrets(eggs, ['aurora'], 'hyrule')
+
+    assert.equal(visible.showProgress, false)
+    assert.equal(visible.showSecrets, false)
+    assert.deepEqual(visible.visibleFoundEggs, [])
+  })
+
+  test('matches a found egg name without revealing the progress line', () => {
+    const visible = getVisibleSecrets(eggs, ['aurora'], 'aurora')
+
+    assert.equal(visible.showProgress, false)
+    assert.deepEqual(visible.visibleFoundEggs, [{ id: 'aurora', name: 'Aurora' }])
   })
 })
