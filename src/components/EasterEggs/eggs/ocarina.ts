@@ -138,12 +138,46 @@ function incrementRupees() {
   updateCounter()
 }
 
-function isSlashTarget(target: EventTarget | null) {
-  if (!(target instanceof Element)) {
+function isInside(start: number, end: number, value: number) {
+  return value >= start && value <= end
+}
+
+function isInteractiveHit(target: Element) {
+  return Boolean(target.closest('.site, a, button, input, textarea, select'))
+}
+
+function isSlashTarget(event: PointerEvent) {
+  if (!(event.target instanceof Element)) {
     return false
   }
 
-  return Boolean(target.closest('[data-ocarina-meadow], [data-ocarina-blade]'))
+  if (event.target.closest('[data-ocarina-blade]')) {
+    return true
+  }
+
+  if (isInteractiveHit(event.target)) {
+    return false
+  }
+
+  return meadowContains(event.clientX, event.clientY)
+}
+
+function meadowContains(x: number, y: number) {
+  for (const meadow of document.querySelectorAll('[data-ocarina-meadow]')) {
+    if (pointInBox(meadow.getBoundingClientRect(), x, y)) {
+      return true
+    }
+  }
+
+  return false
+}
+
+function pointInBox(box: DOMRectReadOnly, x: number, y: number) {
+  if (!isInside(box.left, box.right, x)) {
+    return false
+  }
+
+  return isInside(box.top, box.bottom, y)
 }
 
 function logHint() {
@@ -195,7 +229,7 @@ function mountOcarina() {
 }
 
 function onPointerDown(event: PointerEvent) {
-  if (!isSlashTarget(event.target)) {
+  if (!isSlashTarget(event)) {
     return
   }
 
