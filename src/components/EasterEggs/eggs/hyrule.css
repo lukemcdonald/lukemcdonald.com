@@ -33,13 +33,9 @@ html[data-easter-egg='hyrule'] {
 }
 
 html[data-easter-egg='hyrule'] img,
-html[data-easter-egg='hyrule'] [data-landscape],
-html[data-easter-egg='hyrule'] svg {
-  image-rendering: pixelated;
-}
-
 html[data-easter-egg='hyrule'] [data-landscape] {
-  filter: none;
+  filter: url('#hyrule-pixel');
+  image-rendering: pixelated;
 }
 
 html[data-easter-egg='hyrule'] [data-hyrule-hud] {

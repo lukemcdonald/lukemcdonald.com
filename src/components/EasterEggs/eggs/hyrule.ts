@@ -3,6 +3,8 @@ import { SOUND_CONFIG } from '@/configs/sound'
 
 const CREST_MARKUP =
   '<svg aria-hidden="true" viewBox="0 0 20 24"><polygon points="10,0 18,8 2,8"/><polygon points="10,7 18,15 2,15"/><polygon points="10,14 18,22 2,22"/></svg>'
+const FILTER_MARKUP =
+  '<svg aria-hidden="true" height="0" width="0"><filter id="hyrule-pixel" x="0" y="0" width="100%" height="100%"><feFlood x="2" y="2" height="1" width="1"/><feComposite width="4" height="4"/><feTile result="a"/><feComposite in="SourceGraphic" in2="a" operator="in"/><feMorphology operator="dilate" radius="2"/></filter></svg>'
 const HEART_MARKUP =
   '<svg aria-hidden="true" shape-rendering="crispEdges" viewBox="0 0 9 8"><path d="M1 1h2v1h1v1h1V2h1V1h2v1h1v2H8v1H7v1H6v1H5v1H4V6H3V5H2V4H1V3H0V2h1z"/></svg>'
 const JINGLE = [
@@ -64,7 +66,7 @@ function mountHud() {
   const hud = document.createElement('div')
 
   hud.dataset.hyruleHud = ''
-  hud.innerHTML = `<div data-hyrule-hearts>${HEART_MARKUP}${HEART_MARKUP}${HEART_MARKUP}</div><div data-hyrule-crest>${CREST_MARKUP}</div>`
+  hud.innerHTML = `${FILTER_MARKUP}<div data-hyrule-hearts>${HEART_MARKUP}${HEART_MARKUP}${HEART_MARKUP}</div><div data-hyrule-crest>${CREST_MARKUP}</div>`
   hud.setAttribute('aria-hidden', 'true')
   document.body.append(hud)
 }
