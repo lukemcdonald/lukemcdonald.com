@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { afterEach, before, beforeEach, describe, mock, test } from 'node:test'
 
-import { DEFAULT_THEME_COLOR, THEME_COLOR_STORAGE_KEY } from './constants.ts'
+import { DEFAULT_THEME_COLOR, THEME_COLOR_STORAGE_KEY, THEME_COLORS } from './constants.ts'
 import { getThemeColor } from './utils.ts'
 
 describe('getThemeColor', () => {
@@ -24,9 +24,11 @@ describe('getThemeColor', () => {
   })
 
   test('returns the stored color when it is known', () => {
-    store.set(THEME_COLOR_STORAGE_KEY, 'blue')
+    for (const color of THEME_COLORS) {
+      store.set(THEME_COLOR_STORAGE_KEY, color)
 
-    assert.equal(getThemeColor(), 'blue')
+      assert.equal(getThemeColor(), color)
+    }
   })
 
   test('falls back to default when the stored color was removed', () => {

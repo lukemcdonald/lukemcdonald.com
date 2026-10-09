@@ -51,8 +51,9 @@ const secondaryColors = {
     {
       themes.map((theme) => (
         <button
-          data-theme={theme.value}
+          aria-pressed="false"
           class="theme-button rounded-md border border-primary-900/20 px-3 py-1 text-sm text-primary-900 transition-colors hover:bg-primary-900/8 dark:border-white/20 dark:text-primary-50 dark:hover:bg-white/10"
+          data-theme={theme.value}
         >
           {theme.name}
         </button>
@@ -97,20 +98,27 @@ const secondaryColors = {
     const activeClasses = ['bg-primary-900/10', 'dark:bg-white/15']
     const buttons = document.querySelectorAll('.theme-button')
 
+    function setActiveButton(active: Element) {
+      buttons.forEach((button) => {
+        button.classList.remove(...activeClasses)
+        button.setAttribute('aria-pressed', 'false')
+      })
+      active.classList.add(...activeClasses)
+      active.setAttribute('aria-pressed', 'true')
+    }
+
     buttons.forEach((button) => {
       button.addEventListener('click', () => {
         const theme = button.getAttribute('data-theme') || ''
         document.documentElement.setAttribute('data-theme', theme)
-
-        buttons.forEach((b) => b.classList.remove(...activeClasses))
-        button.classList.add(...activeClasses)
+        setActiveButton(button)
       })
     })
 
     const currentTheme = document.documentElement.getAttribute('data-theme') || ''
     const activeButton = document.querySelector(`.theme-button[data-theme="${currentTheme}"]`)
     if (activeButton) {
-      activeButton.classList.add(...activeClasses)
+      setActiveButton(activeButton)
     }
   })
 </script>
