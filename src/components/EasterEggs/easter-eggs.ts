@@ -9,18 +9,21 @@ import type { SoundName } from 'cuelume'
 import { play } from 'cuelume'
 
 import { auroraEgg } from './eggs/aurora'
+import { ocarinaEgg } from './eggs/ocarina'
 
 type Egg = {
   id: string
   onActivate?: () => void
   onDismiss?: () => void
+  onInit?: () => void
+  onKey?: (code: string) => void
   sequence: readonly string[]
   soundOff?: SoundName
   soundOn?: SoundName
 }
 
 const ATTRIBUTE = 'data-easter-egg'
-const EGGS: readonly Egg[] = [auroraEgg]
+const EGGS: readonly Egg[] = [auroraEgg, ocarinaEgg]
 const IDLE_MS = 2500
 const STORAGE_ON = 'on'
 const STORAGE_PREFIX = 'easter-egg:'
@@ -63,6 +66,7 @@ export function initializeEasterEggs() {
   }
 
   started = true
+  startEggs()
   restoreEgg()
   document.addEventListener('keydown', onKeyDown)
   document.addEventListener('astro:after-swap', remountEgg)
@@ -143,6 +147,10 @@ function hasBlockingFlags(event: KeyboardEvent): boolean {
   ].some(Boolean)
 }
 
+function hasOpenDialog() {
+  return Boolean(document.querySelector('dialog[open], [role="dialog"]:not(dialog)'))
+}
+
 function hideEgg(silent = false) {
   const egg = activeEgg
 
@@ -185,11 +193,17 @@ function onKeyDown(event: KeyboardEvent) {
     return
   }
 
+  notifyKey(event.code)
   applyCode(event.code)
 }
 
+function notifyKey(code: string) {
+  for (const egg of EGGS) {
+    egg.onKey?.(code)
+  }
+}
+
 function pickEgg(completed: readonly Egg[]): Egg | undefined {
-  // A second egg or a date-based pick would go here.
   return completed[0]
 }
 
@@ -264,11 +278,17 @@ function setProgress(id: string, next: number) {
 }
 
 function shouldIgnore(event: KeyboardEvent): boolean {
-  if (hasBlockingFlags(event)) {
+  if (hasBlockingFlags(event) || hasOpenDialog()) {
     return true
   }
 
   return isTypingTarget(event.target)
+}
+
+function startEggs() {
+  for (const egg of EGGS) {
+    egg.onInit?.()
+  }
 }
 
 function showEgg(egg: Egg, silent = false) {

@@ -1,0 +1,165 @@
+html[data-easter-egg='ocarina'] {
+  --ocarina-blade: oklch(0.46 0.11 145);
+  --ocarina-blade-dark: oklch(0.32 0.08 145);
+  --ocarina-rupee: oklch(0.62 0.16 145);
+  --ocarina-rupee-edge: oklch(0.42 0.12 145);
+}
+
+html[data-easter-egg='ocarina'] [data-grass] img {
+  opacity: 0.12;
+}
+
+html[data-easter-egg='ocarina'] [data-ocarina-meadow] {
+  cursor:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M8 20L17 5' fill='none' stroke='%23cfc6a8' stroke-linecap='round' stroke-width='2'/%3E%3Cpath d='M15 7l3-3 2 2-3 3' fill='%23cfc6a8'/%3E%3Cpath d='M7 18l3 3' fill='none' stroke='%23806538' stroke-linecap='round' stroke-width='2'/%3E%3C/svg%3E")
+      4 4,
+    crosshair;
+  pointer-events: none;
+  position: fixed;
+  user-select: none;
+  z-index: 1;
+}
+
+html[data-easter-egg='ocarina'] [data-ocarina-blade] {
+  pointer-events: auto;
+  position: absolute;
+  touch-action: none;
+  transform-origin: 50% 100%;
+}
+
+html[data-easter-egg='ocarina'] [data-ocarina-blade] svg {
+  display: block;
+  fill: color-mix(
+    in oklab,
+    var(--ocarina-blade) calc(var(--blade-tone, 0.5) * 100%),
+    var(--ocarina-blade-dark)
+  );
+  height: 100%;
+  width: 100%;
+}
+
+.dark[data-easter-egg='ocarina'] [data-ocarina-blade] svg {
+  --ocarina-blade: oklch(0.64 0.12 145);
+  --ocarina-blade-dark: oklch(0.44 0.09 145);
+}
+
+html[data-easter-egg='ocarina'] [data-ocarina-blade][data-cut] {
+  animation: ocarina-blade-fall 0.62s ease-in forwards;
+  pointer-events: none;
+}
+
+html[data-easter-egg='ocarina'] [data-ocarina-blade][data-growing] {
+  animation: ocarina-blade-grow 0.48s ease-out;
+}
+
+html[data-easter-egg='ocarina'] [data-ocarina-rupee],
+html[data-easter-egg='ocarina'] [data-ocarina-wallet] svg {
+  fill: var(--ocarina-rupee);
+  filter: drop-shadow(0 0 0.12rem var(--ocarina-rupee-edge));
+}
+
+html[data-easter-egg='ocarina'] [data-ocarina-rupee] {
+  animation: ocarina-rupee-pop 0.9s ease-out forwards;
+  height: 1.4rem;
+  pointer-events: none;
+  position: fixed;
+  translate: -50% -80%;
+  width: 1rem;
+  z-index: 4;
+}
+
+html[data-easter-egg='ocarina'] [data-ocarina-wallet] {
+  align-items: center;
+  bottom: 0.9rem;
+  color: var(--ocarina-rupee-edge);
+  display: flex;
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  gap: 0.35rem;
+  left: 0.9rem;
+  letter-spacing: 0.06em;
+  pointer-events: none;
+  position: fixed;
+  z-index: 4;
+}
+
+html[data-easter-egg='ocarina'] [data-ocarina-wallet] svg {
+  height: 1.15rem;
+  width: 0.85rem;
+}
+
+@keyframes ocarina-blade-fall {
+  to {
+    opacity: 0;
+    rotate: var(--fall-rot, 28deg);
+    translate: var(--fall-x, 10px) 2.4rem;
+  }
+}
+
+@keyframes ocarina-blade-grow {
+  from {
+    opacity: 0.2;
+    scale: 0.45 0.2;
+  }
+
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes ocarina-blade-fade {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes ocarina-rupee-fade {
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  30%,
+  70% {
+    opacity: 1;
+  }
+}
+
+@keyframes ocarina-rupee-pop {
+  0% {
+    opacity: 0;
+    translate: -50% -20%;
+  }
+
+  24% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    translate: -50% -180%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-easter-egg='ocarina'] [data-ocarina-blade][data-cut] {
+    animation: ocarina-blade-fade 0.35s ease forwards;
+  }
+
+  html[data-easter-egg='ocarina'] [data-ocarina-blade][data-growing] {
+    animation: none;
+  }
+
+  html[data-easter-egg='ocarina'] [data-ocarina-rupee] {
+    animation: ocarina-rupee-fade 0.9s ease forwards;
+  }
+}
+
+@media print {
+  [data-ocarina-meadow],
+  [data-ocarina-rupee],
+  [data-ocarina-wallet] {
+    display: none;
+  }
+}

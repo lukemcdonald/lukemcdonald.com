@@ -6,12 +6,14 @@ const leftGrassId = pickGrassId()
 const rightGrassId = pickGrassId({ excludeId: leftGrassId })
 ---
 
-<Grass
-  id={rightGrassId}
-  position="right"
-/>
+<div data-grass>
+  <Grass
+    id={rightGrassId}
+    position="right"
+  />
 
-<Grass
-  id={leftGrassId}
-  position="left"
-/>
+  <Grass
+    id={leftGrassId}
+    position="left"
+  />
+</div>
