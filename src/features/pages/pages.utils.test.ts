@@ -5,25 +5,6 @@ import { buildPagesFilter, resolvePageSeo, sortPages } from './pages.utils.ts'
 
 type PageStub = Parameters<typeof sortPages>[0][number]
 
-function page(
-  id: string,
-  data: {
-    draft?: boolean
-    order?: number
-    title: string
-  },
-): PageStub {
-  return {
-    collection: 'pages',
-    data: {
-      draft: data.draft ?? false,
-      order: data.order,
-      title: data.title,
-    },
-    id,
-  } as PageStub
-}
-
 describe('buildPagesFilter', () => {
   test('always hides drafts', () => {
     const draft = page('secret.md', { draft: true, title: 'Secret' })
@@ -132,3 +113,22 @@ describe('sortPages', () => {
     )
   })
 })
+
+function page(
+  id: string,
+  data: {
+    draft?: boolean
+    order?: number
+    title: string
+  },
+): PageStub {
+  return {
+    collection: 'pages',
+    data: {
+      draft: data.draft ?? false,
+      order: data.order,
+      title: data.title,
+    },
+    id,
+  } as PageStub
+}
