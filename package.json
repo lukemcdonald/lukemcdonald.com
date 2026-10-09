@@ -43,7 +43,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@astrojs/netlify": "^8.2.8",
-    "@astrojs/react": "^6.0.6",
+    "@astrojs/react": "^7.0.1",
     "@astrojs/sitemap": "^3.7.4",
     "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.63.0",
