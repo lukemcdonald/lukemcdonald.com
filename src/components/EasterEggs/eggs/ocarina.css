@@ -3,6 +3,14 @@ html[data-easter-egg='ocarina'] {
   --ocarina-blade-dark: oklch(0.32 0.08 145);
   --ocarina-rupee: oklch(0.62 0.16 145);
   --ocarina-rupee-edge: oklch(0.42 0.12 145);
+  cursor:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M8 20L17 5' fill='none' stroke='%23cfc6a8' stroke-linecap='round' stroke-width='2'/%3E%3Cpath d='M15 7l3-3 2 2-3 3' fill='%23cfc6a8'/%3E%3Cpath d='M7 18l3 3' fill='none' stroke='%23806538' stroke-linecap='round' stroke-width='2'/%3E%3C/svg%3E")
+      4 4,
+    crosshair;
+}
+
+html[data-easter-egg='ocarina'] .site {
+  cursor: auto;
 }
 
 html[data-easter-egg='ocarina'] [data-grass] img {
@@ -10,10 +18,6 @@ html[data-easter-egg='ocarina'] [data-grass] img {
 }
 
 html[data-easter-egg='ocarina'] [data-ocarina-meadow] {
-  cursor:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M8 20L17 5' fill='none' stroke='%23cfc6a8' stroke-linecap='round' stroke-width='2'/%3E%3Cpath d='M15 7l3-3 2 2-3 3' fill='%23cfc6a8'/%3E%3Cpath d='M7 18l3 3' fill='none' stroke='%23806538' stroke-linecap='round' stroke-width='2'/%3E%3C/svg%3E")
-      4 4,
-    crosshair;
   pointer-events: none;
   position: fixed;
   user-select: none;
@@ -21,9 +25,8 @@ html[data-easter-egg='ocarina'] [data-ocarina-meadow] {
 }
 
 html[data-easter-egg='ocarina'] [data-ocarina-blade] {
-  pointer-events: auto;
+  pointer-events: none;
   position: absolute;
-  touch-action: none;
   transform-origin: 50% 100%;
 }
 

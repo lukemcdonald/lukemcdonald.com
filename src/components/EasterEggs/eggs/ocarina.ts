@@ -48,6 +48,7 @@ function bindScene() {
   }
 
   listening = true
+  document.addEventListener('pointercancel', onPointerUp)
   document.addEventListener('pointerdown', onPointerDown)
   document.addEventListener('pointermove', onPointerMove)
   document.addEventListener('pointerup', onPointerUp)
@@ -149,10 +150,6 @@ function isInteractiveHit(target: Element) {
 function isSlashTarget(event: PointerEvent) {
   if (!(event.target instanceof Element)) {
     return false
-  }
-
-  if (event.target.closest('[data-ocarina-blade]')) {
-    return true
   }
 
   if (isInteractiveHit(event.target)) {
@@ -364,6 +361,7 @@ function unbindScene() {
   listening = false
   dragging = false
   clearTimeout(resizeTimer)
+  document.removeEventListener('pointercancel', onPointerUp)
   document.removeEventListener('pointerdown', onPointerDown)
   document.removeEventListener('pointermove', onPointerMove)
   document.removeEventListener('pointerup', onPointerUp)

@@ -295,7 +295,16 @@ function startEggs() {
   }
 }
 
+function dismissOtherEgg(nextId: string) {
+  if (!activeEgg || activeEgg.id === nextId) {
+    return
+  }
+
+  hideEgg(true)
+}
+
 function showEgg(egg: Egg, silent = false) {
+  dismissOtherEgg(egg.id)
   activeEgg = egg
   document.documentElement.setAttribute(ATTRIBUTE, egg.id)
   writeStorage(() => {
