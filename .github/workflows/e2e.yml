@@ -1,12 +1,6 @@
 name: End-to-end tests
 
 on:
-  workflow_call:
-    inputs:
-      browsers:
-        default: pr
-        description: Browser set. pr is Chromium and Pixel 5; full adds Firefox and WebKit.
-        type: string
   workflow_dispatch:
     inputs:
       browsers:
@@ -17,10 +11,9 @@ on:
           - pr
         type: choice
 
-# Manual runs only. workflow_call is cancelled by the caller's concurrency group.
 concurrency:
-  cancel-in-progress: ${{ github.event_name == 'workflow_dispatch' }}
-  group: e2e-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+  group: e2e-workflow_dispatch-${{ github.ref }}
 
 jobs:
   e2e:

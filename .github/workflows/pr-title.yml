@@ -1,4 +1,4 @@
-name: PR title
+name: PR
 
 on:
   pull_request:
@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   pr-title:
-    name: PR title
+    name: Title
     permissions:
       pull-requests: read
     runs-on: ubuntu-latest
