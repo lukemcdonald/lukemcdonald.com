@@ -29,7 +29,19 @@ html[data-easter-egg='hyrule'] {
     auto;
   font-family: var(--font-sans);
   font-size-adjust: 0.5;
-  line-height: 1.7;
+  line-height: 1.5;
+}
+
+html[data-easter-egg='hyrule'] .prose {
+  line-height: inherit;
+}
+
+html[data-easter-egg='hyrule'] :is(h1, h2, h3, h4, h5, h6) {
+  line-height: 1.2;
+}
+
+html[data-easter-egg='hyrule'] :is(ul, ol) :is(li) {
+  margin-block: 0.25em;
 }
 
 html[data-easter-egg='hyrule'] :is(.cursor-pointer, a, button, label, summary, [role='button']) {
