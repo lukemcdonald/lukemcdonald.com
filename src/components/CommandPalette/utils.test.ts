@@ -3,6 +3,40 @@ import { afterEach, describe, mock, test } from 'node:test'
 
 import { applyHighlightedCommand, getHighlightedCommand } from './utils.ts'
 
+function createActions() {
+  const calls: string[] = []
+  const mockClose = mock.fn(() => {
+    calls.push('close')
+  })
+  const mockNavigate = mock.fn((href: string) => {
+    calls.push(`navigate:${href}`)
+  })
+  const mockOnPreferenceApplied = mock.fn(() => {
+    calls.push('onPreferenceApplied')
+  })
+  const mockSetThemeColor = mock.fn((color: string) => {
+    calls.push(`setThemeColor:${color}`)
+  })
+  const mockSetThemeMode = mock.fn((mode: string) => {
+    calls.push(`setThemeMode:${mode}`)
+  })
+  const mockToggleSound = mock.fn(() => {
+    calls.push('toggleSound')
+  })
+
+  return {
+    actions: {
+      close: mockClose,
+      navigate: mockNavigate,
+      onPreferenceApplied: mockOnPreferenceApplied,
+      setThemeColor: mockSetThemeColor,
+      setThemeMode: mockSetThemeMode,
+      toggleSound: mockToggleSound,
+    },
+    calls,
+  }
+}
+
 describe('getHighlightedCommand', () => {
   const navItems = [
     { href: '/resume', name: 'Resume' },
@@ -92,37 +126,3 @@ describe('applyHighlightedCommand', () => {
     assert.deepEqual(calls, ['toggleSound', 'onPreferenceApplied'])
   })
 })
-
-function createActions() {
-  const calls: string[] = []
-  const mockClose = mock.fn(() => {
-    calls.push('close')
-  })
-  const mockNavigate = mock.fn((href: string) => {
-    calls.push(`navigate:${href}`)
-  })
-  const mockOnPreferenceApplied = mock.fn(() => {
-    calls.push('onPreferenceApplied')
-  })
-  const mockSetThemeColor = mock.fn((color: string) => {
-    calls.push(`setThemeColor:${color}`)
-  })
-  const mockSetThemeMode = mock.fn((mode: string) => {
-    calls.push(`setThemeMode:${mode}`)
-  })
-  const mockToggleSound = mock.fn(() => {
-    calls.push('toggleSound')
-  })
-
-  return {
-    actions: {
-      close: mockClose,
-      navigate: mockNavigate,
-      onPreferenceApplied: mockOnPreferenceApplied,
-      setThemeColor: mockSetThemeColor,
-      setThemeMode: mockSetThemeMode,
-      toggleSound: mockToggleSound,
-    },
-    calls,
-  }
-}

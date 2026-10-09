@@ -22,6 +22,30 @@ type PageJsonLd = {
   url?: string
 }
 
+function graph(meta: SeoMeta) {
+  return buildGraphJsonLd(meta)
+}
+
+function meta(overrides: Partial<SeoMeta> = {}): SeoMeta {
+  return {
+    canonicalUrl: '/about',
+    title: 'About',
+    ...overrides,
+  }
+}
+
+function origin() {
+  return GLOBAL_CONFIG.site.origin
+}
+
+function pageNode(meta: SeoMeta) {
+  return graph(meta)['@graph'][1] as PageJsonLd
+}
+
+function websiteNode(meta: SeoMeta) {
+  return graph(meta)['@graph'][0]
+}
+
 describe('buildGraphJsonLd', () => {
   test('returns a two-node @graph of WebSite then the page', () => {
     const jsonLd = graph(meta())
@@ -245,27 +269,3 @@ describe('page JSON-LD', () => {
     assert.ok(page.publisher)
   })
 })
-
-function graph(meta: SeoMeta) {
-  return buildGraphJsonLd(meta)
-}
-
-function meta(overrides: Partial<SeoMeta> = {}): SeoMeta {
-  return {
-    canonicalUrl: '/about',
-    title: 'About',
-    ...overrides,
-  }
-}
-
-function origin() {
-  return GLOBAL_CONFIG.site.origin
-}
-
-function pageNode(meta: SeoMeta) {
-  return graph(meta)['@graph'][1] as PageJsonLd
-}
-
-function websiteNode(meta: SeoMeta) {
-  return graph(meta)['@graph'][0]
-}

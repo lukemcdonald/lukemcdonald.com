@@ -13,6 +13,10 @@ import {
   OG_PHOTO_WIDTH,
 } from './og.ts'
 
+function mustachioPath() {
+  return join(process.cwd(), 'src/assets/images/luke-mustachio.jpg')
+}
+
 describe('getOgImagePath', () => {
   test('maps the homepage to the default generated image', () => {
     assert.equal(getOgImagePath('/'), DEFAULT_OG_IMAGE_PATH)
@@ -106,7 +110,3 @@ describe('renderOgPng', () => {
     assert.ok(withPhoto.byteLength > plain.byteLength)
   })
 })
-
-function mustachioPath() {
-  return join(process.cwd(), 'src/assets/images/luke-mustachio.jpg')
-}

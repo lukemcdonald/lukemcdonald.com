@@ -6,6 +6,44 @@ import { getThemeMode } from '@/components/ThemeMode/utils'
 
 import { applyThemeColorSelection, applyThemeModeSelection } from './mobile-menu-prefs.ts'
 
+function installBrowserStubs({
+  mockClassListToggle,
+  mockGetItem,
+  mockRemoveAttribute,
+  mockSetAttribute,
+  mockSetItem,
+}: {
+  mockClassListToggle: () => void
+  mockGetItem: (key: string) => string | null
+  mockRemoveAttribute: () => void
+  mockSetAttribute: () => void
+  mockSetItem: (key: string, value: string) => void
+}) {
+  Object.defineProperty(globalThis, 'document', {
+    configurable: true,
+    value: {
+      documentElement: {
+        classList: {
+          toggle: mockClassListToggle,
+        },
+        removeAttribute: mockRemoveAttribute,
+        setAttribute: mockSetAttribute,
+      },
+    },
+  })
+  Object.defineProperty(globalThis, 'localStorage', {
+    configurable: true,
+    value: {
+      getItem: mockGetItem,
+      setItem: mockSetItem,
+    },
+  })
+  Object.defineProperty(globalThis, 'window', {
+    configurable: true,
+    value: globalThis,
+  })
+}
+
 describe('mobile-menu-prefs', () => {
   const store = new Map<string, string>()
   const mockClassListToggle = mock.fn()
@@ -74,41 +112,3 @@ describe('mobile-menu-prefs', () => {
     })
   })
 })
-
-function installBrowserStubs({
-  mockClassListToggle,
-  mockGetItem,
-  mockRemoveAttribute,
-  mockSetAttribute,
-  mockSetItem,
-}: {
-  mockClassListToggle: () => void
-  mockGetItem: (key: string) => string | null
-  mockRemoveAttribute: () => void
-  mockSetAttribute: () => void
-  mockSetItem: (key: string, value: string) => void
-}) {
-  Object.defineProperty(globalThis, 'document', {
-    configurable: true,
-    value: {
-      documentElement: {
-        classList: {
-          toggle: mockClassListToggle,
-        },
-        removeAttribute: mockRemoveAttribute,
-        setAttribute: mockSetAttribute,
-      },
-    },
-  })
-  Object.defineProperty(globalThis, 'localStorage', {
-    configurable: true,
-    value: {
-      getItem: mockGetItem,
-      setItem: mockSetItem,
-    },
-  })
-  Object.defineProperty(globalThis, 'window', {
-    configurable: true,
-    value: globalThis,
-  })
-}

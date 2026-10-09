@@ -5,6 +5,13 @@ import { assembleResumeData, pickResumeSection } from './resume.utils.ts'
 
 type ResumeStub = Parameters<typeof assembleResumeData>[0][number]
 
+function entry(id: string, data: unknown): ResumeStub {
+  return {
+    data,
+    id,
+  } as ResumeStub
+}
+
 describe('assembleResumeData', () => {
   test('assigns top-level files as section objects', () => {
     const data = assembleResumeData([entry('basics.yaml', { name: 'Luke McDonald' })])
@@ -63,10 +70,3 @@ describe('pickResumeSection', () => {
     assert.equal(pickResumeSection(data, 'education'), null)
   })
 })
-
-function entry(id: string, data: unknown): ResumeStub {
-  return {
-    data,
-    id,
-  } as ResumeStub
-}

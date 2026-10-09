@@ -8,6 +8,14 @@ import { DEFAULT_OG_IMAGE_PATH, OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH } from '@/utils/
 
 import { buildSocialMetaTags } from './social.ts'
 
+function meta(overrides: Partial<SeoMeta> = {}): SeoMeta {
+  return {
+    canonicalUrl: '/about',
+    title: 'About',
+    ...overrides,
+  }
+}
+
 describe('buildSocialMetaTags', () => {
   const origin = GLOBAL_CONFIG.site.origin
   const defaultImage = `${origin}${DEFAULT_OG_IMAGE_PATH}`
@@ -160,11 +168,3 @@ describe('buildSocialMetaTags', () => {
     assert.equal(tags['twitter:card'], 'summary_large_image')
   })
 })
-
-function meta(overrides: Partial<SeoMeta> = {}): SeoMeta {
-  return {
-    canonicalUrl: '/about',
-    title: 'About',
-    ...overrides,
-  }
-}

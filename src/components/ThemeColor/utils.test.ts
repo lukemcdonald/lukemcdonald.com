@@ -4,6 +4,21 @@ import { afterEach, before, beforeEach, describe, mock, test } from 'node:test'
 import { DEFAULT_THEME_COLOR, THEME_COLOR_STORAGE_KEY, THEME_COLORS } from './constants.ts'
 import { getThemeColor } from './utils.ts'
 
+function installBrowserStubs() {
+  Object.defineProperty(globalThis, 'localStorage', {
+    configurable: true,
+    value: {
+      getItem() {
+        return null
+      },
+    },
+  })
+  Object.defineProperty(globalThis, 'window', {
+    configurable: true,
+    value: globalThis,
+  })
+}
+
 describe('getThemeColor', () => {
   const store = new Map<string, string>()
   const mockGetItem = mock.fn((key: string) => {
@@ -39,18 +54,3 @@ describe('getThemeColor', () => {
     }
   })
 })
-
-function installBrowserStubs() {
-  Object.defineProperty(globalThis, 'localStorage', {
-    configurable: true,
-    value: {
-      getItem() {
-        return null
-      },
-    },
-  })
-  Object.defineProperty(globalThis, 'window', {
-    configurable: true,
-    value: globalThis,
-  })
-}

@@ -102,6 +102,6 @@ import type { ReactNode } from 'react'
 - Wrap `before`, `beforeEach`, `after`, and `afterEach` inside the `describe` they apply to. Never hoist hooks to file top level.
 - Mock with `mock.fn` or `mock.method` and a descriptive name (`mockGetItem`). Restore patched methods in `afterEach` with `mock.restoreAll()`; use `mockFn.mock.resetCalls()` only to clear call history.
 - One `describe` per unit under test. Cases use `test('...')` behavior sentences, not `it`.
-- Keep file-local helpers at the bottom of the file. Extract a shared test util only when more than one file needs it.
+- Keep file-local helpers at the top of the file, after the imports and before the `describe` blocks. Extract a shared test util only when more than one file needs it.
 - Do not use `data-testid` in `src/**/*.test.ts`. Unit tests stay implementation-focused.
 - Keep tests lean. Assert behavior that would regress; skip setup that does not change the assertion.
