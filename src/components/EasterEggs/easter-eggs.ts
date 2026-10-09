@@ -9,23 +9,28 @@ import type { SoundName } from 'cuelume'
 import { play } from 'cuelume'
 
 import { auroraEgg } from './eggs/aurora'
+import { hyruleEgg } from './eggs/hyrule'
 
 type Egg = {
   id: string
-  onActivate?: () => void
+  onActivate?: (silent?: boolean) => void
   onDismiss?: () => void
+  onInit?: () => void
   sequence: readonly string[]
   soundOff?: SoundName
   soundOn?: SoundName
 }
 
 const ATTRIBUTE = 'data-easter-egg'
-const EGGS: readonly Egg[] = [auroraEgg]
+const CYCLE_STORAGE_KEY = 'easter-eggs:cycle'
+const EGGS: readonly Egg[] = [auroraEgg, hyruleEgg]
+const CYCLE_STEPS = EGGS.length + 1
 const IDLE_MS = 2500
 const STORAGE_ON = 'on'
 const STORAGE_PREFIX = 'easter-egg:'
 
 let activeEgg: Egg | undefined
+let cycleIndex = 0
 let idleTimer: ReturnType<typeof setTimeout> | undefined
 let progressById = new Map<string, number>()
 let started = false
@@ -63,6 +68,7 @@ export function initializeEasterEggs() {
   }
 
   started = true
+  startEggs()
   restoreEgg()
   document.addEventListener('keydown', onKeyDown)
   document.addEventListener('astro:after-swap', remountEgg)
@@ -92,7 +98,7 @@ function applyCode(code: string) {
   }
 
   resetProgress()
-  toggleEgg(pickEgg(completed))
+  dispatchCompleted(completed)
 }
 
 function clearIdleTimer() {
@@ -132,6 +138,33 @@ function collectCompleted(code: string): Egg[] {
   return completed
 }
 
+function currentEggId() {
+  return storedEggId() ?? activeEgg?.id
+}
+
+function cycleEgg() {
+  const index = pickCycleIndex()
+  const egg = EGGS[index]
+
+  writeCycleIndex(nextCycleIndex(index))
+
+  if (!egg) {
+    hideEgg()
+    return
+  }
+
+  showEgg(egg)
+}
+
+function dispatchCompleted(completed: readonly Egg[]) {
+  if (completed.some(isCycleTrigger)) {
+    cycleEgg()
+    return
+  }
+
+  toggleEgg(pickEgg(completed))
+}
+
 function hasBlockingFlags(event: KeyboardEvent): boolean {
   return [
     event.altKey,
@@ -143,6 +176,10 @@ function hasBlockingFlags(event: KeyboardEvent): boolean {
   ].some(Boolean)
 }
 
+function hasOpenDialog() {
+  return Boolean(document.querySelector('dialog[open], [role="dialog"]:not(dialog)'))
+}
+
 function hideEgg(silent = false) {
   const egg = activeEgg
 
@@ -151,6 +188,14 @@ function hideEgg(silent = false) {
   writeStorage(clearStoredEggs)
   egg?.onDismiss?.()
   playSound(silent ? undefined : egg?.soundOff)
+}
+
+function isCurrentCycleStep(index: number) {
+  return EGGS[index]?.id === currentEggId()
+}
+
+function isCycleTrigger(egg: Egg) {
+  return egg.id === auroraEgg.id
 }
 
 function isTypingTarget(target: EventTarget | null): boolean {
@@ -175,6 +220,10 @@ function matchesPrefix(attempted: string[], length: number, sequence: readonly s
   return suffix.every((item, index) => item === sequence[index])
 }
 
+function nextCycleIndex(index: number) {
+  return (index + 1) % CYCLE_STEPS
+}
+
 function onKeyDown(event: KeyboardEvent) {
   if (shouldIgnore(event)) {
     return
@@ -188,8 +237,27 @@ function onKeyDown(event: KeyboardEvent) {
   applyCode(event.code)
 }
 
+function parseCycleIndex(stored: string | null) {
+  const index = Number.parseInt(stored ?? '0', 10)
+
+  if (!Number.isFinite(index) || index < 0) {
+    return 0
+  }
+
+  return index % CYCLE_STEPS
+}
+
+function pickCycleIndex() {
+  const index = readCycleIndex()
+
+  if (isCurrentCycleStep(index)) {
+    return nextCycleIndex(index)
+  }
+
+  return index
+}
+
 function pickEgg(completed: readonly Egg[]): Egg | undefined {
-  // A second egg or a date-based pick would go here.
   return completed[0]
 }
 
@@ -199,6 +267,16 @@ function playSound(name: SoundName | undefined) {
   }
 
   play(name)
+}
+
+function readCycleIndex() {
+  try {
+    cycleIndex = parseCycleIndex(localStorage.getItem(CYCLE_STORAGE_KEY))
+  } catch {
+    return cycleIndex
+  }
+
+  return cycleIndex
 }
 
 function readStoredEggId(): string | undefined {
@@ -225,7 +303,7 @@ function remountEgg() {
   }
 
   document.documentElement.setAttribute(ATTRIBUTE, activeEgg.id)
-  activeEgg.onActivate?.()
+  activeEgg.onActivate?.(true)
 }
 
 function resetProgress() {
@@ -264,21 +342,36 @@ function setProgress(id: string, next: number) {
 }
 
 function shouldIgnore(event: KeyboardEvent): boolean {
-  if (hasBlockingFlags(event)) {
+  if (hasBlockingFlags(event) || hasOpenDialog()) {
     return true
   }
 
   return isTypingTarget(event.target)
 }
 
+function startEggs() {
+  for (const egg of EGGS) {
+    egg.onInit?.()
+  }
+}
+
+function dismissOtherEgg(nextId: string) {
+  if (!activeEgg || activeEgg.id === nextId) {
+    return
+  }
+
+  hideEgg(true)
+}
+
 function showEgg(egg: Egg, silent = false) {
+  dismissOtherEgg(egg.id)
   activeEgg = egg
   document.documentElement.setAttribute(ATTRIBUTE, egg.id)
   writeStorage(() => {
     clearStoredEggs()
     localStorage.setItem(`${STORAGE_PREFIX}${egg.id}`, STORAGE_ON)
   })
-  egg.onActivate?.()
+  egg.onActivate?.(silent)
   playSound(silent ? undefined : egg.soundOn)
 }
 
@@ -313,6 +406,13 @@ function toggleEgg(egg: Egg | undefined) {
   }
 
   showEgg(egg)
+}
+
+function writeCycleIndex(index: number) {
+  cycleIndex = index
+  writeStorage(() => {
+    localStorage.setItem(CYCLE_STORAGE_KEY, String(index))
+  })
 }
 
 function writeStorage(write: () => void) {

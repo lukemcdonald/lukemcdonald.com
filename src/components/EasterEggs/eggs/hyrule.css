@@ -1,0 +1,127 @@
+/* Press Start 2P by CodeMan38, SIL Open Font License 1.1 */
+@font-face {
+  font-display: swap;
+  font-family: 'Press Start 2P';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../../../assets/fonts/press-start-2p/PressStart2P-Regular.woff2') format('woff2');
+}
+
+html[data-easter-egg='hyrule'] {
+  --default-font-family: 'Press Start 2P', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Press Start 2P', ui-sans-serif, system-ui, sans-serif;
+  --hyrule-heart: oklch(62% 0.19 25);
+  --hyrule-sword: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28' fill='none'%3E%3Cg transform='rotate(45 14 14)'%3E%3Cpath fill='%23efe6c4' stroke='%236e5630' stroke-linejoin='round' stroke-width='.8' d='M14 1.2 16.6 15.2h-5.2z'/%3E%3Cpath stroke='%23c4a35a' stroke-width='.55' d='M14 3.6v10.6'/%3E%3Crect width='12' height='2.2' x='8' y='15' fill='%23d4b15a' stroke='%236e5630' stroke-width='.65' rx='.7'/%3E%3Crect width='3.4' height='6.2' x='12.3' y='17' fill='%236b4a28' stroke='%234a3218' stroke-width='.55' rx='.45'/%3E%3Ccircle cx='14' cy='24.4' r='1.85' fill='%23d4b15a' stroke='%236e5630' stroke-width='.65'/%3E%3C/g%3E%3C/svg%3E");
+  cursor:
+    var(--hyrule-sword) 23 5,
+    auto;
+  font-family: var(--font-sans);
+  font-size-adjust: 0.5;
+  line-height: 1.5;
+}
+
+html[data-easter-egg='hyrule'] .prose {
+  line-height: inherit;
+}
+
+html[data-easter-egg='hyrule'] :is(h1, h2, h3, h4, h5, h6) {
+  line-height: 1.2;
+}
+
+html[data-easter-egg='hyrule'] :is(ul, ol) :is(li) {
+  margin-block: 0.25em;
+}
+
+html[data-easter-egg='hyrule'] :is(.cursor-pointer, a, button, label, summary, [role='button']) {
+  cursor:
+    var(--hyrule-sword) 23 5,
+    auto;
+}
+
+html[data-easter-egg='hyrule'] img,
+html[data-easter-egg='hyrule'] [data-landscape] {
+  filter: url('#hyrule-pixel');
+  image-rendering: pixelated;
+}
+
+html[data-easter-egg='hyrule'] [data-hyrule-hud] {
+  pointer-events: none;
+  position: fixed;
+  z-index: 20;
+}
+
+html[data-easter-egg='hyrule'] [data-hyrule-hearts] {
+  display: flex;
+  gap: 0.35rem;
+  left: 0.75rem;
+  position: fixed;
+  top: 0.75rem;
+}
+
+html[data-easter-egg='hyrule'] [data-hyrule-hearts] svg {
+  display: block;
+  fill: var(--hyrule-heart);
+  height: 1.1rem;
+  width: auto;
+}
+
+html[data-easter-egg='hyrule'] [data-hyrule-crest] {
+  bottom: 0.85rem;
+  position: fixed;
+  right: 0.85rem;
+}
+
+html[data-easter-egg='hyrule'] [data-hyrule-crest] svg {
+  display: block;
+  fill: var(--color-secondary-base);
+  height: 1.85rem;
+  opacity: 0.72;
+  width: auto;
+}
+
+html[data-easter-egg='hyrule'] [data-hyrule-slash] {
+  animation: hyrule-slash 0.28s ease-out forwards;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--color-secondary-base) 75%, white) 40%,
+    white
+  );
+  border-radius: 999px;
+  filter: drop-shadow(0 0 0.25rem var(--color-secondary-base));
+  height: 0.28rem;
+  pointer-events: none;
+  position: fixed;
+  transform-origin: 12% 50%;
+  translate: -12% -50%;
+  width: 4.25rem;
+  z-index: 30;
+}
+
+@keyframes hyrule-slash {
+  from {
+    opacity: 1;
+    rotate: -70deg;
+    scale: 0.2 1;
+  }
+
+  to {
+    opacity: 0;
+    rotate: 55deg;
+    scale: 1.2 0.3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-easter-egg='hyrule'] [data-hyrule-slash] {
+    animation: none;
+    display: none;
+  }
+}
+
+@media print {
+  [data-hyrule-hud],
+  [data-hyrule-slash] {
+    display: none;
+  }
+}
