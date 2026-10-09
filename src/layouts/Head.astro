@@ -1,12 +1,12 @@
 ---
 import type { SeoMeta } from '@/utils/seo'
 
-import { GOOGLE_SITE_VERIFICATION } from 'astro:env/client'
+import { CLOUDFLARE_ANALYTICS_TOKEN, GOOGLE_SITE_VERIFICATION } from 'astro:env/client'
+import { CONTEXT } from 'astro:env/server'
 import { ClientRouter } from 'astro:transitions'
 
 import { getEasterEggInitScript } from '@/components/EasterEggs/easter-eggs'
-import PostHog from '@/components/PostHog.astro'
-import { GLOBAL_CONFIG, IS_PROD } from '@/configs/global'
+import { GLOBAL_CONFIG } from '@/configs/global'
 import { buildGraphJsonLd, buildSocialMetaTags } from '@/utils/seo'
 import { stripHtmlAndTruncate } from '@/utils/text'
 import { getThemeInitScript } from '@/utils/theme'
@@ -211,8 +211,16 @@ const socialMetaTags = buildSocialMetaTags(metaForSeo, Astro.site ?? GLOBAL_CONF
     content={GLOBAL_CONFIG.themeColor}
   />
 
-  <!-- PostHog Analytics -->
-  {IS_PROD && <PostHog />}
+  {
+    CONTEXT === 'production' && CLOUDFLARE_ANALYTICS_TOKEN && (
+      <script
+        data-cf-beacon={JSON.stringify({ token: CLOUDFLARE_ANALYTICS_TOKEN })}
+        defer
+        is:inline
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+      />
+    )
+  }
 
   <!-- View Transitions API -->
   <ClientRouter />

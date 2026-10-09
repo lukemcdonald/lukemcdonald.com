@@ -11,8 +11,7 @@ const { image, imageAlt } = Astro.props
         <Image
           alt={imageAlt || ''}
           class="block h-full w-full grayscale xs:object-cover"
-          decoding="sync"
-          fetchpriority="high"
+          priority
           src={image}
         />
       </figure>
