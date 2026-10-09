@@ -106,20 +106,20 @@
   --color-secondary-base: oklch(73.7% 0.08 270); /* Purple - complementary to yellow */
 }
 
-[data-theme='green'] {
-  --color-primary-50: oklch(98.4% 0.006 129);
-  --color-primary-100: oklch(96.9% 0.012 129);
-  --color-primary-200: oklch(92.3% 0.025 129);
-  --color-primary-300: oklch(86.8% 0.04 129);
-  --color-primary-400: oklch(82.4% 0.06 129);
-  --color-primary-500: oklch(73.7% 0.08 128);
-  --color-primary-600: oklch(59.2% 0.095 135);
-  --color-primary-700: oklch(39.6% 0.085 115);
-  --color-primary-800: oklch(32.7% 0.07 140);
-  --color-primary-900: oklch(17.1% 0.04 110);
-  --color-primary-950: oklch(6% 0.025 110);
+[data-theme='emerald'] {
+  --color-primary-50: oklch(98.4% 0.006 175);
+  --color-primary-100: oklch(96.9% 0.012 175);
+  --color-primary-200: oklch(92.3% 0.025 170);
+  --color-primary-300: oklch(86.8% 0.045 168);
+  --color-primary-400: oklch(82.4% 0.09 162);
+  --color-primary-500: oklch(73.7% 0.138 167);
+  --color-primary-600: oklch(59.2% 0.114 172);
+  --color-primary-700: oklch(39.6% 0.086 170);
+  --color-primary-800: oklch(32.7% 0.055 180);
+  --color-primary-900: oklch(17.1% 0.036 192);
+  --color-primary-950: oklch(6% 0.031 195);
 
-  --color-secondary-base: oklch(73.7% 0.08 350); /* Red-pink - complementary to green */
+  --color-secondary-base: oklch(73.7% 0.08 30); /* Coral - complementary to emerald */
 }
 
 [data-theme='orange'] {
@@ -136,20 +136,4 @@
   --color-primary-950: oklch(6% 0.025 70);
 
   --color-secondary-base: oklch(73.7% 0.08 225); /* Blue - complementary to orange */
-}
-
-[data-theme='neon'] {
-  --color-primary-50: oklch(98.94% 0.027 122.59);
-  --color-primary-100: oklch(98.94% 0.027 122.59);
-  --color-primary-200: oklch(97.82% 0.057 123.41);
-  --color-primary-300: oklch(95.67% 0.126 122.78);
-  --color-primary-400: oklch(94.59% 0.167 122.68);
-  --color-primary-500: oklch(93.27% 0.227 122.42);
-  --color-primary-600: oklch(77.38% 0.189 135);
-  --color-primary-700: oklch(61.2% 0.15 110);
-  --color-primary-800: oklch(45.93% 0.112 130);
-  --color-primary-900: oklch(12.17% 0.051 105);
-  --color-primary-950: oklch(6.5% 0.03 105);
-
-  --color-secondary-base: oklch(73.7% 0.15 320); /* Magenta - complementary to neon green */
 }

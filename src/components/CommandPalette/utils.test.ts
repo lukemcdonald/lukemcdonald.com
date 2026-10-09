@@ -1,43 +1,49 @@
 import assert from 'node:assert/strict'
-import { describe, test } from 'node:test'
+import { afterEach, describe, mock, test } from 'node:test'
 
 import { applyHighlightedCommand, getHighlightedCommand } from './utils.ts'
 
-const navItems = [
-  { href: '/resume', name: 'Resume' },
-  { href: '/i-am-a/christian', name: 'Christian' },
-  { href: '/i-am-a/coach', name: 'Coach' },
-]
-
 function createActions() {
   const calls: string[] = []
+  const mockClose = mock.fn(() => {
+    calls.push('close')
+  })
+  const mockNavigate = mock.fn((href: string) => {
+    calls.push(`navigate:${href}`)
+  })
+  const mockOnPreferenceApplied = mock.fn(() => {
+    calls.push('onPreferenceApplied')
+  })
+  const mockSetThemeColor = mock.fn((color: string) => {
+    calls.push(`setThemeColor:${color}`)
+  })
+  const mockSetThemeMode = mock.fn((mode: string) => {
+    calls.push(`setThemeMode:${mode}`)
+  })
+  const mockToggleSound = mock.fn(() => {
+    calls.push('toggleSound')
+  })
 
   return {
     actions: {
-      close: () => {
-        calls.push('close')
-      },
-      navigate: (href: string) => {
-        calls.push(`navigate:${href}`)
-      },
-      onPreferenceApplied: () => {
-        calls.push('onPreferenceApplied')
-      },
-      setThemeColor: (color: string) => {
-        calls.push(`setThemeColor:${color}`)
-      },
-      setThemeMode: (mode: string) => {
-        calls.push(`setThemeMode:${mode}`)
-      },
-      toggleSound: () => {
-        calls.push('toggleSound')
-      },
+      close: mockClose,
+      navigate: mockNavigate,
+      onPreferenceApplied: mockOnPreferenceApplied,
+      setThemeColor: mockSetThemeColor,
+      setThemeMode: mockSetThemeMode,
+      toggleSound: mockToggleSound,
     },
     calls,
   }
 }
 
 describe('getHighlightedCommand', () => {
+  const navItems = [
+    { href: '/resume', name: 'Resume' },
+    { href: '/i-am-a/christian', name: 'Christian' },
+    { href: '/i-am-a/coach', name: 'Coach' },
+  ]
+
   test('returns nothing for an empty query', () => {
     assert.equal(getHighlightedCommand(navItems, ''), undefined)
     assert.equal(getHighlightedCommand(navItems, '   '), undefined)
@@ -76,6 +82,10 @@ describe('getHighlightedCommand', () => {
 })
 
 describe('applyHighlightedCommand', () => {
+  afterEach(() => {
+    mock.restoreAll()
+  })
+
   test('does nothing when there is no command', () => {
     const { actions, calls } = createActions()
 

@@ -8,11 +8,6 @@ import { DEFAULT_OG_IMAGE_PATH, OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH } from '@/utils/
 
 import { buildSocialMetaTags } from './social.ts'
 
-const origin = GLOBAL_CONFIG.site.origin
-const defaultImage = `${origin}${DEFAULT_OG_IMAGE_PATH}`
-const imageHeight = String(OG_IMAGE_HEIGHT)
-const imageWidth = String(OG_IMAGE_WIDTH)
-
 function meta(overrides: Partial<SeoMeta> = {}): SeoMeta {
   return {
     canonicalUrl: '/about',
@@ -22,6 +17,10 @@ function meta(overrides: Partial<SeoMeta> = {}): SeoMeta {
 }
 
 describe('buildSocialMetaTags', () => {
+  const origin = GLOBAL_CONFIG.site.origin
+  const defaultImage = `${origin}${DEFAULT_OG_IMAGE_PATH}`
+  const imageHeight = String(OG_IMAGE_HEIGHT)
+  const imageWidth = String(OG_IMAGE_WIDTH)
   test('sets og:type to website for page content', () => {
     const tags = buildSocialMetaTags(meta({ contentType: 'page' }))
 

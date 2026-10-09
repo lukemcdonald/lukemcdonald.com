@@ -13,8 +13,9 @@ import {
   OG_PHOTO_WIDTH,
 } from './og.ts'
 
-const PNG_MAGIC = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])
-const MUSTACHIO = join(process.cwd(), 'src/assets/images/luke-mustachio.jpg')
+function mustachioPath() {
+  return join(process.cwd(), 'src/assets/images/luke-mustachio.jpg')
+}
 
 describe('getOgImagePath', () => {
   test('maps the homepage to the default generated image', () => {
@@ -29,8 +30,11 @@ describe('getOgImagePath', () => {
 
 describe('resolveOgPhotoPath', () => {
   test('resolves a content image src to the local asset', () => {
-    assert.equal(resolveOgPhotoPath({ src: '/src/assets/images/luke-mustachio.jpg' }), MUSTACHIO)
-    assert.equal(resolveOgPhotoPath({ src: '/_astro/luke-mustachio.Dabc12.jpg' }), MUSTACHIO)
+    assert.equal(
+      resolveOgPhotoPath({ src: '/src/assets/images/luke-mustachio.jpg' }),
+      mustachioPath(),
+    )
+    assert.equal(resolveOgPhotoPath({ src: '/_astro/luke-mustachio.Dabc12.jpg' }), mustachioPath())
   })
 
   test('returns undefined when the image is missing', () => {
@@ -82,10 +86,12 @@ describe('buildOgSvg', () => {
 })
 
 describe('renderOgPng', () => {
+  const pngMagic = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])
+
   test('returns a PNG buffer', () => {
     const png = renderOgPng({ title: 'Father' })
 
-    assert.equal(png.subarray(0, 8).equals(PNG_MAGIC), true)
+    assert.equal(png.subarray(0, 8).equals(pngMagic), true)
     assert.ok(png.byteLength > 1024)
   })
 
@@ -98,7 +104,7 @@ describe('renderOgPng', () => {
 
   test('embedding a photo changes the rendered bytes', () => {
     const plain = renderOgPng({ title: 'Luke McDonald' })
-    const withPhoto = renderOgPng({ photoPath: MUSTACHIO, title: 'Luke McDonald' })
+    const withPhoto = renderOgPng({ photoPath: mustachioPath(), title: 'Luke McDonald' })
 
     assert.equal(plain.equals(withPhoto), false)
     assert.ok(withPhoto.byteLength > plain.byteLength)

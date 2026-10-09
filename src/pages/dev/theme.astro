@@ -8,9 +8,8 @@ const themes = [
   { name: 'Blue', value: 'blue' },
   { name: 'Purple', value: 'purple' },
   { name: 'Yellow', value: 'yellow' },
-  { name: 'Green', value: 'green' },
+  { name: 'Emerald', value: 'emerald' },
   { name: 'Orange', value: 'orange' },
-  { name: 'Neon', value: 'neon' },
 ] as const
 
 const primaryColors = {
@@ -52,8 +51,9 @@ const secondaryColors = {
     {
       themes.map((theme) => (
         <button
+          aria-pressed="false"
+          class="theme-button rounded-md border border-primary-900/20 px-3 py-1 text-sm text-primary-900 transition-colors hover:bg-primary-900/8 dark:border-white/20 dark:text-primary-50 dark:hover:bg-white/10"
           data-theme={theme.value}
-          class="theme-button rounded-md border px-3 py-1 text-sm transition-colors hover:bg-gray-50"
         >
           {theme.name}
         </button>
@@ -65,7 +65,7 @@ const secondaryColors = {
     {
       colorShades.map((shade) => (
         <div class="text-center">
-          <div class="text-sm font-semibold text-gray-900">{shade}</div>
+          <div class="text-sm font-semibold text-primary-900 dark:text-primary-50">{shade}</div>
         </div>
       ))
     }
@@ -94,26 +94,31 @@ const secondaryColors = {
 </ProseLayout>
 
 <script>
-  // Theme switching only
   document.addEventListener('DOMContentLoaded', () => {
+    const activeClasses = ['bg-primary-900/10', 'dark:bg-white/15']
     const buttons = document.querySelectorAll('.theme-button')
+
+    function setActiveButton(active: Element) {
+      buttons.forEach((button) => {
+        button.classList.remove(...activeClasses)
+        button.setAttribute('aria-pressed', 'false')
+      })
+      active.classList.add(...activeClasses)
+      active.setAttribute('aria-pressed', 'true')
+    }
 
     buttons.forEach((button) => {
       button.addEventListener('click', () => {
         const theme = button.getAttribute('data-theme') || ''
         document.documentElement.setAttribute('data-theme', theme)
-
-        // Update button states
-        buttons.forEach((b) => b.classList.remove('bg-gray-100'))
-        button.classList.add('bg-gray-100')
+        setActiveButton(button)
       })
     })
 
-    // Set initial active state
     const currentTheme = document.documentElement.getAttribute('data-theme') || ''
-    const activeButton = document.querySelector(`[data-theme="${currentTheme}"]`)
+    const activeButton = document.querySelector(`.theme-button[data-theme="${currentTheme}"]`)
     if (activeButton) {
-      activeButton.classList.add('bg-gray-100')
+      setActiveButton(activeButton)
     }
   })
 </script>

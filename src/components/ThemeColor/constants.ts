@@ -3,8 +3,7 @@ import type { ThemeColor } from './types'
 export const THEME_COLORS: readonly ThemeColor[] = [
   'default',
   'blue',
-  'green',
-  'neon',
+  'emerald',
   'orange',
   'purple',
   'yellow',
@@ -17,8 +16,7 @@ export const THEME_COLOR_STORAGE_KEY = 'theme-color'
 export const THEME_LABELS: Record<ThemeColor, string> = {
   blue: 'Blue',
   default: 'Default',
-  green: 'Green',
-  neon: 'Neon',
+  emerald: 'Emerald',
   orange: 'Orange',
   purple: 'Purple',
   yellow: 'Yellow',

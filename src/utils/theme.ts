@@ -2,7 +2,11 @@ import type { ThemeColor } from '@/components/ThemeColor/types'
 import type { EffectiveMode } from '@/components/ThemeMode/types'
 
 import { DEFAULT_GLASS_LEVEL, GLASS_LEVELS, GLASS_STORAGE_KEY } from '@/components/Glass/constants'
-import { DEFAULT_THEME_COLOR, THEME_COLOR_STORAGE_KEY } from '@/components/ThemeColor/constants'
+import {
+  DEFAULT_THEME_COLOR,
+  THEME_COLOR_STORAGE_KEY,
+  THEME_COLORS,
+} from '@/components/ThemeColor/constants'
 import { DEFAULT_THEME_MODE, THEME_MODE_STORAGE_KEY } from '@/components/ThemeMode/constants'
 
 function getHtmlElement(): HTMLElement | null {
@@ -52,7 +56,8 @@ export function getThemeInitScript(): string {
       return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     };
 
-    const storedColor = localStorage.getItem(STORAGE_KEYS.color) || DEFAULT_THEME_COLOR;
+    const storedColorRaw = localStorage.getItem(STORAGE_KEYS.color);
+    const storedColor = ${JSON.stringify(THEME_COLORS)}.includes(storedColorRaw) ? storedColorRaw : DEFAULT_THEME_COLOR;
     const storedMode = localStorage.getItem(STORAGE_KEYS.mode) || DEFAULT_THEME_MODE;
     const effectiveMode = storedMode === 'system' ? getSystemPreference() : storedMode;
 

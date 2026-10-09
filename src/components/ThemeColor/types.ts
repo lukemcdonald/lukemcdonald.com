@@ -1,1 +1,1 @@
-export type ThemeColor = 'default' | 'blue' | 'purple' | 'yellow' | 'green' | 'orange' | 'neon'
+export type ThemeColor = 'blue' | 'default' | 'emerald' | 'orange' | 'purple' | 'yellow'

@@ -22,18 +22,8 @@ type PageJsonLd = {
   url?: string
 }
 
-const origin = GLOBAL_CONFIG.site.origin
-
 function graph(meta: SeoMeta) {
   return buildGraphJsonLd(meta)
-}
-
-function pageNode(meta: SeoMeta) {
-  return graph(meta)['@graph'][1] as PageJsonLd
-}
-
-function websiteNode(meta: SeoMeta) {
-  return graph(meta)['@graph'][0]
 }
 
 function meta(overrides: Partial<SeoMeta> = {}): SeoMeta {
@@ -42,6 +32,18 @@ function meta(overrides: Partial<SeoMeta> = {}): SeoMeta {
     title: 'About',
     ...overrides,
   }
+}
+
+function origin() {
+  return GLOBAL_CONFIG.site.origin
+}
+
+function pageNode(meta: SeoMeta) {
+  return graph(meta)['@graph'][1] as PageJsonLd
+}
+
+function websiteNode(meta: SeoMeta) {
+  return graph(meta)['@graph'][0]
 }
 
 describe('buildGraphJsonLd', () => {
@@ -60,11 +62,11 @@ describe('buildGraphJsonLd', () => {
 
     assert.deepEqual(website, {
       '@context': 'https://schema.org',
-      '@id': origin,
+      '@id': origin(),
       '@type': 'WebSite',
-      alternateName: new URL(origin).hostname,
+      alternateName: new URL(origin()).hostname,
       name: GLOBAL_CONFIG.name,
-      url: origin,
+      url: origin(),
     })
   })
 })
@@ -82,7 +84,7 @@ describe('page JSON-LD', () => {
     assert.deepEqual(page.publisher, {
       '@type': 'Organization',
       name: GLOBAL_CONFIG.name,
-      url: origin,
+      url: origin(),
     })
     assert.equal('author' in page, false)
   })
@@ -98,7 +100,7 @@ describe('page JSON-LD', () => {
   test('maps article type to Article with an author array and publisher', () => {
     const page = pageNode(
       meta({
-        author: { name: 'Luke McDonald', url: origin },
+        author: { name: 'Luke McDonald', url: origin() },
         contentType: 'article',
       }),
     )
@@ -108,13 +110,13 @@ describe('page JSON-LD', () => {
       {
         '@type': 'Person',
         name: 'Luke McDonald',
-        url: origin,
+        url: origin(),
       },
     ])
     assert.deepEqual(page.publisher, {
       '@type': 'Organization',
       name: GLOBAL_CONFIG.name,
-      url: origin,
+      url: origin(),
     })
   })
 
@@ -157,14 +159,14 @@ describe('page JSON-LD', () => {
 
   test('derives @id and url from a relative canonical path', () => {
     const page = pageNode(meta({ canonicalUrl: '/resume' }))
-    const url = new URL('/resume', origin).toString()
+    const url = new URL('/resume', origin()).toString()
 
     assert.equal(page['@id'], url)
     assert.equal(page.url, url)
   })
 
   test('keeps an absolute canonical URL', () => {
-    const canonicalUrl = `${origin}/i-am-a/father`
+    const canonicalUrl = `${origin()}/i-am-a/father`
     const page = pageNode(meta({ canonicalUrl }))
 
     assert.equal(page['@id'], canonicalUrl)
@@ -172,7 +174,7 @@ describe('page JSON-LD', () => {
   })
 
   test('accepts a canonical URL instance', () => {
-    const canonicalUrl = new URL('/about', origin)
+    const canonicalUrl = new URL('/about', origin())
     const page = pageNode(meta({ canonicalUrl }))
 
     assert.equal(page['@id'], canonicalUrl.toString())
@@ -243,7 +245,7 @@ describe('page JSON-LD', () => {
   test('marks the page as part of the website', () => {
     const page = pageNode(meta())
 
-    assert.deepEqual(page.isPartOf, { '@id': origin })
+    assert.deepEqual(page.isPartOf, { '@id': origin() })
   })
 
   test('builds resume page metadata as a WebPage', () => {
@@ -256,7 +258,7 @@ describe('page JSON-LD', () => {
         title: 'Resume',
       }),
     )
-    const url = new URL('/resume', origin).toString()
+    const url = new URL('/resume', origin()).toString()
 
     assert.equal(page['@type'], 'WebPage')
     assert.equal(page['@id'], url)

@@ -96,3 +96,10 @@ import type { ReactNode } from 'react'
 - Use `node:test` and `node:assert/strict`
 - Colocate tests as `*.test.ts` next to the module
 - End-to-end: Playwright in `e2e/` (`*.spec.ts`). Import `test`/`expect` from `../fixtures`. See `e2e/README.md`.
+
+## Unit tests
+
+- Wrap `before`, `beforeEach`, `after`, and `afterEach` inside the `describe` they apply to.
+- Mock with named `mock.fn` or `mock.method`. Restore in `afterEach` with `mock.restoreAll()`.
+- One `describe` per unit. Cases use `test('...')`, not `it`.
+- File-local helpers go after the imports and before the `describe` blocks.
