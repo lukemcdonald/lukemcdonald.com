@@ -1,37 +1,33 @@
 import type { CommandPaletteNavItem } from './types'
 
+import { Command } from 'cmdk'
+
 import { HOVER_NAV_CUE_PROPS } from '@/components/Sound'
+import { toHrefTestId } from '@/features/navigation/navigation.utils'
 
 import { PALETTE_CHROME } from './chrome'
 import { CommandPaletteSection } from './CommandPaletteSection'
 
 type CommandPaletteNavProps = {
-  highlightedHref?: string
   items: CommandPaletteNavItem[]
-  onNavigate: () => void
+  onNavigate: (href: string) => void
 }
 
-export function CommandPaletteNav({ highlightedHref, items, onNavigate }: CommandPaletteNavProps) {
+export function CommandPaletteNav({ items, onNavigate }: CommandPaletteNavProps) {
   return (
-    <CommandPaletteSection
-      className=""
-      title="Navigation"
-    >
+    <CommandPaletteSection title="Navigation">
       {items.map((item) => {
-        const isHighlighted = item.href === highlightedHref
-
         return (
-          <a
+          <Command.Item
             key={item.href}
-            className={`-mx-2 block rounded-lg px-2 py-1.5 text-base transition-colors ${PALETTE_CHROME.ink} ${
-              isHighlighted ? PALETTE_CHROME.activeFill : PALETTE_CHROME.hoverFill
-            }`}
-            href={item.href}
-            onClick={onNavigate}
+            className={`${PALETTE_CHROME.item} ${PALETTE_CHROME.ink} ${PALETTE_CHROME.hoverFill} ${PALETTE_CHROME.selectedFill}`}
+            data-testid={toHrefTestId('command-palette-item', item.href)}
+            value={item.name}
+            onSelect={() => onNavigate(item.href)}
             {...HOVER_NAV_CUE_PROPS}
           >
             {item.name}
-          </a>
+          </Command.Item>
         )
       })}
     </CommandPaletteSection>

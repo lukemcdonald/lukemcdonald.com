@@ -1,12 +1,14 @@
 import type { Page } from '@playwright/test'
 
-import { TEST_ID } from '../constants'
+import { commandPaletteItemTestId, TEST_ID } from '../constants'
 import { ThemeToggle } from './theme-toggle'
 
 export class CommandPalette {
   readonly dialog
   readonly input
   readonly page: Page
+  readonly secrets
+  readonly secretsFooter
   readonly themeToggle: ThemeToggle
   readonly trigger
 
@@ -14,6 +16,8 @@ export class CommandPalette {
     this.dialog = page.getByTestId(TEST_ID.commandPalette)
     this.input = page.getByTestId(TEST_ID.commandPaletteInput)
     this.page = page
+    this.secrets = page.getByTestId(TEST_ID.commandPaletteSecrets)
+    this.secretsFooter = page.getByTestId(TEST_ID.commandPaletteSecretsFooter)
     this.themeToggle = new ThemeToggle(page)
     this.trigger = page.getByTestId(TEST_ID.commandPaletteTrigger)
   }
@@ -21,6 +25,15 @@ export class CommandPalette {
   async closeWithKeyboard() {
     await this.page.keyboard.press('Escape')
     await this.input.waitFor({ state: 'hidden' })
+  }
+
+  item(href: string) {
+    return this.dialog.getByTestId(commandPaletteItemTestId(href))
+  }
+
+  async openSecrets() {
+    await this.secretsFooter.click()
+    await this.secrets.waitFor({ state: 'visible' })
   }
 
   async openWithKeyboard() {

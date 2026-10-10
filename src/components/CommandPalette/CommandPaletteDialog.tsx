@@ -1,6 +1,6 @@
 import type { ReactNode, RefObject } from 'react'
 
-import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
+import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 
 type CommandPaletteDialogProps = {
   children: ReactNode
@@ -36,6 +36,7 @@ export function CommandPaletteDialog({
             data-testid="command-palette"
             transition
           >
+            <DialogTitle className="sr-only">Site navigation and preferences</DialogTitle>
             {children}
           </DialogPanel>
         </div>

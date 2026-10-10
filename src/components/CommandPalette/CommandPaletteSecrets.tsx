@@ -1,5 +1,7 @@
 import type { CommandPaletteEggItem } from './types'
 
+import { Command } from 'cmdk'
+
 import { TOGGLE_CUE_PROPS } from '@/components/Sound'
 
 import { PALETTE_CHROME } from './chrome'
@@ -19,30 +21,28 @@ export function CommandPaletteSecrets({
   title,
 }: CommandPaletteSecretsProps) {
   return (
-    <div
-      className={PALETTE_CHROME.list}
+    <CommandPaletteSection
       data-testid="command-palette-secrets"
+      forceMount
+      title={title}
     >
-      <CommandPaletteSection title={title}>
-        {foundEggs.map((egg) => {
-          const isActive = egg.id === activeId
+      {foundEggs.map((egg) => {
+        const isActive = egg.id === activeId
 
-          return (
-            <button
-              key={egg.id}
-              aria-pressed={isActive}
-              className={`-mx-2 block w-full rounded-lg px-2 py-1.5 text-left text-base transition-colors ${PALETTE_CHROME.ink} ${
-                isActive ? PALETTE_CHROME.activeFill : PALETTE_CHROME.hoverFill
-              }`}
-              type="button"
-              onClick={() => onToggle(egg.id)}
-              {...TOGGLE_CUE_PROPS}
-            >
-              {egg.name}
-            </button>
-          )
-        })}
-      </CommandPaletteSection>
-    </div>
+        return (
+          <Command.Item
+            key={egg.id}
+            className={`${PALETTE_CHROME.item} ${PALETTE_CHROME.ink} ${
+              isActive ? PALETTE_CHROME.activeFill : PALETTE_CHROME.hoverFill
+            } ${PALETTE_CHROME.selectedFill}`}
+            value={egg.name}
+            onSelect={() => onToggle(egg.id)}
+            {...TOGGLE_CUE_PROPS}
+          >
+            {egg.name}
+          </Command.Item>
+        )
+      })}
+    </CommandPaletteSection>
   )
 }

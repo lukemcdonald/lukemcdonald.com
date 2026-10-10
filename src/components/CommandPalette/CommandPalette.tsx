@@ -1,7 +1,7 @@
 import type { CommandPaletteProps } from './types'
 
 import { navigate } from 'astro:transitions/client'
-import { play } from 'cuelume'
+import { Command } from 'cmdk'
 import { useEffect, useLayoutEffect, useState } from 'react'
 
 import {
@@ -10,12 +10,10 @@ import {
   getFoundEasterEggIds,
   toggleEasterEgg,
 } from '@/components/EasterEggs/easter-eggs'
-import { toggleSoundPreference } from '@/components/Sound/utils'
-import { setThemeColor } from '@/components/ThemeColor/utils'
-import { setThemeMode } from '@/components/ThemeMode/utils'
 
+import { PALETTE_CHROME } from './chrome'
 import { CommandPaletteDialog } from './CommandPaletteDialog'
-import { CommandPaletteMain } from './CommandPaletteMain'
+import { CommandPaletteNav } from './CommandPaletteNav'
 import { CommandPalettePreferences } from './CommandPalettePreferences'
 import { CommandPaletteSearch } from './CommandPaletteSearch'
 import { CommandPaletteSecrets } from './CommandPaletteSecrets'
@@ -23,9 +21,8 @@ import { CommandPaletteSecretsFooter } from './CommandPaletteSecretsFooter'
 import { CommandPaletteTrigger } from './CommandPaletteTrigger'
 import { useCommandPalette } from './useCommandPalette'
 import {
-  applyHighlightedCommand,
   getFoundEggs,
-  getHighlightedCommand,
+  getPaletteEmptyMessage,
   getSecretsFooterLabel,
   getSecretsProgressLabel,
   isPaletteBackKey,
@@ -41,15 +38,6 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
   const page = pages[pages.length - 1]
   const eggs = getEasterEggs()
   const foundEggs = getFoundEggs(eggs, foundEggIds)
-  const filteredEggs = foundEggs.filter((egg) =>
-    egg.name.toLowerCase().includes(searchQuery.toLowerCase()),
-  )
-  const filteredNavItems = navigationItems.filter((item) =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase()),
-  )
-  const highlightedCommand =
-    page === SECRETS_PAGE ? undefined : getHighlightedCommand(navigationItems, searchQuery)
-  const highlightedHref = highlightedCommand?.type === 'nav' ? highlightedCommand.href : undefined
 
   useEffect(() => {
     if (!isOpen) {
@@ -89,26 +77,6 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
     setPreferenceEpoch((epoch) => epoch + 1)
   }
 
-  const selectHighlightedItem = () => {
-    if (highlightedCommand?.type === 'color' || highlightedCommand?.type === 'mode') {
-      play('toggle')
-    }
-
-    applyHighlightedCommand(
-      {
-        close: () => close({ silent: true }),
-        navigate: (href) => {
-          navigate(href)
-        },
-        onPreferenceApplied: syncPreferences,
-        setThemeColor,
-        setThemeMode,
-        toggleSound: toggleSoundPreference,
-      },
-      highlightedCommand,
-    )
-  }
-
   return (
     <>
       <CommandPaletteTrigger onOpen={open} />
@@ -118,33 +86,44 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
         open={isOpen}
         searchInputRef={searchInputRef}
       >
-        <CommandPaletteSearch
-          onEnter={selectHighlightedItem}
-          onQueryChange={setSearchQuery}
-          query={searchQuery}
-          searchInputRef={searchInputRef}
-        />
+        <Command label="Search">
+          <CommandPaletteSearch
+            onQueryChange={setSearchQuery}
+            query={searchQuery}
+            searchInputRef={searchInputRef}
+          />
 
-        {page === SECRETS_PAGE ?
-          <CommandPaletteSecrets
-            activeId={activeEggId}
-            foundEggs={filteredEggs}
-            onToggle={(id) => {
-              toggleEasterEgg(id)
-              syncPreferences()
-            }}
-            title={getSecretsProgressLabel(foundEggs.length, eggs.length)}
-          />
-        : <CommandPaletteMain
-            highlightedCommand={highlightedCommand}
-            highlightedHref={highlightedHref}
-            items={filteredNavItems}
-            onNavigate={() => close({ silent: true })}
-          />
-        }
+          <Command.List
+            key={page ?? 'main'}
+            className={PALETTE_CHROME.list}
+            label="Results"
+          >
+            <Command.Empty className={`py-6 text-center text-sm ${PALETTE_CHROME.muted}`}>
+              {getPaletteEmptyMessage(page, foundEggs.length)}
+            </Command.Empty>
+
+            {page === SECRETS_PAGE ?
+              <CommandPaletteSecrets
+                activeId={activeEggId}
+                foundEggs={foundEggs}
+                onToggle={(id) => {
+                  toggleEasterEgg(id)
+                  syncPreferences()
+                }}
+                title={getSecretsProgressLabel(foundEggs.length, eggs.length)}
+              />
+            : <CommandPaletteNav
+                items={navigationItems}
+                onNavigate={(href) => {
+                  close({ silent: true })
+                  navigate(href)
+                }}
+              />
+            }
+          </Command.List>
+        </Command>
 
         <CommandPalettePreferences
-          highlightedCommand={highlightedCommand}
           isOpen={isOpen}
           preferenceEpoch={preferenceEpoch}
         />

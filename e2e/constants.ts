@@ -3,6 +3,8 @@ import { toHrefTestId, toNavMenuId } from '../src/features/navigation/navigation
 export const TEST_ID = {
   commandPalette: 'command-palette',
   commandPaletteInput: 'command-palette-input',
+  commandPaletteSecrets: 'command-palette-secrets',
+  commandPaletteSecretsFooter: 'command-palette-secrets-footer',
   commandPaletteTrigger: 'command-palette-trigger',
   desktopNav: 'desktop-nav',
   main: 'main',
@@ -27,6 +29,10 @@ export const WCAG_TAGS = [
   'wcag22a',
   'wcag22aa',
 ] as const
+
+export function commandPaletteItemTestId(href: string): string {
+  return toHrefTestId('command-palette-item', href)
+}
 
 export function greetingLinkTestId(href: string): string {
   return toHrefTestId('greeting-link', href)
