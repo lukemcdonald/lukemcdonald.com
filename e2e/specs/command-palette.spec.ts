@@ -17,6 +17,14 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
     await expect(homePage.header.commandPalette.dialog).toBeHidden()
   })
 
+  test('highlights only one item when opened', async ({ homePage }) => {
+    await homePage.goto()
+    await homePage.header.commandPalette.openWithKeyboard()
+
+    await expect(homePage.header.commandPalette.items.first()).toBeVisible()
+    await expect(homePage.header.commandPalette.selectedItems).toHaveCount(1)
+  })
+
   test('closes from the main page with escape', async ({ homePage }) => {
     await homePage.goto()
     await homePage.header.commandPalette.openWithKeyboard()

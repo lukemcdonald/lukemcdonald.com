@@ -5,6 +5,7 @@ import { Command } from 'cmdk'
 import { HOVER_NAV_CUE_PROPS, TOGGLE_CUE_PROPS } from '@/components/Sound'
 import { toHrefTestId } from '@/features/navigation/navigation.utils'
 
+import { PALETTE_CHROME } from './chrome'
 import { getPaletteEmptyMessage, SECRETS_PAGE } from './utils'
 
 type CommandPaletteResultsProps = {
@@ -67,6 +68,7 @@ function NavigationItems({
         return (
           <Command.Item
             key={item.href}
+            className={PALETTE_CHROME.item}
             data-testid={toHrefTestId('command-palette-item', item.href)}
             value={item.name}
             onSelect={() => onNavigate(item.href)}
@@ -112,6 +114,7 @@ function SecretsItems({
         return (
           <Command.Item
             key={egg.id}
+            className={PALETTE_CHROME.item}
             data-active={isActive || undefined}
             value={egg.name}
             onSelect={() => onToggleEgg(egg.id)}

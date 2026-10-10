@@ -3,6 +3,7 @@ export const PALETTE_CHROME = {
   focusRing: 'focus-ring',
   hoverFill: 'hover:bg-primary-900/8 dark:hover:bg-white/10',
   ink: 'text-primary-900 dark:text-white',
+  item: 'data-[active=true]:bg-primary-900/8 data-[selected=true]:bg-primary-900/8 dark:data-[active=true]:bg-white/10 dark:data-[selected=true]:bg-white/10',
   kbd: 'hidden rounded border px-1.5 py-0.5 text-[10px] leading-none sm:inline-block',
   muted: 'text-black/60 dark:text-white/60',
   swatchRing: 'ring-2 ring-black/25 dark:ring-white/40',
