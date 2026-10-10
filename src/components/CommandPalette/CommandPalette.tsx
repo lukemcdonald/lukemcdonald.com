@@ -108,10 +108,12 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
           preferenceEpoch={preferenceEpoch}
         />
 
-        <CommandPaletteSecretsFooter
-          label={getSecretsFooterLabel(foundEggs.length, eggs.length)}
-          onOpen={openSecrets}
-        />
+        {page === 'main' ?
+          <CommandPaletteSecretsFooter
+            label={getSecretsFooterLabel(foundEggs.length, eggs.length)}
+            onOpen={openSecrets}
+          />
+        : null}
       </CommandPaletteDialog>
     </>
   )
@@ -160,7 +162,7 @@ function usePalettePage(
     const onKeyDown = (event: KeyboardEvent) => {
       if (isSecretsShortcut(event)) {
         event.preventDefault()
-        setPage('secrets')
+        setPage((current) => (current === 'secrets' ? 'main' : 'secrets'))
         setSearchQuery('')
         return
       }
