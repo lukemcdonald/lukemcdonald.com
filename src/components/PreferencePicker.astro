@@ -1,0 +1,76 @@
+---
+import CheckIcon from '@lucide/astro/icons/check'
+
+import { PALETTE_CHROME } from '@/components/CommandPalette/chrome'
+import { TOGGLE_CUE_PROPS } from '@/components/Sound'
+
+type Option = {
+  label: string
+  value: string
+}
+
+interface Props {
+  kind: string
+  label: string
+  options: readonly Option[]
+  optionTestIdPrefix?: string
+  pickerId: string
+  testId?: string
+}
+
+const { kind, label, options, optionTestIdPrefix, pickerId, testId } = Astro.props
+const optionsId = `${pickerId}-options`
+---
+
+<div
+  class="relative"
+  data-preference-id={pickerId}
+  data-preference-kind={kind}
+  data-preference-picker
+>
+  <button
+    aria-controls={optionsId}
+    aria-expanded="false"
+    aria-haspopup="listbox"
+    aria-label={label}
+    class={`flex h-11 w-11 items-center justify-center rounded-lg transition-colors ${PALETTE_CHROME.focusRing} ${PALETTE_CHROME.ink} ${PALETTE_CHROME.hoverFill}`}
+    data-preference-trigger
+    data-testid={testId}
+    popovertarget={optionsId}
+    style={`anchor-name: --${pickerId}`}
+    title={label}
+    type="button"
+    {...TOGGLE_CUE_PROPS}
+  >
+    <slot name="icon" />
+  </button>
+  <div
+    aria-label={label}
+    class={`z-60 w-40 rounded-xl border bg-white p-1 shadow-lg outline-none dark:bg-primary-900 ${PALETTE_CHROME.border} ${PALETTE_CHROME.ink}`}
+    data-preference-options
+    id={optionsId}
+    popover
+    role="listbox"
+    style={`position-anchor: --${pickerId}`}
+  >
+    {
+      options.map((option) => (
+        <button
+          class="group flex min-h-11 w-full cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm select-none hover:bg-primary-900/8 dark:hover:bg-white/10"
+          data-preference-option={option.value}
+          data-testid={optionTestIdPrefix ? `${optionTestIdPrefix}-${option.value}` : undefined}
+          role="option"
+          type="button"
+          {...TOGGLE_CUE_PROPS}
+        >
+          <slot name={`icon-${option.value}`} />
+          <span class="flex-1 text-left">{option.label}</span>
+          <CheckIcon
+            aria-hidden="true"
+            class="invisible h-4 w-4 group-data-selected:visible"
+          />
+        </button>
+      ))
+    }
+  </div>
+</div>

@@ -2,8 +2,12 @@ import type { GlassLevel } from './constants'
 
 import { DEFAULT_GLASS_LEVEL, GLASS_LEVELS, GLASS_STORAGE_KEY } from './constants'
 
+export function isGlassLevel(value: string): value is GlassLevel {
+  return (GLASS_LEVELS as readonly string[]).includes(value)
+}
+
 function parseGlassLevel(value: unknown): GlassLevel {
-  return GLASS_LEVELS.find((level) => level === value) ?? DEFAULT_GLASS_LEVEL
+  return typeof value === 'string' && isGlassLevel(value) ? value : DEFAULT_GLASS_LEVEL
 }
 
 export function getGlassLevel(): GlassLevel {

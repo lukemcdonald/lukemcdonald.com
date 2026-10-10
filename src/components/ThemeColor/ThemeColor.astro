@@ -1,0 +1,44 @@
+---
+import CheckIcon from '@lucide/astro/icons/check'
+
+import { PALETTE_CHROME } from '@/components/CommandPalette/chrome'
+import { TOGGLE_CUE_PROPS } from '@/components/Sound'
+
+import { THEME_COLORS, THEME_LABELS } from './constants'
+import ThemeLandscape from './ThemeLandscape.astro'
+---
+
+<div
+  aria-label="Theme colors"
+  class="flex min-w-0 grow gap-1 overflow-x-auto overscroll-x-contain p-1"
+  data-theme-colors
+  role="group"
+>
+  {
+    THEME_COLORS.map((color) => (
+      <button
+        aria-label={`Select ${THEME_LABELS[color]} theme`}
+        aria-pressed="false"
+        class={`relative h-11 w-14 shrink-0 rounded-lg p-1 transition-colors ${PALETTE_CHROME.focusRing} ${PALETTE_CHROME.hoverFill}`}
+        data-theme={color}
+        data-theme-swatch
+        title={THEME_LABELS[color]}
+        type="button"
+        {...TOGGLE_CUE_PROPS}
+      >
+        <span class="block h-full overflow-hidden rounded-md">
+          <ThemeLandscape />
+        </span>
+        <span
+          class="absolute right-1 bottom-1 hidden h-4 w-4 items-center justify-center rounded-full bg-white text-black shadow-sm"
+          data-theme-check
+        >
+          <CheckIcon
+            class="h-2.5 w-2.5"
+            stroke-width={3}
+          />
+        </span>
+      </button>
+    ))
+  }
+</div>
