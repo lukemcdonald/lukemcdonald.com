@@ -1,14 +1,9 @@
 ---
-import { CommandPalette } from '@/components/CommandPalette'
+import CommandPalette from '@/components/CommandPalette/CommandPalette.astro'
 import { getNavigationGroups } from '@/features/navigation/navigation.server'
 
 const groups = await getNavigationGroups()
 const navigationItems = groups.flatMap((group) => group.links)
 ---
 
-<CommandPalette
-  client:media="(hover: hover) and (pointer: fine)"
-  transition:name="command-palette"
-  transition:persist
-  navigationItems={navigationItems}
-/>
+<CommandPalette navigationItems={navigationItems} />
