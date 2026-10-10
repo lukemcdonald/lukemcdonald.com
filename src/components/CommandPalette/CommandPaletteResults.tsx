@@ -85,7 +85,7 @@ function PaletteEmpty({ foundCount, page }: { foundCount: number; page?: string 
     return null
   }
 
-  return <Command.Empty>{getPaletteEmptyMessage(page)}</Command.Empty>
+  return <Command.Empty aria-live="polite">{getPaletteEmptyMessage(page)}</Command.Empty>
 }
 
 function SecretsItems({
@@ -107,15 +107,18 @@ function SecretsItems({
       value={progressLabel}
     >
       {foundEggs.map((egg) => {
+        const isActive = egg.id === activeEggId
+
         return (
           <Command.Item
             key={egg.id}
-            data-active={egg.id === activeEggId || undefined}
+            data-active={isActive || undefined}
             value={egg.name}
             onSelect={() => onToggleEgg(egg.id)}
             {...TOGGLE_CUE_PROPS}
           >
             {egg.name}
+            <span className="sr-only">{isActive ? 'on' : 'off'}</span>
           </Command.Item>
         )
       })}
