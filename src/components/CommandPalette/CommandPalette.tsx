@@ -1,9 +1,8 @@
 import type { CommandPaletteProps } from './types'
-import type { RefObject } from 'react'
 
 import { navigate } from 'astro:transitions/client'
 import { play } from 'cuelume'
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 
 import {
   getActiveEasterEggId,
@@ -18,6 +17,7 @@ import { setThemeMode } from '@/components/ThemeMode/utils'
 import { CommandPaletteDialog } from './CommandPaletteDialog'
 import { CommandPaletteMain } from './CommandPaletteMain'
 import { CommandPalettePreferences } from './CommandPalettePreferences'
+import { CommandPaletteSearch } from './CommandPaletteSearch'
 import { CommandPaletteSecrets } from './CommandPaletteSecrets'
 import { CommandPaletteSecretsFooter } from './CommandPaletteSecretsFooter'
 import { CommandPaletteTrigger } from './CommandPaletteTrigger'
@@ -28,22 +28,62 @@ import {
   getHighlightedCommand,
   getSecretsFooterLabel,
   getSecretsProgressLabel,
+  isPaletteBackKey,
   isSecretsShortcut,
+  SECRETS_PAGE,
 } from './utils'
 
 export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
   const { close, isOpen, open, searchInputRef, searchQuery, setSearchQuery } = useCommandPalette()
+  const [pages, setPages] = useState<string[]>([])
   const [preferenceEpoch, setPreferenceEpoch] = useState(0)
-  const secretsBackRef = useRef<HTMLButtonElement>(null)
   const { activeEggId, foundEggIds } = useFoundEggs(isOpen, preferenceEpoch)
-  const { openSecrets, page, returnToMain } = usePalettePage(isOpen, searchInputRef, setSearchQuery)
+  const page = pages[pages.length - 1]
   const eggs = getEasterEggs()
   const foundEggs = getFoundEggs(eggs, foundEggIds)
+  const filteredEggs = foundEggs.filter((egg) =>
+    egg.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  )
   const filteredNavItems = navigationItems.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase()),
   )
-  const highlightedCommand = getHighlightedCommand(navigationItems, searchQuery)
+  const highlightedCommand =
+    page === SECRETS_PAGE ? undefined : getHighlightedCommand(navigationItems, searchQuery)
   const highlightedHref = highlightedCommand?.type === 'nav' ? highlightedCommand.href : undefined
+
+  useEffect(() => {
+    if (!isOpen) {
+      setPages([])
+    }
+  }, [isOpen])
+
+  useEffect(() => {
+    if (!isOpen) {
+      return
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (isSecretsShortcut(event)) {
+        event.preventDefault()
+        setPages((current) => (current[current.length - 1] === SECRETS_PAGE ? [] : [SECRETS_PAGE]))
+        setSearchQuery('')
+        return
+      }
+
+      if (pages.length === 0 || !isPaletteBackKey(event, searchQuery)) {
+        return
+      }
+
+      event.preventDefault()
+      event.stopPropagation()
+      setPages((current) => current.slice(0, -1))
+      setSearchQuery('')
+    }
+
+    document.addEventListener('keydown', onKeyDown, true)
+
+    return () => document.removeEventListener('keydown', onKeyDown, true)
+  }, [isOpen, pages, searchQuery, setSearchQuery])
 
   const syncPreferences = () => {
     setPreferenceEpoch((epoch) => epoch + 1)
@@ -76,29 +116,30 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
       <CommandPaletteDialog
         onClose={() => close()}
         open={isOpen}
-        searchInputRef={page === 'secrets' ? secretsBackRef : searchInputRef}
+        searchInputRef={searchInputRef}
       >
-        {page === 'secrets' ?
+        <CommandPaletteSearch
+          onEnter={selectHighlightedItem}
+          onQueryChange={setSearchQuery}
+          query={searchQuery}
+          searchInputRef={searchInputRef}
+        />
+
+        {page === SECRETS_PAGE ?
           <CommandPaletteSecrets
             activeId={activeEggId}
-            backButtonRef={secretsBackRef}
-            foundEggs={foundEggs}
-            onBack={returnToMain}
+            foundEggs={filteredEggs}
             onToggle={(id) => {
               toggleEasterEgg(id)
               syncPreferences()
             }}
-            progressLabel={getSecretsProgressLabel(foundEggs.length, eggs.length)}
+            title={getSecretsProgressLabel(foundEggs.length, eggs.length)}
           />
         : <CommandPaletteMain
             highlightedCommand={highlightedCommand}
             highlightedHref={highlightedHref}
             items={filteredNavItems}
-            onEnter={selectHighlightedItem}
             onNavigate={() => close({ silent: true })}
-            onQueryChange={setSearchQuery}
-            searchInputRef={searchInputRef}
-            searchQuery={searchQuery}
           />
         }
 
@@ -108,12 +149,15 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
           preferenceEpoch={preferenceEpoch}
         />
 
-        {page === 'main' ?
+        {page ? null : (
           <CommandPaletteSecretsFooter
             label={getSecretsFooterLabel(foundEggs.length, eggs.length)}
-            onOpen={openSecrets}
+            onOpen={() => {
+              setPages([SECRETS_PAGE])
+              setSearchQuery('')
+            }}
           />
-        : null}
+        )}
       </CommandPaletteDialog>
     </>
   )
@@ -129,68 +173,4 @@ function useFoundEggs(isOpen: boolean, preferenceEpoch: number) {
   }, [isOpen, preferenceEpoch])
 
   return { activeEggId, foundEggIds }
-}
-
-function usePalettePage(
-  isOpen: boolean,
-  searchInputRef: RefObject<HTMLInputElement | null>,
-  setSearchQuery: (query: string) => void,
-) {
-  const [page, setPage] = useState<'main' | 'secrets'>('main')
-
-  useEffect(() => {
-    if (isOpen) {
-      return
-    }
-
-    setPage('main')
-  }, [isOpen])
-
-  useLayoutEffect(() => {
-    if (!isOpen || page !== 'main') {
-      return
-    }
-
-    searchInputRef.current?.focus()
-  }, [isOpen, page, searchInputRef])
-
-  useEffect(() => {
-    if (!isOpen) {
-      return
-    }
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (isSecretsShortcut(event)) {
-        event.preventDefault()
-        setPage((current) => (current === 'secrets' ? 'main' : 'secrets'))
-        setSearchQuery('')
-        return
-      }
-
-      if (page !== 'secrets' || event.key !== 'Escape') {
-        return
-      }
-
-      event.preventDefault()
-      event.stopPropagation()
-      setPage('main')
-      setSearchQuery('')
-    }
-
-    document.addEventListener('keydown', onKeyDown, true)
-
-    return () => document.removeEventListener('keydown', onKeyDown, true)
-  }, [isOpen, page, setSearchQuery])
-
-  return {
-    openSecrets: () => {
-      setPage('secrets')
-      setSearchQuery('')
-    },
-    page,
-    returnToMain: () => {
-      setPage('main')
-      setSearchQuery('')
-    },
-  }
 }

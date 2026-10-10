@@ -7,6 +7,7 @@ import {
   getHighlightedCommand,
   getSecretsFooterLabel,
   getSecretsProgressLabel,
+  isPaletteBackKey,
   isSecretsShortcut,
 } from './utils.ts'
 
@@ -173,6 +174,15 @@ describe('getSecretsProgressLabel', () => {
     assert.equal(getSecretsProgressLabel(0, 2), 'Secrets: 0 of 2 found')
     assert.equal(getSecretsProgressLabel(1, 2), 'Secrets: 1 of 2 found')
     assert.equal(getSecretsProgressLabel(2, 2), 'All secrets found')
+  })
+})
+
+describe('isPaletteBackKey', () => {
+  test('treats escape or empty-search backspace as back', () => {
+    assert.equal(isPaletteBackKey(shortcutEvent({ key: 'Escape' }), 'aurora'), true)
+    assert.equal(isPaletteBackKey(shortcutEvent({ key: 'Backspace' }), ''), true)
+    assert.equal(isPaletteBackKey(shortcutEvent({ key: 'Backspace' }), 's'), false)
+    assert.equal(isPaletteBackKey(shortcutEvent({ key: 'Enter' }), ''), false)
   })
 })
 

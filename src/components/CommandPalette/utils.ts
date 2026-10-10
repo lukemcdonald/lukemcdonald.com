@@ -7,6 +7,7 @@ import { MODE_LABELS, THEME_MODES } from '@/components/ThemeMode/constants'
 
 const SOUND_LABELS = ['sound', 'sounds off', 'sounds on']
 
+export const SECRETS_PAGE = 'secrets'
 export const SECRETS_SHORTCUT_LABEL = '⌘.'
 
 export type ApplyHighlightedCommandActions = {
@@ -109,6 +110,10 @@ export function getSecretsProgressLabel(foundCount: number, totalCount: number) 
   }
 
   return `Secrets: ${foundCount} of ${totalCount} found`
+}
+
+export function isPaletteBackKey(event: KeyboardEvent, search: string) {
+  return event.key === 'Escape' || (event.key === 'Backspace' && !search)
 }
 
 export function isSecretsShortcut(event: KeyboardEvent) {

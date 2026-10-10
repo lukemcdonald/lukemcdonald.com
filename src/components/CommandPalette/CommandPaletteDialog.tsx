@@ -6,7 +6,7 @@ type CommandPaletteDialogProps = {
   children: ReactNode
   onClose: () => void
   open: boolean
-  searchInputRef: RefObject<HTMLElement | null>
+  searchInputRef: RefObject<HTMLInputElement | null>
 }
 
 export function CommandPaletteDialog({
