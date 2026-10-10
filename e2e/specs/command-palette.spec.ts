@@ -10,7 +10,7 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
 
     await expect(homePage.header.commandPalette.dialog).toBeVisible()
     await expect(homePage.header.commandPalette.input).toBeFocused()
-    await expect(homePage.header.commandPalette.input).toHaveAccessibleName('Search navigation')
+    await expect(homePage.header.commandPalette.input).toHaveAccessibleName('Search')
 
     await homePage.page.keyboard.press('ControlOrMeta+k')
     await expect(homePage.header.commandPalette.dialog).toBeHidden()

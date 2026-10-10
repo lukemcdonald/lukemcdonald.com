@@ -25,11 +25,11 @@ export function CommandPaletteSearch({
       />
       <input
         ref={searchInputRef}
-        aria-label="Search navigation"
+        aria-label="Search"
         autoComplete="off"
         className={`w-full border-0 bg-transparent px-4 py-3 outline-none focus:ring-0 ${PALETTE_CHROME.ink} ${PALETTE_CHROME.placeholder}`}
         data-testid="command-palette-input"
-        placeholder="Search navigation..."
+        placeholder="Search..."
         type="text"
         value={query}
         onChange={(event) => onQueryChange(event.target.value)}
