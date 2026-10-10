@@ -43,7 +43,10 @@ export function CommandPaletteMain({
             items={items}
             onNavigate={onNavigate}
           />
-        : <p className={`py-6 text-center text-sm ${PALETTE_CHROME.muted}`}>
+        : <p
+            className={`py-6 text-center text-sm ${PALETTE_CHROME.muted}`}
+            role="status"
+          >
             {highlightedCommand ? 'Press Enter to apply' : 'No matching pages'}
           </p>
         }

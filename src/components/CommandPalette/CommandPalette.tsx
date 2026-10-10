@@ -1,4 +1,5 @@
 import type { CommandPaletteProps } from './types'
+import type { RefObject } from 'react'
 
 import { navigate } from 'astro:transitions/client'
 import { play } from 'cuelume'
@@ -35,7 +36,7 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
   const [preferenceEpoch, setPreferenceEpoch] = useState(0)
   const secretsBackRef = useRef<HTMLButtonElement>(null)
   const { activeEggId, foundEggIds } = useFoundEggs(isOpen, preferenceEpoch)
-  const { openSecrets, page, returnToMain } = usePalettePage(isOpen, setSearchQuery)
+  const { openSecrets, page, returnToMain } = usePalettePage(isOpen, searchInputRef, setSearchQuery)
   const eggs = getEasterEggs()
   const foundEggs = getFoundEggs(eggs, foundEggIds)
   const filteredNavItems = navigationItems.filter((item) =>
@@ -128,7 +129,11 @@ function useFoundEggs(isOpen: boolean, preferenceEpoch: number) {
   return { activeEggId, foundEggIds }
 }
 
-function usePalettePage(isOpen: boolean, setSearchQuery: (query: string) => void) {
+function usePalettePage(
+  isOpen: boolean,
+  searchInputRef: RefObject<HTMLInputElement | null>,
+  setSearchQuery: (query: string) => void,
+) {
   const [page, setPage] = useState<'main' | 'secrets'>('main')
 
   useEffect(() => {
@@ -138,6 +143,14 @@ function usePalettePage(isOpen: boolean, setSearchQuery: (query: string) => void
 
     setPage('main')
   }, [isOpen])
+
+  useLayoutEffect(() => {
+    if (!isOpen || page !== 'main') {
+      return
+    }
+
+    searchInputRef.current?.focus()
+  }, [isOpen, page, searchInputRef])
 
   useEffect(() => {
     if (!isOpen) {
