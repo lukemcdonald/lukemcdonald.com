@@ -122,7 +122,7 @@
 }
 
 [cmdk-root] [cmdk-group-heading] {
-  @apply mb-2 text-xs font-medium tracking-wider text-black/50 uppercase dark:text-white/50;
+  @apply mb-2 text-xs font-medium tracking-wider text-black/60 uppercase dark:text-white/60;
 }
 
 [cmdk-root] [cmdk-item] {
@@ -135,11 +135,11 @@
 }
 
 [cmdk-root] [cmdk-empty] {
-  @apply py-6 text-center text-sm text-black/50 dark:text-white/50;
+  @apply py-6 text-center text-sm text-black/60 dark:text-white/60;
 }
 
 [cmdk-root] [cmdk-input] {
-  @apply w-full border-0 bg-transparent px-4 py-3 text-primary-900 outline-none placeholder:text-black/50 focus:ring-0 dark:text-white dark:placeholder:text-white/50;
+  @apply w-full border-0 bg-transparent px-4 py-3 text-primary-900 outline-none placeholder:text-black/60 focus:ring-0 dark:text-white dark:placeholder:text-white/60;
 }
 
 @media (prefers-reduced-motion: reduce) {
