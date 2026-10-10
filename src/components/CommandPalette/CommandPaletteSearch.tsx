@@ -25,11 +25,11 @@ export function CommandPaletteSearch({
       />
       <input
         ref={searchInputRef}
-        aria-label="Search navigation"
+        aria-label="Search"
         autoComplete="off"
         className={`w-full border-0 bg-transparent px-4 py-3 outline-none focus:ring-0 ${PALETTE_CHROME.ink} ${PALETTE_CHROME.placeholder}`}
         data-testid="command-palette-input"
-        placeholder="Search navigation..."
+        placeholder="Search..."
         type="text"
         value={query}
         onChange={(event) => onQueryChange(event.target.value)}
@@ -42,9 +42,7 @@ export function CommandPaletteSearch({
           onEnter()
         }}
       />
-      <kbd
-        className={`hidden rounded border px-1.5 py-0.5 text-[10px] leading-none sm:inline-block ${PALETTE_CHROME.border} ${PALETTE_CHROME.muted}`}
-      >
+      <kbd className={`${PALETTE_CHROME.kbd} ${PALETTE_CHROME.border} ${PALETTE_CHROME.muted}`}>
         ESC
       </kbd>
     </div>

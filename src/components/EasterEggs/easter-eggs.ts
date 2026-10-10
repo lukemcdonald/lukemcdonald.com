@@ -25,6 +25,7 @@ const ATTRIBUTE = 'data-easter-egg'
 const CYCLE_STORAGE_KEY = 'easter-eggs:cycle'
 const EGGS: readonly Egg[] = [auroraEgg, hyruleEgg]
 const CYCLE_STEPS = EGGS.length + 1
+const FOUND_STORAGE_KEY = 'easter-eggs:found'
 const IDLE_MS = 2500
 const STORAGE_ON = 'on'
 const STORAGE_PREFIX = 'easter-egg:'
@@ -72,6 +73,25 @@ export function initializeEasterEggs() {
   restoreEgg()
   document.addEventListener('keydown', onKeyDown)
   document.addEventListener('astro:after-swap', remountEgg)
+}
+
+export function getActiveEasterEggId() {
+  return currentEggId()
+}
+
+export function getEasterEggs() {
+  return EGGS.map((egg) => ({
+    id: egg.id,
+    name: eggName(egg.id),
+  }))
+}
+
+export function getFoundEasterEggIds() {
+  return readFoundIds()
+}
+
+export function toggleEasterEgg(id: string) {
+  toggleEgg(EGGS.find((egg) => egg.id === id))
 }
 
 function advanceProgress(progress: number, code: string, sequence: readonly string[]): number {
@@ -153,6 +173,7 @@ function cycleEgg() {
     return
   }
 
+  markFound(egg.id)
   showEgg(egg)
 }
 
@@ -163,6 +184,10 @@ function dispatchCompleted(completed: readonly Egg[]) {
   }
 
   toggleEgg(pickEgg(completed))
+}
+
+function eggName(id: string) {
+  return `${id.slice(0, 1).toUpperCase()}${id.slice(1)}`
 }
 
 function hasBlockingFlags(event: KeyboardEvent): boolean {
@@ -214,6 +239,18 @@ function isTypingTarget(target: EventTarget | null): boolean {
   return Boolean(target.closest('input, select, textarea'))
 }
 
+function markFound(id: string) {
+  writeStorage(() => {
+    const found = readFoundIds()
+
+    if (found.includes(id)) {
+      return
+    }
+
+    localStorage.setItem(FOUND_STORAGE_KEY, JSON.stringify([...found, id]))
+  })
+}
+
 function matchesPrefix(attempted: string[], length: number, sequence: readonly string[]): boolean {
   const suffix = attempted.slice(-length)
 
@@ -247,6 +284,20 @@ function parseCycleIndex(stored: string | null) {
   return index % CYCLE_STEPS
 }
 
+function parseFoundIds(raw: string | null) {
+  if (!raw) {
+    return []
+  }
+
+  const parsed: unknown = JSON.parse(raw)
+
+  if (!Array.isArray(parsed)) {
+    return []
+  }
+
+  return parsed.filter((id): id is string => typeof id === 'string')
+}
+
 function pickCycleIndex() {
   const index = readCycleIndex()
 
@@ -277,6 +328,20 @@ function readCycleIndex() {
   }
 
   return cycleIndex
+}
+
+function readFoundIds() {
+  if (typeof window === 'undefined') {
+    return []
+  }
+
+  try {
+    const known = new Set(EGGS.map((egg) => egg.id))
+
+    return parseFoundIds(localStorage.getItem(FOUND_STORAGE_KEY)).filter((id) => known.has(id))
+  } catch {
+    return []
+  }
 }
 
 function readStoredEggId(): string | undefined {
@@ -321,6 +386,7 @@ function restoreEgg() {
     return
   }
 
+  markFound(egg.id)
   showEgg(egg, true)
 }
 
@@ -399,6 +465,8 @@ function toggleEgg(egg: Egg | undefined) {
   if (!egg) {
     return
   }
+
+  markFound(egg.id)
 
   if (activeEgg?.id === egg.id) {
     hideEgg()
