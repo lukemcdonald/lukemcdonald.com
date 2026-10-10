@@ -3,9 +3,11 @@ import { afterEach, describe, mock, test } from 'node:test'
 
 import {
   applyHighlightedCommand,
+  getFoundEggs,
   getHighlightedCommand,
+  getSecretsFooterLabel,
   getSecretsProgressLabel,
-  getVisibleSecrets,
+  isSecretsShortcut,
 } from './utils.ts'
 
 function createActions() {
@@ -25,9 +27,6 @@ function createActions() {
   const mockSetThemeMode = mock.fn((mode: string) => {
     calls.push(`setThemeMode:${mode}`)
   })
-  const mockToggleEgg = mock.fn((id: string) => {
-    calls.push(`toggleEgg:${id}`)
-  })
   const mockToggleSound = mock.fn(() => {
     calls.push('toggleSound')
   })
@@ -39,11 +38,19 @@ function createActions() {
       onPreferenceApplied: mockOnPreferenceApplied,
       setThemeColor: mockSetThemeColor,
       setThemeMode: mockSetThemeMode,
-      toggleEgg: mockToggleEgg,
       toggleSound: mockToggleSound,
     },
     calls,
   }
+}
+
+function shortcutEvent(overrides: Partial<KeyboardEvent> = {}) {
+  return {
+    ctrlKey: false,
+    key: '.',
+    metaKey: true,
+    ...overrides,
+  } as KeyboardEvent
 }
 
 describe('getHighlightedCommand', () => {
@@ -89,22 +96,9 @@ describe('getHighlightedCommand', () => {
     })
   })
 
-  test('matches a found egg after nav items', () => {
-    assert.deepEqual(
-      getHighlightedCommand(navItems, 'aurora', [{ id: 'aurora', name: 'Aurora' }]),
-      {
-        eggId: 'aurora',
-        type: 'egg',
-      },
-    )
-  })
-
-  test('does not match an unfound egg', () => {
+  test('does not match an egg name from the main search', () => {
     assert.equal(getHighlightedCommand(navItems, 'aurora'), undefined)
-    assert.equal(
-      getHighlightedCommand(navItems, 'aurora', [{ id: 'hyrule', name: 'Hyrule' }]),
-      undefined,
-    )
+    assert.equal(getHighlightedCommand(navItems, 'hyrule'), undefined)
   })
 })
 
@@ -152,13 +146,25 @@ describe('applyHighlightedCommand', () => {
 
     assert.deepEqual(calls, ['toggleSound', 'onPreferenceApplied'])
   })
+})
 
-  test('toggles a found egg without closing', () => {
-    const { actions, calls } = createActions()
+describe('getFoundEggs', () => {
+  const eggs = [
+    { id: 'aurora', name: 'Aurora' },
+    { id: 'hyrule', name: 'Hyrule' },
+  ]
 
-    applyHighlightedCommand(actions, { eggId: 'aurora', type: 'egg' })
+  test('returns only eggs that have been found', () => {
+    assert.deepEqual(getFoundEggs(eggs, ['aurora']), [{ id: 'aurora', name: 'Aurora' }])
+    assert.deepEqual(getFoundEggs(eggs, []), [])
+  })
+})
 
-    assert.deepEqual(calls, ['toggleEgg:aurora', 'onPreferenceApplied'])
+describe('getSecretsFooterLabel', () => {
+  test('uses a compact count until all secrets are found', () => {
+    assert.equal(getSecretsFooterLabel(0, 2), 'Secrets 0/2')
+    assert.equal(getSecretsFooterLabel(1, 2), 'Secrets 1/2')
+    assert.equal(getSecretsFooterLabel(2, 2), 'All secrets found')
   })
 })
 
@@ -170,33 +176,11 @@ describe('getSecretsProgressLabel', () => {
   })
 })
 
-describe('getVisibleSecrets', () => {
-  const eggs = [
-    { id: 'aurora', name: 'Aurora' },
-    { id: 'hyrule', name: 'Hyrule' },
-  ]
-
-  test('hides unfound eggs and shows progress when the query is empty', () => {
-    const visible = getVisibleSecrets(eggs, ['aurora'], '')
-
-    assert.equal(visible.progressLabel, 'Secrets: 1 of 2 found')
-    assert.equal(visible.showProgress, true)
-    assert.equal(visible.showSecrets, true)
-    assert.deepEqual(visible.visibleFoundEggs, [{ id: 'aurora', name: 'Aurora' }])
-  })
-
-  test('does not make unfound eggs searchable', () => {
-    const visible = getVisibleSecrets(eggs, ['aurora'], 'hyrule')
-
-    assert.equal(visible.showProgress, false)
-    assert.equal(visible.showSecrets, false)
-    assert.deepEqual(visible.visibleFoundEggs, [])
-  })
-
-  test('matches a found egg name without revealing the progress line', () => {
-    const visible = getVisibleSecrets(eggs, ['aurora'], 'aurora')
-
-    assert.equal(visible.showProgress, false)
-    assert.deepEqual(visible.visibleFoundEggs, [{ id: 'aurora', name: 'Aurora' }])
+describe('isSecretsShortcut', () => {
+  test('matches command or control plus period', () => {
+    assert.equal(isSecretsShortcut(shortcutEvent()), true)
+    assert.equal(isSecretsShortcut(shortcutEvent({ ctrlKey: true, metaKey: false })), true)
+    assert.equal(isSecretsShortcut(shortcutEvent({ key: 's', metaKey: true })), false)
+    assert.equal(isSecretsShortcut(shortcutEvent({ metaKey: false })), false)
   })
 })

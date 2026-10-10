@@ -2,7 +2,7 @@ import type { CommandPaletteProps } from './types'
 
 import { navigate } from 'astro:transitions/client'
 import { play } from 'cuelume'
-import { useLayoutEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 import {
   getActiveEasterEggId,
@@ -14,29 +14,35 @@ import { toggleSoundPreference } from '@/components/Sound/utils'
 import { setThemeColor } from '@/components/ThemeColor/utils'
 import { setThemeMode } from '@/components/ThemeMode/utils'
 
-import { PALETTE_CHROME } from './chrome'
 import { CommandPaletteDialog } from './CommandPaletteDialog'
-import { CommandPaletteNav } from './CommandPaletteNav'
+import { CommandPaletteMain } from './CommandPaletteMain'
 import { CommandPalettePreferences } from './CommandPalettePreferences'
-import { CommandPaletteSearch } from './CommandPaletteSearch'
 import { CommandPaletteSecrets } from './CommandPaletteSecrets'
+import { CommandPaletteSecretsFooter } from './CommandPaletteSecretsFooter'
 import { CommandPaletteTrigger } from './CommandPaletteTrigger'
 import { useCommandPalette } from './useCommandPalette'
-import { applyHighlightedCommand, getHighlightedCommand, getVisibleSecrets } from './utils'
+import {
+  applyHighlightedCommand,
+  getFoundEggs,
+  getHighlightedCommand,
+  getSecretsFooterLabel,
+  getSecretsProgressLabel,
+  isSecretsShortcut,
+} from './utils'
 
 export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
   const { close, isOpen, open, searchInputRef, searchQuery, setSearchQuery } = useCommandPalette()
   const [preferenceEpoch, setPreferenceEpoch] = useState(0)
+  const secretsBackRef = useRef<HTMLButtonElement>(null)
   const { activeEggId, foundEggIds } = useFoundEggs(isOpen, preferenceEpoch)
-  const secrets = getVisibleSecrets(getEasterEggs(), foundEggIds, searchQuery)
+  const { openSecrets, page, returnToMain } = usePalettePage(isOpen, setSearchQuery)
+  const eggs = getEasterEggs()
+  const foundEggs = getFoundEggs(eggs, foundEggIds)
   const filteredNavItems = navigationItems.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase()),
   )
-  const highlightedCommand = getHighlightedCommand(navigationItems, searchQuery, secrets.foundEggs)
-  const highlightedEggId = highlightedCommand?.type === 'egg' ? highlightedCommand.eggId : undefined
+  const highlightedCommand = getHighlightedCommand(navigationItems, searchQuery)
   const highlightedHref = highlightedCommand?.type === 'nav' ? highlightedCommand.href : undefined
-  const showNav = filteredNavItems.length > 0
-  const showEmpty = !showNav && !secrets.showSecrets
 
   const syncPreferences = () => {
     setPreferenceEpoch((epoch) => epoch + 1)
@@ -56,7 +62,6 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
         onPreferenceApplied: syncPreferences,
         setThemeColor,
         setThemeMode,
-        toggleEgg: toggleEasterEgg,
         toggleSound: toggleSoundPreference,
       },
       highlightedCommand,
@@ -70,49 +75,41 @@ export function CommandPalette({ navigationItems = [] }: CommandPaletteProps) {
       <CommandPaletteDialog
         onClose={() => close()}
         open={isOpen}
-        searchInputRef={searchInputRef}
+        searchInputRef={page === 'secrets' ? secretsBackRef : searchInputRef}
       >
-        <CommandPaletteSearch
-          onEnter={selectHighlightedItem}
-          onQueryChange={setSearchQuery}
-          query={searchQuery}
-          searchInputRef={searchInputRef}
-        />
-
-        <div className="max-h-[min(26rem,60dvh)] space-y-4 overflow-y-auto p-4">
-          {showNav ?
-            <CommandPaletteNav
-              highlightedHref={highlightedHref}
-              items={filteredNavItems}
-              onNavigate={() => close({ silent: true })}
-            />
-          : null}
-
-          {secrets.showSecrets ?
-            <CommandPaletteSecrets
-              activeId={activeEggId}
-              foundEggs={secrets.visibleFoundEggs}
-              highlightedId={highlightedEggId}
-              onToggle={(id) => {
-                toggleEasterEgg(id)
-                syncPreferences()
-              }}
-              progressLabel={secrets.progressLabel}
-              showProgress={secrets.showProgress}
-            />
-          : null}
-
-          {showEmpty ?
-            <p className={`py-6 text-center text-sm ${PALETTE_CHROME.muted}`}>
-              {highlightedCommand ? 'Press Enter to apply' : 'No matching pages'}
-            </p>
-          : null}
-        </div>
+        {page === 'secrets' ?
+          <CommandPaletteSecrets
+            activeId={activeEggId}
+            backButtonRef={secretsBackRef}
+            foundEggs={foundEggs}
+            onBack={returnToMain}
+            onToggle={(id) => {
+              toggleEasterEgg(id)
+              syncPreferences()
+            }}
+            progressLabel={getSecretsProgressLabel(foundEggs.length, eggs.length)}
+          />
+        : <CommandPaletteMain
+            highlightedCommand={highlightedCommand}
+            highlightedHref={highlightedHref}
+            items={filteredNavItems}
+            onEnter={selectHighlightedItem}
+            onNavigate={() => close({ silent: true })}
+            onQueryChange={setSearchQuery}
+            searchInputRef={searchInputRef}
+            searchQuery={searchQuery}
+          />
+        }
 
         <CommandPalettePreferences
           highlightedCommand={highlightedCommand}
           isOpen={isOpen}
           preferenceEpoch={preferenceEpoch}
+        />
+
+        <CommandPaletteSecretsFooter
+          label={getSecretsFooterLabel(foundEggs.length, eggs.length)}
+          onOpen={openSecrets}
         />
       </CommandPaletteDialog>
     </>
@@ -129,4 +126,56 @@ function useFoundEggs(isOpen: boolean, preferenceEpoch: number) {
   }, [isOpen, preferenceEpoch])
 
   return { activeEggId, foundEggIds }
+}
+
+function usePalettePage(isOpen: boolean, setSearchQuery: (query: string) => void) {
+  const [page, setPage] = useState<'main' | 'secrets'>('main')
+
+  useEffect(() => {
+    if (isOpen) {
+      return
+    }
+
+    setPage('main')
+  }, [isOpen])
+
+  useEffect(() => {
+    if (!isOpen) {
+      return
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (isSecretsShortcut(event)) {
+        event.preventDefault()
+        setPage('secrets')
+        setSearchQuery('')
+        return
+      }
+
+      if (page !== 'secrets' || event.key !== 'Escape') {
+        return
+      }
+
+      event.preventDefault()
+      event.stopPropagation()
+      setPage('main')
+      setSearchQuery('')
+    }
+
+    document.addEventListener('keydown', onKeyDown, true)
+
+    return () => document.removeEventListener('keydown', onKeyDown, true)
+  }, [isOpen, page, setSearchQuery])
+
+  return {
+    openSecrets: () => {
+      setPage('secrets')
+      setSearchQuery('')
+    },
+    page,
+    returnToMain: () => {
+      setPage('main')
+      setSearchQuery('')
+    },
+  }
 }

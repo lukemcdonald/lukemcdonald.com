@@ -42,9 +42,7 @@ export function CommandPaletteSearch({
           onEnter()
         }}
       />
-      <kbd
-        className={`hidden rounded border px-1.5 py-0.5 text-[10px] leading-none sm:inline-block ${PALETTE_CHROME.border} ${PALETTE_CHROME.muted}`}
-      >
+      <kbd className={`${PALETTE_CHROME.kbd} ${PALETTE_CHROME.border} ${PALETTE_CHROME.muted}`}>
         ESC
       </kbd>
     </div>
