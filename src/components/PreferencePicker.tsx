@@ -7,7 +7,6 @@ import { PALETTE_CHROME } from '@/components/CommandPalette/chrome'
 import { TOGGLE_CUE_PROPS } from '@/components/Sound'
 
 type PreferencePickerProps<Value extends string> = {
-  highlightedValue?: Value
   icon: ReactNode
   label: string
   onChange: (value: Value) => void
@@ -18,7 +17,6 @@ type PreferencePickerProps<Value extends string> = {
 }
 
 export function PreferencePicker<Value extends string>({
-  highlightedValue,
   icon,
   label,
   onChange,
@@ -34,7 +32,7 @@ export function PreferencePicker<Value extends string>({
     >
       <ListboxButton
         aria-label={label}
-        className={`flex h-11 w-11 items-center justify-center rounded-lg transition-colors ${PALETTE_CHROME.focusRing} ${PALETTE_CHROME.ink} ${PALETTE_CHROME.hoverFill} ${highlightedValue ? PALETTE_CHROME.activeFill : ''}`}
+        className={`flex h-11 w-11 items-center justify-center rounded-lg transition-colors ${PALETTE_CHROME.focusRing} ${PALETTE_CHROME.ink} ${PALETTE_CHROME.hoverFill}`}
         data-testid={testId}
         title={label}
         {...TOGGLE_CUE_PROPS}

@@ -9,16 +9,11 @@ import { MODE_ICONS } from './icons'
 import { getThemeMode, setThemeMode } from './utils'
 
 type ThemeModePickerProps = {
-  highlightedMode?: ThemeMode
   isOpen?: boolean
   preferenceEpoch?: number
 }
 
-export function ThemeModePicker({
-  highlightedMode,
-  isOpen,
-  preferenceEpoch,
-}: ThemeModePickerProps) {
+export function ThemeModePicker({ isOpen, preferenceEpoch }: ThemeModePickerProps) {
   const [selectedMode, setSelectedMode] = useState<ThemeMode>('system')
 
   useEffect(() => {
@@ -38,7 +33,6 @@ export function ThemeModePicker({
 
   return (
     <PreferencePicker
-      highlightedValue={highlightedMode}
       icon={
         <SelectedIcon
           aria-hidden="true"

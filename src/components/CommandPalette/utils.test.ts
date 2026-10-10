@@ -33,9 +33,8 @@ describe('getFoundEggs', () => {
 
 describe('getPaletteEmptyMessage', () => {
   test('describes the current page when nothing matches', () => {
-    assert.equal(getPaletteEmptyMessage(undefined, 0), 'No matching pages')
-    assert.equal(getPaletteEmptyMessage('secrets', 0), 'No secrets found yet')
-    assert.equal(getPaletteEmptyMessage('secrets', 1), 'No matching secrets')
+    assert.equal(getPaletteEmptyMessage(), 'No matching pages')
+    assert.equal(getPaletteEmptyMessage('secrets'), 'No matching secrets')
   })
 })
 

@@ -8,12 +8,11 @@ import { PALETTE_CHROME } from '@/components/CommandPalette/chrome'
 import { getSoundPreference, toggleSoundPreference } from './utils'
 
 type SoundToggleProps = {
-  isHighlighted?: boolean
   isOpen?: boolean
   preferenceEpoch?: number
 }
 
-export function SoundToggle({ isHighlighted = false, isOpen, preferenceEpoch }: SoundToggleProps) {
+export function SoundToggle({ isOpen, preferenceEpoch }: SoundToggleProps) {
   const [preference, setPreference] = useState<SoundPreference>('off')
 
   // Read the stored preference after mount (not as a lazy useState
@@ -41,9 +40,7 @@ export function SoundToggle({ isHighlighted = false, isOpen, preferenceEpoch }: 
       aria-label={isOn ? 'Disable interaction sounds' : 'Enable interaction sounds'}
       aria-pressed={isOn}
       title={label}
-      className={`flex min-h-11 items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${PALETTE_CHROME.focusRing} ${PALETTE_CHROME.ink} ${
-        isHighlighted ? PALETTE_CHROME.activeFill : PALETTE_CHROME.hoverFill
-      }`}
+      className={`flex min-h-11 items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${PALETTE_CHROME.focusRing} ${PALETTE_CHROME.ink} ${PALETTE_CHROME.hoverFill}`}
       type="button"
       onClick={handleClick}
     >

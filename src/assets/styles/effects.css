@@ -116,3 +116,34 @@
     }
   }
 }
+
+[cmdk-root] [cmdk-list] {
+  @apply max-h-[min(26rem,60dvh)] overflow-y-auto p-4;
+}
+
+[cmdk-root] [cmdk-group-heading] {
+  @apply mb-2 text-xs font-medium tracking-wider text-black/50 uppercase dark:text-white/50;
+}
+
+[cmdk-root] [cmdk-item] {
+  @apply -mx-2 w-full cursor-pointer rounded-lg px-2 py-1.5 text-left text-base text-primary-900 transition-colors outline-none dark:text-white;
+}
+
+[cmdk-root] [cmdk-item][data-active='true'],
+[cmdk-root] [cmdk-item][data-selected='true'] {
+  @apply bg-primary-900/8 dark:bg-white/10;
+}
+
+[cmdk-root] [cmdk-empty] {
+  @apply py-6 text-center text-sm text-black/50 dark:text-white/50;
+}
+
+[cmdk-root] [cmdk-input] {
+  @apply w-full border-0 bg-transparent px-4 py-3 text-primary-900 outline-none placeholder:text-black/50 focus:ring-0 dark:text-white dark:placeholder:text-white/50;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [cmdk-root] [cmdk-item] {
+    transition: none;
+  }
+}

@@ -14,16 +14,11 @@ import { getThemeColor, setThemeColor } from './utils'
 type LandscapeStyle = CSSProperties & { [key: `--landscape-${string}`]: string }
 
 type ThemeColorPickerProps = {
-  highlightedColor?: ThemeColor
   isOpen?: boolean
   preferenceEpoch?: number
 }
 
-export function ThemeColorPicker({
-  highlightedColor,
-  isOpen,
-  preferenceEpoch,
-}: ThemeColorPickerProps) {
+export function ThemeColorPicker({ isOpen, preferenceEpoch }: ThemeColorPickerProps) {
   const [selectedColor, setSelectedColor] = useState<ThemeColor>('default')
   const [resolvedColors, setResolvedColors] = useState<Partial<Record<ThemeColor, LandscapeStyle>>>(
     {},
@@ -81,7 +76,6 @@ export function ThemeColorPicker({
       role="group"
     >
       {THEME_COLORS.map((color) => {
-        const isHighlighted = color === highlightedColor
         const isSelected = selectedColor === color
 
         return (
@@ -93,7 +87,7 @@ export function ThemeColorPicker({
             aria-label={`Select ${THEME_LABELS[color]} theme`}
             aria-pressed={isSelected}
             className={`relative h-11 w-14 shrink-0 rounded-lg p-1 transition-colors ${PALETTE_CHROME.focusRing} ${
-              isSelected || isHighlighted ? PALETTE_CHROME.swatchRing : PALETTE_CHROME.hoverFill
+              isSelected ? PALETTE_CHROME.swatchRing : PALETTE_CHROME.hoverFill
             }`}
             data-theme={color}
             style={resolvedColors[color]}

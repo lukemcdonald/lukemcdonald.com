@@ -2,9 +2,9 @@ import type { CommandPaletteEggItem, CommandPaletteNavItem } from './types'
 
 import { Command } from 'cmdk'
 
-import { PALETTE_CHROME } from './chrome'
-import { CommandPaletteNav } from './CommandPaletteNav'
-import { CommandPaletteSecrets } from './CommandPaletteSecrets'
+import { HOVER_NAV_CUE_PROPS, TOGGLE_CUE_PROPS } from '@/components/Sound'
+import { toHrefTestId } from '@/features/navigation/navigation.utils'
+
 import { getPaletteEmptyMessage, SECRETS_PAGE } from './utils'
 
 type CommandPaletteResultsProps = {
@@ -29,18 +29,20 @@ export function CommandPaletteResults({
   return (
     <Command.List
       key={page ?? 'main'}
-      className={PALETTE_CHROME.list}
       label="Results"
     >
-      <PalettePageItems
-        activeEggId={activeEggId}
-        foundEggs={foundEggs}
-        navigationItems={navigationItems}
-        onNavigate={onNavigate}
-        onToggleEgg={onToggleEgg}
-        page={page}
-        progressLabel={progressLabel}
-      />
+      {page === SECRETS_PAGE ?
+        <SecretsItems
+          activeEggId={activeEggId}
+          foundEggs={foundEggs}
+          onToggleEgg={onToggleEgg}
+          progressLabel={progressLabel}
+        />
+      : <NavigationItems
+          navigationItems={navigationItems}
+          onNavigate={onNavigate}
+        />
+      }
       <PaletteEmpty
         foundCount={foundEggs.length}
         page={page}
@@ -49,42 +51,74 @@ export function CommandPaletteResults({
   )
 }
 
+function NavigationItems({
+  navigationItems,
+  onNavigate,
+}: {
+  navigationItems: CommandPaletteNavItem[]
+  onNavigate: (href: string) => void
+}) {
+  return (
+    <Command.Group
+      heading="Navigation"
+      value="Navigation"
+    >
+      {navigationItems.map((item) => {
+        return (
+          <Command.Item
+            key={item.href}
+            data-testid={toHrefTestId('command-palette-item', item.href)}
+            value={item.name}
+            onSelect={() => onNavigate(item.href)}
+            {...HOVER_NAV_CUE_PROPS}
+          >
+            {item.name}
+          </Command.Item>
+        )
+      })}
+    </Command.Group>
+  )
+}
+
 function PaletteEmpty({ foundCount, page }: { foundCount: number; page?: string }) {
   if (page === SECRETS_PAGE && foundCount === 0) {
     return null
   }
 
-  return (
-    <Command.Empty className={`py-6 text-center text-sm ${PALETTE_CHROME.muted}`}>
-      {getPaletteEmptyMessage(page, foundCount)}
-    </Command.Empty>
-  )
+  return <Command.Empty>{getPaletteEmptyMessage(page)}</Command.Empty>
 }
 
-function PalettePageItems({
+function SecretsItems({
   activeEggId,
   foundEggs,
-  navigationItems,
-  onNavigate,
   onToggleEgg,
-  page,
   progressLabel,
-}: CommandPaletteResultsProps) {
-  if (page === SECRETS_PAGE) {
-    return (
-      <CommandPaletteSecrets
-        activeId={activeEggId}
-        foundEggs={foundEggs}
-        onToggle={onToggleEgg}
-        title={progressLabel}
-      />
-    )
-  }
-
+}: {
+  activeEggId?: string
+  foundEggs: readonly CommandPaletteEggItem[]
+  onToggleEgg: (id: string) => void
+  progressLabel: string
+}) {
   return (
-    <CommandPaletteNav
-      items={navigationItems}
-      onNavigate={onNavigate}
-    />
+    <Command.Group
+      data-testid="command-palette-secrets"
+      forceMount
+      heading={progressLabel}
+      value={progressLabel}
+    >
+      {foundEggs.map((egg) => {
+        return (
+          <Command.Item
+            key={egg.id}
+            data-active={egg.id === activeEggId || undefined}
+            value={egg.name}
+            onSelect={() => onToggleEgg(egg.id)}
+            {...TOGGLE_CUE_PROPS}
+          >
+            {egg.name}
+          </Command.Item>
+        )
+      })}
+    </Command.Group>
   )
 }

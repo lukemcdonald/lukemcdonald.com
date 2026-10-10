@@ -7,12 +7,8 @@ export function getFoundEggs(eggs: readonly CommandPaletteEggItem[], foundIds: r
   return eggs.filter((egg) => foundIds.includes(egg.id))
 }
 
-export function getPaletteEmptyMessage(page: string | undefined, foundCount: number) {
+export function getPaletteEmptyMessage(page?: string) {
   if (page === SECRETS_PAGE) {
-    if (foundCount === 0) {
-      return 'No secrets found yet'
-    }
-
     return 'No matching secrets'
   }
 
