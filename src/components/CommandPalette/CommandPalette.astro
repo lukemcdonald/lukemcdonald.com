@@ -20,6 +20,10 @@ interface Props {
 const { navigationItems = [] } = Astro.props
 const eggs = getEasterEggs()
 const itemClass = `-mx-2 block rounded-lg px-2 py-1.5 text-base transition-colors ${PALETTE_CHROME.ink} ${PALETTE_CHROME.hoverFill}`
+
+function pageOptionId(href: string) {
+  return `command-palette-page${href.replaceAll('/', '-')}`
+}
 ---
 
 <div
@@ -58,12 +62,17 @@ const itemClass = `-mx-2 block rounded-lg px-2 py-1.5 text-base transition-color
             class={`h-5 w-5 ${PALETTE_CHROME.muted}`}
           />
           <input
+            aria-autocomplete="list"
+            aria-controls="command-palette-results"
+            aria-expanded="false"
+            aria-haspopup="listbox"
             aria-label="Search"
             autocomplete="off"
             class={`w-full border-0 bg-transparent px-4 py-3 outline-none focus:ring-0 ${PALETTE_CHROME.ink} ${PALETTE_CHROME.placeholder}`}
             data-command-palette-input
             data-testid="command-palette-input"
             placeholder="Search..."
+            role="combobox"
             type="text"
           />
           <kbd class={`${PALETTE_CHROME.kbd} ${PALETTE_CHROME.border} ${PALETTE_CHROME.muted}`}>
@@ -79,19 +88,29 @@ const itemClass = `-mx-2 block rounded-lg px-2 py-1.5 text-base transition-color
             <h2 class={`mb-2 text-xs font-medium tracking-wider uppercase ${PALETTE_CHROME.muted}`}>
               Navigation
             </h2>
-            {
-              navigationItems.map((item) => (
-                <a
-                  class={itemClass}
-                  data-name={item.name.toLowerCase()}
-                  data-palette-nav
-                  href={item.href}
-                  {...HOVER_NAV_CUE_PROPS}
-                >
-                  {item.name}
-                </a>
-              ))
-            }
+            <div
+              aria-label="Pages"
+              data-palette-results
+              id="command-palette-results"
+              role="listbox"
+            >
+              {
+                navigationItems.map((item) => (
+                  <a
+                    class={itemClass}
+                    data-name={item.name.toLowerCase()}
+                    data-palette-nav
+                    href={item.href}
+                    id={pageOptionId(item.href)}
+                    role="option"
+                    tabindex="-1"
+                    {...HOVER_NAV_CUE_PROPS}
+                  >
+                    {item.name}
+                  </a>
+                ))
+              }
+            </div>
           </div>
           <p
             class={`hidden py-6 text-center text-sm ${PALETTE_CHROME.muted}`}
@@ -113,20 +132,30 @@ const itemClass = `-mx-2 block rounded-lg px-2 py-1.5 text-base transition-color
           >
             Secrets
           </h2>
-          {
-            eggs.map((egg) => (
-              <button
-                aria-pressed="false"
-                class={`${itemClass} hidden w-full text-left`}
-                data-name={egg.name.toLowerCase()}
-                data-palette-egg={egg.id}
-                type="button"
-                {...TOGGLE_CUE_PROPS}
-              >
-                {egg.name}
-              </button>
-            ))
-          }
+          <div
+            aria-label="Secrets"
+            data-palette-secrets-list
+            id="command-palette-secrets-list"
+            role="listbox"
+          >
+            {
+              eggs.map((egg) => (
+                <button
+                  aria-pressed="false"
+                  class={`${itemClass} hidden w-full text-left`}
+                  data-name={egg.name.toLowerCase()}
+                  data-palette-egg={egg.id}
+                  id={`command-palette-egg-${egg.id}`}
+                  role="option"
+                  tabindex="-1"
+                  type="button"
+                  {...TOGGLE_CUE_PROPS}
+                >
+                  {egg.name}
+                </button>
+              ))
+            }
+          </div>
         </div>
 
         <div class={`flex items-center gap-2 border-t px-3 py-2 ${PALETTE_CHROME.border}`}>

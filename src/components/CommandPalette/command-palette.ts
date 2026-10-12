@@ -24,6 +24,7 @@ import {
   isPaletteBackKey,
   isSecretsShortcut,
   SECRETS_PAGE,
+  wrapIndex,
 } from './utils'
 
 const DESKTOP_MEDIA = '(hover: hover) and (pointer: fine)'
@@ -252,11 +253,43 @@ function resolveActiveIndex(palette: Palette, items: HTMLElement[], highlightedH
 
 function syncActiveStyles(items: HTMLElement[], activeIndex: number) {
   items.forEach((item, index) => {
+    const isActive = index === activeIndex
     const isPressedEgg =
       item.hasAttribute('data-palette-egg') && item.getAttribute('aria-pressed') === 'true'
 
-    toggleClasses(item, PALETTE_CHROME.activeFill, index === activeIndex || isPressedEgg)
+    item.setAttribute('aria-selected', isActive ? 'true' : 'false')
+    toggleClasses(item, PALETTE_CHROME.activeFill, isActive || isPressedEgg)
   })
+}
+
+function resultsList(palette: Palette) {
+  const selector =
+    palette.state.page === SECRETS_PAGE ? '[data-palette-secrets-list]' : '[data-palette-results]'
+
+  return palette.root.querySelector<HTMLElement>(selector)
+}
+
+function setActiveDescendant(input: HTMLInputElement, activeId: string | undefined) {
+  if (!activeId) {
+    input.removeAttribute('aria-activedescendant')
+    return
+  }
+
+  input.setAttribute('aria-activedescendant', activeId)
+}
+
+function syncComboboxControls(palette: Palette) {
+  const listId = resultsList(palette)?.id
+
+  if (listId) {
+    palette.input.setAttribute('aria-controls', listId)
+  }
+}
+
+function syncCombobox(palette: Palette, items: HTMLElement[]) {
+  palette.input.setAttribute('aria-expanded', palette.dialog.open ? 'true' : 'false')
+  syncComboboxControls(palette)
+  setActiveDescendant(palette.input, items[palette.state.activeIndex]?.id)
 }
 
 function setHidden(element: HTMLElement | null, hidden: boolean) {
@@ -337,6 +370,7 @@ function syncList(palette: Palette) {
 
   resolveActiveIndex(palette, items, commandHref(command))
   syncActiveStyles(items, palette.state.activeIndex)
+  syncCombobox(palette, items)
   syncPageVisibility(palette, palette.state.page === SECRETS_PAGE, items.length > 0, command)
   syncPreferenceHighlights(palette.root, command)
   syncThemeColors(palette.root, commandColor(command))
@@ -483,12 +517,7 @@ function moveActive(palette: Palette, delta: number) {
   }
 
   palette.state.arrowOverride = true
-
-  if (palette.state.activeIndex < 0) {
-    palette.state.activeIndex = delta > 0 ? 0 : items.length - 1
-  } else {
-    palette.state.activeIndex = (palette.state.activeIndex + delta + items.length) % items.length
-  }
+  palette.state.activeIndex = wrapIndex(palette.state.activeIndex, delta, items.length)
 
   items[palette.state.activeIndex]?.scrollIntoView({ block: 'nearest' })
   syncList(palette)
@@ -526,7 +555,7 @@ function onDialogClose(palette: Palette) {
   play('close')
 }
 
-function onSearchKeydown(event: KeyboardEvent, palette: Palette) {
+function onSearchNavKey(event: KeyboardEvent, palette: Palette) {
   if (event.key === 'ArrowDown') {
     event.preventDefault()
     moveActive(palette, 1)
@@ -543,6 +572,14 @@ function onSearchKeydown(event: KeyboardEvent, palette: Palette) {
     event.preventDefault()
     selectActive(palette)
   }
+}
+
+function onSearchKeydown(event: KeyboardEvent, palette: Palette) {
+  if (isPickerOpen(palette.root)) {
+    return
+  }
+
+  onSearchNavKey(event, palette)
 }
 
 function isPaletteToggle(event: KeyboardEvent) {
@@ -679,6 +716,123 @@ function bindThemeSwatches(palette: Palette, signal: AbortSignal) {
   })
 }
 
+function pickerOptionButtons(picker: Element) {
+  return [...picker.querySelectorAll<HTMLButtonElement>('[data-preference-option]')]
+}
+
+function selectedPickerOption(picker: Element) {
+  return (
+    picker.querySelector<HTMLButtonElement>('[data-preference-option][data-selected]') ??
+    pickerOptionButtons(picker)[0]
+  )
+}
+
+function focusPickerOption(picker: Element, current: Element | null, delta: number) {
+  const options = pickerOptionButtons(picker)
+  const index = current instanceof HTMLButtonElement ? options.indexOf(current) : -1
+
+  options[wrapIndex(index, delta, options.length)]?.focus()
+}
+
+function focusPickerEdge(picker: Element, key: string) {
+  const options = pickerOptionButtons(picker)
+
+  options[key === 'Home' ? 0 : options.length - 1]?.focus()
+}
+
+function currentPickerOption(event: KeyboardEvent) {
+  return event.target instanceof Element ? event.target.closest('[data-preference-option]') : null
+}
+
+function openPickerAtSelected(picker: Element, panel: HTMLElement) {
+  panel.showPopover()
+  selectedPickerOption(picker)?.focus()
+}
+
+function moveOpenPicker(event: KeyboardEvent, picker: Element) {
+  const current = currentPickerOption(event)
+
+  if (!current) {
+    selectedPickerOption(picker)?.focus()
+    return
+  }
+
+  focusPickerOption(picker, current, event.key === 'ArrowDown' ? 1 : -1)
+}
+
+function onPickerArrow(event: KeyboardEvent, picker: Element, panel: HTMLElement) {
+  if (!panel.matches(':popover-open')) {
+    openPickerAtSelected(picker, panel)
+    return
+  }
+
+  moveOpenPicker(event, picker)
+}
+
+function onPickerEdgeKey(picker: Element, panel: HTMLElement, key: string) {
+  if (!panel.matches(':popover-open')) {
+    panel.showPopover()
+  }
+
+  focusPickerEdge(picker, key)
+}
+
+function isPickerEdgeKey(key: string) {
+  return key === 'Home' || key === 'End'
+}
+
+function isPickerArrowKey(key: string) {
+  return key === 'ArrowDown' || key === 'ArrowUp'
+}
+
+function onPickerKeydown(event: KeyboardEvent, picker: Element, panel: HTMLElement) {
+  if (isPickerEdgeKey(event.key)) {
+    event.preventDefault()
+    onPickerEdgeKey(picker, panel, event.key)
+    return
+  }
+
+  if (!isPickerArrowKey(event.key)) {
+    return
+  }
+
+  event.preventDefault()
+  onPickerArrow(event, picker, panel)
+}
+
+function handlePickerKeydown(event: Event, picker: Element, panel: HTMLElement | null) {
+  if (!panel || !(event instanceof KeyboardEvent)) {
+    return
+  }
+
+  onPickerKeydown(event, picker, panel)
+}
+
+function bindPickerOptions(
+  palette: Palette,
+  picker: Element,
+  panel: HTMLElement | null,
+  signal: AbortSignal,
+) {
+  picker.querySelectorAll<HTMLButtonElement>('[data-preference-option]').forEach((option) => {
+    option.addEventListener(
+      'click',
+      () => {
+        const value = option.dataset.preferenceOption
+
+        if (!value) {
+          return
+        }
+
+        applyPreference(picker.getAttribute('data-preference-kind'), value)
+        panel?.hidePopover()
+        syncPreferences(palette)
+      },
+      { signal },
+    )
+  })
+}
+
 function bindPreferencePickers(palette: Palette, signal: AbortSignal) {
   palette.root.querySelectorAll('[data-preference-picker]').forEach((picker) => {
     const panel = picker.querySelector<HTMLElement>('[data-preference-options]')
@@ -687,31 +841,20 @@ function bindPreferencePickers(palette: Palette, signal: AbortSignal) {
     panel?.addEventListener(
       'toggle',
       () => {
-        triggerButton?.setAttribute(
-          'aria-expanded',
-          panel.matches(':popover-open') ? 'true' : 'false',
-        )
+        const isOpen = panel.matches(':popover-open')
+
+        triggerButton?.setAttribute('aria-expanded', isOpen ? 'true' : 'false')
+
+        if (isOpen) {
+          selectedPickerOption(picker)?.focus()
+        }
       },
       { signal },
     )
-
-    picker.querySelectorAll<HTMLButtonElement>('[data-preference-option]').forEach((option) => {
-      option.addEventListener(
-        'click',
-        () => {
-          const value = option.dataset.preferenceOption
-
-          if (!value) {
-            return
-          }
-
-          applyPreference(picker.getAttribute('data-preference-kind'), value)
-          panel?.hidePopover()
-          syncPreferences(palette)
-        },
-        { signal },
-      )
+    picker.addEventListener('keydown', (event) => handlePickerKeydown(event, picker, panel), {
+      signal,
     })
+    bindPickerOptions(palette, picker, panel, signal)
   })
 }
 

@@ -60,6 +60,7 @@ const optionsId = `${pickerId}-options`
           data-preference-option={option.value}
           data-testid={optionTestIdPrefix ? `${optionTestIdPrefix}-${option.value}` : undefined}
           role="option"
+          tabindex="-1"
           type="button"
           {...TOGGLE_CUE_PROPS}
         >

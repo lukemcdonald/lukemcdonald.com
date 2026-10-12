@@ -15,4 +15,36 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
     await homePage.page.keyboard.press('ControlOrMeta+k')
     await expect(homePage.header.commandPalette.dialog).toBeHidden()
   })
+
+  test('arrow keys expose the active command to assistive tech', async ({ homePage }) => {
+    await homePage.goto()
+    await homePage.header.commandPalette.openWithKeyboard()
+
+    const input = homePage.header.commandPalette.input
+
+    await expect(input).toHaveRole('combobox')
+    await homePage.page.keyboard.press('ArrowDown')
+
+    const activeId = await input.getAttribute('aria-activedescendant')
+
+    expect(activeId).toBeTruthy()
+
+    const activeOption = homePage.page.locator(`[id="${activeId}"]`)
+
+    await expect(activeOption).toHaveRole('option')
+    await expect(activeOption).toHaveAttribute('aria-selected', 'true')
+  })
+
+  test('appearance options move with arrow keys', async ({ homePage }) => {
+    await homePage.goto()
+    await homePage.header.commandPalette.openWithKeyboard()
+    await homePage.header.commandPalette.themeToggle.root.click()
+    await expect(homePage.header.commandPalette.themeToggle.option('system')).toBeFocused()
+
+    await homePage.page.keyboard.press('ArrowDown')
+    await expect(homePage.header.commandPalette.themeToggle.option('light')).toBeFocused()
+
+    await homePage.page.keyboard.press('Enter')
+    await expect.poll(() => homePage.storedThemeMode()).toBe('light')
+  })
 })
