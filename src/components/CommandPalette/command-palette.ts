@@ -204,7 +204,7 @@ function syncEggButton(
   const isActive = id === activeId
 
   button.hidden = !isFoundEgg(id, foundIds, button.dataset.name ?? '', needle)
-  button.setAttribute('aria-pressed', String(isActive))
+  button.setAttribute('aria-checked', isActive ? 'true' : 'false')
   toggleClasses(button, PALETTE_CHROME.activeFill, isActive)
 }
 
@@ -254,11 +254,11 @@ function resolveActiveIndex(palette: Palette, items: HTMLElement[], highlightedH
 function syncActiveStyles(items: HTMLElement[], activeIndex: number) {
   items.forEach((item, index) => {
     const isActive = index === activeIndex
-    const isPressedEgg =
-      item.hasAttribute('data-palette-egg') && item.getAttribute('aria-pressed') === 'true'
+    const isCheckedEgg =
+      item.hasAttribute('data-palette-egg') && item.getAttribute('aria-checked') === 'true'
 
     item.setAttribute('aria-selected', isActive ? 'true' : 'false')
-    toggleClasses(item, PALETTE_CHROME.activeFill, isActive || isPressedEgg)
+    toggleClasses(item, PALETTE_CHROME.activeFill, isActive || isCheckedEgg)
   })
 }
 

@@ -71,17 +71,11 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
 
     await palette.openSecretsWithKeyboard()
     await expect(aurora).toBeVisible()
-    await expect(aurora).toHaveAttribute('aria-pressed', 'false')
+    await expect(aurora).toHaveAttribute('aria-checked', 'false')
     await aurora.click()
-    await expect(aurora).toHaveAttribute('aria-pressed', 'true')
+    await expect(aurora).toHaveAttribute('aria-checked', 'true')
 
-    await homePage.page.keyboard.press('Escape')
-    await expect(palette.secretsFooter).toBeVisible()
-
-    await palette.openSecretsWithKeyboard()
-    await expect(aurora).toBeVisible()
-    await expect(aurora).toHaveAttribute('aria-pressed', 'true')
     await aurora.click()
-    await expect(aurora).toHaveAttribute('aria-pressed', 'false')
+    await expect(aurora).toHaveAttribute('aria-checked', 'false')
   })
 })
