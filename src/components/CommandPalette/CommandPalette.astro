@@ -114,8 +114,9 @@ function pageOptionId(href: string) {
           </div>
         </div>
         <p
-          class={`hidden py-6 text-center text-sm ${PALETTE_CHROME.muted}`}
+          class={`py-6 text-center text-sm ${PALETTE_CHROME.muted}`}
           data-palette-empty
+          hidden
           role="status"
         >
           No matching pages
@@ -123,9 +124,10 @@ function pageOptionId(href: string) {
       </div>
 
       <div
-        class={`${PALETTE_CHROME.list} hidden`}
+        class={PALETTE_CHROME.list}
         data-palette-secrets
         data-testid="command-palette-secrets"
+        hidden
       >
         <h2
           class={`mb-2 text-xs font-medium tracking-wider uppercase ${PALETTE_CHROME.muted}`}
@@ -143,9 +145,11 @@ function pageOptionId(href: string) {
             eggs.map((egg) => (
               <button
                 aria-pressed="false"
-                class={`${itemClass} hidden w-full text-left`}
+                class={`${itemClass} w-full text-left`}
                 data-name={egg.name.toLowerCase()}
                 data-palette-egg={egg.id}
+                data-testid={`command-palette-egg-${egg.id}`}
+                hidden
                 id={`command-palette-egg-${egg.id}`}
                 role="option"
                 tabindex="-1"
