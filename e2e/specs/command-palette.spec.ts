@@ -60,9 +60,7 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
     await expect(homePage.header.commandPalette.dialog).toBeHidden()
   })
 
-  test('lists found eggs on the Secrets page from the footer and shortcut', async ({
-    homePage,
-  }) => {
+  test('lists found eggs on the Secrets page from the shortcut', async ({ homePage }) => {
     const palette = homePage.header.commandPalette
     const aurora = palette.egg('aurora')
 
@@ -71,7 +69,7 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
     await palette.openWithKeyboard()
     await expect(palette.secretsFooter).toContainText('Secrets 1/2')
 
-    await palette.openSecretsFromFooter()
+    await palette.openSecretsWithKeyboard()
     await expect(aurora).toBeVisible()
     await expect(aurora).toHaveAttribute('aria-pressed', 'false')
     await aurora.click()

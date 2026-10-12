@@ -47,11 +47,6 @@ export class CommandPalette {
     )
   }
 
-  async openSecretsFromFooter() {
-    await this.secretsFooter.click()
-    await this.secrets.waitFor({ state: 'visible' })
-  }
-
   async openSecretsWithKeyboard() {
     await this.page.keyboard.press('ControlOrMeta+.')
     await this.secrets.waitFor({ state: 'visible' })

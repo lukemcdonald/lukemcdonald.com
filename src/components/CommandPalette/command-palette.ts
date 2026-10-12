@@ -897,13 +897,6 @@ function bindPaletteEvents(palette: Palette, signal: AbortSignal) {
     { signal },
   )
   palette.input.addEventListener('keydown', (event) => onSearchKeydown(event, palette), { signal })
-  palette.root.querySelector('[data-palette-secrets-open]')?.addEventListener(
-    'click',
-    () => {
-      openSecrets(palette)
-    },
-    { signal },
-  )
   palette.soundToggle?.addEventListener(
     'click',
     () => {
