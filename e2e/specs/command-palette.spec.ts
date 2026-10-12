@@ -47,4 +47,16 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
     await homePage.page.keyboard.press('Enter')
     await expect.poll(() => homePage.storedThemeMode()).toBe('light')
   })
+
+  test('closes when the backdrop is clicked', async ({ homePage }) => {
+    await homePage.goto()
+    await homePage.header.commandPalette.openWithKeyboard()
+    await expect(homePage.header.commandPalette.dialog).toBeVisible()
+
+    await homePage.header.commandPalette.input.click()
+    await expect(homePage.header.commandPalette.dialog).toBeVisible()
+
+    await homePage.header.commandPalette.closeWithBackdropClick()
+    await expect(homePage.header.commandPalette.dialog).toBeHidden()
+  })
 })

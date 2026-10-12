@@ -858,17 +858,34 @@ function bindPreferencePickers(palette: Palette, signal: AbortSignal) {
   })
 }
 
-function bindPaletteEvents(palette: Palette, signal: AbortSignal) {
-  palette.trigger.addEventListener('click', () => openPalette(palette), { signal })
+function isDialogTarget(event: Event, dialog: HTMLDialogElement) {
+  return event.target === dialog
+}
+
+function bindBackdropClose(palette: Palette, signal: AbortSignal) {
+  let pointerStartedOnDialog = false
+
+  palette.dialog.addEventListener(
+    'pointerdown',
+    (event) => {
+      pointerStartedOnDialog = isDialogTarget(event, palette.dialog)
+    },
+    { signal },
+  )
   palette.dialog.addEventListener(
     'click',
     (event) => {
-      if (event.target === palette.dialog) {
+      if (pointerStartedOnDialog && isDialogTarget(event, palette.dialog)) {
         closePalette(palette)
       }
     },
     { signal },
   )
+}
+
+function bindPaletteEvents(palette: Palette, signal: AbortSignal) {
+  palette.trigger.addEventListener('click', () => openPalette(palette), { signal })
+  bindBackdropClose(palette, signal)
   palette.dialog.addEventListener('cancel', (event) => onDialogCancel(event, palette), { signal })
   palette.dialog.addEventListener('close', () => onDialogClose(palette), { signal })
   palette.input.addEventListener(

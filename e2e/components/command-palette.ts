@@ -5,6 +5,7 @@ import { ThemeToggle } from './theme-toggle'
 
 export class CommandPalette {
   readonly dialog
+  readonly host
   readonly input
   readonly page: Page
   readonly themeToggle: ThemeToggle
@@ -12,10 +13,16 @@ export class CommandPalette {
 
   constructor(page: Page) {
     this.dialog = page.getByTestId(TEST_ID.commandPalette)
+    this.host = page.getByTestId(TEST_ID.commandPaletteDialog)
     this.input = page.getByTestId(TEST_ID.commandPaletteInput)
     this.page = page
     this.themeToggle = new ThemeToggle(page)
     this.trigger = page.getByTestId(TEST_ID.commandPaletteTrigger)
+  }
+
+  async closeWithBackdropClick() {
+    await this.host.click({ position: { x: 8, y: 8 } })
+    await this.input.waitFor({ state: 'hidden' })
   }
 
   async closeWithKeyboard() {
