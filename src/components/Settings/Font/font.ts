@@ -4,9 +4,9 @@ import {
   type SettingChange,
   syncPreferencePicker,
 } from '../picker'
-import { FONT_LABELS, FONT_PAIRINGS, type SelectableFontPairing } from './pairings'
+import { FONT_PAIRINGS, type SelectableFontPairing } from './pairings'
 
-export { FONT_LABELS, FONT_PAIRINGS }
+export { FONT_PAIRINGS }
 
 export const DEFAULT_FONT_PAIRING = 'default'
 

@@ -47,4 +47,27 @@ describe('fontPairingCss', () => {
       assert.match(css, new RegExp(`--font-ui: var\\(${pairing.nav.cssVariable}\\)`))
     }
   })
+
+  test('previews each option label in the heading face only while the menu is open', () => {
+    const css = fontPairingCss()
+
+    for (const pairing of FONT_PAIRING_CONFIGS) {
+      assert.match(
+        css,
+        new RegExp(
+          `\\[data-preference-options\\]:popover-open \\[data-font-preview='${pairing.id}'\\]`,
+        ),
+      )
+      assert.match(
+        css,
+        new RegExp(
+          `\\[data-font-preview='${pairing.id}'\\] \\{[^}]*font-family: var\\(${pairing.heading.cssVariable}\\)`,
+        ),
+      )
+      assert.doesNotMatch(
+        css,
+        new RegExp(`\\[data-font-preview='${pairing.id}'\\] \\{[^}]*line-height:`),
+      )
+    }
+  })
 })

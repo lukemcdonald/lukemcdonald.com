@@ -85,6 +85,29 @@ test.describe('font', { tag: '@smoke' }, () => {
     }
   })
 
+  test('font option labels preview the heading face after the picker opens', async ({
+    homePage,
+    isMobile,
+  }) => {
+    test.skip(isMobile, 'Native select options cannot use a custom face')
+
+    const fontToggle = homePage.header.commandPalette.fontToggle
+    const liveLabel = fontToggle.option('live').locator('[data-font-preview]')
+
+    await homePage.goto()
+    await homePage.header.commandPalette.openWithKeyboard()
+    await expect.poll(() => fontFamily(liveLabel)).not.toMatch(PAIRING_FACES.live.heading)
+
+    await fontToggle.root.click()
+
+    for (const [pairing, faces] of Object.entries(PAIRING_FACES)) {
+      const label = fontToggle.option(pairing).locator('[data-font-preview]')
+
+      await expect(label).toHaveAttribute('data-font-preview', pairing)
+      await expect.poll(() => fontFamily(label)).toMatch(faces.heading)
+    }
+  })
+
   test('selecting the active font again restores the default', async ({ homePage, isMobile }) => {
     await homePage.goto()
     await selectFont(homePage, isMobile, 'work')
