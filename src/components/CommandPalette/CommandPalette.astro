@@ -146,7 +146,7 @@ function pageOptionId(href: string) {
             eggs.map((egg) => (
               <button
                 aria-checked="false"
-                class={`group -mx-2 flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-base transition-colors ${PALETTE_CHROME.ink} ${PALETTE_CHROME.hoverFill}`}
+                class={`group -mx-2 flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-base transition-colors ${PALETTE_CHROME.ink}`}
                 data-name={egg.name.toLowerCase()}
                 data-palette-egg={egg.id}
                 data-testid={`command-palette-egg-${egg.id}`}
@@ -157,11 +157,13 @@ function pageOptionId(href: string) {
                 type="button"
                 {...TOGGLE_CUE_PROPS}
               >
-                <span class="flex-1">{egg.name}</span>
-                <CheckIcon
+                <span
                   aria-hidden="true"
-                  class="invisible h-4 w-4 group-aria-checked:visible"
-                />
+                  class="inline-flex h-4 w-4 shrink-0 items-center justify-center"
+                >
+                  <CheckIcon class="invisible h-4 w-4 group-aria-checked:visible" />
+                </span>
+                <span class="min-w-0 flex-1">{egg.name}</span>
               </button>
             ))
           }

@@ -78,4 +78,33 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
     await aurora.click()
     await expect(aurora).toHaveAttribute('aria-checked', 'false')
   })
+
+  test('keeps secret labels aligned and highlights only the active item', async ({ homePage }) => {
+    const palette = homePage.header.commandPalette
+    const aurora = palette.egg('aurora')
+    const hyrule = palette.egg('hyrule')
+
+    await homePage.goto()
+    await palette.markEggFound('aurora', 'hyrule')
+    await palette.openWithKeyboard()
+    await palette.openSecretsWithKeyboard()
+
+    const auroraCheck = await aurora.locator('svg').boundingBox()
+    const auroraLabel = await aurora.getByText('Aurora').boundingBox()
+    const hyruleLabel = await hyrule.getByText('Hyrule').boundingBox()
+
+    expect(auroraCheck?.x).toBeLessThan(auroraLabel?.x ?? 0)
+    expect(auroraLabel?.x).toBe(hyruleLabel?.x)
+
+    await aurora.click()
+    await expect(aurora).toHaveAttribute('aria-checked', 'true')
+    await expect(palette.highlightedSecrets).toHaveCount(1)
+    await expect(aurora).toHaveAttribute('data-palette-highlighted', '')
+
+    await homePage.page.keyboard.press('ArrowDown')
+    await expect(palette.highlightedSecrets).toHaveCount(1)
+    await expect(hyrule).toHaveAttribute('data-palette-highlighted', '')
+    await expect(aurora).not.toHaveAttribute('data-palette-highlighted')
+    await expect(aurora).toHaveAttribute('aria-checked', 'true')
+  })
 })

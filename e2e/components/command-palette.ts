@@ -5,6 +5,7 @@ import { ThemeToggle } from './theme-toggle'
 
 export class CommandPalette {
   readonly dialog
+  readonly highlightedSecrets
   readonly host
   readonly input
   readonly page: Page
@@ -15,6 +16,9 @@ export class CommandPalette {
 
   constructor(page: Page) {
     this.dialog = page.getByTestId(TEST_ID.commandPalette)
+    this.highlightedSecrets = page
+      .getByTestId(TEST_ID.commandPaletteSecrets)
+      .locator('[data-palette-highlighted]')
     this.host = page.getByTestId(TEST_ID.commandPaletteDialog)
     this.input = page.getByTestId(TEST_ID.commandPaletteInput)
     this.page = page
@@ -38,12 +42,12 @@ export class CommandPalette {
     return this.page.getByTestId(commandPaletteEggTestId(id))
   }
 
-  async markEggFound(id: string) {
+  async markEggFound(...ids: string[]) {
     await this.page.evaluate(
-      ({ eggId, key }) => {
-        localStorage.setItem(key, JSON.stringify([eggId]))
+      ({ eggIds, key }) => {
+        localStorage.setItem(key, JSON.stringify(eggIds))
       },
-      { eggId: id, key: EASTER_EGGS_FOUND_KEY },
+      { eggIds: ids, key: EASTER_EGGS_FOUND_KEY },
     )
   }
 

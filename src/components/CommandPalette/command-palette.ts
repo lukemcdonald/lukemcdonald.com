@@ -205,7 +205,6 @@ function syncEggButton(
 
   button.hidden = !isFoundEgg(id, foundIds, button.dataset.name ?? '', needle)
   button.setAttribute('aria-checked', isActive ? 'true' : 'false')
-  toggleClasses(button, PALETTE_CHROME.activeFill, isActive)
 }
 
 function syncEggs(palette: Palette, query: string) {
@@ -251,14 +250,17 @@ function resolveActiveIndex(palette: Palette, items: HTMLElement[], highlightedH
   }
 }
 
+function setItemHighlight(item: HTMLElement, highlighted: boolean) {
+  item.toggleAttribute('data-palette-highlighted', highlighted)
+  toggleClasses(item, PALETTE_CHROME.activeFill, highlighted)
+}
+
 function syncActiveStyles(items: HTMLElement[], activeIndex: number) {
   items.forEach((item, index) => {
     const isActive = index === activeIndex
-    const isCheckedEgg =
-      item.hasAttribute('data-palette-egg') && item.getAttribute('aria-checked') === 'true'
 
     item.setAttribute('aria-selected', isActive ? 'true' : 'false')
-    toggleClasses(item, PALETTE_CHROME.activeFill, isActive || isCheckedEgg)
+    setItemHighlight(item, isActive)
   })
 }
 
@@ -509,6 +511,19 @@ function selectActive(palette: Palette) {
   )
 }
 
+function activateItem(palette: Palette, item: HTMLElement) {
+  const items = visibleItems(palette)
+  const index = items.indexOf(item)
+
+  if (index < 0 || index === palette.state.activeIndex) {
+    return
+  }
+
+  palette.state.arrowOverride = true
+  palette.state.activeIndex = index
+  syncList(palette)
+}
+
 function moveActive(palette: Palette, delta: number) {
   const items = visibleItems(palette)
 
@@ -673,21 +688,32 @@ function bindNavAndEggs(palette: Palette, signal: AbortSignal) {
   })
 
   palette.root.querySelectorAll<HTMLButtonElement>('[data-palette-egg]').forEach((button) => {
-    button.addEventListener(
-      'click',
-      () => {
-        const id = button.dataset.paletteEgg
-
-        if (!id) {
-          return
-        }
-
-        toggleEasterEgg(id)
-        syncPreferences(palette)
-      },
-      { signal },
-    )
+    bindEggButton(palette, button, signal)
   })
+}
+
+function bindEggButton(palette: Palette, button: HTMLButtonElement, signal: AbortSignal) {
+  button.addEventListener(
+    'click',
+    () => {
+      const id = button.dataset.paletteEgg
+
+      if (!id) {
+        return
+      }
+
+      toggleEasterEgg(id)
+      syncPreferences(palette)
+    },
+    { signal },
+  )
+  button.addEventListener(
+    'pointerenter',
+    () => {
+      activateItem(palette, button)
+    },
+    { signal },
+  )
 }
 
 function bindThemeSwatches(palette: Palette, signal: AbortSignal) {
