@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
-import { getSoundToggleCopy } from './utils.ts'
+import { getSoundToggleCopy } from './sound.ts'
 
 describe('getSoundToggleCopy', () => {
   test('describes the next action and current state', () => {

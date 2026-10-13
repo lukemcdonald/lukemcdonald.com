@@ -6,14 +6,6 @@ import { SOUND_CONFIG } from '@/configs/sound'
 
 import { DEFAULT_SOUND_PREFERENCE, SOUND_STORAGE_KEY } from './constants'
 
-export function getSoundToggleCopy(isOn: boolean) {
-  return {
-    label: isOn ? 'Sounds on' : 'Sounds off',
-    pressed: isOn ? 'true' : 'false',
-    toggle: isOn ? 'Disable interaction sounds' : 'Enable interaction sounds',
-  }
-}
-
 export function getSoundPreference(): SoundPreference {
   if (typeof window === 'undefined') {
     return DEFAULT_SOUND_PREFERENCE
