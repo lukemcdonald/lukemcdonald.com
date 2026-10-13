@@ -59,10 +59,10 @@ const meta: SeoMeta = {
 
     <EasterEggs />
 
-    <!-- iOS 26 Safari samples this for the top chrome. Header on small screens, shell on lg+. -->
+    <!-- iOS 26 Safari samples a fixed top bar (>=3px, not display:none) for chrome tint. Hidden from lg+; html already matches the shell. -->
     <div
       aria-hidden="true"
-      class="pointer-events-none fixed inset-x-0 top-0 z-50 h-1.5 bg-primary-500 lg:bg-primary-50 lg:dark:bg-primary-900"
+      class="pointer-events-none fixed inset-x-0 top-0 z-50 h-1.5 bg-primary-500 lg:hidden"
     >
     </div>
 
