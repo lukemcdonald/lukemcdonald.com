@@ -69,10 +69,10 @@ describe('applyFontSelection', () => {
   test('clears the document font for the default pairing', () => {
     applyFontSelection('work')
 
-    const applied = applyFontSelection('home')
+    const applied = applyFontSelection('default')
 
     assert.equal(applied, true)
-    assert.equal(getFontPairing(), 'home')
+    assert.equal(getFontPairing(), 'default')
     assert.equal(document.documentElement.dataset.font, undefined)
   })
 

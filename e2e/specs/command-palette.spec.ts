@@ -43,12 +43,12 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
     await homePage.goto()
     await homePage.header.commandPalette.openWithKeyboard()
     await fontToggle.root.click()
-    await expect(fontToggle.option('home')).toBeFocused()
-    await expect(fontToggle.option('home')).toHaveAttribute('data-selected', '')
+    await expect(fontToggle.option('default')).toBeFocused()
+    await expect(fontToggle.option('default')).toHaveAttribute('data-selected', '')
 
     await homePage.page.keyboard.press('ArrowDown')
     await expect(fontToggle.option('work')).toBeFocused()
-    await expect(fontToggle.option('home')).toHaveAttribute('data-selected', '')
+    await expect(fontToggle.option('default')).toHaveAttribute('data-selected', '')
     await expect(fontToggle.option('work')).not.toHaveAttribute('data-selected')
 
     await homePage.page.keyboard.press('Enter')
