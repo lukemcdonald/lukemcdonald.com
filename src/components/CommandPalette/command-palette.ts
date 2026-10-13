@@ -704,6 +704,7 @@ function bindEggButton(palette: Palette, button: HTMLButtonElement, signal: Abor
 
       toggleEasterEgg(id)
       syncPreferences(palette)
+      palette.input.focus()
     },
     { signal },
   )

@@ -96,10 +96,13 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
     expect(auroraCheck?.x).toBeLessThan(auroraLabel?.x ?? 0)
     expect(auroraLabel?.x).toBe(hyruleLabel?.x)
 
-    await aurora.click()
-    await expect(aurora).toHaveAttribute('aria-checked', 'true')
+    await homePage.page.keyboard.press('ArrowDown')
     await expect(palette.highlightedSecrets).toHaveCount(1)
     await expect(aurora).toHaveAttribute('data-palette-highlighted', '')
+
+    await homePage.page.keyboard.press('Enter')
+    await expect(aurora).toHaveAttribute('aria-checked', 'true')
+    await expect(palette.highlightedSecrets).toHaveCount(1)
 
     await homePage.page.keyboard.press('ArrowDown')
     await expect(palette.highlightedSecrets).toHaveCount(1)
