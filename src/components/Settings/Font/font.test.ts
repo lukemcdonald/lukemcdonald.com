@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { afterEach, before, beforeEach, describe, mock, test } from 'node:test'
 
-import { applyFontSelection, getFontPairing } from './font.ts'
+import { applyFontSelection, DEFAULT_FONT_PAIRING, FONT_PAIRINGS, getFontPairing } from './font.ts'
 
 function installBrowserStubs({
   mockGetItem,
@@ -64,6 +64,20 @@ describe('applyFontSelection', () => {
     assert.equal(applied, true)
     assert.equal(getFontPairing(), 'live')
     assert.equal(document.documentElement.dataset.font, 'live')
+  })
+
+  test('sets data-font for each non-default pairing', () => {
+    for (const pairing of FONT_PAIRINGS) {
+      if (pairing === DEFAULT_FONT_PAIRING) {
+        continue
+      }
+
+      const applied = applyFontSelection(pairing)
+
+      assert.equal(applied, true)
+      assert.equal(getFontPairing(), pairing)
+      assert.equal(document.documentElement.dataset.font, pairing)
+    }
   })
 
   test('clears the document font for the default pairing', () => {

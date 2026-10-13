@@ -105,22 +105,46 @@
   font-family: var(--font-sans);
 }
 
+[data-font] :where(button, input, select, textarea, kbd) {
+  font-family: inherit;
+}
+
 [data-font='work'] {
-  --default-font-family: var(--font-source-sans-3);
-  --font-heading: var(--font-source-serif-4);
-  --font-sans: var(--font-source-sans-3);
+  --default-font-family: var(--font-ibm-plex-sans);
+  --font-heading: var(--font-ibm-plex-serif);
+  --font-mono: var(--font-ibm-plex-sans);
+  --font-sans: var(--font-ibm-plex-sans);
 }
 
 [data-font='live'] {
-  --default-font-family: var(--font-inter);
+  --default-font-family: var(--font-nunito);
   --font-heading: var(--font-fraunces);
-  --font-sans: var(--font-inter);
+  --font-mono: var(--font-nunito);
+  --font-sans: var(--font-nunito);
+}
+
+[data-font='live'] :is(h1, h2, h3, h4, h5, h6) {
+  font-optical-sizing: auto;
+  font-variation-settings:
+    'SOFT' 70,
+    'WONK' 1;
 }
 
 [data-font='play'] {
-  --default-font-family: var(--font-inter);
-  --font-heading: var(--font-sora);
-  --font-sans: var(--font-inter);
+  --default-font-family: var(--font-space-mono);
+  --font-heading: var(--font-bricolage-grotesque);
+  --font-mono: var(--font-space-mono);
+  --font-sans: var(--font-space-mono);
+}
+
+[data-font='play'] :is(h1, h2, h3, h4, h5, h6) {
+  font-optical-sizing: auto;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+[data-font='play'] .entry__content {
+  line-height: 1.5;
 }
 
 :where(h1, h2, h3, h4, h5, h6) {
