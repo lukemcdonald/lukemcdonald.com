@@ -41,3 +41,9 @@ pnpm-debug.log*
 blob-report/
 playwright-report/
 test-results/
+
+# Agents
+**/.agents/skills/**
+**/.claude/skills/**
+**/skills-lock.json
+**/skills-npm-lock.json
