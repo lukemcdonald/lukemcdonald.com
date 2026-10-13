@@ -4,20 +4,15 @@ import {
   type SettingChange,
   syncPreferencePicker,
 } from '../picker'
+import { FONT_LABELS, FONT_PAIRINGS, type SelectableFontPairing } from './pairings'
+
+export { FONT_LABELS, FONT_PAIRINGS }
 
 export const DEFAULT_FONT_PAIRING = 'default'
 
-export const FONT_PAIRINGS = ['work', 'play', 'live'] as const
-
-export type FontPairing = (typeof FONT_PAIRINGS)[number] | typeof DEFAULT_FONT_PAIRING
+export type FontPairing = SelectableFontPairing | typeof DEFAULT_FONT_PAIRING
 
 export const FONT_STORAGE_KEY = 'font-pairing'
-
-export const FONT_LABELS: Record<(typeof FONT_PAIRINGS)[number], string> = {
-  live: 'Live',
-  play: 'Play',
-  work: 'Work',
-}
 
 function isSelectablePairing(value: string): value is (typeof FONT_PAIRINGS)[number] {
   return (FONT_PAIRINGS as readonly string[]).includes(value)

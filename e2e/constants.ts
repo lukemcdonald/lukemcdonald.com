@@ -10,6 +10,7 @@ export const TEST_ID = {
   commandPaletteTrigger: 'command-palette-trigger',
   desktopNav: 'desktop-nav',
   fontToggle: 'font-toggle',
+  glassToggle: 'glass-toggle',
   main: 'main',
   mobileAppearance: 'mobile-appearance',
   mobileFont: 'mobile-font',
@@ -24,6 +25,7 @@ export const TEST_ID = {
 
 export const EASTER_EGGS_FOUND_KEY = 'easter-eggs:found'
 export const FONT_STORAGE_KEY = 'font-pairing'
+export const GLASS_STORAGE_KEY = 'glass-level'
 export const THEME_MODE_STORAGE_KEY = 'theme-mode'
 export const THEME_SEED_LOCK_KEY = '__e2e-theme-seeded'
 
@@ -42,6 +44,10 @@ export function commandPaletteEggTestId(id: string): string {
 
 export function fontOptionTestId(pairing: string): string {
   return `font-option-${pairing}`
+}
+
+export function glassOptionTestId(level: string): string {
+  return `glass-option-${level}`
 }
 
 export function greetingLinkTestId(href: string): string {

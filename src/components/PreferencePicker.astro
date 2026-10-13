@@ -10,7 +10,6 @@ type Option = {
 }
 
 interface Props {
-  checkStart?: boolean
   kind: string
   label: string
   options: readonly Option[]
@@ -19,7 +18,7 @@ interface Props {
   testId?: string
 }
 
-const { checkStart, kind, label, options, optionTestIdPrefix, pickerId, testId } = Astro.props
+const { kind, label, options, optionTestIdPrefix, pickerId, testId } = Astro.props
 const optionsId = `${pickerId}-options`
 ---
 
@@ -57,7 +56,7 @@ const optionsId = `${pickerId}-options`
     {
       options.map((option) => (
         <button
-          class={`group flex min-h-11 w-full cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm select-none ${PALETTE_CHROME.focusFill} ${PALETTE_CHROME.hoverFill}`}
+          class={PALETTE_CHROME.option}
           data-preference-option={option.value}
           data-testid={optionTestIdPrefix ? `${optionTestIdPrefix}-${option.value}` : undefined}
           role="option"
@@ -65,20 +64,12 @@ const optionsId = `${pickerId}-options`
           type="button"
           {...TOGGLE_CUE_PROPS}
         >
-          {checkStart ?
-            <CheckIcon
-              aria-hidden="true"
-              class="invisible h-4 w-4 shrink-0 group-data-selected:visible"
-            />
-          : null}
+          <CheckIcon
+            aria-hidden="true"
+            class="invisible h-4 w-4 shrink-0 group-data-selected:visible"
+          />
           <slot name={`icon-${option.value}`} />
           <span class="flex-1 text-left">{option.label}</span>
-          {checkStart ? null : (
-            <CheckIcon
-              aria-hidden="true"
-              class="invisible h-4 w-4 group-data-selected:visible"
-            />
-          )}
         </button>
       ))
     }

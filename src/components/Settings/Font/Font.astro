@@ -28,14 +28,13 @@ const iconClass = 'h-5 w-5'
       ))}
     </MenuSelect>
   : <PreferencePicker
-      checkStart
       kind="font"
       label="Font"
-      optionTestIdPrefix="font-option"
       options={FONT_PAIRINGS.map((pairing) => ({
         label: FONT_LABELS[pairing],
         value: pairing,
       }))}
+      optionTestIdPrefix="font-option"
       pickerId="palette-font"
       testId="font-toggle"
     >

@@ -8,6 +8,8 @@ export const PALETTE_CHROME = {
   kbd: 'hidden rounded border px-1.5 py-0.5 text-[10px] leading-none sm:inline-block',
   list: 'overflow-y-auto',
   muted: 'text-black/50 dark:text-white/50',
+  option:
+    'group flex h-8 w-full cursor-pointer items-center gap-2 rounded-lg px-3 text-sm select-none',
   placeholder: 'placeholder:text-black/50 dark:placeholder:text-white/50',
   swatchRing: 'ring-2 ring-black/25 dark:ring-white/40',
 } as const

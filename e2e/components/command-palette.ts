@@ -2,11 +2,13 @@ import type { Page } from '@playwright/test'
 
 import { commandPaletteEggTestId, EASTER_EGGS_FOUND_KEY, TEST_ID } from '../constants'
 import { FontToggle } from './font-toggle'
+import { GlassToggle } from './glass-toggle'
 import { ThemeToggle } from './theme-toggle'
 
 export class CommandPalette {
   readonly dialog
   readonly fontToggle: FontToggle
+  readonly glassToggle: GlassToggle
   readonly highlightedSecrets
   readonly host
   readonly input
@@ -20,6 +22,7 @@ export class CommandPalette {
   constructor(page: Page) {
     this.dialog = page.getByTestId(TEST_ID.commandPalette)
     this.fontToggle = new FontToggle(page)
+    this.glassToggle = new GlassToggle(page)
     this.highlightedSecrets = page
       .getByTestId(TEST_ID.commandPaletteSecrets)
       .locator('[data-palette-highlighted]')

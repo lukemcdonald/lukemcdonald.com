@@ -5,8 +5,9 @@ import tailwindcss from '@tailwindcss/vite'
 
 import { defineConfig, fontProviders } from 'astro/config'
 
-import { GLOBAL_CONFIG } from './src/configs/global.js'
+import { FONT_SOURCE_FAMILIES } from './src/components/Settings/Font/pairings.js'
 import { ENV_SCHEMA } from './src/configs/env.js'
+import { GLOBAL_CONFIG } from './src/configs/global.js'
 
 // Sitemap exclusions
 const SITEMAP_EXCLUSIONS = new Set([`${GLOBAL_CONFIG.site.origin}/index`])
@@ -31,62 +32,12 @@ export default defineConfig({
   env: {
     schema: ENV_SCHEMA,
   },
-  fonts: [
-    {
-      cssVariable: '--font-bricolage-grotesque',
-      fallbacks: ['sans-serif'],
-      name: 'Bricolage Grotesque',
+  fonts: FONT_SOURCE_FAMILIES.map((family) => {
+    return {
+      ...family,
       provider: fontProviders.fontsource(),
-      styles: ['normal'],
-      subsets: ['latin'],
-      weights: ['200 800'],
-    },
-    {
-      cssVariable: '--font-fraunces',
-      fallbacks: ['serif'],
-      name: 'Fraunces',
-      provider: fontProviders.fontsource(),
-      styles: ['normal'],
-      subsets: ['latin'],
-      weights: ['100 900'],
-    },
-    {
-      cssVariable: '--font-ibm-plex-mono',
-      fallbacks: ['monospace'],
-      name: 'IBM Plex Mono',
-      provider: fontProviders.fontsource(),
-      styles: ['normal'],
-      subsets: ['latin'],
-      weights: [400, 600, 700],
-    },
-    {
-      cssVariable: '--font-ibm-plex-sans',
-      fallbacks: ['sans-serif'],
-      name: 'IBM Plex Sans',
-      provider: fontProviders.fontsource(),
-      styles: ['normal'],
-      subsets: ['latin'],
-      weights: ['100 700'],
-    },
-    {
-      cssVariable: '--font-inter',
-      fallbacks: ['sans-serif'],
-      name: 'Inter',
-      provider: fontProviders.fontsource(),
-      styles: ['normal'],
-      subsets: ['latin'],
-      weights: ['100 900'],
-    },
-    {
-      cssVariable: '--font-space-mono',
-      fallbacks: ['monospace'],
-      name: 'Space Mono',
-      provider: fontProviders.fontsource(),
-      styles: ['normal'],
-      subsets: ['latin'],
-      weights: [400, 700],
-    },
-  ],
+    }
+  }),
   image: {
     layout: 'constrained',
     responsiveStyles: false, // issue with Tailwind v4 if enabled

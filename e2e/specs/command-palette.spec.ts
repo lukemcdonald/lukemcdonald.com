@@ -1,4 +1,36 @@
+import type { Locator } from '@playwright/test'
+
 import { expect, test } from '../fixtures'
+
+async function expectHoverHighlightOnly(hovered: Locator, selected: Locator, idle: Locator) {
+  await hovered.hover()
+  await expect.poll(async () => optionBackground(selected)).toBe(await optionBackground(idle))
+  await expect
+    .poll(async () => optionBackground(hovered))
+    .not.toBe(await optionBackground(selected))
+}
+
+async function expectPickerOptionChrome(option: Locator) {
+  const check = await option.locator('svg').first().boundingBox()
+  const label = await option.locator('span').boundingBox()
+  const height = await optionHeight(option)
+
+  expect(check?.x).toBeLessThan(label?.x ?? 0)
+  expect(height).toBeGreaterThanOrEqual(32)
+  expect(height).toBeLessThanOrEqual(36)
+}
+
+async function optionBackground(locator: Locator) {
+  return locator.evaluate((el) => {
+    return getComputedStyle(el).backgroundColor
+  })
+}
+
+async function optionHeight(locator: Locator) {
+  return locator.evaluate((el) => {
+    return el.getBoundingClientRect().height
+  })
+}
 
 test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
   test('opens from the keyboard with a named search field and toggles closed', async ({
@@ -53,28 +85,69 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
     await expect(fontToggle.option('work')).toBeFocused()
     await expect(fontToggle.option('work')).toHaveAttribute('data-selected', '')
 
-    const check = await fontToggle.option('work').locator('svg').boundingBox()
-    const label = await fontToggle.option('work').locator('span').boundingBox()
-
-    expect(check?.x).toBeLessThan(label?.x ?? 0)
+    await expectPickerOptionChrome(fontToggle.option('work'))
 
     await homePage.page.keyboard.press('ArrowDown')
     await expect(fontToggle.option('play')).toBeFocused()
     await expect(fontToggle.option('work')).toHaveAttribute('data-selected', '')
     await expect(fontToggle.option('play')).not.toHaveAttribute('data-selected')
+
+    await fontToggle.option('live').click()
+    await fontToggle.root.click()
+    await expect(fontToggle.option('live')).toBeFocused()
+    await expect(fontToggle.option('live')).toHaveAttribute('data-selected', '')
+    await expectHoverHighlightOnly(
+      fontToggle.option('work'),
+      fontToggle.option('live'),
+      fontToggle.option('play'),
+    )
   })
 
-  test('appearance options move with arrow keys', async ({ homePage }) => {
+  test('appearance options keep the check on the left and move with arrow keys', async ({
+    homePage,
+  }) => {
+    const themeToggle = homePage.header.commandPalette.themeToggle
+
     await homePage.goto()
     await homePage.header.commandPalette.openWithKeyboard()
-    await homePage.header.commandPalette.themeToggle.root.click()
-    await expect(homePage.header.commandPalette.themeToggle.option('system')).toBeFocused()
+    await themeToggle.root.click()
+    await expect(themeToggle.option('system')).toBeFocused()
 
     await homePage.page.keyboard.press('ArrowDown')
-    await expect(homePage.header.commandPalette.themeToggle.option('light')).toBeFocused()
+    await expect(themeToggle.option('light')).toBeFocused()
 
     await homePage.page.keyboard.press('Enter')
     await expect.poll(() => homePage.storedThemeMode()).toBe('light')
+
+    await themeToggle.root.click()
+    await expect(themeToggle.option('light')).toHaveAttribute('data-selected', '')
+    await expectPickerOptionChrome(themeToggle.option('light'))
+    await expectHoverHighlightOnly(
+      themeToggle.option('dark'),
+      themeToggle.option('light'),
+      themeToggle.option('system'),
+    )
+  })
+
+  test('glass options share the picker row chrome', async ({ homePage }) => {
+    const glassToggle = homePage.header.commandPalette.glassToggle
+
+    await homePage.goto()
+    await homePage.header.commandPalette.openWithKeyboard()
+    await glassToggle.root.click()
+    await expect(glassToggle.option('tinted')).toBeFocused()
+
+    await glassToggle.option('solid').click()
+    await expect.poll(() => homePage.storedGlassLevel()).toBe('solid')
+
+    await glassToggle.root.click()
+    await expect(glassToggle.option('solid')).toHaveAttribute('data-selected', '')
+    await expectPickerOptionChrome(glassToggle.option('solid'))
+    await expectHoverHighlightOnly(
+      glassToggle.option('clear'),
+      glassToggle.option('solid'),
+      glassToggle.option('tinted'),
+    )
   })
 
   test('closes when the backdrop is clicked', async ({ homePage }) => {

@@ -7,6 +7,7 @@ import { CONTEXT } from 'astro:env/server'
 import { ClientRouter } from 'astro:transitions'
 
 import { getEasterEggInitScript } from '@/components/EasterEggs/easter-eggs'
+import { FONT_SOURCE_FAMILIES, fontPairingCss } from '@/components/Settings/Font/pairings'
 import { GLOBAL_CONFIG } from '@/configs/global'
 import { buildGraphJsonLd, buildSocialMetaTags } from '@/utils/seo'
 import { stripHtmlAndTruncate } from '@/utils/text'
@@ -52,12 +53,8 @@ const socialMetaTags = buildSocialMetaTags(metaForSeo, Astro.site ?? GLOBAL_CONF
     content="width=device-width,initial-scale=1"
   />
 
-  <Font cssVariable="--font-bricolage-grotesque" />
-  <Font cssVariable="--font-fraunces" />
-  <Font cssVariable="--font-ibm-plex-mono" />
-  <Font cssVariable="--font-ibm-plex-sans" />
-  <Font cssVariable="--font-inter" />
-  <Font cssVariable="--font-space-mono" />
+  {FONT_SOURCE_FAMILIES.map((family) => <Font cssVariable={family.cssVariable} />)}
+  <style is:inline set:html={fontPairingCss()}></style>
   <meta
     name="googlebot"
     content="index, follow"

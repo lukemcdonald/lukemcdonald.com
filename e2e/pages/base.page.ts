@@ -5,6 +5,7 @@ import { SiteHeader } from '../components/site-header'
 import { SkipLink } from '../components/skip-link'
 import {
   FONT_STORAGE_KEY,
+  GLASS_STORAGE_KEY,
   TEST_ID,
   THEME_MODE_STORAGE_KEY,
   THEME_SEED_LOCK_KEY,
@@ -62,6 +63,12 @@ export class BasePage {
     return this.page.evaluate((key) => {
       return localStorage.getItem(key)
     }, FONT_STORAGE_KEY)
+  }
+
+  async storedGlassLevel() {
+    return this.page.evaluate((key) => {
+      return localStorage.getItem(key)
+    }, GLASS_STORAGE_KEY)
   }
 
   async storedThemeMode() {
