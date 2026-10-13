@@ -109,18 +109,30 @@
   font-family: inherit;
 }
 
+[data-font] :is(.site-header, footer) {
+  font-family: var(--font-ui);
+}
+
 [data-font='work'] {
   --default-font-family: var(--font-ibm-plex-sans);
-  --font-heading: var(--font-ibm-plex-serif);
-  --font-mono: var(--font-ibm-plex-sans);
+  --font-heading: var(--font-ibm-plex-sans);
+  --font-mono: var(--font-ibm-plex-mono);
   --font-sans: var(--font-ibm-plex-sans);
+  --font-ui: var(--font-ibm-plex-mono);
+}
+
+[data-font='work'] :is(h1, h2, h3, h4, h5, h6) {
+  font-stretch: 85%;
+  font-weight: 700;
+  letter-spacing: -0.04em;
 }
 
 [data-font='live'] {
-  --default-font-family: var(--font-nunito);
+  --default-font-family: var(--font-inter);
   --font-heading: var(--font-fraunces);
-  --font-mono: var(--font-nunito);
-  --font-sans: var(--font-nunito);
+  --font-mono: var(--font-inter);
+  --font-sans: var(--font-inter);
+  --font-ui: var(--font-inter);
 }
 
 [data-font='live'] :is(h1, h2, h3, h4, h5, h6) {
@@ -135,10 +147,13 @@
   --font-heading: var(--font-bricolage-grotesque);
   --font-mono: var(--font-space-mono);
   --font-sans: var(--font-space-mono);
+  --font-ui: var(--font-space-mono);
 }
 
 [data-font='play'] :is(h1, h2, h3, h4, h5, h6) {
   font-optical-sizing: auto;
+  font-stretch: 100%;
+  font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.15;
 }

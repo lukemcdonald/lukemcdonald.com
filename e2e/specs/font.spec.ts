@@ -4,9 +4,9 @@ import type { Locator } from '@playwright/test'
 import { expect, test } from '../fixtures'
 
 const PAIRING_FACES = {
-  live: { body: /Nunito/i, heading: /Fraunces/i },
-  play: { body: /Space Mono/i, heading: /Bricolage/i },
-  work: { body: /IBM Plex Sans/i, heading: /IBM Plex Serif/i },
+  live: { body: /Inter/i, heading: /Fraunces/i, nav: /Inter/i },
+  play: { body: /Space Mono/i, heading: /Bricolage/i, nav: /Space Mono/i },
+  work: { body: /IBM Plex Sans/i, heading: /IBM Plex Sans/i, nav: /IBM Plex Mono/i },
 } as const
 
 async function fontFamily(locator: Locator) {
@@ -68,14 +68,14 @@ test.describe('font', { tag: '@smoke' }, () => {
       await expect(homePage.page.locator('html')).toHaveAttribute('data-font', pairing)
       await expect.poll(() => fontFamily(heading)).toMatch(faces.heading)
       await expect.poll(() => fontFamily(body)).toMatch(faces.body)
-      await expect.poll(() => fontFamily(nav)).toMatch(faces.body)
+      await expect.poll(() => fontFamily(nav)).toMatch(faces.nav)
 
       if (!isMobile) {
         const palette = homePage.header.commandPalette
 
         await palette.openWithKeyboard()
-        await expect.poll(() => fontFamily(palette.input)).toMatch(faces.body)
-        await expect.poll(() => fontFamily(palette.trigger)).toMatch(faces.body)
+        await expect.poll(() => fontFamily(palette.input)).toMatch(faces.nav)
+        await expect.poll(() => fontFamily(palette.trigger)).toMatch(faces.nav)
         await palette.closeWithKeyboard()
       }
 
