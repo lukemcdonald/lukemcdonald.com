@@ -4,7 +4,7 @@ import { afterEach, before, beforeEach, describe, mock, test } from 'node:test'
 import {
   applyFontSelection,
   DEFAULT_FONT_PAIRING,
-  FONT_PAIRINGS,
+  FONT_STORAGE_KEY,
   getFontPairing,
   selectFontOption,
 } from './font.ts'
@@ -75,22 +75,13 @@ describe('applyFontSelection', () => {
     mock.restoreAll()
   })
 
-  test('applies a known pairing', () => {
+  test('applies a known pairing and persists it', () => {
     const applied = applyFontSelection('live')
 
     assert.equal(applied, true)
     assert.equal(getFontPairing(), 'live')
     assert.equal(document.documentElement.dataset.font, 'live')
-  })
-
-  test('sets data-font for each pairing', () => {
-    for (const pairing of FONT_PAIRINGS) {
-      const applied = applyFontSelection(pairing)
-
-      assert.equal(applied, true)
-      assert.equal(getFontPairing(), pairing)
-      assert.equal(document.documentElement.dataset.font, pairing)
-    }
+    assert.equal(store.get(FONT_STORAGE_KEY), 'live')
   })
 
   test('clears the document font for the default pairing', () => {
@@ -101,6 +92,12 @@ describe('applyFontSelection', () => {
     assert.equal(applied, true)
     assert.equal(getFontPairing(), DEFAULT_FONT_PAIRING)
     assert.equal(document.documentElement.dataset.font, undefined)
+  })
+
+  test('falls back when storage has an unknown pairing', () => {
+    store.set(FONT_STORAGE_KEY, 'comic-sans')
+
+    assert.equal(getFontPairing(), DEFAULT_FONT_PAIRING)
   })
 
   test('does not write unknown pairings', () => {

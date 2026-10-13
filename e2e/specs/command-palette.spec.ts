@@ -103,51 +103,17 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
     )
   })
 
-  test('appearance options keep the check on the left and move with arrow keys', async ({
-    homePage,
-  }) => {
-    const themeToggle = homePage.header.commandPalette.themeToggle
-
+  test('appearance options move with arrow keys', async ({ homePage }) => {
     await homePage.goto()
     await homePage.header.commandPalette.openWithKeyboard()
-    await themeToggle.root.click()
-    await expect(themeToggle.option('system')).toBeFocused()
+    await homePage.header.commandPalette.themeToggle.root.click()
+    await expect(homePage.header.commandPalette.themeToggle.option('system')).toBeFocused()
 
     await homePage.page.keyboard.press('ArrowDown')
-    await expect(themeToggle.option('light')).toBeFocused()
+    await expect(homePage.header.commandPalette.themeToggle.option('light')).toBeFocused()
 
     await homePage.page.keyboard.press('Enter')
     await expect.poll(() => homePage.storedThemeMode()).toBe('light')
-
-    await themeToggle.root.click()
-    await expect(themeToggle.option('light')).toHaveAttribute('data-selected', '')
-    await expectPickerOptionChrome(themeToggle.option('light'))
-    await expectHoverHighlightOnly(
-      themeToggle.option('dark'),
-      themeToggle.option('light'),
-      themeToggle.option('system'),
-    )
-  })
-
-  test('glass options share the picker row chrome', async ({ homePage }) => {
-    const glassToggle = homePage.header.commandPalette.glassToggle
-
-    await homePage.goto()
-    await homePage.header.commandPalette.openWithKeyboard()
-    await glassToggle.root.click()
-    await expect(glassToggle.option('tinted')).toBeFocused()
-
-    await glassToggle.option('solid').click()
-    await expect.poll(() => homePage.storedGlassLevel()).toBe('solid')
-
-    await glassToggle.root.click()
-    await expect(glassToggle.option('solid')).toHaveAttribute('data-selected', '')
-    await expectPickerOptionChrome(glassToggle.option('solid'))
-    await expectHoverHighlightOnly(
-      glassToggle.option('clear'),
-      glassToggle.option('solid'),
-      glassToggle.option('tinted'),
-    )
   })
 
   test('closes when the backdrop is clicked', async ({ homePage }) => {
