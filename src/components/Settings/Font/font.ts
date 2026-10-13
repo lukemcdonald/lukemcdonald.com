@@ -60,7 +60,7 @@ function setFontPairing(pairing: FontPairing): void {
   }
 }
 
-export function applyFontSelection(value: string): boolean {
+function applyFontSelection(value: string): boolean {
   const pairing = value === '' ? DEFAULT_FONT_PAIRING : value
 
   if (!isFontPairing(pairing)) {

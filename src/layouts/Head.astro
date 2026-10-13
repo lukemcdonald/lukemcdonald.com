@@ -32,6 +32,7 @@ const description = stripHtmlAndTruncate(inDescription, 160, '...')
 
 // Create JSON-LD graph ([WebSite, Page]) and social meta tags
 const metaForSeo: SeoMeta = { ...meta, description }
+const pairingCss = fontPairingCss()
 const structuredData = buildGraphJsonLd(metaForSeo)
 const socialMetaTags = buildSocialMetaTags(metaForSeo, Astro.site ?? GLOBAL_CONFIG.site.origin)
 ---
@@ -55,7 +56,7 @@ const socialMetaTags = buildSocialMetaTags(metaForSeo, Astro.site ?? GLOBAL_CONF
   />
 
   {FONT_SOURCE_FAMILIES.map((family) => <Font cssVariable={family.cssVariable} />)}
-  <style is:inline set:html={fontPairingCss()}></style>
+  <style is:inline set:html={pairingCss}></style>
   <meta
     name="googlebot"
     content="index, follow"

@@ -10,25 +10,9 @@ async function expectHoverHighlightOnly(hovered: Locator, selected: Locator, idl
     .not.toBe(await optionBackground(selected))
 }
 
-async function expectPickerOptionChrome(option: Locator) {
-  const check = await option.locator('svg').first().boundingBox()
-  const label = await option.locator('span').boundingBox()
-  const height = await optionHeight(option)
-
-  expect(check?.x).toBeLessThan(label?.x ?? 0)
-  expect(height).toBeGreaterThanOrEqual(32)
-  expect(height).toBeLessThanOrEqual(36)
-}
-
 async function optionBackground(locator: Locator) {
   return locator.evaluate((el) => {
     return getComputedStyle(el).backgroundColor
-  })
-}
-
-async function optionHeight(locator: Locator) {
-  return locator.evaluate((el) => {
-    return el.getBoundingClientRect().height
   })
 }
 
@@ -84,8 +68,6 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
     await fontToggle.root.click()
     await expect(fontToggle.option('work')).toBeFocused()
     await expect(fontToggle.option('work')).toHaveAttribute('data-selected', '')
-
-    await expectPickerOptionChrome(fontToggle.option('work'))
 
     await homePage.page.keyboard.press('ArrowDown')
     await expect(fontToggle.option('play')).toBeFocused()

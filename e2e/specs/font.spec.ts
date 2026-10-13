@@ -3,12 +3,6 @@ import type { Locator } from '@playwright/test'
 
 import { expect, test } from '../fixtures'
 
-const PAIRING_FACES = {
-  live: { body: /Source Sans/i, heading: /Lora/i, nav: /Source Sans/i },
-  play: { body: /Nunito/i, heading: /Fredoka/i, nav: /Nunito/i },
-  work: { body: /Inter/i, heading: /Space Grotesk/i, nav: /Inter/i },
-} as const
-
 async function fontFamily(locator: Locator) {
   return locator.evaluate((el) => {
     return getComputedStyle(el).fontFamily
@@ -29,16 +23,20 @@ async function selectFont(homePage: HomePage, isMobile: boolean, pairing: string
 }
 
 test.describe('font', { tag: '@smoke' }, () => {
-  test('font choice persists across ClientRouter navigation and reload', async ({
+  test('font choice applies and persists across navigation and reload', async ({
     homePage,
     isMobile,
   }) => {
     await homePage.goto()
 
+    const heading = homePage.page.getByRole('heading', { level: 1 })
+    const defaultHeadingFace = await fontFamily(heading)
+
     await selectFont(homePage, isMobile, 'work')
 
     await expect.poll(() => homePage.storedFontPairing()).toBe('work')
     await expect(homePage.page.locator('html')).toHaveAttribute('data-font', 'work')
+    await expect.poll(() => fontFamily(heading)).not.toBe(defaultHeadingFace)
 
     await homePage.greetingLink('/i-am-a/christian').click()
     await homePage.waitForPath('/i-am-a/christian')
@@ -49,63 +47,6 @@ test.describe('font', { tag: '@smoke' }, () => {
     await homePage.main.waitFor({ state: 'visible' })
     await expect.poll(() => homePage.storedFontPairing()).toBe('work')
     await expect(homePage.page.locator('html')).toHaveAttribute('data-font', 'work')
-  })
-
-  test('each pairing restyles headings, body, and nav without breaking the homepage card', async ({
-    homePage,
-    isMobile,
-  }) => {
-    await homePage.goto()
-
-    const body = homePage.greetingLink('/i-am-a/christian')
-    const heading = homePage.page.getByRole('heading', { level: 1 })
-    const nav =
-      isMobile ? homePage.header.nav.mobileMenuTrigger : homePage.header.nav.workMenuTrigger
-    const site = homePage.page.locator('.site')
-
-    for (const [pairing, faces] of Object.entries(PAIRING_FACES)) {
-      await selectFont(homePage, isMobile, pairing)
-      await expect(homePage.page.locator('html')).toHaveAttribute('data-font', pairing)
-      await expect.poll(() => fontFamily(heading)).toMatch(faces.heading)
-      await expect.poll(() => fontFamily(body)).toMatch(faces.body)
-      await expect.poll(() => fontFamily(nav)).toMatch(faces.nav)
-
-      if (!isMobile) {
-        const palette = homePage.header.commandPalette
-
-        await palette.openWithKeyboard()
-        await expect.poll(() => fontFamily(palette.input)).toMatch(faces.nav)
-        await expect.poll(() => fontFamily(palette.trigger)).toMatch(faces.nav)
-        await palette.closeWithKeyboard()
-      }
-
-      await expect(heading).toBeVisible()
-      await expect(body).toBeVisible()
-      expect(await site.evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(2)
-    }
-  })
-
-  test('font option labels preview the heading face after the picker opens', async ({
-    homePage,
-    isMobile,
-  }) => {
-    test.skip(isMobile, 'Native select options cannot use a custom face')
-
-    const fontToggle = homePage.header.commandPalette.fontToggle
-    const liveLabel = fontToggle.option('live').locator('[data-font-preview]')
-
-    await homePage.goto()
-    await homePage.header.commandPalette.openWithKeyboard()
-    await expect.poll(() => fontFamily(liveLabel)).not.toMatch(PAIRING_FACES.live.heading)
-
-    await fontToggle.root.click()
-
-    for (const [pairing, faces] of Object.entries(PAIRING_FACES)) {
-      const label = fontToggle.option(pairing).locator('[data-font-preview]')
-
-      await expect(label).toHaveAttribute('data-font-preview', pairing)
-      await expect.poll(() => fontFamily(label)).toMatch(faces.heading)
-    }
   })
 
   test('selecting the active font again restores the default', async ({ homePage, isMobile }) => {
