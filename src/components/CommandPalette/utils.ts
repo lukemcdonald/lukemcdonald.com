@@ -5,6 +5,8 @@ import type { ThemeMode } from '@/components/ThemeMode/types'
 import { THEME_COLORS, THEME_LABELS } from '@/components/ThemeColor/constants'
 import { MODE_LABELS, THEME_MODES } from '@/components/ThemeMode/constants'
 
+const SECRETS_BACK_LABEL = 'Back'
+const SECRETS_BACK_SHORTCUT_LABEL = 'esc'
 const SOUND_LABELS = ['sound', 'sounds off', 'sounds on']
 
 export const SECRETS_PAGE = 'secrets'
@@ -94,6 +96,18 @@ export function applyHighlightedCommand(
 
 export function getFoundEggs(eggs: readonly CommandPaletteEggItem[], foundIds: readonly string[]) {
   return eggs.filter((egg) => foundIds.includes(egg.id))
+}
+
+export function getPaletteFooterLabel(onSecrets: boolean, foundCount: number, totalCount: number) {
+  if (onSecrets) {
+    return SECRETS_BACK_LABEL
+  }
+
+  return getSecretsFooterLabel(foundCount, totalCount)
+}
+
+export function getPaletteFooterShortcut(onSecrets: boolean) {
+  return onSecrets ? SECRETS_BACK_SHORTCUT_LABEL : SECRETS_SHORTCUT_LABEL
 }
 
 export function getSecretsFooterLabel(foundCount: number, totalCount: number) {

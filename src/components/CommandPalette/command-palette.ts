@@ -19,7 +19,8 @@ import {
   applyHighlightedCommand,
   getFoundEggs,
   getHighlightedCommand,
-  getSecretsFooterLabel,
+  getPaletteFooterLabel,
+  getPaletteFooterShortcut,
   getSecretsProgressLabel,
   isPaletteBackKey,
   isSecretsShortcut,
@@ -44,11 +45,10 @@ type CloseOptions = {
 }
 
 type Palette = {
-  crumb: HTMLElement | null
   dialog: HTMLDialogElement
   eggs: ReturnType<typeof getEasterEggs>
   empty: HTMLElement | null
-  footer: HTMLElement | null
+  footerKbd: HTMLElement | null
   footerLabel: HTMLElement | null
   input: HTMLInputElement
   main: HTMLElement | null
@@ -225,8 +225,18 @@ function syncEggs(palette: Palette, query: string) {
     )
   }
 
+  syncFooterHint(palette, foundEggs.length, palette.eggs.length)
+}
+
+function syncFooterHint(palette: Palette, foundCount: number, totalCount: number) {
+  const onSecrets = palette.state.page === SECRETS_PAGE
+
   if (palette.footerLabel) {
-    palette.footerLabel.textContent = getSecretsFooterLabel(foundEggs.length, palette.eggs.length)
+    palette.footerLabel.textContent = getPaletteFooterLabel(onSecrets, foundCount, totalCount)
+  }
+
+  if (palette.footerKbd) {
+    palette.footerKbd.textContent = getPaletteFooterShortcut(onSecrets)
   }
 }
 
@@ -317,17 +327,6 @@ function writeEmptyState(
   }
 }
 
-function syncSearchContext(palette: Palette, onSecrets: boolean) {
-  setHidden(palette.crumb, !onSecrets)
-
-  if (onSecrets && palette.crumb?.id) {
-    palette.input.setAttribute('aria-describedby', palette.crumb.id)
-    return
-  }
-
-  palette.input.removeAttribute('aria-describedby')
-}
-
 function syncPageVisibility(
   palette: Palette,
   onSecrets: boolean,
@@ -338,8 +337,6 @@ function syncPageVisibility(
   setHidden(palette.navList, onSecrets || !hasItems)
   setHidden(palette.main, onSecrets)
   setHidden(palette.secrets, !onSecrets)
-  setHidden(palette.footer, onSecrets)
-  syncSearchContext(palette, onSecrets)
 }
 
 function syncPreferenceHighlights(
@@ -964,11 +961,10 @@ function queryPalette(root: Element): Palette | undefined {
   }
 
   return {
-    crumb: root.querySelector('[data-palette-crumb]'),
     dialog,
     eggs: getEasterEggs(),
     empty: root.querySelector('[data-palette-empty]'),
-    footer: root.querySelector('[data-palette-secrets-footer]'),
+    footerKbd: root.querySelector('[data-palette-secrets-footer-kbd]'),
     footerLabel: root.querySelector('[data-palette-secrets-footer-label]'),
     input,
     main: root.querySelector('[data-palette-main]'),

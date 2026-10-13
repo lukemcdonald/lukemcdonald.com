@@ -5,6 +5,8 @@ import {
   applyHighlightedCommand,
   getFoundEggs,
   getHighlightedCommand,
+  getPaletteFooterLabel,
+  getPaletteFooterShortcut,
   getSecretsFooterLabel,
   getSecretsProgressLabel,
   isPaletteBackKey,
@@ -159,6 +161,20 @@ describe('getFoundEggs', () => {
   test('returns only eggs that have been found', () => {
     assert.deepEqual(getFoundEggs(eggs, ['aurora']), [{ id: 'aurora', name: 'Aurora' }])
     assert.deepEqual(getFoundEggs(eggs, []), [])
+  })
+})
+
+describe('getPaletteFooterLabel', () => {
+  test('uses Back on the Secrets page and the secrets count otherwise', () => {
+    assert.equal(getPaletteFooterLabel(true, 1, 2), 'Back')
+    assert.equal(getPaletteFooterLabel(false, 1, 2), 'Secrets 1/2')
+  })
+})
+
+describe('getPaletteFooterShortcut', () => {
+  test('uses esc on the Secrets page and the secrets shortcut otherwise', () => {
+    assert.equal(getPaletteFooterShortcut(true), 'esc')
+    assert.equal(getPaletteFooterShortcut(false), '⌘.')
   })
 })
 
