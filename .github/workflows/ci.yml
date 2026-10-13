@@ -26,21 +26,23 @@ jobs:
       - run: pnpm build
 
   audit:
-    continue-on-error: true
     name: Code health
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
-      - run: git fetch --no-tags origin main
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v5
         with:
           cache: pnpm
           node-version-file: .nvmrc
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec fallow audit --base origin/main && pnpm exec fallow health --score --hotspots --summary
+      - name: Audit new issues vs PR base
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch --no-tags origin "${{ github.base_ref }}"
+          pnpm exec fallow audit --base "origin/${{ github.base_ref }}"
 
   e2e:
     env:
