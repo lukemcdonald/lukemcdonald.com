@@ -1,0 +1,56 @@
+---
+import MonitorIcon from '@lucide/astro/icons/monitor'
+import MoonIcon from '@lucide/astro/icons/moon'
+import SunIcon from '@lucide/astro/icons/sun'
+
+import PreferencePicker from '@/components/PreferencePicker.astro'
+
+import { MODE_LABELS, THEME_MODES } from './constants'
+
+const iconClass = 'h-5 w-5'
+---
+
+<PreferencePicker
+  kind="mode"
+  label="Appearance: System"
+  optionTestIdPrefix="theme-option"
+  options={THEME_MODES.map((mode) => ({
+    label: MODE_LABELS[mode],
+    value: mode,
+  }))}
+  pickerId="palette-mode"
+  testId="theme-toggle"
+>
+  <span slot="icon">
+    <SunIcon
+      aria-hidden="true"
+      class={`${iconClass} hidden`}
+      data-picker-icon="light"
+    />
+    <MoonIcon
+      aria-hidden="true"
+      class={`${iconClass} hidden`}
+      data-picker-icon="dark"
+    />
+    <MonitorIcon
+      aria-hidden="true"
+      class={iconClass}
+      data-picker-icon="system"
+    />
+  </span>
+  <SunIcon
+    slot="icon-light"
+    aria-hidden="true"
+    class={iconClass}
+  />
+  <MoonIcon
+    slot="icon-dark"
+    aria-hidden="true"
+    class={iconClass}
+  />
+  <MonitorIcon
+    slot="icon-system"
+    aria-hidden="true"
+    class={iconClass}
+  />
+</PreferencePicker>

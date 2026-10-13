@@ -468,7 +468,7 @@ function toggleEgg(egg: Egg | undefined) {
 
   markFound(egg.id)
 
-  if (activeEgg?.id === egg.id) {
+  if (currentEggId() === egg.id) {
     hideEgg()
     return
   }

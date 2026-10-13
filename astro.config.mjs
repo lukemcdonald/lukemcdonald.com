@@ -1,6 +1,5 @@
 // @ts-check
 import netlify from '@astrojs/netlify'
-import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
 import tailwindcss from '@tailwindcss/vite'
 
@@ -37,7 +36,6 @@ export default defineConfig({
     responsiveStyles: false, // issue with Tailwind v4 if enabled
   },
   integrations: [
-    react(),
     sitemap({
       filter: (page) => {
         if (SITEMAP_EXCLUSIONS.has(page)) {

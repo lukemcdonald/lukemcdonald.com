@@ -79,7 +79,7 @@ Naming:
 - Generated IDs from `toHrefTestId` / `toNavMenuId` in `src/features/navigation/navigation.utils.ts` (imported by components and e2e so the contract cannot drift): `nav-link-resume`, `greeting-link-i-am-a--christian`, `nav-menu-work`. Path slashes become `--` so `/a/foo/bar` and `/a/foo-bar` stay distinct.
 - Duplicate `nav-link-*` IDs exist in the desktop nav and mobile menu. Scope locators to `desktop-nav` or `mobile-menu`, do not filter on CSS visibility.
 
-Add the attribute on the Astro/React element the test actually uses. Do not sprinkle test IDs on purely decorative nodes.
+Add the attribute on the Astro element the test actually uses. Do not sprinkle test IDs on purely decorative nodes.
 
 ## Assertions
 
@@ -88,7 +88,7 @@ Prefer web-first assertions (`toBeVisible`, `toBeFocused`, `toHaveURL`). Do not 
 Tags:
 
 - `@axe` — WCAG sweep. Chromium only; extra browsers and mobile skip it.
-- `@desktop` — command palette (`client:media` hover/fine pointer). Mobile skips it via `grepInvert`.
+- `@desktop` — command palette (hover/fine pointer). Mobile skips it via `grepInvert`.
 - `@a11y` — skip-link and visible-focus specs
 - `@smoke` — navigation, theme, command palette
 

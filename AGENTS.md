@@ -43,7 +43,7 @@ Always use the **lukemcdonald.com** project (`f04167ed-3a9c-48ad-ac93-bea8ca3890
 
 - `src/pages/` — Astro routes
 - `src/layouts/` — Page shells
-- `src/components/` — Shared UI (Astro and React islands)
+- `src/components/` — Shared UI (Astro and vanilla scripts)
 - `src/features/` — Domain modules (navigation, pages, resume)
 - `src/content/` — Content collections (pages markdown, resume yaml)
 - `src/configs/` — Site, env, content, and sound config
@@ -56,7 +56,7 @@ Always use the **lukemcdonald.com** project (`f04167ed-3a9c-48ad-ac93-bea8ca3890
 
 ```sh
 src/features/{domain}/
-├─ components/           # Feature-specific Astro/React
+├─ components/           # Feature-specific Astro
 ├─ {domain}.schema.ts    # Content schemas
 ├─ {domain}.server.ts    # Collection loaders and queries
 ├─ {domain}.types.ts     # Types
@@ -68,7 +68,7 @@ src/features/{domain}/
 
 1. **Shared** — `src/components/`
 2. **Feature** — `src/features/{domain}/components/`
-3. **React islands** — folder with `index.ts`, `types.ts`, `constants.ts`, `utils.ts` as needed
+3. **Client scripts** — colocated `*.ts` modules imported from `<script>` tags, following `src/components/Nav/mobile-menu.ts`
 
 Do not import from `@lucide/astro`. Import icons directly:
 
@@ -80,15 +80,9 @@ import ChevronDown from '@lucide/astro/icons/chevron-down'
 
 Pages live in `src/content/pages` as markdown. Resume data lives in `src/content/resume` as yaml. Collection metadata is in `src/configs/content.ts`. Schemas and loaders are wired in `src/content.config.ts`.
 
-## React
+## Client scripts
 
-React 19 compiler auto-optimizes. Do not use `React.memo()`, `useMemo()`, or `useCallback()` unless the work is genuinely expensive.
-
-Import React types explicitly:
-
-```ts
-import type { ReactNode } from 'react'
-```
+Prefer native HTML (`<dialog>`, `<select>`, popover) plus a small vanilla TypeScript module. Do not add React, Headless UI, or other UI runtime libraries.
 
 ## Testing
 

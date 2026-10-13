@@ -1,0 +1,58 @@
+---
+import CopyIcon from '@lucide/astro/icons/copy'
+
+import PreferencePicker from '@/components/PreferencePicker.astro'
+
+import { GLASS_LEVELS } from './constants'
+
+const GLASS_LABELS = {
+  clear: 'Clear',
+  solid: 'Solid',
+  tinted: 'Tinted',
+} as const
+
+const iconClass = 'h-5 w-5'
+---
+
+<PreferencePicker
+  kind="glass"
+  label="Glass: Tinted"
+  options={GLASS_LEVELS.map((value) => ({
+    label: GLASS_LABELS[value],
+    value,
+  }))}
+  pickerId="palette-glass"
+>
+  <span slot="icon">
+    <CopyIcon
+      aria-hidden="true"
+      class={`${iconClass} hidden`}
+      data-picker-icon="clear"
+    />
+    <CopyIcon
+      aria-hidden="true"
+      class={`${iconClass} hidden [&_rect]:fill-current`}
+      data-picker-icon="solid"
+    />
+    <CopyIcon
+      aria-hidden="true"
+      class={`${iconClass} [&_rect]:fill-current/30`}
+      data-picker-icon="tinted"
+    />
+  </span>
+  <CopyIcon
+    slot="icon-clear"
+    aria-hidden="true"
+    class={iconClass}
+  />
+  <CopyIcon
+    slot="icon-solid"
+    aria-hidden="true"
+    class={`${iconClass} [&_rect]:fill-current`}
+  />
+  <CopyIcon
+    slot="icon-tinted"
+    aria-hidden="true"
+    class={`${iconClass} [&_rect]:fill-current/30`}
+  />
+</PreferencePicker>

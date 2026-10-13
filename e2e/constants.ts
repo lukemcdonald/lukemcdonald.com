@@ -2,7 +2,11 @@ import { toHrefTestId, toNavMenuId } from '../src/features/navigation/navigation
 
 export const TEST_ID = {
   commandPalette: 'command-palette',
+  commandPaletteDialog: 'command-palette-dialog',
   commandPaletteInput: 'command-palette-input',
+  commandPaletteList: 'command-palette-list',
+  commandPaletteSecrets: 'command-palette-secrets',
+  commandPaletteSecretsFooter: 'command-palette-secrets-footer',
   commandPaletteTrigger: 'command-palette-trigger',
   desktopNav: 'desktop-nav',
   main: 'main',
@@ -16,6 +20,7 @@ export const TEST_ID = {
   themeToggle: 'theme-toggle',
 } as const
 
+export const EASTER_EGGS_FOUND_KEY = 'easter-eggs:found'
 export const THEME_MODE_STORAGE_KEY = 'theme-mode'
 export const THEME_SEED_LOCK_KEY = '__e2e-theme-seeded'
 
@@ -27,6 +32,10 @@ export const WCAG_TAGS = [
   'wcag22a',
   'wcag22aa',
 ] as const
+
+export function commandPaletteEggTestId(id: string): string {
+  return `command-palette-egg-${id}`
+}
 
 export function greetingLinkTestId(href: string): string {
   return toHrefTestId('greeting-link', href)

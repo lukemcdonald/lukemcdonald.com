@@ -1,0 +1,34 @@
+---
+import Volume2Icon from '@lucide/astro/icons/volume-2'
+import VolumeXIcon from '@lucide/astro/icons/volume-x'
+
+import { PALETTE_CHROME } from '@/components/CommandPalette/chrome'
+
+const iconClass = 'h-5 w-5'
+---
+
+<button
+  aria-label="Enable interaction sounds"
+  aria-pressed="false"
+  class={`flex min-h-11 items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${PALETTE_CHROME.focusRing} ${PALETTE_CHROME.ink} ${PALETTE_CHROME.hoverFill}`}
+  data-sound-toggle
+  title="Sounds off"
+  type="button"
+>
+  <VolumeXIcon
+    aria-hidden="true"
+    class={iconClass}
+    data-sound-icon="off"
+  />
+  <Volume2Icon
+    aria-hidden="true"
+    class={`${iconClass} hidden`}
+    data-sound-icon="on"
+  />
+  <span
+    class="sr-only"
+    data-sound-label
+  >
+    Sounds off
+  </span>
+</button>

@@ -65,3 +65,12 @@ html:has(dialog[open]) body {
   position: absolute;
   top: calc(anchor(bottom) + 0.375rem);
 }
+
+[data-preference-options] {
+  inset: unset;
+  margin: 0;
+  overflow: visible;
+  position: absolute;
+  right: anchor(right);
+  bottom: calc(anchor(top) + 0.5rem);
+}

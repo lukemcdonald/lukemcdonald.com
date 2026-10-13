@@ -5,6 +5,8 @@ import type { ThemeMode } from '@/components/ThemeMode/types'
 import { THEME_COLORS, THEME_LABELS } from '@/components/ThemeColor/constants'
 import { MODE_LABELS, THEME_MODES } from '@/components/ThemeMode/constants'
 
+const SECRETS_BACK_LABEL = 'Back'
+const SECRETS_BACK_SHORTCUT_LABEL = 'esc'
 const SOUND_LABELS = ['sound', 'sounds off', 'sounds on']
 
 export const SECRETS_PAGE = 'secrets'
@@ -96,6 +98,18 @@ export function getFoundEggs(eggs: readonly CommandPaletteEggItem[], foundIds: r
   return eggs.filter((egg) => foundIds.includes(egg.id))
 }
 
+export function getPaletteFooterLabel(onSecrets: boolean, foundCount: number, totalCount: number) {
+  if (onSecrets) {
+    return SECRETS_BACK_LABEL
+  }
+
+  return getSecretsFooterLabel(foundCount, totalCount)
+}
+
+export function getPaletteFooterShortcut(onSecrets: boolean) {
+  return onSecrets ? SECRETS_BACK_SHORTCUT_LABEL : SECRETS_SHORTCUT_LABEL
+}
+
 export function getSecretsFooterLabel(foundCount: number, totalCount: number) {
   if (foundCount >= totalCount) {
     return 'All secrets found'
@@ -118,4 +132,16 @@ export function isPaletteBackKey(event: KeyboardEvent, search: string) {
 
 export function isSecretsShortcut(event: KeyboardEvent) {
   return (event.ctrlKey || event.metaKey) && event.key === '.'
+}
+
+export function wrapIndex(index: number, delta: number, length: number) {
+  if (length <= 0) {
+    return -1
+  }
+
+  if (index < 0) {
+    return delta > 0 ? 0 : length - 1
+  }
+
+  return (index + delta + length) % length
 }
