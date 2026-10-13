@@ -4,6 +4,7 @@ import { commandPaletteEggTestId, EASTER_EGGS_FOUND_KEY, TEST_ID } from '../cons
 import { ThemeToggle } from './theme-toggle'
 
 export class CommandPalette {
+  readonly crumb
   readonly dialog
   readonly highlightedSecrets
   readonly host
@@ -15,6 +16,7 @@ export class CommandPalette {
   readonly trigger
 
   constructor(page: Page) {
+    this.crumb = page.getByTestId(TEST_ID.commandPaletteCrumb)
     this.dialog = page.getByTestId(TEST_ID.commandPalette)
     this.highlightedSecrets = page
       .getByTestId(TEST_ID.commandPaletteSecrets)

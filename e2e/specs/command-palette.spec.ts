@@ -68,8 +68,12 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
     await palette.markEggFound('aurora')
     await palette.openWithKeyboard()
     await expect(palette.secretsFooter).toContainText('Secrets 1/2')
+    await expect(palette.crumb).toBeHidden()
 
     await palette.openSecretsWithKeyboard()
+    await expect(palette.crumb).toBeVisible()
+    await expect(palette.crumb).toHaveText('Secrets')
+    await expect(palette.input).toHaveAccessibleDescription('Secrets')
     await expect(aurora).toBeVisible()
     await expect(aurora).toHaveAttribute('aria-checked', 'false')
     await aurora.click()

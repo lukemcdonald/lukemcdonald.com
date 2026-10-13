@@ -44,6 +44,7 @@ type CloseOptions = {
 }
 
 type Palette = {
+  crumb: HTMLElement | null
   dialog: HTMLDialogElement
   eggs: ReturnType<typeof getEasterEggs>
   empty: HTMLElement | null
@@ -316,6 +317,17 @@ function writeEmptyState(
   }
 }
 
+function syncSearchContext(palette: Palette, onSecrets: boolean) {
+  setHidden(palette.crumb, !onSecrets)
+
+  if (onSecrets && palette.crumb?.id) {
+    palette.input.setAttribute('aria-describedby', palette.crumb.id)
+    return
+  }
+
+  palette.input.removeAttribute('aria-describedby')
+}
+
 function syncPageVisibility(
   palette: Palette,
   onSecrets: boolean,
@@ -327,6 +339,7 @@ function syncPageVisibility(
   setHidden(palette.main, onSecrets)
   setHidden(palette.secrets, !onSecrets)
   setHidden(palette.footer, onSecrets)
+  syncSearchContext(palette, onSecrets)
 }
 
 function syncPreferenceHighlights(
@@ -951,6 +964,7 @@ function queryPalette(root: Element): Palette | undefined {
   }
 
   return {
+    crumb: root.querySelector('[data-palette-crumb]'),
     dialog,
     eggs: getEasterEggs(),
     empty: root.querySelector('[data-palette-empty]'),

@@ -58,11 +58,20 @@ function pageOptionId(href: string) {
       class="glass relative w-full max-w-2xl overflow-hidden rounded-xl glass-dialog"
       data-testid="command-palette"
     >
-      <div class={`flex items-center border-b px-4 ${PALETTE_CHROME.border}`}>
+      <div class={`flex items-center gap-2 border-b px-4 ${PALETTE_CHROME.border}`}>
         <SearchIcon
           aria-hidden="true"
-          class={`h-5 w-5 ${PALETTE_CHROME.muted}`}
+          class={`h-5 w-5 shrink-0 ${PALETTE_CHROME.muted}`}
         />
+        <span
+          class={`rounded-md border px-1.5 py-0.5 text-xs leading-none ${PALETTE_CHROME.border} ${PALETTE_CHROME.muted}`}
+          data-palette-crumb
+          data-testid="command-palette-crumb"
+          hidden
+          id="command-palette-crumb"
+        >
+          Secrets
+        </span>
         <input
           aria-autocomplete="list"
           aria-controls="command-palette-results"
@@ -70,7 +79,7 @@ function pageOptionId(href: string) {
           aria-haspopup="listbox"
           aria-label="Search"
           autocomplete="off"
-          class={`w-full border-0 bg-transparent px-4 py-3 outline-none focus:ring-0 ${PALETTE_CHROME.ink} ${PALETTE_CHROME.placeholder}`}
+          class={`min-w-0 flex-1 border-0 bg-transparent py-3 outline-none focus:ring-0 ${PALETTE_CHROME.ink} ${PALETTE_CHROME.placeholder}`}
           data-command-palette-input
           data-testid="command-palette-input"
           placeholder="Search..."

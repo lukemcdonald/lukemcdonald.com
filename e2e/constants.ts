@@ -2,6 +2,7 @@ import { toHrefTestId, toNavMenuId } from '../src/features/navigation/navigation
 
 export const TEST_ID = {
   commandPalette: 'command-palette',
+  commandPaletteCrumb: 'command-palette-crumb',
   commandPaletteDialog: 'command-palette-dialog',
   commandPaletteInput: 'command-palette-input',
   commandPaletteSecrets: 'command-palette-secrets',
