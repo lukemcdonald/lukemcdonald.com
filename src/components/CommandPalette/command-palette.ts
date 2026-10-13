@@ -51,6 +51,8 @@ type Palette = {
   footerKbd: HTMLElement | null
   footerLabel: HTMLElement | null
   input: HTMLInputElement
+  list: HTMLElement | null
+  listSizer: HTMLElement | null
   main: HTMLElement | null
   navItems: CommandPaletteNavItem[]
   navList: HTMLElement | null
@@ -387,6 +389,15 @@ function syncList(palette: Palette) {
   syncPreferenceHighlights(palette.root, command)
   syncThemeColors(palette.root, commandColor(command))
   syncSound(palette, command?.type === 'sound')
+  measureList(palette)
+}
+
+function measureList(palette: Palette) {
+  if (!palette.list || !palette.listSizer) {
+    return
+  }
+
+  palette.list.style.setProperty('--palette-list-height', `${palette.listSizer.offsetHeight}px`)
 }
 
 function syncPreferences(palette: Palette) {
@@ -920,6 +931,19 @@ function bindBackdropClose(palette: Palette, signal: AbortSignal) {
   )
 }
 
+function bindListHeight(palette: Palette, signal: AbortSignal) {
+  if (!palette.listSizer) {
+    return
+  }
+
+  const observer = new ResizeObserver(() => {
+    measureList(palette)
+  })
+
+  observer.observe(palette.listSizer)
+  signal.addEventListener('abort', () => observer.disconnect())
+}
+
 function bindPaletteEvents(palette: Palette, signal: AbortSignal) {
   palette.trigger.addEventListener('click', () => openPalette(palette), { signal })
   bindBackdropClose(palette, signal)
@@ -942,6 +966,7 @@ function bindPaletteEvents(palette: Palette, signal: AbortSignal) {
     },
     { signal },
   )
+  bindListHeight(palette, signal)
   bindNavAndEggs(palette, signal)
   bindThemeSwatches(palette, signal)
   bindPreferencePickers(palette, signal)
@@ -967,6 +992,8 @@ function queryPalette(root: Element): Palette | undefined {
     footerKbd: root.querySelector('[data-palette-secrets-footer-kbd]'),
     footerLabel: root.querySelector('[data-palette-secrets-footer-label]'),
     input,
+    list: root.querySelector('[data-palette-list]'),
+    listSizer: root.querySelector('[data-palette-list-sizer]'),
     main: root.querySelector('[data-palette-main]'),
     navItems: [...root.querySelectorAll<HTMLAnchorElement>('[data-palette-nav]')].map((item) => ({
       href: item.getAttribute('href') ?? '',

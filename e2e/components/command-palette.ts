@@ -44,6 +44,12 @@ export class CommandPalette {
     return this.page.getByTestId(commandPaletteEggTestId(id))
   }
 
+  async listHeight() {
+    return this.list.evaluate((el) => {
+      return Number.parseFloat(el.style.getPropertyValue('--palette-list-height')) || 0
+    })
+  }
+
   async markEggFound(...ids: string[]) {
     await this.page.evaluate(
       ({ eggIds, key }) => {
