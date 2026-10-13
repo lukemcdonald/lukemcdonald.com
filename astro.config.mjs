@@ -3,7 +3,7 @@ import netlify from '@astrojs/netlify'
 import sitemap from '@astrojs/sitemap'
 import tailwindcss from '@tailwindcss/vite'
 
-import { defineConfig } from 'astro/config'
+import { defineConfig, fontProviders } from 'astro/config'
 
 import { GLOBAL_CONFIG } from './src/configs/global.js'
 import { ENV_SCHEMA } from './src/configs/env.js'
@@ -31,6 +31,53 @@ export default defineConfig({
   env: {
     schema: ENV_SCHEMA,
   },
+  fonts: [
+    {
+      cssVariable: '--font-fraunces',
+      fallbacks: ['serif'],
+      name: 'Fraunces',
+      provider: fontProviders.fontsource(),
+      styles: ['normal'],
+      subsets: ['latin'],
+      weights: ['100 900'],
+    },
+    {
+      cssVariable: '--font-ibm-plex-sans',
+      fallbacks: ['sans-serif'],
+      name: 'IBM Plex Sans',
+      provider: fontProviders.fontsource(),
+      styles: ['normal'],
+      subsets: ['latin'],
+      weights: ['100 700'],
+    },
+    {
+      cssVariable: '--font-inter',
+      fallbacks: ['sans-serif'],
+      name: 'Inter',
+      provider: fontProviders.fontsource(),
+      styles: ['normal'],
+      subsets: ['latin'],
+      weights: ['100 900'],
+    },
+    {
+      cssVariable: '--font-jetbrains-mono',
+      fallbacks: ['monospace'],
+      name: 'JetBrains Mono',
+      provider: fontProviders.fontsource(),
+      styles: ['normal'],
+      subsets: ['latin'],
+      weights: ['100 800'],
+    },
+    {
+      cssVariable: '--font-space-grotesk',
+      fallbacks: ['sans-serif'],
+      name: 'Space Grotesk',
+      provider: fontProviders.fontsource(),
+      styles: ['normal'],
+      subsets: ['latin'],
+      weights: ['300 700'],
+    },
+  ],
   image: {
     layout: 'constrained',
     responsiveStyles: false, // issue with Tailwind v4 if enabled

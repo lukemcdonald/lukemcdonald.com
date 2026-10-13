@@ -1,0 +1,47 @@
+---
+import TypeIcon from '@lucide/astro/icons/type'
+
+import PreferencePicker from '@/components/PreferencePicker.astro'
+
+import MenuSelect from '../MenuSelect.astro'
+import { FONT_LABELS, FONT_PAIRINGS } from './font'
+
+interface Props {
+  variant: 'menu' | 'palette'
+}
+
+const { variant } = Astro.props
+const iconClass = 'h-5 w-5'
+---
+
+{
+  variant === 'menu' ?
+    <MenuSelect
+      kind="font"
+      label="Font"
+      name="font"
+      testId="mobile-font"
+    >
+      {FONT_PAIRINGS.map((pairing) => (
+        <option value={pairing}>{FONT_LABELS[pairing]}</option>
+      ))}
+    </MenuSelect>
+  : <PreferencePicker
+      checkStart
+      kind="font"
+      label="Font: Default"
+      optionTestIdPrefix="font-option"
+      options={FONT_PAIRINGS.map((pairing) => ({
+        label: FONT_LABELS[pairing],
+        value: pairing,
+      }))}
+      pickerId="palette-font"
+      testId="font-toggle"
+    >
+      <TypeIcon
+        slot="icon"
+        aria-hidden="true"
+        class={iconClass}
+      />
+    </PreferencePicker>
+}

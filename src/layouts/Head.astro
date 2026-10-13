@@ -1,6 +1,7 @@
 ---
 import type { SeoMeta } from '@/utils/seo'
 
+import { Font } from 'astro:assets'
 import { CLOUDFLARE_ANALYTICS_TOKEN, GOOGLE_SITE_VERIFICATION } from 'astro:env/client'
 import { CONTEXT } from 'astro:env/server'
 import { ClientRouter } from 'astro:transitions'
@@ -50,6 +51,12 @@ const socialMetaTags = buildSocialMetaTags(metaForSeo, Astro.site ?? GLOBAL_CONF
     name="viewport"
     content="width=device-width,initial-scale=1"
   />
+
+  <Font cssVariable="--font-fraunces" />
+  <Font cssVariable="--font-ibm-plex-sans" />
+  <Font cssVariable="--font-inter" />
+  <Font cssVariable="--font-jetbrains-mono" />
+  <Font cssVariable="--font-space-grotesk" />
   <meta
     name="googlebot"
     content="index, follow"

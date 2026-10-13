@@ -3,7 +3,12 @@ import type { Page } from '@playwright/test'
 
 import { SiteHeader } from '../components/site-header'
 import { SkipLink } from '../components/skip-link'
-import { TEST_ID, THEME_MODE_STORAGE_KEY, THEME_SEED_LOCK_KEY } from '../constants'
+import {
+  FONT_STORAGE_KEY,
+  TEST_ID,
+  THEME_MODE_STORAGE_KEY,
+  THEME_SEED_LOCK_KEY,
+} from '../constants'
 
 export class BasePage {
   readonly header: SiteHeader
@@ -51,6 +56,12 @@ export class BasePage {
     await this.page.evaluate(() => {
       Object.assign(window, { __e2eClientRouter: true })
     })
+  }
+
+  async storedFontPairing() {
+    return this.page.evaluate((key) => {
+      return localStorage.getItem(key)
+    }, FONT_STORAGE_KEY)
   }
 
   async storedThemeMode() {

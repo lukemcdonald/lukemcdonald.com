@@ -6,6 +6,7 @@ export class SiteNav {
   readonly desktopNav
   readonly liveMenuTrigger
   readonly mobileAppearance
+  readonly mobileFont
   readonly mobileMenu
   readonly mobileMenuTrigger
   readonly page: Page
@@ -17,6 +18,7 @@ export class SiteNav {
     this.liveMenuTrigger = this.desktopNav.getByTestId(navMenuTestId('Live'))
     this.mobileMenu = page.getByTestId(TEST_ID.mobileMenu)
     this.mobileAppearance = this.mobileMenu.getByTestId(TEST_ID.mobileAppearance)
+    this.mobileFont = this.mobileMenu.getByTestId(TEST_ID.mobileFont)
     this.mobileMenuTrigger = this.mobileMenu.getByTestId(TEST_ID.mobileMenuTrigger)
     this.page = page
     this.root = page.getByTestId(TEST_ID.siteNav)

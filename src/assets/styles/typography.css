@@ -100,3 +100,29 @@
     content: counter(list-number);
   }
 }
+
+[data-font] {
+  font-family: var(--font-sans);
+}
+
+[data-font='editorial'] {
+  --default-font-family: var(--font-inter);
+  --font-heading: var(--font-fraunces);
+  --font-sans: var(--font-inter);
+}
+
+[data-font='geometric'] {
+  --default-font-family: var(--font-ibm-plex-sans);
+  --font-heading: var(--font-space-grotesk);
+  --font-sans: var(--font-ibm-plex-sans);
+}
+
+[data-font='mono'] {
+  --default-font-family: var(--font-jetbrains-mono);
+  --font-heading: var(--font-jetbrains-mono);
+  --font-sans: var(--font-jetbrains-mono);
+}
+
+:where(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-heading, inherit);
+}
