@@ -112,15 +112,15 @@
 }
 
 [data-font='geometric'] {
-  --default-font-family: var(--font-ibm-plex-sans);
-  --font-heading: var(--font-space-grotesk);
-  --font-sans: var(--font-ibm-plex-sans);
+  --default-font-family: var(--font-inter);
+  --font-heading: var(--font-sora);
+  --font-sans: var(--font-inter);
 }
 
-[data-font='mono'] {
-  --default-font-family: var(--font-jetbrains-mono);
-  --font-heading: var(--font-jetbrains-mono);
-  --font-sans: var(--font-jetbrains-mono);
+[data-font='source'] {
+  --default-font-family: var(--font-source-sans-3);
+  --font-heading: var(--font-source-serif-4);
+  --font-sans: var(--font-source-sans-3);
 }
 
 :where(h1, h2, h3, h4, h5, h6) {

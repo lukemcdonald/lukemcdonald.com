@@ -67,7 +67,7 @@ describe('applyFontSelection', () => {
   })
 
   test('clears the document font for the default pairing', () => {
-    applyFontSelection('mono')
+    applyFontSelection('source')
 
     const applied = applyFontSelection('default')
 

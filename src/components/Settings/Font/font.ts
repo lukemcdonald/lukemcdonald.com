@@ -5,7 +5,7 @@ import {
   syncPreferencePicker,
 } from '../picker'
 
-export const FONT_PAIRINGS = ['default', 'editorial', 'geometric', 'mono'] as const
+export const FONT_PAIRINGS = ['default', 'editorial', 'geometric', 'source'] as const
 
 export type FontPairing = (typeof FONT_PAIRINGS)[number]
 
@@ -17,7 +17,7 @@ export const FONT_LABELS: Record<FontPairing, string> = {
   default: 'Default',
   editorial: 'Editorial',
   geometric: 'Geometric',
-  mono: 'Mono',
+  source: 'Source',
 }
 
 function isFontPairing(value: string): value is FontPairing {
