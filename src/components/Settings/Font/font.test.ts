@@ -59,11 +59,11 @@ describe('applyFontSelection', () => {
   })
 
   test('applies a known pairing', () => {
-    const applied = applyFontSelection('life')
+    const applied = applyFontSelection('live')
 
     assert.equal(applied, true)
-    assert.equal(getFontPairing(), 'life')
-    assert.equal(document.documentElement.dataset.font, 'life')
+    assert.equal(getFontPairing(), 'live')
+    assert.equal(document.documentElement.dataset.font, 'live')
   })
 
   test('clears the document font for the default pairing', () => {

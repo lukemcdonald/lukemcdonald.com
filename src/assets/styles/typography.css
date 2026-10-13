@@ -111,7 +111,7 @@
   --font-sans: var(--font-source-sans-3);
 }
 
-[data-font='life'] {
+[data-font='live'] {
   --default-font-family: var(--font-inter);
   --font-heading: var(--font-fraunces);
   --font-sans: var(--font-inter);

@@ -5,7 +5,7 @@ import {
   syncPreferencePicker,
 } from '../picker'
 
-export const FONT_PAIRINGS = ['home', 'work', 'life', 'play'] as const
+export const FONT_PAIRINGS = ['home', 'work', 'live', 'play'] as const
 
 export type FontPairing = (typeof FONT_PAIRINGS)[number]
 
@@ -15,7 +15,7 @@ export const FONT_STORAGE_KEY = 'font-pairing'
 
 export const FONT_LABELS: Record<FontPairing, string> = {
   home: 'Home',
-  life: 'Life',
+  live: 'Live',
   play: 'Play',
   work: 'Work',
 }
