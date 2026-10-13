@@ -26,37 +26,13 @@ export type FontPairingConfig = {
 }
 
 const FONT_FAMILIES = {
-  bricolageGrotesque: {
-    cssVariable: '--font-bricolage-grotesque',
+  fredoka: {
+    cssVariable: '--font-fredoka',
     fallbacks: ['sans-serif'],
-    name: 'Bricolage Grotesque',
+    name: 'Fredoka',
     styles: ['normal'],
     subsets: ['latin'],
-    weights: ['200 800'],
-  },
-  fraunces: {
-    cssVariable: '--font-fraunces',
-    fallbacks: ['serif'],
-    name: 'Fraunces',
-    styles: ['normal'],
-    subsets: ['latin'],
-    weights: ['100 900'],
-  },
-  ibmPlexMono: {
-    cssVariable: '--font-ibm-plex-mono',
-    fallbacks: ['monospace'],
-    name: 'IBM Plex Mono',
-    styles: ['normal'],
-    subsets: ['latin'],
-    weights: [400, 600, 700],
-  },
-  ibmPlexSans: {
-    cssVariable: '--font-ibm-plex-sans',
-    fallbacks: ['sans-serif'],
-    name: 'IBM Plex Sans',
-    styles: ['normal'],
-    subsets: ['latin'],
-    weights: ['100 700'],
+    weights: ['300 700'],
   },
   inter: {
     cssVariable: '--font-inter',
@@ -66,55 +42,71 @@ const FONT_FAMILIES = {
     subsets: ['latin'],
     weights: ['100 900'],
   },
-  spaceMono: {
-    cssVariable: '--font-space-mono',
-    fallbacks: ['monospace'],
-    name: 'Space Mono',
+  lora: {
+    cssVariable: '--font-lora',
+    fallbacks: ['serif'],
+    name: 'Lora',
     styles: ['normal'],
     subsets: ['latin'],
-    weights: [400, 700],
+    weights: ['400 700'],
+  },
+  nunito: {
+    cssVariable: '--font-nunito',
+    fallbacks: ['sans-serif'],
+    name: 'Nunito',
+    styles: ['normal'],
+    subsets: ['latin'],
+    weights: ['200 900'],
+  },
+  sourceSans3: {
+    cssVariable: '--font-source-sans-3',
+    fallbacks: ['sans-serif'],
+    name: 'Source Sans 3',
+    styles: ['normal'],
+    subsets: ['latin'],
+    weights: ['200 900'],
+  },
+  spaceGrotesk: {
+    cssVariable: '--font-space-grotesk',
+    fallbacks: ['sans-serif'],
+    name: 'Space Grotesk',
+    styles: ['normal'],
+    subsets: ['latin'],
+    weights: ['300 700'],
   },
 } as const satisfies Record<string, FontSourceFamily>
 
 /** Add or swap a pairing here; Astro Fonts and generated CSS read this list. */
 export const FONT_PAIRING_CONFIGS = [
   {
-    body: FONT_FAMILIES.ibmPlexSans,
+    body: FONT_FAMILIES.inter,
     heading: {
-      ...FONT_FAMILIES.ibmPlexSans,
-      letterSpacing: '-0.04em',
-      stretch: '85%',
+      ...FONT_FAMILIES.spaceGrotesk,
       weight: '700',
     },
     id: 'work',
     label: 'Work',
-    nav: FONT_FAMILIES.ibmPlexMono,
+    nav: FONT_FAMILIES.inter,
   },
   {
-    body: FONT_FAMILIES.spaceMono,
-    contentLineHeight: '1.5',
+    body: FONT_FAMILIES.nunito,
     heading: {
-      ...FONT_FAMILIES.bricolageGrotesque,
-      letterSpacing: '-0.03em',
-      lineHeight: '1.15',
-      opticalSizing: 'auto',
-      stretch: '100%',
-      weight: '800',
+      ...FONT_FAMILIES.fredoka,
+      weight: '700',
     },
     id: 'play',
     label: 'Play',
-    nav: FONT_FAMILIES.spaceMono,
+    nav: FONT_FAMILIES.nunito,
   },
   {
-    body: FONT_FAMILIES.inter,
+    body: FONT_FAMILIES.sourceSans3,
     heading: {
-      ...FONT_FAMILIES.fraunces,
-      opticalSizing: 'auto',
-      variationSettings: "'SOFT' 70, 'WONK' 1",
+      ...FONT_FAMILIES.lora,
+      weight: '700',
     },
     id: 'live',
     label: 'Live',
-    nav: FONT_FAMILIES.inter,
+    nav: FONT_FAMILIES.sourceSans3,
   },
 ] as const satisfies readonly FontPairingConfig[]
 

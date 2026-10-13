@@ -4,9 +4,9 @@ import type { Locator } from '@playwright/test'
 import { expect, test } from '../fixtures'
 
 const PAIRING_FACES = {
-  live: { body: /Inter/i, heading: /Fraunces/i, nav: /Inter/i },
-  play: { body: /Space Mono/i, heading: /Bricolage/i, nav: /Space Mono/i },
-  work: { body: /IBM Plex Sans/i, heading: /IBM Plex Sans/i, nav: /IBM Plex Mono/i },
+  live: { body: /Source Sans/i, heading: /Lora/i, nav: /Source Sans/i },
+  play: { body: /Nunito/i, heading: /Fredoka/i, nav: /Nunito/i },
+  work: { body: /Inter/i, heading: /Space Grotesk/i, nav: /Inter/i },
 } as const
 
 async function fontFamily(locator: Locator) {
