@@ -8,6 +8,7 @@ export class CommandPalette {
   readonly highlightedSecrets
   readonly host
   readonly input
+  readonly list
   readonly page: Page
   readonly secrets
   readonly secretsFooter
@@ -21,6 +22,7 @@ export class CommandPalette {
       .locator('[data-palette-highlighted]')
     this.host = page.getByTestId(TEST_ID.commandPaletteDialog)
     this.input = page.getByTestId(TEST_ID.commandPaletteInput)
+    this.list = page.getByTestId(TEST_ID.commandPaletteList)
     this.page = page
     this.secrets = page.getByTestId(TEST_ID.commandPaletteSecrets)
     this.secretsFooter = page.getByTestId(TEST_ID.commandPaletteSecretsFooter)

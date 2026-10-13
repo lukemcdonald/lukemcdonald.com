@@ -69,7 +69,15 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
     await palette.openWithKeyboard()
     await expect(palette.secretsFooter).toContainText('Secrets 1/2')
 
+    const mainListHeight = (await palette.list.boundingBox())?.height
+
+    await palette.input.fill('zzzz-no-match')
+    await expect(palette.list).toHaveCSS('overflow-y', 'auto')
+    expect((await palette.list.boundingBox())?.height).toBe(mainListHeight)
+
+    await palette.input.fill('')
     await palette.openSecretsWithKeyboard()
+    expect((await palette.list.boundingBox())?.height).toBe(mainListHeight)
     await expect(palette.secretsFooter).toContainText('Back')
     await expect(palette.secretsFooter.locator('kbd')).toHaveText('esc')
     await expect(palette.secretsFooter.locator('button')).toHaveCount(0)

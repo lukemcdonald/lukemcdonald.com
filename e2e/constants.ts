@@ -4,6 +4,7 @@ export const TEST_ID = {
   commandPalette: 'command-palette',
   commandPaletteDialog: 'command-palette-dialog',
   commandPaletteInput: 'command-palette-input',
+  commandPaletteList: 'command-palette-list',
   commandPaletteSecrets: 'command-palette-secrets',
   commandPaletteSecretsFooter: 'command-palette-secrets-footer',
   commandPaletteTrigger: 'command-palette-trigger',
