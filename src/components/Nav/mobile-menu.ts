@@ -1,7 +1,4 @@
-import { getThemeColor } from '@/components/ThemeColor/utils'
-import { getThemeMode } from '@/components/ThemeMode/utils'
-
-import { applyThemeColorSelection, applyThemeModeSelection } from './mobile-menu-prefs'
+import { bindSettings } from '@/components/Settings/settings'
 
 const binders = new WeakMap<Element, AbortController>()
 
@@ -20,8 +17,6 @@ function closeOpenMenus() {
 function bindMenu(root: Element) {
   const dialog = root.querySelector<HTMLDialogElement>('[data-mobile-menu-dialog]')
   const header = root.closest('header')
-  const modeSelect = root.querySelector<HTMLSelectElement>('[data-mobile-menu-mode]')
-  const themeSelect = root.querySelector<HTMLSelectElement>('[data-mobile-menu-theme]')
   const trigger = root.querySelector<HTMLButtonElement>('[data-mobile-menu-trigger]')
 
   if (!dialog || !trigger) {
@@ -93,28 +88,7 @@ function bindMenu(root: Element) {
     )
   })
 
-  if (themeSelect) {
-    themeSelect.value = getThemeColor()
-    themeSelect.addEventListener(
-      'change',
-      () => {
-        applyThemeColorSelection(themeSelect.value)
-      },
-      { signal },
-    )
-  }
-
-  if (modeSelect) {
-    modeSelect.value = getThemeMode()
-    modeSelect.addEventListener(
-      'change',
-      () => {
-        applyThemeModeSelection(modeSelect.value)
-      },
-      { signal },
-    )
-  }
-
+  bindSettings(root, { signal })
   syncChrome(dialog.open)
 }
 

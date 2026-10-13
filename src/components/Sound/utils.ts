@@ -20,7 +20,7 @@ export function getSoundPreference(): SoundPreference {
   return DEFAULT_SOUND_PREFERENCE
 }
 
-export function setSoundPreference(preference: SoundPreference): void {
+function setSoundPreference(preference: SoundPreference): void {
   if (typeof window === 'undefined') {
     return
   }

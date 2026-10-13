@@ -1,0 +1,46 @@
+---
+import { PALETTE_CHROME } from '@/components/CommandPalette/chrome'
+
+import Glass from './Glass/Glass.astro'
+import Sound from './Sound/Sound.astro'
+import ThemeColor from './ThemeColor/ThemeColor.astro'
+import ThemeMode from './ThemeMode/ThemeMode.astro'
+
+interface Props {
+  variant: 'menu' | 'palette'
+}
+
+const { variant } = Astro.props
+---
+
+{
+  variant === 'menu' ?
+    <div
+      class="grid grid-cols-2 gap-3 border-t border-black/10 pt-6 dark:border-white/15"
+      data-settings
+      data-settings-variant="menu"
+    >
+      <ThemeColor variant="menu" />
+      <ThemeMode variant="menu" />
+    </div>
+  : <div
+      class={`flex items-center gap-2 border-t px-3 py-2 ${PALETTE_CHROME.border}`}
+      data-settings
+      data-settings-variant="palette"
+    >
+      <ThemeColor variant="palette" />
+      <div class="flex shrink-0 items-center gap-1">
+        <span
+          aria-hidden="true"
+          class={`mr-1 h-5 border-l ${PALETTE_CHROME.border}`}
+        />
+        <Glass variant="palette" />
+        <ThemeMode variant="palette" />
+        <span
+          aria-hidden="true"
+          class={`h-5 border-l ${PALETTE_CHROME.border}`}
+        />
+        <Sound variant="palette" />
+      </div>
+    </div>
+}

@@ -5,11 +5,8 @@ import CheckIcon from '@lucide/astro/icons/check'
 import SearchIcon from '@lucide/astro/icons/search'
 
 import { getEasterEggs } from '@/components/EasterEggs/easter-eggs'
-import GlassPicker from '@/components/Glass/Glass.astro'
+import Settings from '@/components/Settings/Settings.astro'
 import { HOVER_NAV_CUE_PROPS, TOGGLE_CUE_PROPS } from '@/components/Sound'
-import SoundToggle from '@/components/Sound/Sound.astro'
-import ThemeColorPicker from '@/components/ThemeColor/ThemeColor.astro'
-import ThemeModePicker from '@/components/ThemeMode/ThemeMode.astro'
 
 import { PALETTE_CHROME } from './chrome'
 import { SECRETS_SHORTCUT_LABEL } from './utils'
@@ -180,22 +177,7 @@ function pageOptionId(href: string) {
         </div>
       </div>
 
-      <div class={`flex items-center gap-2 border-t px-3 py-2 ${PALETTE_CHROME.border}`}>
-        <ThemeColorPicker />
-        <div class="flex shrink-0 items-center gap-1">
-          <span
-            aria-hidden="true"
-            class={`mr-1 h-5 border-l ${PALETTE_CHROME.border}`}
-          ></span>
-          <GlassPicker />
-          <ThemeModePicker />
-          <span
-            aria-hidden="true"
-            class={`h-5 border-l ${PALETTE_CHROME.border}`}
-          ></span>
-          <SoundToggle />
-        </div>
-      </div>
+      <Settings variant="palette" />
 
       <div
         class={`flex items-center gap-2 border-t px-4 py-3 text-xs ${PALETTE_CHROME.border} ${PALETTE_CHROME.muted}`}
