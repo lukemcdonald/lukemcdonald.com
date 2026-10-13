@@ -8,3 +8,7 @@ https://www.lukemcdonald.com/*       https://lukemcdonald.com/:splat 301!
 /work/blazer-six                    /
 /work/cedaro                        /
 /xmlrpc.php                         /
+
+# Cloudflare Web Analytics first-party proxy (paths must match src/configs/analytics.ts)
+/cf-insights.js                     https://static.cloudflareinsights.com/beacon.min.js  200
+/cf-insights                        https://cloudflareinsights.com/cdn-cgi/rum  200
