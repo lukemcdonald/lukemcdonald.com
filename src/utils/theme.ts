@@ -2,11 +2,7 @@ import type { ThemeColor } from '@/components/ThemeColor/types'
 import type { EffectiveMode } from '@/components/ThemeMode/types'
 
 import { DEFAULT_GLASS_LEVEL, GLASS_LEVELS, GLASS_STORAGE_KEY } from '@/components/Glass/constants'
-import {
-  DEFAULT_FONT_PAIRING,
-  FONT_PAIRINGS,
-  FONT_STORAGE_KEY,
-} from '@/components/Settings/Font/font'
+import { FONT_PAIRINGS, FONT_STORAGE_KEY } from '@/components/Settings/Font/font'
 import {
   DEFAULT_THEME_COLOR,
   THEME_COLOR_STORAGE_KEY,
@@ -71,7 +67,7 @@ export function getThemeInitScript(): string {
     html.dataset.glass = ${JSON.stringify(GLASS_LEVELS)}.includes(storedGlass) ? storedGlass : '${DEFAULT_GLASS_LEVEL}';
 
     const storedFont = localStorage.getItem('${FONT_STORAGE_KEY}');
-    if (${JSON.stringify(FONT_PAIRINGS)}.includes(storedFont) && storedFont !== '${DEFAULT_FONT_PAIRING}') {
+    if (${JSON.stringify(FONT_PAIRINGS)}.includes(storedFont)) {
       html.dataset.font = storedFont;
     } else {
       delete html.dataset.font;

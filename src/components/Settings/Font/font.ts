@@ -5,23 +5,26 @@ import {
   syncPreferencePicker,
 } from '../picker'
 
-export const FONT_PAIRINGS = ['default', 'work', 'live', 'play'] as const
+export const DEFAULT_FONT_PAIRING = 'default'
 
-export type FontPairing = (typeof FONT_PAIRINGS)[number]
+export const FONT_PAIRINGS = ['work', 'play', 'live'] as const
 
-export const DEFAULT_FONT_PAIRING: FontPairing = 'default'
+export type FontPairing = (typeof FONT_PAIRINGS)[number] | typeof DEFAULT_FONT_PAIRING
 
 export const FONT_STORAGE_KEY = 'font-pairing'
 
-export const FONT_LABELS: Record<FontPairing, string> = {
-  default: 'Default',
+export const FONT_LABELS: Record<(typeof FONT_PAIRINGS)[number], string> = {
   live: 'Live',
   play: 'Play',
   work: 'Work',
 }
 
-function isFontPairing(value: string): value is FontPairing {
+function isSelectablePairing(value: string): value is (typeof FONT_PAIRINGS)[number] {
   return (FONT_PAIRINGS as readonly string[]).includes(value)
+}
+
+function isFontPairing(value: string): value is FontPairing {
+  return value === DEFAULT_FONT_PAIRING || isSelectablePairing(value)
 }
 
 function parseFontPairing(value: unknown): FontPairing {
@@ -51,6 +54,11 @@ function setFontPairing(pairing: FontPairing): void {
   applyFontPairing(pairing)
 
   try {
+    if (pairing === DEFAULT_FONT_PAIRING) {
+      localStorage.removeItem(FONT_STORAGE_KEY)
+      return
+    }
+
     localStorage.setItem(FONT_STORAGE_KEY, pairing)
   } catch {
     // Keep the current page usable when browser storage is unavailable.
@@ -58,13 +66,23 @@ function setFontPairing(pairing: FontPairing): void {
 }
 
 export function applyFontSelection(value: string): boolean {
-  if (!isFontPairing(value)) {
+  const pairing = value === '' ? DEFAULT_FONT_PAIRING : value
+
+  if (!isFontPairing(pairing)) {
     return false
   }
 
-  setFontPairing(value)
+  setFontPairing(pairing)
 
   return true
+}
+
+export function selectFontOption(value: string): boolean {
+  if (isSelectablePairing(value) && getFontPairing() === value) {
+    return applyFontSelection(DEFAULT_FONT_PAIRING)
+  }
+
+  return applyFontSelection(value)
 }
 
 function fontPicker(root: Element) {
@@ -77,7 +95,7 @@ export function syncFont(root: Element) {
   const select = root.querySelector<HTMLSelectElement>('[data-settings-select="font"]')
 
   if (select) {
-    select.value = selected
+    select.value = selected === DEFAULT_FONT_PAIRING ? '' : selected
   }
 
   if (!picker) {
@@ -93,7 +111,7 @@ export function bindFont(root: Element, { onChange, signal }: SettingChange) {
 
   if (picker) {
     bindPreferencePicker(picker, {
-      apply: applyFontSelection,
+      apply: selectFontOption,
       onChange,
       signal,
       sync,

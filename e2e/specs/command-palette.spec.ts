@@ -43,12 +43,7 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
     await homePage.goto()
     await homePage.header.commandPalette.openWithKeyboard()
     await fontToggle.root.click()
-    await expect(fontToggle.option('default')).toBeFocused()
-    await expect(fontToggle.option('default')).toHaveAttribute('data-selected', '')
-
-    await homePage.page.keyboard.press('ArrowDown')
     await expect(fontToggle.option('work')).toBeFocused()
-    await expect(fontToggle.option('default')).toHaveAttribute('data-selected', '')
     await expect(fontToggle.option('work')).not.toHaveAttribute('data-selected')
 
     await homePage.page.keyboard.press('Enter')
@@ -64,9 +59,9 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
     expect(check?.x).toBeLessThan(label?.x ?? 0)
 
     await homePage.page.keyboard.press('ArrowDown')
-    await expect(fontToggle.option('live')).toBeFocused()
+    await expect(fontToggle.option('play')).toBeFocused()
     await expect(fontToggle.option('work')).toHaveAttribute('data-selected', '')
-    await expect(fontToggle.option('live')).not.toHaveAttribute('data-selected')
+    await expect(fontToggle.option('play')).not.toHaveAttribute('data-selected')
   })
 
   test('appearance options move with arrow keys', async ({ homePage }) => {

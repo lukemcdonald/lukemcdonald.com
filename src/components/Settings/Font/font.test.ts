@@ -1,15 +1,34 @@
 import assert from 'node:assert/strict'
 import { afterEach, before, beforeEach, describe, mock, test } from 'node:test'
 
-import { applyFontSelection, DEFAULT_FONT_PAIRING, FONT_PAIRINGS, getFontPairing } from './font.ts'
+import {
+  applyFontSelection,
+  DEFAULT_FONT_PAIRING,
+  FONT_PAIRINGS,
+  getFontPairing,
+  selectFontOption,
+} from './font.ts'
+
+function createFontStorage() {
+  const store = new Map<string, string>()
+  const mockGetItem = mock.fn((key: string) => {
+    return store.get(key) ?? null
+  })
+  const mockRemoveItem = mock.fn((key: string) => {
+    store.delete(key)
+  })
+  const mockSetItem = mock.fn((key: string, value: string) => {
+    store.set(key, value)
+  })
+
+  return { mockGetItem, mockRemoveItem, mockSetItem, store }
+}
 
 function installBrowserStubs({
   mockGetItem,
+  mockRemoveItem,
   mockSetItem,
-}: {
-  mockGetItem: (key: string) => string | null
-  mockSetItem: (key: string, value: string) => void
-}) {
+}: ReturnType<typeof createFontStorage>) {
   Object.defineProperty(globalThis, 'document', {
     configurable: true,
     value: {
@@ -22,6 +41,7 @@ function installBrowserStubs({
     configurable: true,
     value: {
       getItem: mockGetItem,
+      removeItem: mockRemoveItem,
       setItem: mockSetItem,
     },
   })
@@ -32,23 +52,20 @@ function installBrowserStubs({
 }
 
 describe('applyFontSelection', () => {
-  const store = new Map<string, string>()
-  const mockGetItem = mock.fn((key: string) => {
-    return store.get(key) ?? null
-  })
-  const mockSetItem = mock.fn((key: string, value: string) => {
-    store.set(key, value)
-  })
+  const { mockGetItem, mockRemoveItem, mockSetItem, store } = createFontStorage()
 
   before(() => {
     installBrowserStubs({
       mockGetItem,
+      mockRemoveItem,
       mockSetItem,
+      store,
     })
   })
 
   beforeEach(() => {
     mock.method(globalThis.localStorage, 'getItem', mockGetItem)
+    mock.method(globalThis.localStorage, 'removeItem', mockRemoveItem)
     mock.method(globalThis.localStorage, 'setItem', mockSetItem)
   })
 
@@ -66,12 +83,8 @@ describe('applyFontSelection', () => {
     assert.equal(document.documentElement.dataset.font, 'live')
   })
 
-  test('sets data-font for each non-default pairing', () => {
+  test('sets data-font for each pairing', () => {
     for (const pairing of FONT_PAIRINGS) {
-      if (pairing === DEFAULT_FONT_PAIRING) {
-        continue
-      }
-
       const applied = applyFontSelection(pairing)
 
       assert.equal(applied, true)
@@ -83,10 +96,10 @@ describe('applyFontSelection', () => {
   test('clears the document font for the default pairing', () => {
     applyFontSelection('work')
 
-    const applied = applyFontSelection('default')
+    const applied = applyFontSelection('')
 
     assert.equal(applied, true)
-    assert.equal(getFontPairing(), 'default')
+    assert.equal(getFontPairing(), DEFAULT_FONT_PAIRING)
     assert.equal(document.documentElement.dataset.font, undefined)
   })
 
@@ -96,6 +109,51 @@ describe('applyFontSelection', () => {
     const applied = applyFontSelection('comic-sans')
 
     assert.equal(applied, false)
+    assert.equal(getFontPairing(), 'play')
+    assert.equal(document.documentElement.dataset.font, 'play')
+  })
+})
+
+describe('selectFontOption', () => {
+  const { mockGetItem, mockRemoveItem, mockSetItem, store } = createFontStorage()
+
+  before(() => {
+    installBrowserStubs({
+      mockGetItem,
+      mockRemoveItem,
+      mockSetItem,
+      store,
+    })
+  })
+
+  beforeEach(() => {
+    mock.method(globalThis.localStorage, 'getItem', mockGetItem)
+    mock.method(globalThis.localStorage, 'removeItem', mockRemoveItem)
+    mock.method(globalThis.localStorage, 'setItem', mockSetItem)
+  })
+
+  afterEach(() => {
+    store.clear()
+    delete document.documentElement.dataset.font
+    mock.restoreAll()
+  })
+
+  test('toggles the active pairing back to default', () => {
+    selectFontOption('work')
+
+    const applied = selectFontOption('work')
+
+    assert.equal(applied, true)
+    assert.equal(getFontPairing(), DEFAULT_FONT_PAIRING)
+    assert.equal(document.documentElement.dataset.font, undefined)
+  })
+
+  test('switches to a different pairing without clearing', () => {
+    selectFontOption('work')
+
+    const applied = selectFontOption('play')
+
+    assert.equal(applied, true)
     assert.equal(getFontPairing(), 'play')
     assert.equal(document.documentElement.dataset.font, 'play')
   })

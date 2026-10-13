@@ -22,6 +22,7 @@ const iconClass = 'h-5 w-5'
       name="font"
       testId="mobile-font"
     >
+      <option value="">Default</option>
       {FONT_PAIRINGS.map((pairing) => (
         <option value={pairing}>{FONT_LABELS[pairing]}</option>
       ))}
@@ -29,7 +30,7 @@ const iconClass = 'h-5 w-5'
   : <PreferencePicker
       checkStart
       kind="font"
-      label="Font: Default"
+      label="Font"
       optionTestIdPrefix="font-option"
       options={FONT_PAIRINGS.map((pairing) => ({
         label: FONT_LABELS[pairing],

@@ -84,4 +84,23 @@ test.describe('font', { tag: '@smoke' }, () => {
       expect(await site.evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(2)
     }
   })
+
+  test('selecting the active font again restores the default', async ({ homePage, isMobile }) => {
+    await homePage.goto()
+    await selectFont(homePage, isMobile, 'work')
+    await expect(homePage.page.locator('html')).toHaveAttribute('data-font', 'work')
+
+    if (isMobile) {
+      await homePage.header.nav.openMobileMenu()
+      await homePage.header.nav.mobileFont.selectOption({ label: 'Default' })
+      await homePage.header.nav.closeMobileMenu()
+    } else {
+      await homePage.header.commandPalette.openWithKeyboard()
+      await homePage.header.commandPalette.fontToggle.select('work')
+      await homePage.header.commandPalette.closeWithKeyboard()
+    }
+
+    await expect.poll(() => homePage.storedFontPairing()).toBeNull()
+    await expect(homePage.page.locator('html')).not.toHaveAttribute('data-font')
+  })
 })
