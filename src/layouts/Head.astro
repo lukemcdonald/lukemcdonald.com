@@ -8,6 +8,7 @@ import { ClientRouter } from 'astro:transitions'
 
 import { getEasterEggInitScript } from '@/components/EasterEggs/easter-eggs'
 import { FONT_SOURCE_FAMILIES, fontPairingCss } from '@/components/Settings/Font/pairings'
+import { CLOUDFLARE_WEB_ANALYTICS, getCloudflareBeaconConfig } from '@/configs/analytics'
 import { GLOBAL_CONFIG } from '@/configs/global'
 import { buildGraphJsonLd, buildSocialMetaTags } from '@/utils/seo'
 import { stripHtmlAndTruncate } from '@/utils/text'
@@ -219,10 +220,10 @@ const socialMetaTags = buildSocialMetaTags(metaForSeo, Astro.site ?? GLOBAL_CONF
   {
     CONTEXT === 'production' && CLOUDFLARE_ANALYTICS_TOKEN && (
       <script
-        data-cf-beacon={JSON.stringify({ token: CLOUDFLARE_ANALYTICS_TOKEN })}
+        data-cf-beacon={JSON.stringify(getCloudflareBeaconConfig(CLOUDFLARE_ANALYTICS_TOKEN))}
         defer
         is:inline
-        src="https://static.cloudflareinsights.com/beacon.min.js"
+        src={CLOUDFLARE_WEB_ANALYTICS.scriptPath}
       />
     )
   }
