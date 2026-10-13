@@ -43,30 +43,30 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
     await homePage.goto()
     await homePage.header.commandPalette.openWithKeyboard()
     await fontToggle.root.click()
-    await expect(fontToggle.option('default')).toBeFocused()
-    await expect(fontToggle.option('default')).toHaveAttribute('data-selected', '')
+    await expect(fontToggle.option('home')).toBeFocused()
+    await expect(fontToggle.option('home')).toHaveAttribute('data-selected', '')
 
     await homePage.page.keyboard.press('ArrowDown')
-    await expect(fontToggle.option('editorial')).toBeFocused()
-    await expect(fontToggle.option('default')).toHaveAttribute('data-selected', '')
-    await expect(fontToggle.option('editorial')).not.toHaveAttribute('data-selected')
+    await expect(fontToggle.option('work')).toBeFocused()
+    await expect(fontToggle.option('home')).toHaveAttribute('data-selected', '')
+    await expect(fontToggle.option('work')).not.toHaveAttribute('data-selected')
 
     await homePage.page.keyboard.press('Enter')
-    await expect.poll(() => homePage.storedFontPairing()).toBe('editorial')
+    await expect.poll(() => homePage.storedFontPairing()).toBe('work')
 
     await fontToggle.root.click()
-    await expect(fontToggle.option('editorial')).toBeFocused()
-    await expect(fontToggle.option('editorial')).toHaveAttribute('data-selected', '')
+    await expect(fontToggle.option('work')).toBeFocused()
+    await expect(fontToggle.option('work')).toHaveAttribute('data-selected', '')
 
-    const check = await fontToggle.option('editorial').locator('svg').boundingBox()
-    const label = await fontToggle.option('editorial').locator('span').boundingBox()
+    const check = await fontToggle.option('work').locator('svg').boundingBox()
+    const label = await fontToggle.option('work').locator('span').boundingBox()
 
     expect(check?.x).toBeLessThan(label?.x ?? 0)
 
     await homePage.page.keyboard.press('ArrowDown')
-    await expect(fontToggle.option('geometric')).toBeFocused()
-    await expect(fontToggle.option('editorial')).toHaveAttribute('data-selected', '')
-    await expect(fontToggle.option('geometric')).not.toHaveAttribute('data-selected')
+    await expect(fontToggle.option('life')).toBeFocused()
+    await expect(fontToggle.option('work')).toHaveAttribute('data-selected', '')
+    await expect(fontToggle.option('life')).not.toHaveAttribute('data-selected')
   })
 
   test('appearance options move with arrow keys', async ({ homePage }) => {

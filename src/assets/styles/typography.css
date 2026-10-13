@@ -105,22 +105,22 @@
   font-family: var(--font-sans);
 }
 
-[data-font='editorial'] {
+[data-font='work'] {
+  --default-font-family: var(--font-source-sans-3);
+  --font-heading: var(--font-source-serif-4);
+  --font-sans: var(--font-source-sans-3);
+}
+
+[data-font='life'] {
   --default-font-family: var(--font-inter);
   --font-heading: var(--font-fraunces);
   --font-sans: var(--font-inter);
 }
 
-[data-font='geometric'] {
+[data-font='play'] {
   --default-font-family: var(--font-inter);
   --font-heading: var(--font-sora);
   --font-sans: var(--font-inter);
-}
-
-[data-font='source'] {
-  --default-font-family: var(--font-source-sans-3);
-  --font-heading: var(--font-source-serif-4);
-  --font-sans: var(--font-source-sans-3);
 }
 
 :where(h1, h2, h3, h4, h5, h6) {

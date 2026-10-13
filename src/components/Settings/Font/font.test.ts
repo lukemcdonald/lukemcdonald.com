@@ -59,30 +59,30 @@ describe('applyFontSelection', () => {
   })
 
   test('applies a known pairing', () => {
-    const applied = applyFontSelection('editorial')
+    const applied = applyFontSelection('life')
 
     assert.equal(applied, true)
-    assert.equal(getFontPairing(), 'editorial')
-    assert.equal(document.documentElement.dataset.font, 'editorial')
+    assert.equal(getFontPairing(), 'life')
+    assert.equal(document.documentElement.dataset.font, 'life')
   })
 
   test('clears the document font for the default pairing', () => {
-    applyFontSelection('source')
+    applyFontSelection('work')
 
-    const applied = applyFontSelection('default')
+    const applied = applyFontSelection('home')
 
     assert.equal(applied, true)
-    assert.equal(getFontPairing(), 'default')
+    assert.equal(getFontPairing(), 'home')
     assert.equal(document.documentElement.dataset.font, undefined)
   })
 
   test('does not write unknown pairings', () => {
-    applyFontSelection('geometric')
+    applyFontSelection('play')
 
     const applied = applyFontSelection('comic-sans')
 
     assert.equal(applied, false)
-    assert.equal(getFontPairing(), 'geometric')
-    assert.equal(document.documentElement.dataset.font, 'geometric')
+    assert.equal(getFontPairing(), 'play')
+    assert.equal(document.documentElement.dataset.font, 'play')
   })
 })
