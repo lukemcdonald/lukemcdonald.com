@@ -8,7 +8,6 @@ highlights:
   - Reduced new acquisition funnel delivery from 6 weeks to under 1 week by engineering a reusable, configuration-driven skip-logic framework, saving ~100 developer-weeks annually.
   - Designed a versioned AI skills architecture distributed through shared npm packages, automatically providing coding agents with package-specific standards, patterns, and documentation across repositories.
   - Cut cached CI builds by 85% and local builds by 97% by modernizing shared build infrastructure across 12+ applications and resolving a critical circular dependency.
-image: '@/assets/images/logo-zenbusiness.png'
 location: Remote
 position: Staff / Senior Staff Software Engineer, Technical Lead (Platform & Growth)
 startDate: '2023-05'

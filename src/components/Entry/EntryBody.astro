@@ -12,6 +12,7 @@ const { image, imageAlt } = Astro.props
           alt={imageAlt || ''}
           class="block h-full w-full grayscale xs:object-cover"
           priority
+          quality={70}
           src={image}
         />
       </figure>

@@ -3,7 +3,7 @@ order: 3
 subtitle: 'I am a'
 title: 'Father'
 image: '@/assets/images/luke-and-kids.jpg'
-imageAlt: 'luke and the kids'
+imageAlt: 'Luke and his three children standing and sitting on a rocky overlook'
 description: >
   "Like arrows in the hand of a warrior are the children of one's youth. Blessed is the man who fills his quiver with them!" <a class="text-sm font-semibold tracking-wide uppercase text-primary-800" href="https://www.esv.org/Psalm+127/">Psalm 127:4-5</a>
 ---
