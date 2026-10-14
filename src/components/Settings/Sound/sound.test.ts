@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
 import { getSoundToggleCopy } from './sound.ts'
+import { playSound } from './utils.ts'
 
 describe('getSoundToggleCopy', () => {
   test('describes the next action and current state', () => {
@@ -14,6 +15,14 @@ describe('getSoundToggleCopy', () => {
       label: 'Sounds on',
       pressed: 'true',
       toggle: 'Disable interaction sounds',
+    })
+  })
+})
+
+describe('playSound', () => {
+  test('no-ops without a window', () => {
+    assert.doesNotThrow(() => {
+      playSound('open')
     })
   })
 })

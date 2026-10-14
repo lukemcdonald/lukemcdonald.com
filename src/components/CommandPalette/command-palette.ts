@@ -1,7 +1,6 @@
 import type { CommandPaletteNavItem } from './types'
 
 import { navigate } from 'astro:transitions/client'
-import { play } from 'cuelume'
 
 import {
   getActiveEasterEggId,
@@ -16,7 +15,7 @@ import {
   snapshotThemeLandscapes,
   syncSettings,
 } from '@/components/Settings/settings'
-import { toggleSoundPreference } from '@/components/Settings/Sound/utils'
+import { playSound, toggleSoundPreference } from '@/components/Settings/Sound/utils'
 import { setThemeColor } from '@/components/Settings/ThemeColor/utils'
 import { setThemeMode } from '@/components/Settings/ThemeMode/utils'
 import { toggleClasses } from '@/utils/toggle-classes'
@@ -321,7 +320,7 @@ function openPalette(palette: Palette) {
   palette.trigger.setAttribute('aria-expanded', 'true')
   snapshotThemeLandscapes(palette.root)
   syncList(palette)
-  play('open')
+  playSound('open')
   palette.input.focus()
 }
 
@@ -350,7 +349,7 @@ function isPreferenceCommand(command: ReturnType<typeof getHighlightedCommand>) 
 
 function playPreferenceCue(command: ReturnType<typeof getHighlightedCommand>) {
   if (isPreferenceCommand(command)) {
-    play('toggle')
+    playSound('toggle')
   }
 }
 
@@ -433,7 +432,7 @@ function onDialogClose(palette: Palette) {
     return
   }
 
-  play('close')
+  playSound('close')
 }
 
 function onSearchNavKey(event: KeyboardEvent, palette: Palette) {

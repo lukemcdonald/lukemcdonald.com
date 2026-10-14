@@ -1,11 +1,16 @@
 import type { SoundPreference } from './types'
-
-import { bind, play, setEnabled, setVolume } from 'cuelume'
+import type { SoundName } from 'cuelume'
 
 import { SOUND_CONFIG } from '@/configs/sound'
 import { getStorageItem, setStorageItem, STORAGE_KEYS } from '@/utils/storage'
 
 import { DEFAULT_SOUND_PREFERENCE } from './constants'
+
+type Cuelume = typeof import('cuelume')
+
+let cuelume: Cuelume | undefined
+let cuelumePromise: Promise<Cuelume> | undefined
+let started = false
 
 export function getSoundPreference(): SoundPreference {
   const stored = getStorageItem(STORAGE_KEYS.sound)
@@ -17,39 +22,80 @@ export function getSoundPreference(): SoundPreference {
   return DEFAULT_SOUND_PREFERENCE
 }
 
-function setSoundPreference(preference: SoundPreference): void {
-  setStorageItem(STORAGE_KEYS.sound, preference)
-  setEnabled(preference === 'on')
-}
-
-export function toggleSoundPreference(): SoundPreference {
-  const next: SoundPreference = getSoundPreference() === 'on' ? 'off' : 'on'
-
-  if (next === 'off') {
-    play('toggle')
-    setSoundPreference(next)
-  } else {
-    setSoundPreference(next)
-    play('toggle')
-  }
-
-  return next
-}
-
 export function initializeSound(): void {
   if (typeof window === 'undefined' || !SOUND_CONFIG.enableSounds) {
     return
   }
 
-  bind()
-  setEnabled(getSoundPreference() === 'on')
-  setVolume(SOUND_CONFIG.volume)
+  if (getSoundPreference() !== 'on') {
+    return
+  }
+
+  void startCuelume()
 }
 
 export function playPageArrival(): void {
+  playSound('navigate')
+}
+
+export function playSound(name: SoundName): void {
   if (typeof window === 'undefined' || !SOUND_CONFIG.enableSounds) {
     return
   }
 
-  play('navigate')
+  if (getSoundPreference() !== 'on') {
+    return
+  }
+
+  void startCuelume().then(({ play }) => {
+    play(name)
+  })
+}
+
+export function toggleSoundPreference(): SoundPreference {
+  const next: SoundPreference = getSoundPreference() === 'on' ? 'off' : 'on'
+
+  setStorageItem(STORAGE_KEYS.sound, next)
+
+  if (next === 'on') {
+    void startCuelume().then(({ play }) => {
+      play('toggle')
+    })
+    return next
+  }
+
+  if (cuelume && started) {
+    cuelume.setEnabled(true)
+    cuelume.play('toggle')
+    cuelume.setEnabled(false)
+  }
+
+  return next
+}
+
+function loadCuelume() {
+  cuelumePromise ??= import('cuelume').then((mod) => {
+    cuelume = mod
+    return mod
+  })
+
+  return cuelumePromise
+}
+
+function soundsAreEnabled() {
+  return SOUND_CONFIG.enableSounds && getSoundPreference() === 'on'
+}
+
+async function startCuelume() {
+  const mod = await loadCuelume()
+
+  if (!started) {
+    mod.bind()
+    mod.setVolume(SOUND_CONFIG.volume)
+    started = true
+  }
+
+  mod.setEnabled(soundsAreEnabled())
+
+  return mod
 }
