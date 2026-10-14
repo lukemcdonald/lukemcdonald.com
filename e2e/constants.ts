@@ -1,4 +1,5 @@
 import { toHrefTestId, toNavMenuId } from '../src/features/navigation/navigation.utils'
+import { STORAGE_KEYS } from '../src/utils/storage'
 
 export const TEST_ID = {
   commandPalette: 'command-palette',
@@ -22,9 +23,9 @@ export const TEST_ID = {
   themeToggle: 'theme-toggle',
 } as const
 
-export const EASTER_EGGS_FOUND_KEY = 'easter-eggs:found'
-export const FONT_STORAGE_KEY = 'font-pairing'
-export const THEME_MODE_STORAGE_KEY = 'theme-mode'
+export const EASTER_EGGS_FOUND_KEY = STORAGE_KEYS.easterEggFound
+export const FONT_STORAGE_KEY = STORAGE_KEYS.font
+export const THEME_MODE_STORAGE_KEY = STORAGE_KEYS.themeMode
 export const THEME_SEED_LOCK_KEY = '__e2e-theme-seeded'
 
 export const WCAG_TAGS = [

@@ -1,9 +1,9 @@
 import type { CommandPaletteEggItem, CommandPaletteNavItem } from './types'
-import type { ThemeColor } from '@/components/ThemeColor/types'
-import type { ThemeMode } from '@/components/ThemeMode/types'
+import type { ThemeColor } from '@/components/Settings/ThemeColor/types'
+import type { ThemeMode } from '@/components/Settings/ThemeMode/types'
 
-import { THEME_COLORS, THEME_LABELS } from '@/components/ThemeColor/constants'
-import { MODE_LABELS, THEME_MODES } from '@/components/ThemeMode/constants'
+import { THEME_COLORS, THEME_LABELS } from '@/components/Settings/ThemeColor/constants'
+import { MODE_LABELS, THEME_MODES } from '@/components/Settings/ThemeMode/constants'
 
 const SECRETS_BACK_LABEL = 'Back'
 const SECRETS_BACK_SHORTCUT_LABEL = 'esc'

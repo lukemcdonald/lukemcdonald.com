@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict'
 import { afterEach, before, beforeEach, describe, mock, test } from 'node:test'
 
-import { DEFAULT_FONT_PAIRING, FONT_STORAGE_KEY, getFontPairing, selectFontOption } from './font.ts'
+import { STORAGE_KEYS } from '@/utils/storage'
+
+import { DEFAULT_FONT_PAIRING, getFontPairing, selectFontOption } from './font.ts'
 
 function createFontStorage() {
   const store = new Map<string, string>()
@@ -75,7 +77,7 @@ describe('selectFontOption', () => {
     assert.equal(applied, true)
     assert.equal(getFontPairing(), 'live')
     assert.equal(document.documentElement.dataset.font, 'live')
-    assert.equal(store.get(FONT_STORAGE_KEY), 'live')
+    assert.equal(store.get(STORAGE_KEYS.font), 'live')
   })
 
   test('toggles the active pairing back to default', () => {
@@ -86,7 +88,7 @@ describe('selectFontOption', () => {
     assert.equal(applied, true)
     assert.equal(getFontPairing(), DEFAULT_FONT_PAIRING)
     assert.equal(document.documentElement.dataset.font, undefined)
-    assert.equal(store.get(FONT_STORAGE_KEY), undefined)
+    assert.equal(store.get(STORAGE_KEYS.font), undefined)
   })
 })
 
@@ -114,7 +116,7 @@ describe('getFontPairing', () => {
   })
 
   test('falls back when storage has an unknown pairing', () => {
-    store.set(FONT_STORAGE_KEY, 'comic-sans')
+    store.set(STORAGE_KEYS.font, 'comic-sans')
 
     assert.equal(getFontPairing(), DEFAULT_FONT_PAIRING)
   })

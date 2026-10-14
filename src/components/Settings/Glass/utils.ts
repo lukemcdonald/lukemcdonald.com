@@ -1,6 +1,8 @@
 import type { GlassLevel } from './constants'
 
-import { DEFAULT_GLASS_LEVEL, GLASS_LEVELS, GLASS_STORAGE_KEY } from './constants'
+import { getStorageItem, setStorageItem, STORAGE_KEYS } from '@/utils/storage'
+
+import { DEFAULT_GLASS_LEVEL, GLASS_LEVELS } from './constants'
 
 export function isGlassLevel(value: string): value is GlassLevel {
   return (GLASS_LEVELS as readonly string[]).includes(value)
@@ -11,11 +13,7 @@ function parseGlassLevel(value: unknown): GlassLevel {
 }
 
 export function getGlassLevel(): GlassLevel {
-  try {
-    return parseGlassLevel(localStorage.getItem(GLASS_STORAGE_KEY))
-  } catch {
-    return DEFAULT_GLASS_LEVEL
-  }
+  return parseGlassLevel(getStorageItem(STORAGE_KEYS.glass))
 }
 
 export function applyGlassLevel(level: GlassLevel): void {
@@ -24,10 +22,5 @@ export function applyGlassLevel(level: GlassLevel): void {
 
 export function setGlassLevel(level: GlassLevel): void {
   applyGlassLevel(level)
-
-  try {
-    localStorage.setItem(GLASS_STORAGE_KEY, level)
-  } catch {
-    // Keep the current page usable when browser storage is unavailable.
-  }
+  setStorageItem(STORAGE_KEYS.glass, level)
 }

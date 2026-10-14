@@ -1,4 +1,4 @@
-import { getSoundPreference } from '@/components/Sound/utils'
+import { getSoundPreference } from '@/components/Settings/Sound/utils'
 import { SOUND_CONFIG } from '@/configs/sound'
 
 const CREST_MARKUP =

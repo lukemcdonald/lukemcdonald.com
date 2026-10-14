@@ -1,9 +1,8 @@
 import assert from 'node:assert/strict'
 import { afterEach, before, beforeEach, describe, mock, test } from 'node:test'
 
-import { getThemeColor } from '@/components/ThemeColor/utils'
-
 import { applyThemeColorSelection } from './theme-color.ts'
+import { getThemeColor } from './utils.ts'
 
 function installBrowserStubs({
   mockGetItem,

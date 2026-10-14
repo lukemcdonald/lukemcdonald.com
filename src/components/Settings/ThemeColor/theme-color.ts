@@ -1,8 +1,8 @@
 import { PALETTE_CHROME } from '@/components/CommandPalette/chrome'
-import { getThemeColor, isThemeColor, setThemeColor } from '@/components/ThemeColor/utils'
 import { toggleClasses } from '@/utils/toggle-classes'
 
 import { afterSettingChange, type SettingChange } from '../picker'
+import { getThemeColor, isThemeColor, setThemeColor } from './utils'
 
 const LANDSCAPE_VARS = [
   ['--landscape-dark', '--color-primary-800'],

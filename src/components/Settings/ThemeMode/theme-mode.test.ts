@@ -1,9 +1,8 @@
 import assert from 'node:assert/strict'
 import { afterEach, before, beforeEach, describe, mock, test } from 'node:test'
 
-import { getThemeMode } from '@/components/ThemeMode/utils'
-
 import { applyThemeModeSelection } from './theme-mode.ts'
+import { getThemeMode } from './utils.ts'
 
 function installBrowserStubs({
   mockClassListToggle,

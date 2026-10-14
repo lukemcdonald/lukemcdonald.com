@@ -6,13 +6,19 @@ import { CLOUDFLARE_ANALYTICS_TOKEN, GOOGLE_SITE_VERIFICATION } from 'astro:env/
 import { CONTEXT } from 'astro:env/server'
 import { ClientRouter } from 'astro:transitions'
 
-import { getEasterEggInitScript } from '@/components/EasterEggs/easter-eggs'
-import { FONT_SOURCE_FAMILIES, fontPairingCss } from '@/components/Settings/Font/pairings'
+import {
+  FONT_PAIRINGS,
+  FONT_SOURCE_FAMILIES,
+  fontPairingCss,
+} from '@/components/Settings/Font/pairings'
+import { DEFAULT_GLASS_LEVEL, GLASS_LEVELS } from '@/components/Settings/Glass/constants'
+import { DEFAULT_THEME_COLOR, THEME_COLORS } from '@/components/Settings/ThemeColor/constants'
+import { DEFAULT_THEME_MODE } from '@/components/Settings/ThemeMode/constants'
 import { CLOUDFLARE_WEB_ANALYTICS, getCloudflareBeaconConfig } from '@/configs/analytics'
 import { GLOBAL_CONFIG } from '@/configs/global'
 import { buildGraphJsonLd, buildSocialMetaTags } from '@/utils/seo'
+import { STORAGE_KEYS } from '@/utils/storage'
 import { stripHtmlAndTruncate } from '@/utils/text'
-import { getThemeInitScript } from '@/utils/theme'
 
 export interface Props {
   generator?: string
@@ -31,22 +37,101 @@ const title = hasSiteName ? baseTitle : `${baseTitle} - ${GLOBAL_CONFIG.name}`
 const description = stripHtmlAndTruncate(inDescription, 160, '...')
 
 // Create JSON-LD graph ([WebSite, Page]) and social meta tags
+const defaultGlassLevel = DEFAULT_GLASS_LEVEL
+const defaultThemeColor = DEFAULT_THEME_COLOR
+const defaultThemeMode = DEFAULT_THEME_MODE
+const easterEggPrefix = STORAGE_KEYS.easterEggPrefix
+const fontPairings = FONT_PAIRINGS
+const glassLevels = GLASS_LEVELS
 const metaForSeo: SeoMeta = { ...meta, description }
 const pairingCss = fontPairingCss()
-const structuredData = buildGraphJsonLd(metaForSeo)
 const socialMetaTags = buildSocialMetaTags(metaForSeo, Astro.site ?? GLOBAL_CONFIG.site.origin)
+const storageKeys = STORAGE_KEYS
+const structuredData = buildGraphJsonLd(metaForSeo)
+const themeColors = THEME_COLORS
 ---
 
 <head>
   <!-- Theme and easter-egg initialization (prevents flash) - must run before any CSS -->
   <script
+    define:vars={{
+      defaultGlassLevel,
+      defaultThemeColor,
+      defaultThemeMode,
+      fontPairings,
+      glassLevels,
+      storageKeys,
+      themeColors,
+    }}
     is:inline
-    set:html={getThemeInitScript()}
-  />
-  <script
-    is:inline
-    set:html={getEasterEggInitScript()}
-  />
+  >
+    ;(function () {
+      try {
+        const getSystemPreference = () => {
+          if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return 'dark'
+          }
+
+          return 'light'
+        }
+
+        const storedColorRaw = localStorage.getItem(storageKeys.themeColor)
+        const storedColor =
+          themeColors.includes(storedColorRaw) ? storedColorRaw : defaultThemeColor
+        const storedMode = localStorage.getItem(storageKeys.themeMode) || defaultThemeMode
+        const effectiveMode = storedMode === 'system' ? getSystemPreference() : storedMode
+
+        const html = document.documentElement
+        const storedGlass = localStorage.getItem(storageKeys.glass)
+        html.dataset.glass = glassLevels.includes(storedGlass) ? storedGlass : defaultGlassLevel
+
+        const storedFont = localStorage.getItem(storageKeys.font)
+        if (fontPairings.includes(storedFont)) {
+          html.dataset.font = storedFont
+        } else {
+          delete html.dataset.font
+        }
+
+        if (storedColor !== 'default') {
+          html.setAttribute('data-theme', storedColor)
+        } else {
+          html.removeAttribute('data-theme')
+        }
+
+        if (effectiveMode === 'dark') {
+          html.classList.add('dark')
+        } else {
+          html.classList.remove('dark')
+        }
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error('Failed to initialize theme:', e)
+      }
+    })()
+  </script>
+  <script define:vars={{ easterEggPrefix }} is:inline>
+    ;(function () {
+      try {
+        const html = document.documentElement
+        const on = 'on'
+
+        for (let index = 0; index < localStorage.length; index += 1) {
+          const key = localStorage.key(index)
+
+          if (!key || key.indexOf(easterEggPrefix) !== 0) {
+            continue
+          }
+
+          if (localStorage.getItem(key) !== on) {
+            continue
+          }
+
+          html.setAttribute('data-easter-egg', key.slice(easterEggPrefix.length))
+          break
+        }
+      } catch {}
+    })()
+  </script>
 
   <!-- Basic HTML Head Elements -->
   <meta charset="UTF-8" />
