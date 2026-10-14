@@ -3,7 +3,7 @@ order: 1
 subtitle: 'I am a'
 title: 'Christian'
 image: '@/assets/images/luke-baptism.jpg'
-imageAlt: 'Luke standing waist-deep in a river during his baptism, beside a pastor and another person'
+imageAlt: 'Luke being baptized in a river'
 description: >
   "For the wages of sin is death, but the free gift of God is eternal life in Christ Jesus our Lord." <a class="text-sm font-semibold tracking-wide uppercase text-primary-800" href="https://www.esv.org/Romans+6:23;1+Corinthians+6:9%E2%80%9311;Isaiah+9:6%E2%80%937;Matthew+1:21%E2%80%9325;Colossians+1:15%E2%80%9317;Philippians+2:5%E2%80%9311;2+Corinthians+5:21;Isaiah+53;John+19:17%E2%80%9320;John+19:28%E2%80%9330;John+19:38%E2%80%9342;Matthew+28:5%E2%80%936/">Romans 6:23</a>
 ---

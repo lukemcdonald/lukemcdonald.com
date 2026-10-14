@@ -2,7 +2,7 @@
 title: 'TREAD Talks'
 subtitle: 'Website'
 image: '@/assets/images/tread-talks-billy-graham.jpg'
-imageAlt: 'Billy Graham preaching at a podium, holding an open Bible with one hand raised'
+imageAlt: 'Billy Graham preaching with an open Bible'
 description: >
   Workout your salvation with Christ-centered sermons to elevate your spiritual heartbeat.
 ---

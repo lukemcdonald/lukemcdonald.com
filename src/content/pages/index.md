@@ -1,7 +1,7 @@
 ---
 title: 'Greetings'
 image: '@/assets/images/luke-mustachio.jpg'
-imageAlt: 'Luke McDonald standing in a pine forest in an Iowa Wrestling sweatshirt and handlebar mustache'
+imageAlt: 'Luke in a pine forest, sporting a handlebar mustache'
 seo:
   title: Luke McDonald | Christian, Husband, Father and Wrestling Coach
   description: I'm Luke, a Christian, husband, father and wrestling coach living in beautiful Eastern Iowa. My tent making is as a full-stack developer with an eye for design.
