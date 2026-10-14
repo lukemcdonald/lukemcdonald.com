@@ -23,6 +23,13 @@ describe('toDate', () => {
     assert.equal(date?.toISOString().startsWith('2024-01-15'), true)
   })
 
+  test('parses year-month strings', () => {
+    const date = toDate('2023-11')
+
+    assert.ok(date instanceof Date)
+    assert.equal(date?.toISOString().startsWith('2023-11-01'), true)
+  })
+
   test('parses timestamps', () => {
     const timestamp = Date.parse('2020-05-01T00:00:00.000Z')
     const date = toDate(timestamp)
@@ -44,6 +51,10 @@ describe('toDate', () => {
 describe('formatMonthYear', () => {
   test('formats a UTC date as Mon YYYY', () => {
     assert.equal(formatMonthYear('2023-01-15'), 'Jan 2023')
+  })
+
+  test('formats a year-month value as Mon YYYY', () => {
+    assert.equal(formatMonthYear('2023-11'), 'Nov 2023')
   })
 
   test('returns null when the value cannot be parsed', () => {

@@ -1,5 +1,3 @@
-import { compareDesc, isValid, parseISO } from 'date-fns'
-
 export type DateLike = Date | string | number | null | undefined
 
 type HasEndDate = {
@@ -19,7 +17,7 @@ function compareNullableDateDesc(a: Date | null, b: Date | null) {
     return -1
   }
 
-  return compareDesc(a, b)
+  return b.getTime() - a.getTime()
 }
 
 function firstDefinedByPaths(obj: unknown, paths: string[]): unknown {
@@ -60,8 +58,12 @@ function isPresent(endDate?: string | null) {
   return Boolean(!endDate || endDate.toLowerCase() === 'present')
 }
 
+function isValidDate(value: Date) {
+  return !Number.isNaN(value.getTime())
+}
+
 function validDateOrNull(value: Date) {
-  if (!isValid(value)) {
+  if (!isValidDate(value)) {
     return null
   }
 
@@ -73,12 +75,6 @@ function parseDateNumber(value: number) {
 }
 
 function parseDateString(value: string) {
-  const parsed = parseISO(value)
-
-  if (isValid(parsed)) {
-    return parsed
-  }
-
   return validDateOrNull(new Date(value))
 }
 
