@@ -9,6 +9,7 @@
 
 html[data-easter-egg='hyrule'] {
   --default-font-family: 'Press Start 2P', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: 'Press Start 2P', ui-sans-serif, system-ui, sans-serif;
   --font-sans: 'Press Start 2P', ui-sans-serif, system-ui, sans-serif;
   --hyrule-heart: oklch(62% 0.19 25);
   --hyrule-sword: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28' fill='none'%3E%3Cg transform='rotate(45 14 14)'%3E%3Cpath fill='%23efe6c4' stroke='%236e5630' stroke-linejoin='round' stroke-width='.8' d='M14 1.2 16.6 15.2h-5.2z'/%3E%3Cpath stroke='%23c4a35a' stroke-width='.55' d='M14 3.6v10.6'/%3E%3Crect width='12' height='2.2' x='8' y='15' fill='%23d4b15a' stroke='%236e5630' stroke-width='.65' rx='.7'/%3E%3Crect width='3.4' height='6.2' x='12.3' y='17' fill='%236b4a28' stroke='%234a3218' stroke-width='.55' rx='.45'/%3E%3Ccircle cx='14' cy='24.4' r='1.85' fill='%23d4b15a' stroke='%236e5630' stroke-width='.65'/%3E%3C/g%3E%3C/svg%3E");

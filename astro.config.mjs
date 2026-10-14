@@ -3,10 +3,11 @@ import netlify from '@astrojs/netlify'
 import sitemap from '@astrojs/sitemap'
 import tailwindcss from '@tailwindcss/vite'
 
-import { defineConfig } from 'astro/config'
+import { defineConfig, fontProviders } from 'astro/config'
 
-import { GLOBAL_CONFIG } from './src/configs/global.js'
+import { FONT_SOURCE_FAMILIES } from './src/components/Settings/Font/pairings.js'
 import { ENV_SCHEMA } from './src/configs/env.js'
+import { GLOBAL_CONFIG } from './src/configs/global.js'
 
 // Sitemap exclusions
 const SITEMAP_EXCLUSIONS = new Set([`${GLOBAL_CONFIG.site.origin}/index`])
@@ -31,6 +32,12 @@ export default defineConfig({
   env: {
     schema: ENV_SCHEMA,
   },
+  fonts: FONT_SOURCE_FAMILIES.map((family) => {
+    return {
+      ...family,
+      provider: fontProviders.fontsource(),
+    }
+  }),
   image: {
     layout: 'constrained',
     responsiveStyles: false, // issue with Tailwind v4 if enabled

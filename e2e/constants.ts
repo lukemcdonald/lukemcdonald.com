@@ -9,8 +9,10 @@ export const TEST_ID = {
   commandPaletteSecretsFooter: 'command-palette-secrets-footer',
   commandPaletteTrigger: 'command-palette-trigger',
   desktopNav: 'desktop-nav',
+  fontToggle: 'font-toggle',
   main: 'main',
   mobileAppearance: 'mobile-appearance',
+  mobileFont: 'mobile-font',
   mobileMenu: 'mobile-menu',
   mobileMenuTrigger: 'mobile-menu-trigger',
   siteHeader: 'site-header',
@@ -21,6 +23,7 @@ export const TEST_ID = {
 } as const
 
 export const EASTER_EGGS_FOUND_KEY = 'easter-eggs:found'
+export const FONT_STORAGE_KEY = 'font-pairing'
 export const THEME_MODE_STORAGE_KEY = 'theme-mode'
 export const THEME_SEED_LOCK_KEY = '__e2e-theme-seeded'
 
@@ -35,6 +38,10 @@ export const WCAG_TAGS = [
 
 export function commandPaletteEggTestId(id: string): string {
   return `command-palette-egg-${id}`
+}
+
+export function fontOptionTestId(pairing: string): string {
+  return `font-option-${pairing}`
 }
 
 export function greetingLinkTestId(href: string): string {

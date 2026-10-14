@@ -100,3 +100,19 @@
     content: counter(list-number);
   }
 }
+
+[data-font] {
+  font-family: var(--font-sans);
+}
+
+[data-font] :where(button, input, select, textarea, kbd) {
+  font-family: inherit;
+}
+
+[data-font] :is(.site-header, footer) {
+  font-family: var(--font-ui);
+}
+
+:where(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-heading, inherit);
+}

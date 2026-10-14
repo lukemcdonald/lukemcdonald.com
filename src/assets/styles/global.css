@@ -74,3 +74,11 @@ html:has(dialog[open]) body {
   right: anchor(right);
   bottom: calc(anchor(top) + 0.5rem);
 }
+
+[data-preference-option]:is(:hover, :focus-visible) {
+  @apply bg-primary-900/8 dark:bg-white/10;
+}
+
+[data-preference-options]:hover [data-preference-option]:focus-visible:not(:hover) {
+  @apply bg-transparent;
+}

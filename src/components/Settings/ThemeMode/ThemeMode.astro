@@ -31,11 +31,11 @@ const iconClass = 'h-5 w-5'
   : <PreferencePicker
       kind="mode"
       label="Appearance: System"
-      optionTestIdPrefix="theme-option"
       options={THEME_MODES.map((mode) => ({
         label: MODE_LABELS[mode],
         value: mode,
       }))}
+      optionTestIdPrefix="theme-option"
       pickerId="palette-mode"
       testId="theme-toggle"
     >

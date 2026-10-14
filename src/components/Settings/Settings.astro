@@ -1,6 +1,7 @@
 ---
 import { PALETTE_CHROME } from '@/components/CommandPalette/chrome'
 
+import Font from './Font/Font.astro'
 import Glass from './Glass/Glass.astro'
 import Sound from './Sound/Sound.astro'
 import ThemeColor from './ThemeColor/ThemeColor.astro'
@@ -22,6 +23,7 @@ const { variant } = Astro.props
     >
       <ThemeColor variant="menu" />
       <ThemeMode variant="menu" />
+      <Font variant="menu" />
     </div>
   : <div
       class={`flex items-center gap-2 border-t px-3 py-2 ${PALETTE_CHROME.border}`}
@@ -36,6 +38,7 @@ const { variant } = Astro.props
         />
         <Glass variant="palette" />
         <ThemeMode variant="palette" />
+        <Font variant="palette" />
         <span
           aria-hidden="true"
           class={`h-5 border-l ${PALETTE_CHROME.border}`}

@@ -1,3 +1,4 @@
+import { bindFont, syncFont } from './Font/font'
 import { bindGlass, syncGlass } from './Glass/glass'
 import { closeSettingsPickers, isSettingsPickerOpen, type SettingChange } from './picker'
 import { bindSound, syncSound } from './Sound/sound'
@@ -15,6 +16,7 @@ export type SettingsHighlights = {
 export { closeSettingsPickers, isSettingsPickerOpen, snapshotThemeLandscapes }
 
 export function syncSettings(root: Element, highlights: SettingsHighlights = {}) {
+  syncFont(root)
   syncGlass(root)
   syncSound(root, highlights.sound === true)
   syncThemeColor(root, highlights.color)
@@ -22,6 +24,7 @@ export function syncSettings(root: Element, highlights: SettingsHighlights = {})
 }
 
 export function bindSettings(root: Element, options: BindSettingsOptions) {
+  bindFont(root, options)
   bindGlass(root, options)
   bindSound(root, options)
   bindThemeColor(root, options)

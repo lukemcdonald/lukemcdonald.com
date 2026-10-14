@@ -1,4 +1,20 @@
+import type { Locator } from '@playwright/test'
+
 import { expect, test } from '../fixtures'
+
+async function expectHoverHighlightOnly(hovered: Locator, selected: Locator, idle: Locator) {
+  await hovered.hover()
+  await expect.poll(async () => optionBackground(selected)).toBe(await optionBackground(idle))
+  await expect
+    .poll(async () => optionBackground(hovered))
+    .not.toBe(await optionBackground(selected))
+}
+
+async function optionBackground(locator: Locator) {
+  return locator.evaluate((el) => {
+    return getComputedStyle(el).backgroundColor
+  })
+}
 
 test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
   test('opens from the keyboard with a named search field and toggles closed', async ({
@@ -33,6 +49,40 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
 
     await expect(activeOption).toHaveRole('option')
     await expect(activeOption).toHaveAttribute('aria-selected', 'true')
+  })
+
+  test('font options keep the check on the selection and move highlight with focus', async ({
+    homePage,
+  }) => {
+    const fontToggle = homePage.header.commandPalette.fontToggle
+
+    await homePage.goto()
+    await homePage.header.commandPalette.openWithKeyboard()
+    await fontToggle.root.click()
+    await expect(fontToggle.option('work')).toBeFocused()
+    await expect(fontToggle.option('work')).not.toHaveAttribute('data-selected')
+
+    await homePage.page.keyboard.press('Enter')
+    await expect.poll(() => homePage.storedFontPairing()).toBe('work')
+
+    await fontToggle.root.click()
+    await expect(fontToggle.option('work')).toBeFocused()
+    await expect(fontToggle.option('work')).toHaveAttribute('data-selected', '')
+
+    await homePage.page.keyboard.press('ArrowDown')
+    await expect(fontToggle.option('play')).toBeFocused()
+    await expect(fontToggle.option('work')).toHaveAttribute('data-selected', '')
+    await expect(fontToggle.option('play')).not.toHaveAttribute('data-selected')
+
+    await fontToggle.option('live').click()
+    await fontToggle.root.click()
+    await expect(fontToggle.option('live')).toBeFocused()
+    await expect(fontToggle.option('live')).toHaveAttribute('data-selected', '')
+    await expectHoverHighlightOnly(
+      fontToggle.option('work'),
+      fontToggle.option('live'),
+      fontToggle.option('play'),
+    )
   })
 
   test('appearance options move with arrow keys', async ({ homePage }) => {
