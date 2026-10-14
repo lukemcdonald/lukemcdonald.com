@@ -40,13 +40,11 @@ const description = stripHtmlAndTruncate(inDescription, 160, '...')
 const defaultGlassLevel = DEFAULT_GLASS_LEVEL
 const defaultThemeColor = DEFAULT_THEME_COLOR
 const defaultThemeMode = DEFAULT_THEME_MODE
-const easterEggPrefix = STORAGE_KEYS.easterEggPrefix
 const fontPairings = FONT_PAIRINGS
 const glassLevels = GLASS_LEVELS
 const metaForSeo: SeoMeta = { ...meta, description }
 const pairingCss = fontPairingCss()
 const socialMetaTags = buildSocialMetaTags(metaForSeo, Astro.site ?? GLOBAL_CONFIG.site.origin)
-const storageKeys = STORAGE_KEYS
 const structuredData = buildGraphJsonLd(metaForSeo)
 const themeColors = THEME_COLORS
 ---
@@ -60,7 +58,7 @@ const themeColors = THEME_COLORS
       defaultThemeMode,
       fontPairings,
       glassLevels,
-      storageKeys,
+      STORAGE_KEYS,
       themeColors,
     }}
     is:inline
@@ -75,17 +73,17 @@ const themeColors = THEME_COLORS
           return 'light'
         }
 
-        const storedColorRaw = localStorage.getItem(storageKeys.themeColor)
+        const storedColorRaw = localStorage.getItem(STORAGE_KEYS.themeColor)
         const storedColor =
           themeColors.includes(storedColorRaw) ? storedColorRaw : defaultThemeColor
-        const storedMode = localStorage.getItem(storageKeys.themeMode) || defaultThemeMode
+        const storedMode = localStorage.getItem(STORAGE_KEYS.themeMode) || defaultThemeMode
         const effectiveMode = storedMode === 'system' ? getSystemPreference() : storedMode
 
         const html = document.documentElement
-        const storedGlass = localStorage.getItem(storageKeys.glass)
+        const storedGlass = localStorage.getItem(STORAGE_KEYS.glass)
         html.dataset.glass = glassLevels.includes(storedGlass) ? storedGlass : defaultGlassLevel
 
-        const storedFont = localStorage.getItem(storageKeys.font)
+        const storedFont = localStorage.getItem(STORAGE_KEYS.font)
         if (fontPairings.includes(storedFont)) {
           html.dataset.font = storedFont
         } else {
@@ -109,7 +107,7 @@ const themeColors = THEME_COLORS
       }
     })()
   </script>
-  <script define:vars={{ easterEggPrefix }} is:inline>
+  <script define:vars={{ STORAGE_KEYS }} is:inline>
     ;(function () {
       try {
         const html = document.documentElement
@@ -118,7 +116,7 @@ const themeColors = THEME_COLORS
         for (let index = 0; index < localStorage.length; index += 1) {
           const key = localStorage.key(index)
 
-          if (!key || key.indexOf(easterEggPrefix) !== 0) {
+          if (!key || key.indexOf(STORAGE_KEYS.easterEggPrefix) !== 0) {
             continue
           }
 
@@ -126,7 +124,7 @@ const themeColors = THEME_COLORS
             continue
           }
 
-          html.setAttribute('data-easter-egg', key.slice(easterEggPrefix.length))
+          html.setAttribute('data-easter-egg', key.slice(STORAGE_KEYS.easterEggPrefix.length))
           break
         }
       } catch {}

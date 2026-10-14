@@ -1,6 +1,7 @@
 import type { Page } from '@playwright/test'
 
-import { commandPaletteEggTestId, EASTER_EGGS_FOUND_KEY, TEST_ID } from '../constants'
+import { STORAGE_KEYS } from '../../src/utils/storage'
+import { commandPaletteEggTestId, TEST_ID } from '../constants'
 import { FontToggle } from './font-toggle'
 import { ThemeToggle } from './theme-toggle'
 
@@ -58,7 +59,7 @@ export class CommandPalette {
       ({ eggIds, key }) => {
         localStorage.setItem(key, JSON.stringify(eggIds))
       },
-      { eggIds: ids, key: EASTER_EGGS_FOUND_KEY },
+      { eggIds: ids, key: STORAGE_KEYS.easterEggFound },
     )
   }
 

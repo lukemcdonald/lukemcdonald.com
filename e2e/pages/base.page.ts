@@ -1,14 +1,10 @@
 import type { SiteTheme } from '../routes'
 import type { Page } from '@playwright/test'
 
+import { STORAGE_KEYS } from '../../src/utils/storage'
 import { SiteHeader } from '../components/site-header'
 import { SkipLink } from '../components/skip-link'
-import {
-  FONT_STORAGE_KEY,
-  TEST_ID,
-  THEME_MODE_STORAGE_KEY,
-  THEME_SEED_LOCK_KEY,
-} from '../constants'
+import { TEST_ID, THEME_SEED_LOCK_KEY } from '../constants'
 
 export class BasePage {
   readonly header: SiteHeader
@@ -38,7 +34,7 @@ export class BasePage {
           localStorage.setItem(key, theme)
           sessionStorage.setItem(lockKey, '1')
         },
-        { key: THEME_MODE_STORAGE_KEY, lockKey: THEME_SEED_LOCK_KEY, theme: options.theme },
+        { key: STORAGE_KEYS.themeMode, lockKey: THEME_SEED_LOCK_KEY, theme: options.theme },
       )
     }
 
@@ -61,13 +57,13 @@ export class BasePage {
   async storedFontPairing() {
     return this.page.evaluate((key) => {
       return localStorage.getItem(key)
-    }, FONT_STORAGE_KEY)
+    }, STORAGE_KEYS.font)
   }
 
   async storedThemeMode() {
     return this.page.evaluate((key) => {
       return localStorage.getItem(key)
-    }, THEME_MODE_STORAGE_KEY)
+    }, STORAGE_KEYS.themeMode)
   }
 
   async waitForPath(path: string) {
