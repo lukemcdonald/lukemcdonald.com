@@ -34,13 +34,13 @@ const FONT_FAMILIES = {
     subsets: ['latin'],
     weights: ['300 700'],
   },
-  inter: {
-    cssVariable: '--font-inter',
+  ibmPlexSans: {
+    cssVariable: '--font-ibm-plex-sans',
     fallbacks: ['sans-serif'],
-    name: 'Inter',
+    name: 'IBM Plex Sans',
     styles: ['normal'],
     subsets: ['latin'],
-    weights: ['100 900'],
+    weights: ['100 700'],
   },
   lora: {
     cssVariable: '--font-lora',
@@ -79,14 +79,14 @@ const FONT_FAMILIES = {
 /** Add or swap a pairing here; Astro Fonts and generated CSS read this list. */
 export const FONT_PAIRING_CONFIGS = [
   {
-    body: FONT_FAMILIES.inter,
+    body: FONT_FAMILIES.ibmPlexSans,
     heading: {
       ...FONT_FAMILIES.spaceGrotesk,
       weight: '700',
     },
     id: 'work',
     label: 'Work',
-    nav: FONT_FAMILIES.inter,
+    nav: FONT_FAMILIES.ibmPlexSans,
   },
   {
     body: FONT_FAMILIES.nunito,
