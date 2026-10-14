@@ -1,12 +1,20 @@
 /**
  * Tiny Konami-style extras. Add eggs/<id>.ts + eggs/<id>.css and one line in
  * EGGS. Delete those to remove it. CSS is globbed from EasterEggs.astro so a
- * restored egg does not flash. Toggle state is localStorage `easter-egg:<id>=on`,
+ * restored egg does not flash. Active-egg keys use the shared storage prefix,
  * applied by the inline head script in Head.astro.
  */
 import type { SoundName } from 'cuelume'
 
 import { play } from 'cuelume'
+
+import {
+  getStorageItem,
+  getStorageKeys,
+  removeStorageItem,
+  setStorageItem,
+  STORAGE_KEYS,
+} from '@/utils/storage'
 
 import { auroraEgg } from './eggs/aurora'
 import { hyruleEgg } from './eggs/hyrule'
@@ -22,46 +30,16 @@ type Egg = {
 }
 
 const ATTRIBUTE = 'data-easter-egg'
-const CYCLE_STORAGE_KEY = 'easter-eggs:cycle'
 const EGGS: readonly Egg[] = [auroraEgg, hyruleEgg]
 const CYCLE_STEPS = EGGS.length + 1
-const FOUND_STORAGE_KEY = 'easter-eggs:found'
 const IDLE_MS = 2500
 const STORAGE_ON = 'on'
-const STORAGE_PREFIX = 'easter-egg:'
 
 let activeEgg: Egg | undefined
 let cycleIndex = 0
 let idleTimer: ReturnType<typeof setTimeout> | undefined
 let progressById = new Map<string, number>()
 let started = false
-
-export function getEasterEggInitScript(): string {
-  return `
-(function() {
-  try {
-    const prefix = '${STORAGE_PREFIX}';
-    const on = '${STORAGE_ON}';
-    const html = document.documentElement;
-
-    for (let index = 0; index < localStorage.length; index += 1) {
-      const key = localStorage.key(index);
-
-      if (!key || key.indexOf(prefix) !== 0) {
-        continue;
-      }
-
-      if (localStorage.getItem(key) !== on) {
-        continue;
-      }
-
-      html.setAttribute('${ATTRIBUTE}', key.slice(prefix.length));
-      break;
-    }
-  } catch (e) {}
-})();
-`.trim()
-}
 
 export function initializeEasterEggs() {
   if (typeof window === 'undefined' || started) {
@@ -131,18 +109,10 @@ function clearIdleTimer() {
 }
 
 function clearStoredEggs() {
-  const keys: string[] = []
-
-  for (let index = 0; index < localStorage.length; index += 1) {
-    const key = localStorage.key(index)
-
-    if (key?.startsWith(STORAGE_PREFIX)) {
-      keys.push(key)
+  for (const key of getStorageKeys()) {
+    if (key.startsWith(STORAGE_KEYS.easterEggPrefix)) {
+      removeStorageItem(key)
     }
-  }
-
-  for (const key of keys) {
-    localStorage.removeItem(key)
   }
 }
 
@@ -210,7 +180,7 @@ function hideEgg(silent = false) {
 
   activeEgg = undefined
   document.documentElement.removeAttribute(ATTRIBUTE)
-  writeStorage(clearStoredEggs)
+  clearStoredEggs()
   egg?.onDismiss?.()
   playSound(silent ? undefined : egg?.soundOff)
 }
@@ -240,15 +210,13 @@ function isTypingTarget(target: EventTarget | null): boolean {
 }
 
 function markFound(id: string) {
-  writeStorage(() => {
-    const found = readFoundIds()
+  const found = readFoundIds()
 
-    if (found.includes(id)) {
-      return
-    }
+  if (found.includes(id)) {
+    return
+  }
 
-    localStorage.setItem(FOUND_STORAGE_KEY, JSON.stringify([...found, id]))
-  })
+  setStorageItem(STORAGE_KEYS.easterEggFound, JSON.stringify([...found, id]))
 }
 
 function matchesPrefix(attempted: string[], length: number, sequence: readonly string[]): boolean {
@@ -321,42 +289,32 @@ function playSound(name: SoundName | undefined) {
 }
 
 function readCycleIndex() {
-  try {
-    cycleIndex = parseCycleIndex(localStorage.getItem(CYCLE_STORAGE_KEY))
-  } catch {
-    return cycleIndex
-  }
+  cycleIndex = parseCycleIndex(getStorageItem(STORAGE_KEYS.easterEggCycle))
 
   return cycleIndex
 }
 
 function readFoundIds() {
-  if (typeof window === 'undefined') {
-    return []
-  }
-
   try {
     const known = new Set(EGGS.map((egg) => egg.id))
 
-    return parseFoundIds(localStorage.getItem(FOUND_STORAGE_KEY)).filter((id) => known.has(id))
+    return parseFoundIds(getStorageItem(STORAGE_KEYS.easterEggFound)).filter((id) => known.has(id))
   } catch {
     return []
   }
 }
 
 function readStoredEggId(): string | undefined {
-  for (let index = 0; index < localStorage.length; index += 1) {
-    const key = localStorage.key(index)
-
-    if (!key?.startsWith(STORAGE_PREFIX)) {
+  for (const key of getStorageKeys()) {
+    if (!key.startsWith(STORAGE_KEYS.easterEggPrefix)) {
       continue
     }
 
-    if (localStorage.getItem(key) !== STORAGE_ON) {
+    if (getStorageItem(key) !== STORAGE_ON) {
       continue
     }
 
-    return key.slice(STORAGE_PREFIX.length)
+    return key.slice(STORAGE_KEYS.easterEggPrefix.length)
   }
 
   return undefined
@@ -382,7 +340,7 @@ function restoreEgg() {
 
   if (!egg) {
     document.documentElement.removeAttribute(ATTRIBUTE)
-    writeStorage(clearStoredEggs)
+    clearStoredEggs()
     return
   }
 
@@ -433,10 +391,8 @@ function showEgg(egg: Egg, silent = false) {
   dismissOtherEgg(egg.id)
   activeEgg = egg
   document.documentElement.setAttribute(ATTRIBUTE, egg.id)
-  writeStorage(() => {
-    clearStoredEggs()
-    localStorage.setItem(`${STORAGE_PREFIX}${egg.id}`, STORAGE_ON)
-  })
+  clearStoredEggs()
+  setStorageItem(`${STORAGE_KEYS.easterEggPrefix}${egg.id}`, STORAGE_ON)
   egg.onActivate?.(silent)
   playSound(silent ? undefined : egg.soundOn)
 }
@@ -454,11 +410,7 @@ function stepEgg(egg: Egg, code: string): boolean {
 }
 
 function storedEggId(): string | undefined {
-  try {
-    return readStoredEggId()
-  } catch {
-    return undefined
-  }
+  return readStoredEggId()
 }
 
 function toggleEgg(egg: Egg | undefined) {
@@ -478,15 +430,5 @@ function toggleEgg(egg: Egg | undefined) {
 
 function writeCycleIndex(index: number) {
   cycleIndex = index
-  writeStorage(() => {
-    localStorage.setItem(CYCLE_STORAGE_KEY, String(index))
-  })
-}
-
-function writeStorage(write: () => void) {
-  try {
-    write()
-  } catch {
-    return
-  }
+  setStorageItem(STORAGE_KEYS.easterEggCycle, String(index))
 }

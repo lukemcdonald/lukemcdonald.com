@@ -22,9 +22,6 @@ export const TEST_ID = {
   themeToggle: 'theme-toggle',
 } as const
 
-export const EASTER_EGGS_FOUND_KEY = 'easter-eggs:found'
-export const FONT_STORAGE_KEY = 'font-pairing'
-export const THEME_MODE_STORAGE_KEY = 'theme-mode'
 export const THEME_SEED_LOCK_KEY = '__e2e-theme-seeded'
 
 export const WCAG_TAGS = [

@@ -1,14 +1,5 @@
-import type { ThemeColor } from '@/components/ThemeColor/types'
-import type { EffectiveMode } from '@/components/ThemeMode/types'
-
-import { DEFAULT_GLASS_LEVEL, GLASS_LEVELS, GLASS_STORAGE_KEY } from '@/components/Glass/constants'
-import { FONT_PAIRINGS, FONT_STORAGE_KEY } from '@/components/Settings/Font/font'
-import {
-  DEFAULT_THEME_COLOR,
-  THEME_COLOR_STORAGE_KEY,
-  THEME_COLORS,
-} from '@/components/ThemeColor/constants'
-import { DEFAULT_THEME_MODE, THEME_MODE_STORAGE_KEY } from '@/components/ThemeMode/constants'
+import type { ThemeColor } from '@/components/Settings/ThemeColor/types'
+import type { EffectiveMode } from '@/components/Settings/ThemeMode/types'
 
 function getHtmlElement(): HTMLElement | null {
   if (typeof window === 'undefined') {
@@ -40,53 +31,4 @@ export function applyThemeMode(mode: EffectiveMode): void {
   }
 
   html.classList.toggle('dark', mode === 'dark')
-}
-
-/**
- * Get inline script for initializing theme before hydration (prevents flash)
- */
-export function getThemeInitScript(): string {
-  return `
-(function() {
-  try {
-    const STORAGE_KEYS = { color: '${THEME_COLOR_STORAGE_KEY}', mode: '${THEME_MODE_STORAGE_KEY}' };
-    const DEFAULT_THEME_COLOR = '${DEFAULT_THEME_COLOR}';
-    const DEFAULT_THEME_MODE = '${DEFAULT_THEME_MODE}';
-
-    const getSystemPreference = () => {
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    };
-
-    const storedColorRaw = localStorage.getItem(STORAGE_KEYS.color);
-    const storedColor = ${JSON.stringify(THEME_COLORS)}.includes(storedColorRaw) ? storedColorRaw : DEFAULT_THEME_COLOR;
-    const storedMode = localStorage.getItem(STORAGE_KEYS.mode) || DEFAULT_THEME_MODE;
-    const effectiveMode = storedMode === 'system' ? getSystemPreference() : storedMode;
-
-    const html = document.documentElement;
-    const storedGlass = localStorage.getItem('${GLASS_STORAGE_KEY}');
-    html.dataset.glass = ${JSON.stringify(GLASS_LEVELS)}.includes(storedGlass) ? storedGlass : '${DEFAULT_GLASS_LEVEL}';
-
-    const storedFont = localStorage.getItem('${FONT_STORAGE_KEY}');
-    if (${JSON.stringify(FONT_PAIRINGS)}.includes(storedFont)) {
-      html.dataset.font = storedFont;
-    } else {
-      delete html.dataset.font;
-    }
-
-    if (storedColor !== 'default') {
-      html.setAttribute('data-theme', storedColor);
-    } else {
-      html.removeAttribute('data-theme');
-    }
-
-    if (effectiveMode === 'dark') {
-      html.classList.add('dark');
-    } else {
-      html.classList.remove('dark');
-    }
-  } catch (e) {
-    console.error('Failed to initialize theme:', e);
-  }
-})();
-`.trim()
 }

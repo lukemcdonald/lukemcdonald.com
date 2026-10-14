@@ -1,9 +1,8 @@
 import assert from 'node:assert/strict'
 import { afterEach, before, beforeEach, describe, mock, test } from 'node:test'
 
-import { getGlassLevel } from '@/components/Glass/utils'
-
 import { applyGlassSelection } from './glass.ts'
+import { getGlassLevel } from './utils.ts'
 
 function installBrowserStubs({
   mockGetItem,

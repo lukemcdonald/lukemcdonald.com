@@ -1,6 +1,5 @@
-import { getGlassLevel, isGlassLevel, setGlassLevel } from '@/components/Glass/utils'
-
 import { bindPreferencePicker, type SettingChange, syncPreferencePicker } from '../picker'
+import { getGlassLevel, isGlassLevel, setGlassLevel } from './utils'
 
 export function applyGlassSelection(value: string): boolean {
   if (!isGlassLevel(value)) {

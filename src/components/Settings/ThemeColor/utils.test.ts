@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict'
 import { afterEach, before, beforeEach, describe, mock, test } from 'node:test'
 
-import { DEFAULT_THEME_COLOR, THEME_COLOR_STORAGE_KEY, THEME_COLORS } from './constants.ts'
+import { STORAGE_KEYS } from '@/utils/storage'
+
+import { DEFAULT_THEME_COLOR, THEME_COLORS } from './constants.ts'
 import { getThemeColor } from './utils.ts'
 
 function installBrowserStubs() {
@@ -40,7 +42,7 @@ describe('getThemeColor', () => {
 
   test('returns the stored color when it is known', () => {
     for (const color of THEME_COLORS) {
-      store.set(THEME_COLOR_STORAGE_KEY, color)
+      store.set(STORAGE_KEYS.themeColor, color)
 
       assert.equal(getThemeColor(), color)
     }
@@ -48,7 +50,7 @@ describe('getThemeColor', () => {
 
   test('falls back to default when the stored color was removed', () => {
     for (const removed of ['green', 'neon']) {
-      store.set(THEME_COLOR_STORAGE_KEY, removed)
+      store.set(STORAGE_KEYS.themeColor, removed)
 
       assert.equal(getThemeColor(), DEFAULT_THEME_COLOR)
     }

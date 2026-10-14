@@ -1,5 +1,4 @@
 import { PALETTE_CHROME } from '@/components/CommandPalette/chrome'
-import { getThemeMode, isThemeMode, setThemeMode } from '@/components/ThemeMode/utils'
 import { toggleClasses } from '@/utils/toggle-classes'
 
 import {
@@ -8,6 +7,7 @@ import {
   type SettingChange,
   syncPreferencePicker,
 } from '../picker'
+import { getThemeMode, isThemeMode, setThemeMode } from './utils'
 
 export function applyThemeModeSelection(value: string): boolean {
   if (!isThemeMode(value)) {

@@ -1,7 +1,5 @@
 import type { SoundPreference } from './types'
 
-export const SOUND_STORAGE_KEY = 'sound-enabled'
-
 export const DEFAULT_SOUND_PREFERENCE: SoundPreference = 'off'
 
 export const HOVER_NAV_CUE_PROPS = {

@@ -16,9 +16,9 @@ import {
   snapshotThemeLandscapes,
   syncSettings,
 } from '@/components/Settings/settings'
-import { toggleSoundPreference } from '@/components/Sound/utils'
-import { setThemeColor } from '@/components/ThemeColor/utils'
-import { setThemeMode } from '@/components/ThemeMode/utils'
+import { toggleSoundPreference } from '@/components/Settings/Sound/utils'
+import { setThemeColor } from '@/components/Settings/ThemeColor/utils'
+import { setThemeMode } from '@/components/Settings/ThemeMode/utils'
 import { toggleClasses } from '@/utils/toggle-classes'
 import { wrapIndex } from '@/utils/wrap-index'
 

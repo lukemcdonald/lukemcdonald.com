@@ -1,8 +1,8 @@
 import { PALETTE_CHROME } from '@/components/CommandPalette/chrome'
-import { getSoundPreference, toggleSoundPreference } from '@/components/Sound/utils'
 import { toggleClasses } from '@/utils/toggle-classes'
 
 import { afterSettingChange, type SettingChange } from '../picker'
+import { getSoundPreference, toggleSoundPreference } from './utils'
 
 export function getSoundToggleCopy(isOn: boolean) {
   return {

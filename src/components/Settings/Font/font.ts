@@ -1,3 +1,5 @@
+import { getStorageItem, removeStorageItem, setStorageItem, STORAGE_KEYS } from '@/utils/storage'
+
 import {
   afterSettingChange,
   bindPreferencePicker,
@@ -6,13 +8,9 @@ import {
 } from '../picker'
 import { FONT_PAIRINGS, type SelectableFontPairing } from './pairings'
 
-export { FONT_PAIRINGS }
-
 export const DEFAULT_FONT_PAIRING = 'default'
 
 export type FontPairing = SelectableFontPairing | typeof DEFAULT_FONT_PAIRING
-
-export const FONT_STORAGE_KEY = 'font-pairing'
 
 function isSelectablePairing(value: string): value is (typeof FONT_PAIRINGS)[number] {
   return (FONT_PAIRINGS as readonly string[]).includes(value)
@@ -27,11 +25,7 @@ function parseFontPairing(value: unknown): FontPairing {
 }
 
 export function getFontPairing(): FontPairing {
-  try {
-    return parseFontPairing(localStorage.getItem(FONT_STORAGE_KEY))
-  } catch {
-    return DEFAULT_FONT_PAIRING
-  }
+  return parseFontPairing(getStorageItem(STORAGE_KEYS.font))
 }
 
 export function applyFontPairing(pairing: FontPairing): void {
@@ -48,16 +42,12 @@ export function applyFontPairing(pairing: FontPairing): void {
 function setFontPairing(pairing: FontPairing): void {
   applyFontPairing(pairing)
 
-  try {
-    if (pairing === DEFAULT_FONT_PAIRING) {
-      localStorage.removeItem(FONT_STORAGE_KEY)
-      return
-    }
-
-    localStorage.setItem(FONT_STORAGE_KEY, pairing)
-  } catch {
-    // Keep the current page usable when browser storage is unavailable.
+  if (pairing === DEFAULT_FONT_PAIRING) {
+    removeStorageItem(STORAGE_KEYS.font)
+    return
   }
+
+  setStorageItem(STORAGE_KEYS.font, pairing)
 }
 
 function applyFontSelection(value: string): boolean {
