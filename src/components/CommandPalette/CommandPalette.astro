@@ -9,7 +9,7 @@ import Settings from '@/components/Settings/Settings.astro'
 import { HOVER_NAV_CUE_PROPS, TOGGLE_CUE_PROPS } from '@/components/Sound'
 
 import { PALETTE_CHROME } from './chrome'
-import { SECRETS_SHORTCUT_LABEL } from './utils'
+import { PALETTE_EGG_COMMANDS, SECRETS_SHORTCUT_LABEL } from './utils'
 
 interface Props {
   navigationItems?: CommandPaletteNavItem[]
@@ -93,6 +93,7 @@ function pageOptionId(href: string) {
             <div data-palette-nav-list>
               <h2
                 class={`mb-2 text-xs font-medium tracking-wider uppercase ${PALETTE_CHROME.muted}`}
+                data-palette-nav-heading
               >
                 Navigation
               </h2>
@@ -116,6 +117,24 @@ function pageOptionId(href: string) {
                     >
                       {item.name}
                     </a>
+                  ))
+                }
+                {
+                  PALETTE_EGG_COMMANDS.map((command) => (
+                    <button
+                      class={`${itemClass} w-full text-left`}
+                      data-name={command.query}
+                      data-palette-command={command.eggId}
+                      data-testid={`command-palette-command-${command.query}`}
+                      hidden
+                      id={`command-palette-command-${command.query}`}
+                      role="option"
+                      tabindex="-1"
+                      type="button"
+                      {...TOGGLE_CUE_PROPS}
+                    >
+                      {command.name}
+                    </button>
                   ))
                 }
               </div>

@@ -11,6 +11,7 @@ import {
   getSecretsProgressLabel,
   isPaletteBackKey,
   isSecretsShortcut,
+  PALETTE_EGG_COMMANDS,
 } from './utils.ts'
 
 function createActions() {
@@ -108,11 +109,22 @@ describe('getHighlightedCommand', () => {
     assert.equal(getHighlightedCommand(navItems, 'hyrule'), undefined)
   })
 
-  test('matches lamp as an egg command', () => {
-    assert.deepEqual(getHighlightedCommand(navItems, 'lamp'), {
+  test('matches selah as the lamp egg command', () => {
+    assert.equal(getHighlightedCommand(navItems, 'lamp'), undefined)
+    assert.deepEqual(getHighlightedCommand(navItems, 'sel'), {
       eggId: 'lamp',
       type: 'egg',
     })
+    assert.deepEqual(getHighlightedCommand(navItems, 'selah'), {
+      eggId: 'lamp',
+      type: 'egg',
+    })
+  })
+})
+
+describe('PALETTE_EGG_COMMANDS', () => {
+  test('exposes selah as the lamp trigger', () => {
+    assert.deepEqual(PALETTE_EGG_COMMANDS, [{ eggId: 'lamp', name: 'Selah', query: 'selah' }])
   })
 })
 

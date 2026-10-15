@@ -1,4 +1,4 @@
-const LAMP_ATTR = 'data-lamp-verse'
+const LAMP_ATTR = 'data-lamp'
 const POS_VAR = '--lamp-pos'
 const TEMPLATE_ATTR = 'data-lamp-template'
 
@@ -29,7 +29,7 @@ function bindPointer() {
 }
 
 function lampRoot() {
-  return document.documentElement
+  return document.querySelector<HTMLElement>(`[${LAMP_ATTR}]`)
 }
 
 function mountLamp() {
@@ -57,7 +57,7 @@ function onPointer(event: PointerEvent) {
     return
   }
 
-  lampRoot().style.setProperty(POS_VAR, lampPos(event.clientX, event.clientY))
+  lampRoot()?.style.setProperty(POS_VAR, lampPos(event.clientX, event.clientY))
 }
 
 function prefersReducedMotion() {
@@ -76,7 +76,6 @@ function unbindPointer() {
 
 function unmountLamp() {
   unbindPointer()
-  lampRoot().style.removeProperty(POS_VAR)
   document.querySelectorAll(`[${LAMP_ATTR}]`).forEach((node) => {
     node.remove()
   })

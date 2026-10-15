@@ -1,63 +1,52 @@
-html[data-easter-egg='lamp'] {
+[data-lamp] {
   --lamp-pos: 50vw 50vh;
 }
 
-html[data-easter-egg='lamp']::after {
-  background: radial-gradient(
-    circle 14rem at var(--lamp-pos),
-    transparent 0%,
-    color-mix(in oklab, var(--color-primary-900) 40%, transparent) 34%,
-    color-mix(in oklab, var(--color-primary-900) 88%, black) 72%
-  );
-  content: '';
+[data-lamp-veil] {
+  background: var(--color-primary-950);
   inset: 0;
   pointer-events: none;
   position: fixed;
-  z-index: 40;
+  z-index: 60;
 }
 
 [data-lamp-verse] {
   color: var(--color-primary-50);
   display: grid;
+  font-family: var(--font-sans);
+  font-size: 1.125rem;
   inset: 0;
+  line-height: 1.625;
   -webkit-mask-image: radial-gradient(
     circle 12rem at var(--lamp-pos),
     #000 0%,
-    #000 30%,
-    transparent 70%
+    #000 35%,
+    transparent 72%
   );
-  mask-image: radial-gradient(circle 12rem at var(--lamp-pos), #000 0%, #000 30%, transparent 70%);
+  mask-image: radial-gradient(circle 12rem at var(--lamp-pos), #000 0%, #000 35%, transparent 72%);
+  padding: 1.5rem;
   place-content: center;
   pointer-events: none;
   position: fixed;
   text-align: center;
-  text-shadow: 0 0 24px color-mix(in oklab, var(--color-primary-500) 55%, transparent);
-  z-index: 41;
+  z-index: 61;
 }
 
 [data-lamp-verse] p {
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
-  line-height: 1.3;
   margin: 0 auto;
-  max-width: 18ch;
-  text-wrap: balance;
+  max-width: 40ch;
+  text-wrap: pretty;
 }
 
 [data-lamp-verse] cite {
+  color: var(--color-primary-300);
   display: block;
   font-size: 0.875rem;
   font-style: normal;
-  letter-spacing: 0.08em;
-  margin-top: 1rem;
-  opacity: 0.7;
-  text-transform: uppercase;
+  margin-top: 0.75rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html[data-easter-egg='lamp']::after {
-    background: color-mix(in oklab, var(--color-primary-900) 78%, black);
-  }
-
   [data-lamp-verse] {
     -webkit-mask-image: none;
     mask-image: none;
@@ -65,8 +54,7 @@ html[data-easter-egg='lamp']::after {
 }
 
 @media print {
-  html[data-easter-egg='lamp']::after,
-  [data-lamp-verse] {
+  [data-lamp] {
     display: none;
   }
 }

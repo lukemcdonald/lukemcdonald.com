@@ -81,7 +81,10 @@ function closeOpenPalettes() {
 }
 
 function visibleItems(palette: Palette) {
-  const selector = palette.state.page === SECRETS_PAGE ? '[data-palette-egg]' : '[data-palette-nav]'
+  const selector =
+    palette.state.page === SECRETS_PAGE ?
+      '[data-palette-egg]'
+    : '[data-palette-nav], [data-palette-command]'
 
   return [...palette.root.querySelectorAll<HTMLElement>(selector)].filter((item) => !item.hidden)
 }
@@ -147,12 +150,40 @@ function filterNavItems(root: Element, needle: string) {
   })
 }
 
-function resolveActiveIndex(palette: Palette, items: HTMLElement[], highlightedHref?: string) {
+function filterCommandItems(root: Element, needle: string) {
+  root.querySelectorAll<HTMLButtonElement>('[data-palette-command]').forEach((item) => {
+    const name = item.dataset.name ?? ''
+
+    item.hidden = needle === '' || !name.includes(needle)
+  })
+}
+
+function hasVisible(root: Element, selector: string) {
+  return [...root.querySelectorAll<HTMLElement>(selector)].some((item) => !item.hidden)
+}
+
+function highlightedIndex(items: HTMLElement[], command: ReturnType<typeof getHighlightedCommand>) {
+  const eggId = commandEggId(command)
+  const href = commandHref(command)
+
+  if (href !== undefined) {
+    return items.findIndex((item) => item.getAttribute('href') === href)
+  }
+
+  if (eggId !== undefined) {
+    return items.findIndex((item) => item.dataset.paletteCommand === eggId)
+  }
+
+  return -1
+}
+
+function resolveActiveIndex(
+  palette: Palette,
+  items: HTMLElement[],
+  command: ReturnType<typeof getHighlightedCommand>,
+) {
   if (!palette.state.arrowOverride) {
-    palette.state.activeIndex =
-      highlightedHref ?
-        items.findIndex((item) => item.getAttribute('href') === highlightedHref)
-      : -1
+    palette.state.activeIndex = highlightedIndex(items, command)
   }
 
   if (palette.state.activeIndex >= items.length) {
@@ -246,12 +277,16 @@ function currentCommand(palette: Palette) {
   return getHighlightedCommand(palette.navItems, palette.input.value)
 }
 
-function commandHref(command: ReturnType<typeof getHighlightedCommand>) {
-  return command?.type === 'nav' ? command.href : undefined
-}
-
 function commandColor(command: ReturnType<typeof getHighlightedCommand>) {
   return command?.type === 'color' ? command.color : undefined
+}
+
+function commandEggId(command: ReturnType<typeof getHighlightedCommand>) {
+  return command?.type === 'egg' ? command.eggId : undefined
+}
+
+function commandHref(command: ReturnType<typeof getHighlightedCommand>) {
+  return command?.type === 'nav' ? command.href : undefined
 }
 
 function syncList(palette: Palette) {
@@ -259,11 +294,16 @@ function syncList(palette: Palette) {
   const command = currentCommand(palette)
 
   filterNavItems(palette.root, query.trim().toLowerCase())
+  filterCommandItems(palette.root, query.trim().toLowerCase())
   syncEggs(palette, query)
+  setHidden(
+    palette.root.querySelector('[data-palette-nav-heading]'),
+    !hasVisible(palette.root, '[data-palette-nav]'),
+  )
 
   const items = visibleItems(palette)
 
-  resolveActiveIndex(palette, items, commandHref(command))
+  resolveActiveIndex(palette, items, command)
   syncActiveStyles(items, palette.state.activeIndex)
   syncCombobox(palette, items)
   syncPageVisibility(palette, palette.state.page === SECRETS_PAGE, items.length > 0, command)
@@ -336,10 +376,7 @@ function selectListItem(palette: Palette) {
     return false
   }
 
-  if (item instanceof HTMLAnchorElement) {
-    item.click()
-  }
-
+  item?.click()
   return true
 }
 
@@ -556,6 +593,34 @@ function bindNavAndEggs(palette: Palette, signal: AbortSignal) {
   palette.root.querySelectorAll<HTMLButtonElement>('[data-palette-egg]').forEach((button) => {
     bindEggButton(palette, button, signal)
   })
+
+  palette.root.querySelectorAll<HTMLButtonElement>('[data-palette-command]').forEach((button) => {
+    bindCommandButton(palette, button, signal)
+  })
+}
+
+function bindCommandButton(palette: Palette, button: HTMLButtonElement, signal: AbortSignal) {
+  button.addEventListener(
+    'click',
+    () => {
+      const id = button.dataset.paletteCommand
+
+      if (!id) {
+        return
+      }
+
+      closePalette(palette, { silent: true })
+      toggleEasterEgg(id)
+    },
+    { signal },
+  )
+  button.addEventListener(
+    'pointerenter',
+    () => {
+      activateItem(palette, button)
+    },
+    { signal },
+  )
 }
 
 function bindEggButton(palette: Palette, button: HTMLButtonElement, signal: AbortSignal) {

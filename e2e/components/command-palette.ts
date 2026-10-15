@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test'
 
 import { STORAGE_KEYS } from '../../src/utils/storage'
-import { commandPaletteEggTestId, TEST_ID } from '../constants'
+import { commandPaletteCommandTestId, commandPaletteEggTestId, TEST_ID } from '../constants'
 import { FontToggle } from './font-toggle'
 import { ThemeToggle } from './theme-toggle'
 
@@ -42,6 +42,10 @@ export class CommandPalette {
   async closeWithKeyboard() {
     await this.page.keyboard.press('Escape')
     await this.input.waitFor({ state: 'hidden' })
+  }
+
+  command(query: string) {
+    return this.page.getByTestId(commandPaletteCommandTestId(query))
   }
 
   egg(id: string) {

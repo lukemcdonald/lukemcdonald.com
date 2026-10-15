@@ -5,7 +5,7 @@ import type { ThemeMode } from '@/components/Settings/ThemeMode/types'
 import { THEME_COLORS, THEME_LABELS } from '@/components/Settings/ThemeColor/constants'
 import { MODE_LABELS, THEME_MODES } from '@/components/Settings/ThemeMode/constants'
 
-const PALETTE_EGG_IDS = ['lamp'] as const
+export const PALETTE_EGG_COMMANDS = [{ eggId: 'lamp', name: 'Selah', query: 'selah' }] as const
 const SECRETS_BACK_LABEL = 'Back'
 const SECRETS_BACK_SHORTCUT_LABEL = 'esc'
 const SOUND_LABELS = ['sound', 'sounds off', 'sounds on']
@@ -64,10 +64,10 @@ export function getHighlightedCommand(
     return { type: 'sound' }
   }
 
-  const eggId = PALETTE_EGG_IDS.find((id) => id === needle)
+  const eggCommand = PALETTE_EGG_COMMANDS.find((item) => item.query.includes(needle))
 
-  if (eggId) {
-    return { eggId, type: 'egg' }
+  if (eggCommand) {
+    return { eggId: eggCommand.eggId, type: 'egg' }
   }
 
   return undefined
