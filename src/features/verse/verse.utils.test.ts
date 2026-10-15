@@ -1,7 +1,32 @@
 import assert from 'node:assert/strict'
-import { describe, test } from 'node:test'
+import { afterEach, describe, mock, test } from 'node:test'
 
-import { FALLBACK_VERSE, YOUVERSION_BSB_ID, youVersionVerseUrl } from './verse.utils.ts'
+import {
+  dayOfYear,
+  FALLBACK_VERSE,
+  fetchTodayVerse,
+  YOUVERSION_API_ORIGIN,
+  YOUVERSION_APP_KEY_HEADER,
+  YOUVERSION_BSB_ID,
+  youVersionVerseUrl,
+} from './verse.utils.ts'
+
+function jsonResponse(body: unknown, status = 200) {
+  return new Response(JSON.stringify(body), {
+    headers: { 'Content-Type': 'application/json' },
+    status,
+  })
+}
+
+function requestHeaders(call: { arguments: readonly unknown[] }) {
+  const init = call.arguments[1] as RequestInit | undefined
+
+  return init?.headers as Record<string, string> | undefined
+}
+
+function requestUrl(call: { arguments: readonly unknown[] }) {
+  return String(call.arguments[0])
+}
 
 describe('youVersionVerseUrl', () => {
   test('builds a BSB bible.com link from USFM', () => {
@@ -19,5 +44,86 @@ describe('FALLBACK_VERSE', () => {
       text: 'Your word is a lamp to my feet and a light to my path.',
       url: youVersionVerseUrl('PSA.119.105'),
     })
+  })
+})
+
+describe('dayOfYear', () => {
+  test('counts from January 1 including leap days', () => {
+    assert.equal(dayOfYear(new Date('2026-01-01T00:00:00Z')), 1)
+    assert.equal(dayOfYear(new Date('2025-12-31T12:00:00Z')), 365)
+    assert.equal(dayOfYear(new Date('2024-12-31T12:00:00Z')), 366)
+  })
+})
+
+describe('fetchTodayVerse', () => {
+  afterEach(() => {
+    mock.restoreAll()
+  })
+
+  test('returns the fallback when the app key is missing', async () => {
+    const fetchMock = mock.fn(async () => {
+      return new Response('unused', { status: 500 })
+    })
+
+    assert.equal(await fetchTodayVerse({ fetch: fetchMock }), FALLBACK_VERSE)
+    assert.equal(fetchMock.mock.calls.length, 0)
+  })
+
+  test('loads the YouVersion verse of the day in BSB', async () => {
+    const fetchMock = mock.fn(async (url: string) => {
+      if (String(url).includes('/verse-of-the-days/')) {
+        return jsonResponse({ day: 15, passage_id: 'JHN.3.16' })
+      }
+
+      return jsonResponse({
+        content: 'For God so loved the world that He gave His one and only Son.',
+        id: 'JHN.3.16',
+        reference: 'John 3:16',
+      })
+    })
+
+    assert.deepEqual(
+      await fetchTodayVerse({
+        appKey: 'test-key',
+        fetch: fetchMock,
+        now: new Date('2026-01-15T12:00:00Z'),
+      }),
+      {
+        reference: 'John 3:16',
+        text: 'For God so loved the world that He gave His one and only Son.',
+        url: youVersionVerseUrl('JHN.3.16'),
+      },
+    )
+
+    const calls = fetchMock.mock.calls
+    const votdCall = calls[0]
+    const passageCall = calls[1]
+
+    assert.equal(calls.length, 2)
+    assert.ok(votdCall)
+    assert.ok(passageCall)
+    assert.equal(requestUrl(votdCall), `${YOUVERSION_API_ORIGIN}/verse-of-the-days/15`)
+    assert.equal(
+      requestUrl(passageCall),
+      `${YOUVERSION_API_ORIGIN}/bibles/${YOUVERSION_BSB_ID}/passages/JHN.3.16`,
+    )
+    assert.equal(requestHeaders(votdCall)?.[YOUVERSION_APP_KEY_HEADER], 'test-key')
+    assert.equal(requestHeaders(passageCall)?.[YOUVERSION_APP_KEY_HEADER], 'test-key')
+  })
+
+  test('returns the fallback when a YouVersion request fails', async () => {
+    const fetchMock = mock.fn(async () => {
+      return new Response('nope', { status: 500 })
+    })
+
+    assert.equal(await fetchTodayVerse({ appKey: 'test-key', fetch: fetchMock }), FALLBACK_VERSE)
+  })
+
+  test('returns the fallback when the payload is missing a passage', async () => {
+    const fetchMock = mock.fn(async () => {
+      return jsonResponse({ day: 1 })
+    })
+
+    assert.equal(await fetchTodayVerse({ appKey: 'test-key', fetch: fetchMock }), FALLBACK_VERSE)
   })
 })

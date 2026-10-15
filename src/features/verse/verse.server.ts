@@ -1,11 +1,9 @@
 import type { Verse } from './verse.types'
 
-import { FALLBACK_VERSE } from './verse.utils'
+import { YVP_APP_KEY } from 'astro:env/server'
 
-/**
- * Swap this body to fetch YouVersion's VOTD at build time via `YVP_APP_KEY`
- * (`astro:env/server`, secret). Keep `{ reference, text, url }`; never call from client.
- */
+import { fetchTodayVerse } from './verse.utils'
+
 export async function getTodayVerse(): Promise<Verse> {
-  return FALLBACK_VERSE
+  return fetchTodayVerse({ appKey: YVP_APP_KEY })
 }
