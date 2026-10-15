@@ -3,8 +3,9 @@
 }
 
 [data-lamp-veil] {
-  background: color-mix(in oklab, var(--color-primary-950) 90%, transparent);
+  background: var(--color-primary-950);
   inset: 0;
+  opacity: 0.9;
   pointer-events: none;
   position: fixed;
   z-index: 60;
@@ -13,10 +14,10 @@
 [data-lamp-glow] {
   animation: lamp-flicker 4.8s ease-in-out infinite;
   background: radial-gradient(
-    circle 20rem at var(--lamp-pos),
-    color-mix(in oklab, oklch(78% 0.1 75) 42%, transparent) 0%,
-    color-mix(in oklab, oklch(70% 0.08 70) 18%, transparent) 38%,
-    transparent 74%
+    circle 26rem at var(--lamp-pos),
+    color-mix(in oklab, oklch(78% 0.1 75) 38%, transparent) 0%,
+    color-mix(in oklab, oklch(70% 0.08 70) 16%, transparent) 42%,
+    transparent 78%
   );
   inset: 0;
   pointer-events: none;
@@ -32,17 +33,18 @@
   inset: 0;
   line-height: 1.6;
   -webkit-mask-image: radial-gradient(
-    circle 18rem at var(--lamp-pos),
+    circle 28rem at var(--lamp-pos),
     #000 0%,
-    #000 28%,
-    transparent 78%
+    #000 48%,
+    transparent 82%
   );
-  mask-image: radial-gradient(circle 18rem at var(--lamp-pos), #000 0%, #000 28%, transparent 78%);
+  mask-image: radial-gradient(circle 28rem at var(--lamp-pos), #000 0%, #000 48%, transparent 82%);
   padding: 1.5rem;
   place-content: center;
   pointer-events: none;
   position: fixed;
   text-align: center;
+  text-shadow: 0 0 32px var(--color-primary-950);
   z-index: 62;
 }
 
