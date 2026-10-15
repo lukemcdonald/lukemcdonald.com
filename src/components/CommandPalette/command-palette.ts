@@ -370,6 +370,7 @@ function selectActive(palette: Palette) {
       onPreferenceApplied: () => syncList(palette),
       setThemeColor,
       setThemeMode,
+      toggleEgg: toggleEasterEgg,
       toggleSound: toggleSoundPreference,
     },
     command,

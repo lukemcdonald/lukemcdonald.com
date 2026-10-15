@@ -16,8 +16,10 @@ import {
 
 import { auroraEgg } from './eggs/aurora'
 import { hyruleEgg } from './eggs/hyrule'
+import { lampEgg } from './eggs/lamp'
 
 type Egg = {
+  dismissOnEscape?: boolean
   id: string
   onActivate?: (silent?: boolean) => void
   onDismiss?: () => void
@@ -28,7 +30,7 @@ type Egg = {
 }
 
 const ATTRIBUTE = 'data-easter-egg'
-const EGGS: readonly Egg[] = [auroraEgg, hyruleEgg]
+const EGGS: readonly Egg[] = [auroraEgg, hyruleEgg, lampEgg]
 const CYCLE_STEPS = EGGS.length + 1
 const IDLE_MS = 2500
 const STORAGE_ON = 'on'
@@ -227,13 +229,21 @@ function nextCycleIndex(index: number) {
   return (index + 1) % CYCLE_STEPS
 }
 
+function onEscape() {
+  resetProgress()
+
+  if (activeEgg?.dismissOnEscape) {
+    hideEgg()
+  }
+}
+
 function onKeyDown(event: KeyboardEvent) {
   if (shouldIgnore(event)) {
     return
   }
 
   if (event.key === 'Escape') {
-    resetProgress()
+    onEscape()
     return
   }
 

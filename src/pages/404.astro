@@ -1,22 +1,41 @@
 ---
+import notFoundImage from '@/assets/images/not-found.jpg'
 import Entry from '@/components/Entry/Entry.astro'
+import Link from '@/components/Link.astro'
+import { getTodayVerse } from '@/features/verse/verse.server'
 import Layout from '@/layouts/Layout.astro'
 import Main from '@/layouts/Main.astro'
-import { createErrorData } from '@/utils/error'
 
-const errorData = createErrorData(404, 'The page you are looking for does not exist.')
-const { html, image, imageAlt, subtitle, title } = errorData
+const verse = await getTodayVerse()
 ---
 
-<Layout title={subtitle ?? title}>
+<Layout
+  description="You're lost, but here's something true."
+  title="Not Found"
+>
   <Main>
     <Entry
-      subtitle={subtitle}
-      title={title}
-      image={image}
-      imageAlt={imageAlt}
+      image={notFoundImage}
+      imageAlt="Little Carly coding."
+      subtitle="Not found"
+      title="You're lost, but here's something true"
     >
-      <slot set:html={html} />
+      <blockquote class="m-0 border-l-2 border-primary-500 pl-4">
+        <p class="m-0">{verse.text}</p>
+        <footer class="mt-3 text-base">
+          <cite class="not-italic">
+            <Link
+              href={verse.url}
+              target="_blank"
+            >
+              {verse.reference}
+            </Link>
+          </cite>
+        </footer>
+      </blockquote>
+      <p class="mt-8">
+        <Link href="/">Head home</Link>
+      </p>
     </Entry>
   </Main>
 </Layout>

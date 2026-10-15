@@ -1,0 +1,72 @@
+html[data-easter-egg='lamp'] {
+  --lamp-pos: 50vw 50vh;
+}
+
+html[data-easter-egg='lamp']::after {
+  background: radial-gradient(
+    circle 14rem at var(--lamp-pos),
+    transparent 0%,
+    color-mix(in oklab, var(--color-primary-900) 40%, transparent) 34%,
+    color-mix(in oklab, var(--color-primary-900) 88%, black) 72%
+  );
+  content: '';
+  inset: 0;
+  pointer-events: none;
+  position: fixed;
+  z-index: 40;
+}
+
+[data-lamp-verse] {
+  color: var(--color-primary-50);
+  display: grid;
+  inset: 0;
+  -webkit-mask-image: radial-gradient(
+    circle 12rem at var(--lamp-pos),
+    #000 0%,
+    #000 30%,
+    transparent 70%
+  );
+  mask-image: radial-gradient(circle 12rem at var(--lamp-pos), #000 0%, #000 30%, transparent 70%);
+  place-content: center;
+  pointer-events: none;
+  position: fixed;
+  text-align: center;
+  text-shadow: 0 0 24px color-mix(in oklab, var(--color-primary-500) 55%, transparent);
+  z-index: 41;
+}
+
+[data-lamp-verse] p {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  line-height: 1.3;
+  margin: 0 auto;
+  max-width: 18ch;
+  text-wrap: balance;
+}
+
+[data-lamp-verse] cite {
+  display: block;
+  font-size: 0.875rem;
+  font-style: normal;
+  letter-spacing: 0.08em;
+  margin-top: 1rem;
+  opacity: 0.7;
+  text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-easter-egg='lamp']::after {
+    background: color-mix(in oklab, var(--color-primary-900) 78%, black);
+  }
+
+  [data-lamp-verse] {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
+@media print {
+  html[data-easter-egg='lamp']::after,
+  [data-lamp-verse] {
+    display: none;
+  }
+}

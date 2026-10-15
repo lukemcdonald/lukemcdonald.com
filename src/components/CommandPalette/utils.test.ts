@@ -30,6 +30,9 @@ function createActions() {
   const mockSetThemeMode = mock.fn((mode: string) => {
     calls.push(`setThemeMode:${mode}`)
   })
+  const mockToggleEgg = mock.fn((id: string) => {
+    calls.push(`toggleEgg:${id}`)
+  })
   const mockToggleSound = mock.fn(() => {
     calls.push('toggleSound')
   })
@@ -41,6 +44,7 @@ function createActions() {
       onPreferenceApplied: mockOnPreferenceApplied,
       setThemeColor: mockSetThemeColor,
       setThemeMode: mockSetThemeMode,
+      toggleEgg: mockToggleEgg,
       toggleSound: mockToggleSound,
     },
     calls,
@@ -103,6 +107,13 @@ describe('getHighlightedCommand', () => {
     assert.equal(getHighlightedCommand(navItems, 'aurora'), undefined)
     assert.equal(getHighlightedCommand(navItems, 'hyrule'), undefined)
   })
+
+  test('matches lamp as an egg command', () => {
+    assert.deepEqual(getHighlightedCommand(navItems, 'lamp'), {
+      eggId: 'lamp',
+      type: 'egg',
+    })
+  })
 })
 
 describe('applyHighlightedCommand', () => {
@@ -148,6 +159,14 @@ describe('applyHighlightedCommand', () => {
     applyHighlightedCommand(actions, { type: 'sound' })
 
     assert.deepEqual(calls, ['toggleSound', 'onPreferenceApplied'])
+  })
+
+  test('closes and toggles the lamp egg', () => {
+    const { actions, calls } = createActions()
+
+    applyHighlightedCommand(actions, { eggId: 'lamp', type: 'egg' })
+
+    assert.deepEqual(calls, ['close', 'toggleEgg:lamp'])
   })
 })
 

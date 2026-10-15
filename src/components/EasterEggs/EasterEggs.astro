@@ -1,3 +1,16 @@
+---
+import { getTodayVerse } from '@/features/verse/verse.server'
+
+const verse = await getTodayVerse()
+---
+
+<template data-lamp-template>
+  <div data-lamp-verse>
+    <p>{verse.text}</p>
+    <cite>{verse.reference}</cite>
+  </div>
+</template>
+
 <script>
   import { initializeEasterEggs } from './easter-eggs'
 

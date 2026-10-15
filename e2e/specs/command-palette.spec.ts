@@ -117,7 +117,7 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
     await homePage.goto()
     await palette.markEggFound('aurora')
     await palette.openWithKeyboard()
-    await expect(palette.secretsFooter).toContainText('Secrets 1/2')
+    await expect(palette.secretsFooter).toContainText('Secrets 1/3')
 
     await expect.poll(async () => palette.listHeight()).toBeGreaterThan(150)
 

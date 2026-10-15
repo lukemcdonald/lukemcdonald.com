@@ -10,6 +10,7 @@ export const ROUTES = [
   { id: 'husband', path: '/i-am-a/husband' },
   { id: 'father', path: '/i-am-a/father' },
   { id: 'coach', path: '/i-am-a/coach' },
+  { id: 'not-found', path: '/missing-page' },
 ] as const
 
 export type SiteRoute = (typeof ROUTES)[number]
