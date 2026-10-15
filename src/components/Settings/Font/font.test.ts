@@ -4,6 +4,8 @@ import { afterEach, before, beforeEach, describe, mock, test } from 'node:test'
 import { STORAGE_KEYS } from '@/utils/storage'
 
 import { DEFAULT_FONT_PAIRING, getFontPairing, selectFontOption } from './font.ts'
+import { fontPairingStyleId } from './load-pairing.ts'
+import { FONT_PAIRING_CSS_SCRIPT_ID } from './pairings.ts'
 
 function createFontStorage() {
   const store = new Map<string, string>()
@@ -25,11 +27,34 @@ function installBrowserStubs({
   mockRemoveItem,
   mockSetItem,
 }: ReturnType<typeof createFontStorage>) {
+  const styles = new Map<string, { id: string; textContent: string }>()
+
   Object.defineProperty(globalThis, 'document', {
     configurable: true,
     value: {
+      createElement: mock.fn(() => {
+        return { id: '', textContent: '' }
+      }),
       documentElement: {
         dataset: {},
+      },
+      getElementById: mock.fn((id: string) => {
+        if (id === FONT_PAIRING_CSS_SCRIPT_ID) {
+          return {
+            textContent: JSON.stringify({
+              live: '.live{}',
+              play: '.play{}',
+              work: '.work{}',
+            }),
+          }
+        }
+
+        return styles.get(id) ?? null
+      }),
+      head: {
+        append: mock.fn((node: { id: string; textContent: string }) => {
+          styles.set(node.id, node)
+        }),
       },
     },
   })
@@ -78,6 +103,7 @@ describe('selectFontOption', () => {
     assert.equal(getFontPairing(), 'live')
     assert.equal(document.documentElement.dataset.font, 'live')
     assert.equal(store.get(STORAGE_KEYS.font), 'live')
+    assert.equal(document.getElementById(fontPairingStyleId('live'))?.textContent, '.live{}')
   })
 
   test('toggles the active pairing back to default', () => {

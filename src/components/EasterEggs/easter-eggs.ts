@@ -1,13 +1,11 @@
 /**
  * Tiny Konami-style extras. Add eggs/<id>.ts + eggs/<id>.css and one line in
- * EGGS. Delete those to remove it. CSS is globbed from EasterEggs.astro so a
- * restored egg does not flash. Active-egg keys use the shared storage prefix,
- * applied by the inline head script in Head.astro.
+ * EGGS. Delete those to remove it. CSS is loaded when an egg is shown. Active-egg
+ * keys use the shared storage prefix, applied by the inline head script in Head.astro.
  */
 import type { SoundName } from 'cuelume'
 
-import { play } from 'cuelume'
-
+import { playSound } from '@/components/Settings/Sound/utils'
 import {
   getStorageItem,
   getStorageKeys,
@@ -182,7 +180,7 @@ function hideEgg(silent = false) {
   document.documentElement.removeAttribute(ATTRIBUTE)
   clearStoredEggs()
   egg?.onDismiss?.()
-  playSound(silent ? undefined : egg?.soundOff)
+  playEggSound(silent ? undefined : egg?.soundOff)
 }
 
 function isCurrentCycleStep(index: number) {
@@ -280,12 +278,18 @@ function pickEgg(completed: readonly Egg[]): Egg | undefined {
   return completed[0]
 }
 
-function playSound(name: SoundName | undefined) {
+async function loadEggStyles(id: string) {
+  const { loadEggStyles: load } = await import('./load-egg-styles')
+
+  return load(id)
+}
+
+function playEggSound(name: SoundName | undefined) {
   if (!name) {
     return
   }
 
-  play(name)
+  playSound(name)
 }
 
 function readCycleIndex() {
@@ -325,8 +329,16 @@ function remountEgg() {
     return
   }
 
-  document.documentElement.setAttribute(ATTRIBUTE, activeEgg.id)
-  activeEgg.onActivate?.(true)
+  const egg = activeEgg
+
+  void loadEggStyles(egg.id).then(() => {
+    if (activeEgg !== egg) {
+      return
+    }
+
+    document.documentElement.setAttribute(ATTRIBUTE, egg.id)
+    egg.onActivate?.(true)
+  })
 }
 
 function resetProgress() {
@@ -390,11 +402,17 @@ function dismissOtherEgg(nextId: string) {
 function showEgg(egg: Egg, silent = false) {
   dismissOtherEgg(egg.id)
   activeEgg = egg
-  document.documentElement.setAttribute(ATTRIBUTE, egg.id)
   clearStoredEggs()
   setStorageItem(`${STORAGE_KEYS.easterEggPrefix}${egg.id}`, STORAGE_ON)
-  egg.onActivate?.(silent)
-  playSound(silent ? undefined : egg.soundOn)
+  void loadEggStyles(egg.id).then(() => {
+    if (activeEgg !== egg) {
+      return
+    }
+
+    document.documentElement.setAttribute(ATTRIBUTE, egg.id)
+    egg.onActivate?.(silent)
+    playEggSound(silent ? undefined : egg.soundOn)
+  })
 }
 
 function stepEgg(egg: Egg, code: string): boolean {

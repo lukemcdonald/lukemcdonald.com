@@ -6,6 +6,7 @@ import {
   type SettingChange,
   syncPreferencePicker,
 } from '../picker'
+import { loadAllFontPairings, loadFontPairing } from './load-pairing'
 import { FONT_PAIRINGS, type SelectableFontPairing } from './pairings'
 
 export const DEFAULT_FONT_PAIRING = 'default'
@@ -36,6 +37,7 @@ export function applyFontPairing(pairing: FontPairing): void {
     return
   }
 
+  loadFontPairing(pairing)
   html.dataset.font = pairing
 }
 
@@ -95,6 +97,21 @@ export function bindFont(root: Element, { onChange, signal }: SettingChange) {
   const sync = () => syncFont(root)
 
   if (picker) {
+    picker.querySelector('[data-preference-options]')?.addEventListener(
+      'toggle',
+      (event) => {
+        if (!(event.currentTarget instanceof HTMLElement)) {
+          return
+        }
+
+        if (!event.currentTarget.matches(':popover-open')) {
+          return
+        }
+
+        loadAllFontPairings()
+      },
+      { signal },
+    )
     bindPreferencePicker(picker, {
       apply: selectFontOption,
       onChange,

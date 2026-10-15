@@ -110,6 +110,8 @@ export const FONT_PAIRING_CONFIGS = [
   },
 ] as const satisfies readonly FontPairingConfig[]
 
+export const FONT_PAIRING_CSS_SCRIPT_ID = 'font-pairing-css'
+
 export const FONT_PAIRINGS = FONT_PAIRING_CONFIGS.map((pairing) => pairing.id)
 
 export type SelectableFontPairing = (typeof FONT_PAIRING_CONFIGS)[number]['id']
@@ -117,6 +119,22 @@ export type SelectableFontPairing = (typeof FONT_PAIRING_CONFIGS)[number]['id']
 export const FONT_SOURCE_FAMILIES = Object.values(FONT_FAMILIES).toSorted((left, right) => {
   return left.cssVariable.localeCompare(right.cssVariable)
 })
+
+export function fontPairingFacesCss(familyCss: (cssVariable: string) => string) {
+  const entries = FONT_PAIRING_CONFIGS.map((pairing) => {
+    const css = pairingFamilyCssVariables(pairing).map(familyCss).join('')
+
+    return [pairing.id, css] as const
+  })
+
+  return Object.fromEntries(entries.toSorted(([left], [right]) => left.localeCompare(right)))
+}
+
+export function pairingFamilyCssVariables(pairing: FontPairingConfig) {
+  return [
+    ...new Set([pairing.body.cssVariable, pairing.heading.cssVariable, pairing.nav.cssVariable]),
+  ].toSorted()
+}
 
 function headingDeclarations(heading: HeadingFace, includeLineHeight = true) {
   const declarations: string[] = []

@@ -1,15 +1,16 @@
 ---
 import type { SeoMeta } from '@/utils/seo'
 
-import { Font } from 'astro:assets'
 import { CLOUDFLARE_ANALYTICS_TOKEN, GOOGLE_SITE_VERIFICATION } from 'astro:env/client'
 import { CONTEXT } from 'astro:env/server'
 import { ClientRouter } from 'astro:transitions'
+import { componentDataByCssVariable } from 'virtual:astro:assets/fonts/internal'
 
 import {
+  FONT_PAIRING_CSS_SCRIPT_ID,
   FONT_PAIRINGS,
-  FONT_SOURCE_FAMILIES,
   fontPairingCss,
+  fontPairingFacesCss,
 } from '@/components/Settings/Font/pairings'
 import { DEFAULT_GLASS_LEVEL, GLASS_LEVELS } from '@/components/Settings/Glass/constants'
 import { DEFAULT_THEME_COLOR, THEME_COLORS } from '@/components/Settings/ThemeColor/constants'
@@ -40,22 +41,33 @@ const description = stripHtmlAndTruncate(inDescription, 160, '...')
 const defaultGlassLevel = DEFAULT_GLASS_LEVEL
 const defaultThemeColor = DEFAULT_THEME_COLOR
 const defaultThemeMode = DEFAULT_THEME_MODE
+const fontPairingCssScriptId = FONT_PAIRING_CSS_SCRIPT_ID
 const fontPairings = FONT_PAIRINGS
 const glassLevels = GLASS_LEVELS
 const metaForSeo: SeoMeta = { ...meta, description }
 const pairingCss = fontPairingCss()
+const pairingFontCss = fontPairingFacesCss((cssVariable) => {
+  return componentDataByCssVariable.get(cssVariable)?.css ?? ''
+})
 const socialMetaTags = buildSocialMetaTags(metaForSeo, Astro.site ?? GLOBAL_CONFIG.site.origin)
 const structuredData = buildGraphJsonLd(metaForSeo)
 const themeColors = THEME_COLORS
 ---
 
 <head>
+  <script
+    id={fontPairingCssScriptId}
+    is:inline
+    set:html={JSON.stringify(pairingFontCss)}
+    type="application/json"
+  />
   <!-- Theme and easter-egg initialization (prevents flash) - must run before any CSS -->
   <script
     define:vars={{
       defaultGlassLevel,
       defaultThemeColor,
       defaultThemeMode,
+      fontPairingCssScriptId,
       fontPairings,
       glassLevels,
       STORAGE_KEYS,
@@ -86,6 +98,18 @@ const themeColors = THEME_COLORS
         const storedFont = localStorage.getItem(STORAGE_KEYS.font)
         if (fontPairings.includes(storedFont)) {
           html.dataset.font = storedFont
+          try {
+            const cssNode = document.getElementById(fontPairingCssScriptId)
+            const pairingFontCss = JSON.parse((cssNode && cssNode.textContent) || '{}')
+            const css = pairingFontCss[storedFont]
+            const styleId = 'font-pairing-' + storedFont
+            if (css && !document.getElementById(styleId)) {
+              const style = document.createElement('style')
+              style.id = styleId
+              style.textContent = css
+              document.head.append(style)
+            }
+          } catch {}
         } else {
           delete html.dataset.font
         }
@@ -138,7 +162,6 @@ const themeColors = THEME_COLORS
     content="width=device-width,initial-scale=1"
   />
 
-  {FONT_SOURCE_FAMILIES.map((family) => <Font cssVariable={family.cssVariable} />)}
   <style is:inline set:html={pairingCss}></style>
   <meta
     name="googlebot"
