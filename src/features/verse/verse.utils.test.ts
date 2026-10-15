@@ -41,6 +41,7 @@ describe('FALLBACK_VERSE', () => {
   test('uses the BSB wording for Psalm 119:105', () => {
     assert.deepEqual(FALLBACK_VERSE, {
       reference: 'Psalm 119:105',
+      source: 'fallback',
       text: 'Your word is a lamp to my feet and a light to my path.',
       url: youVersionVerseUrl('PSA.119.105'),
     })
@@ -65,7 +66,10 @@ describe('fetchTodayVerse', () => {
       return new Response('unused', { status: 500 })
     })
 
-    assert.equal(await fetchTodayVerse({ fetch: fetchMock }), FALLBACK_VERSE)
+    const verse = await fetchTodayVerse({ fetch: fetchMock })
+
+    assert.equal(verse, FALLBACK_VERSE)
+    assert.equal(verse.source, 'fallback')
     assert.equal(fetchMock.mock.calls.length, 0)
   })
 
@@ -90,6 +94,7 @@ describe('fetchTodayVerse', () => {
       }),
       {
         reference: 'John 3:16',
+        source: 'api',
         text: 'For God so loved the world that He gave His one and only Son.',
         url: youVersionVerseUrl('JHN.3.16'),
       },

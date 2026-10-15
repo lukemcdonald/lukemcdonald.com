@@ -13,6 +13,7 @@ export function youVersionVerseUrl(usfm: string, version = 'BSB') {
 
 export const FALLBACK_VERSE: Verse = {
   reference: 'Psalm 119:105',
+  source: 'fallback',
   text: 'Your word is a lamp to my feet and a light to my path.',
   url: youVersionVerseUrl('PSA.119.105'),
 }
@@ -127,6 +128,7 @@ async function loadYouVersionVerse(appKey: string, fetchFn: VerseFetch, now: Dat
 
   return {
     reference: passage.reference,
+    source: 'api' as const,
     text: passage.content,
     url: youVersionVerseUrl(passageId),
   }

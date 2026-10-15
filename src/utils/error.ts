@@ -1,6 +1,7 @@
 import type { ImageMetadata } from 'astro'
 
 import notFoundImage from '@/assets/images/not-found.jpg'
+import { BADGE_CLASS } from '@/components/badge'
 
 export interface ErrorData {
   description?: string
@@ -22,7 +23,7 @@ export function createErrorData(status: number, errorMessage?: string): ErrorDat
   }
 
   if (errorMessage) {
-    baseData.html = `<pre class="text-base leading-7 whitespace-normal"><span class="px-1 py-px font-sans text-sm font-medium uppercase rounded-xs text-primary-900 bg-primary-500">Error</span> <span class="block mt-2">${errorMessage}</span></pre>`
+    baseData.html = `<pre class="text-base leading-7 whitespace-normal"><span class="${BADGE_CLASS}">Error</span> <span class="block mt-2">${errorMessage}</span></pre>`
   }
 
   return baseData

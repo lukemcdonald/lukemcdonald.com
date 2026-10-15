@@ -3,50 +3,91 @@
 }
 
 [data-lamp-veil] {
-  background: var(--color-primary-950);
+  background: color-mix(in oklab, var(--color-primary-950) 90%, transparent);
   inset: 0;
   pointer-events: none;
   position: fixed;
   z-index: 60;
 }
 
-[data-lamp-verse] {
-  color: var(--color-primary-50);
-  display: grid;
-  font-family: var(--font-sans);
-  font-size: 1.125rem;
-  inset: 0;
-  line-height: 1.625;
-  -webkit-mask-image: radial-gradient(
-    circle 12rem at var(--lamp-pos),
-    #000 0%,
-    #000 35%,
-    transparent 72%
+[data-lamp-glow] {
+  animation: lamp-flicker 4.8s ease-in-out infinite;
+  background: radial-gradient(
+    circle 20rem at var(--lamp-pos),
+    color-mix(in oklab, oklch(78% 0.1 75) 42%, transparent) 0%,
+    color-mix(in oklab, oklch(70% 0.08 70) 18%, transparent) 38%,
+    transparent 74%
   );
-  mask-image: radial-gradient(circle 12rem at var(--lamp-pos), #000 0%, #000 35%, transparent 72%);
+  inset: 0;
+  pointer-events: none;
+  position: fixed;
+  z-index: 61;
+}
+
+[data-lamp-verse] {
+  color: oklch(96% 0.02 80);
+  display: grid;
+  font-family: var(--font-heading, var(--font-sans));
+  font-size: clamp(1.5rem, 3.2vw, 2.25rem);
+  inset: 0;
+  line-height: 1.6;
+  -webkit-mask-image: radial-gradient(
+    circle 18rem at var(--lamp-pos),
+    #000 0%,
+    #000 28%,
+    transparent 78%
+  );
+  mask-image: radial-gradient(circle 18rem at var(--lamp-pos), #000 0%, #000 28%, transparent 78%);
   padding: 1.5rem;
   place-content: center;
   pointer-events: none;
   position: fixed;
   text-align: center;
-  z-index: 61;
+  z-index: 62;
 }
 
 [data-lamp-verse] p {
   margin: 0 auto;
-  max-width: 40ch;
+  max-width: 32ch;
   text-wrap: pretty;
 }
 
 [data-lamp-verse] cite {
-  color: var(--color-primary-300);
   display: block;
-  font-size: 0.875rem;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
   font-style: normal;
-  margin-top: 0.75rem;
+  letter-spacing: 0.08em;
+  margin-top: 1rem;
+  opacity: 0.8;
+  text-transform: uppercase;
+}
+
+@keyframes lamp-flicker {
+  0%,
+  100% {
+    opacity: 0.58;
+  }
+
+  35% {
+    opacity: 0.72;
+  }
+
+  55% {
+    opacity: 0.5;
+  }
+
+  78% {
+    opacity: 0.66;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  [data-lamp-glow] {
+    animation: none;
+    opacity: 0.6;
+  }
+
   [data-lamp-verse] {
     -webkit-mask-image: none;
     mask-image: none;

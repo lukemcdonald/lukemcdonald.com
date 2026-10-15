@@ -1,4 +1,5 @@
 ---
+import Badge from '@/components/Badge.astro'
 import Entry from '@/components/Entry/Entry.astro'
 import Link from '@/components/Link.astro'
 import { getTodayVerse } from '@/features/verse/verse.server'
@@ -19,7 +20,14 @@ const { html, image, imageAlt, subtitle, title } = errorData
       subtitle={subtitle}
       title={title}
     >
-      <slot set:html={html} />
+      <Fragment set:html={html} />
+      {
+        verse.source === 'api' && (
+          <p>
+            <Badge>Verse of the day</Badge>
+          </p>
+        )
+      }
       <blockquote>
         <p>{verse.text}</p>
         <p>

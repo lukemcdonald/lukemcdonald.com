@@ -8,6 +8,7 @@ test.describe('not found', { tag: '@smoke' }, () => {
     await expect(
       sitePage.page.getByText('The page you are looking for does not exist.'),
     ).toBeVisible()
+    await expect(sitePage.page.getByText('Verse of the day', { exact: true })).toHaveCount(0)
     await expect(sitePage.page.locator('blockquote')).toContainText(/.+/)
     await expect(sitePage.page.locator('blockquote a')).toHaveAttribute(
       'href',
