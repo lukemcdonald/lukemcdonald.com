@@ -69,7 +69,7 @@ src/features/{domain}/
 
 1. **Shared** — `src/components/`
 2. **Feature** — `src/features/{domain}/components/`
-3. **Client scripts** — colocated `*.ts` modules imported from `<script>` tags, following `src/components/Nav/mobile-menu.ts`
+3. **Client scripts** — colocated `*.ts` modules imported from `<script>` tags, following `src/features/navigation/components/mobile-menu.ts`
 
 Do not import from `@lucide/astro`. Import icons directly:
 

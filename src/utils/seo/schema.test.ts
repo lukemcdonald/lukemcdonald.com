@@ -42,19 +42,32 @@ function pageNode(meta: SeoMeta) {
   return graph(meta)['@graph'][1] as PageJsonLd
 }
 
+function personId() {
+  return `${origin()}/#person`
+}
+
+function personNode(meta: SeoMeta) {
+  return graph(meta)['@graph'][2]
+}
+
+function personRef() {
+  return { '@id': personId() }
+}
+
 function websiteNode(meta: SeoMeta) {
   return graph(meta)['@graph'][0]
 }
 
 describe('buildGraphJsonLd', () => {
-  test('returns a two-node @graph of WebSite then the page', () => {
+  test('returns a three-node @graph of WebSite, page, then Person', () => {
     const jsonLd = graph(meta())
-    const [website, page] = jsonLd['@graph']
+    const [website, page, person] = jsonLd['@graph']
 
     assert.equal(jsonLd['@context'], 'https://schema.org')
-    assert.equal(jsonLd['@graph'].length, 2)
+    assert.equal(jsonLd['@graph'].length, 3)
     assert.equal(website['@type'], 'WebSite')
     assert.equal(page['@type'], 'WebPage')
+    assert.equal(person['@type'], 'Person')
   })
 
   test('website node uses the site origin and name', () => {
@@ -71,6 +84,21 @@ describe('buildGraphJsonLd', () => {
   })
 })
 
+describe('Person JSON-LD', () => {
+  test('describes Luke McDonald with profile sameAs links', () => {
+    const person = personNode(meta())
+
+    assert.deepEqual(person, {
+      '@context': 'https://schema.org',
+      '@id': personId(),
+      '@type': 'Person',
+      name: GLOBAL_CONFIG.author.name,
+      sameAs: ['https://github.com/lukemcdonald', 'https://www.linkedin.com/in/thelukemcdonald/'],
+      url: origin(),
+    })
+  })
+})
+
 describe('page JSON-LD', () => {
   test('maps page type to WebPage with publisher and no author', () => {
     const page = pageNode(
@@ -81,11 +109,7 @@ describe('page JSON-LD', () => {
     )
 
     assert.equal(page['@type'], 'WebPage')
-    assert.deepEqual(page.publisher, {
-      '@type': 'Organization',
-      name: GLOBAL_CONFIG.name,
-      url: origin(),
-    })
+    assert.deepEqual(page.publisher, personRef())
     assert.equal('author' in page, false)
   })
 
@@ -97,64 +121,20 @@ describe('page JSON-LD', () => {
     assert.equal('author' in page, false)
   })
 
-  test('maps article type to Article with an author array and publisher', () => {
-    const page = pageNode(
-      meta({
-        author: { name: 'Luke McDonald', url: origin() },
-        contentType: 'article',
-      }),
-    )
-
-    assert.equal(page['@type'], 'Article')
-    assert.deepEqual(page.author, [
-      {
-        '@type': 'Person',
-        name: 'Luke McDonald',
-        url: origin(),
-      },
-    ])
-    assert.deepEqual(page.publisher, {
-      '@type': 'Organization',
-      name: GLOBAL_CONFIG.name,
-      url: origin(),
-    })
-  })
-
-  test('maps blog type to BlogPosting with an author array and publisher', () => {
-    const page = pageNode(
-      meta({
-        author: { name: 'Luke McDonald' },
-        contentType: 'blog',
-      }),
-    )
-
-    assert.equal(page['@type'], 'BlogPosting')
-    assert.deepEqual(page.author, [
-      {
-        '@type': 'Person',
-        name: 'Luke McDonald',
-      },
-    ])
-    assert.ok(page.publisher)
-  })
-
-  test('omits author url when the author has no url', () => {
-    const page = pageNode(
-      meta({
-        author: { name: 'Luke McDonald' },
-        contentType: 'article',
-      }),
-    )
-
-    assert.deepEqual(page.author, [{ '@type': 'Person', name: 'Luke McDonald' }])
-  })
-
-  test('omits author and publisher when an article has no author', () => {
+  test('maps article type to Article with the Person as author and publisher', () => {
     const page = pageNode(meta({ contentType: 'article' }))
 
     assert.equal(page['@type'], 'Article')
-    assert.equal('author' in page, false)
-    assert.equal('publisher' in page, false)
+    assert.deepEqual(page.author, [personRef()])
+    assert.deepEqual(page.publisher, personRef())
+  })
+
+  test('maps blog type to BlogPosting with the Person as author and publisher', () => {
+    const page = pageNode(meta({ contentType: 'blog' }))
+
+    assert.equal(page['@type'], 'BlogPosting')
+    assert.deepEqual(page.author, [personRef()])
+    assert.deepEqual(page.publisher, personRef())
   })
 
   test('derives @id and url from a relative canonical path', () => {

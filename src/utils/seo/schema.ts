@@ -10,6 +10,30 @@ const CONTENT_TYPE_MAP: Record<SeoContentType, SchemaType> = {
   page: 'WebPage',
 } as const
 
+const PERSON_SAME_AS = [
+  'https://github.com/lukemcdonald',
+  'https://www.linkedin.com/in/thelukemcdonald/',
+] as const
+
+function personId() {
+  return `${GLOBAL_CONFIG.site.origin}/#person`
+}
+
+function personRef() {
+  return { '@id': personId() }
+}
+
+function buildPersonJsonLd() {
+  return {
+    '@context': 'https://schema.org',
+    '@id': personId(),
+    '@type': 'Person',
+    name: GLOBAL_CONFIG.author.name,
+    sameAs: PERSON_SAME_AS,
+    url: GLOBAL_CONFIG.author.url,
+  }
+}
+
 function buildWebsiteJsonLd() {
   return {
     '@context': 'https://schema.org',
@@ -22,17 +46,11 @@ function buildWebsiteJsonLd() {
 }
 
 function buildPageJsonLd(meta: SeoMeta) {
-  const { author, canonicalUrl, contentType = 'page', description, modDate, pubDate, title } = meta
+  const { canonicalUrl, contentType = 'page', description, modDate, pubDate, title } = meta
 
   const type = CONTENT_TYPE_MAP[contentType]
   const isArticleOrBlog = type === 'Article' || type === 'BlogPosting'
-
-  const publisher = {
-    '@type': 'Organization',
-    name: GLOBAL_CONFIG.name,
-    url: GLOBAL_CONFIG.site.origin,
-  }
-
+  const person = personRef()
   const url = canonicalUrl ? new URL(canonicalUrl, GLOBAL_CONFIG.site.origin).toString() : undefined
 
   const base = {
@@ -49,30 +67,20 @@ function buildPageJsonLd(meta: SeoMeta) {
     ...(pubDate && { datePublished: pubDate.toISOString() }),
   } as const
 
-  if (isArticleOrBlog && author && typeof author === 'object') {
-    const person = {
-      '@type': 'Person',
-      name: author.name,
-      ...(author.url && { url: author.url }),
-    }
-
+  if (isArticleOrBlog) {
     return {
       ...base,
       author: [person],
-      publisher,
+      publisher: person,
     }
   }
 
-  if (!isArticleOrBlog) {
-    return { ...base, publisher }
-  }
-
-  return base
+  return { ...base, publisher: person }
 }
 
 export function buildGraphJsonLd(meta: SeoMeta) {
   return {
     '@context': 'https://schema.org',
-    '@graph': [buildWebsiteJsonLd(), buildPageJsonLd(meta)],
+    '@graph': [buildWebsiteJsonLd(), buildPageJsonLd(meta), buildPersonJsonLd()],
   }
 }
