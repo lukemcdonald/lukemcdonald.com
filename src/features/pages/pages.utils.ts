@@ -60,6 +60,12 @@ export function buildPagesFilter(options: PageFilterOptions = {}) {
   return (entry: PageEntry) => matchesPageFilter(entry, included)
 }
 
+export function omitIndexPage<T extends { id: string }>(pages: T[]) {
+  return pages.filter((page) => {
+    return page.id !== 'index'
+  })
+}
+
 export function resolvePageSeo(page: {
   data: Pick<PageEntry['data'], 'description' | 'seo' | 'title'>
   rendered?: { html?: string } | null

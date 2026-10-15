@@ -3,7 +3,7 @@ order: 2
 subtitle: 'I am a'
 title: 'Husband'
 image: '@/assets/images/luke-and-heather.jpg'
-imageAlt: 'luke and heather'
+imageAlt: 'Luke and Heather outdoors'
 description: '"You being you, lets me be me, and us be us."'
 ---
 

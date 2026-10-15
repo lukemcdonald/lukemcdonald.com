@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
-import { buildPagesFilter, resolvePageSeo, sortPages } from './pages.utils.ts'
+import { buildPagesFilter, omitIndexPage, resolvePageSeo, sortPages } from './pages.utils.ts'
 
 type PageStub = Parameters<typeof sortPages>[0][number]
 
@@ -42,6 +42,16 @@ describe('buildPagesFilter', () => {
       buildPagesFilter({ include: ['about.md'] })(page('about.md', { title: 'About' })),
       true,
     )
+  })
+})
+
+describe('omitIndexPage', () => {
+  test('drops the homepage index entry and keeps other pages', () => {
+    const index = { id: 'index' }
+    const christian = { id: 'i-am-a/christian' }
+    const talks = { id: 'tread-talks' }
+
+    assert.deepEqual(omitIndexPage([index, christian, talks]), [christian, talks])
   })
 })
 

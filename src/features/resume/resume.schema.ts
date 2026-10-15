@@ -27,7 +27,6 @@ const experienceSchema = z.object({
   company: z.string(),
   endDate: endDateSchema,
   highlights: z.array(z.string()).optional(),
-  image: z.string().optional(),
   location: z.string().optional(),
   position: z.string(),
   startDate: dateStringSchema,
