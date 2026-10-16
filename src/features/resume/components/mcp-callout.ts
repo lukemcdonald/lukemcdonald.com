@@ -4,7 +4,6 @@ export const COPIED_BUTTON_LABEL = 'Copied MCP URL'
 export const COPIED_LABEL = 'Copied'
 const COPIED_RESET_MS = 2000
 export const COPY_BUTTON_LABEL = 'Copy MCP URL'
-export const COPY_LABEL = 'Copy'
 
 export async function copyText(text: string) {
   await navigator.clipboard.writeText(text)
@@ -12,6 +11,8 @@ export async function copyText(text: string) {
 
 export function setCopyFeedback(root: Element, copied: boolean) {
   const button = root.querySelector<HTMLButtonElement>('[data-mcp-copy]')
+  const doneIcon = root.querySelector<HTMLElement>('[data-mcp-copy-icon="done"]')
+  const idleIcon = root.querySelector<HTMLElement>('[data-mcp-copy-icon="idle"]')
   const status = root.querySelector<HTMLElement>('[data-mcp-copy-status]')
 
   if (!button || !status) {
@@ -19,7 +20,9 @@ export function setCopyFeedback(root: Element, copied: boolean) {
   }
 
   button.setAttribute('aria-label', copied ? COPIED_BUTTON_LABEL : COPY_BUTTON_LABEL)
-  button.textContent = copied ? COPIED_LABEL : COPY_LABEL
+  doneIcon?.classList.toggle('hidden', !copied)
+  idleIcon?.classList.toggle('hidden', copied)
+  status.classList.toggle('hidden', !copied)
   status.textContent = copied ? COPIED_LABEL : ''
 }
 
