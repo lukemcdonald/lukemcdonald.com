@@ -20,6 +20,7 @@
     "format:fix": "prettier . --write --ignore-unknown",
     "lint": "eslint ./src ./e2e playwright.config.ts --report-unused-disable-directives",
     "lint:fix": "eslint ./src ./e2e playwright.config.ts --fix --report-unused-disable-directives",
+    "mcp:smoke": "node scripts/mcp-smoke.mjs",
     "preinstall": "npx only-allow pnpm",
     "prepare": "skills-npm --agents cursor,claude-code --yes",
     "preview": "netlify deploy --build --message \"preview $(git rev-parse --short HEAD)\"",
@@ -33,6 +34,7 @@
   },
   "dependencies": {
     "@lucide/astro": "^1.53.0",
+    "@modelcontextprotocol/server": "^2.3.1",
     "@resvg/resvg-js": "^2.6.2",
     "cuelume": "0.2.4"
   },
