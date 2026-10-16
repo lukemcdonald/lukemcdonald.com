@@ -1,8 +1,8 @@
 ---
-import { getNavigationGroups } from '@/features/navigation/navigation.server'
+import { loadNavigationGroups } from '@/features/navigation/navigation.server'
 import { toHrefTestId } from '@/features/navigation/navigation.utils'
 
-const groups = await getNavigationGroups()
+const groups = await loadNavigationGroups()
 const liveLinks = groups.find((group) => group.name === 'Live')?.links ?? []
 
 const linkStyles =

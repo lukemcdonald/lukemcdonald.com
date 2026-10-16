@@ -1,13 +1,13 @@
 import type { APIRoute } from 'astro'
 
 import { GLOBAL_CONFIG } from '@/configs/global'
-import { getPublishedPages } from '@/features/pages/pages.server'
+import { loadPublishedPages } from '@/features/pages/pages.server'
 import { renderOgPng, resolveOgPhotoPath } from '@/utils/og.render'
 
 export const prerender = true
 
 export async function getStaticPaths() {
-  const pages = await getPublishedPages()
+  const pages = await loadPublishedPages()
   const contentPaths = pages.map((page) => {
     const isHome = page.id === 'index'
     const slug = isHome ? 'index' : page.id

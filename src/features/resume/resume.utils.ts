@@ -7,7 +7,7 @@ import { sortByDateDesc, sortExperienceByEndDate } from '@/utils/dates'
 
 type ResumeEntry = CollectionEntry<'resume'>
 
-function getEntryFields(data: unknown) {
+function toEntryFields(data: unknown) {
   if (data && typeof data === 'object') {
     return data as Record<string, unknown>
   }
@@ -24,7 +24,7 @@ function assignResumeEntry(result: Record<string, unknown>, entry: ResumeEntry) 
   }
 
   const existing = Array.isArray(result[section]) ? result[section] : []
-  const fields = getEntryFields(entry.data)
+  const fields = toEntryFields(entry.data)
 
   result[section] = [...existing, { id: itemId, ...fields }]
 }
@@ -41,7 +41,7 @@ function sortResumeValue(key: string, value: unknown) {
   return sortByDateDesc(value)
 }
 
-export function assembleResumeData(entries: ResumeEntry[]): ResumeData {
+export function buildResumeData(entries: ResumeEntry[]): ResumeData {
   const result: Record<string, unknown> = {}
 
   for (const entry of entries) {

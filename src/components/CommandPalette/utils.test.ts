@@ -3,12 +3,12 @@ import { afterEach, describe, mock, test } from 'node:test'
 
 import {
   applyHighlightedCommand,
+  formatPaletteFooterLabel,
+  formatPaletteFooterShortcut,
+  formatSecretsFooterLabel,
+  formatSecretsProgressLabel,
   getFoundEggs,
   getHighlightedCommand,
-  getPaletteFooterLabel,
-  getPaletteFooterShortcut,
-  getSecretsFooterLabel,
-  getSecretsProgressLabel,
   isPaletteBackKey,
   isSecretsShortcut,
 } from './utils.ts'
@@ -165,33 +165,33 @@ describe('getFoundEggs', () => {
   })
 })
 
-describe('getPaletteFooterLabel', () => {
+describe('formatPaletteFooterLabel', () => {
   test('uses Back on the Secrets page and the secrets count otherwise', () => {
-    assert.equal(getPaletteFooterLabel(true, 1, 2), 'Back')
-    assert.equal(getPaletteFooterLabel(false, 1, 2), 'Secrets 1/2')
+    assert.equal(formatPaletteFooterLabel(true, 1, 2), 'Back')
+    assert.equal(formatPaletteFooterLabel(false, 1, 2), 'Secrets 1/2')
   })
 })
 
-describe('getPaletteFooterShortcut', () => {
+describe('formatPaletteFooterShortcut', () => {
   test('uses esc on the Secrets page and the secrets shortcut otherwise', () => {
-    assert.equal(getPaletteFooterShortcut(true), 'esc')
-    assert.equal(getPaletteFooterShortcut(false), '⌘.')
+    assert.equal(formatPaletteFooterShortcut(true), 'esc')
+    assert.equal(formatPaletteFooterShortcut(false), '⌘.')
   })
 })
 
-describe('getSecretsFooterLabel', () => {
+describe('formatSecretsFooterLabel', () => {
   test('uses a compact count until all secrets are found', () => {
-    assert.equal(getSecretsFooterLabel(0, 2), 'Secrets 0/2')
-    assert.equal(getSecretsFooterLabel(1, 2), 'Secrets 1/2')
-    assert.equal(getSecretsFooterLabel(2, 2), 'All secrets found')
+    assert.equal(formatSecretsFooterLabel(0, 2), 'Secrets 0/2')
+    assert.equal(formatSecretsFooterLabel(1, 2), 'Secrets 1/2')
+    assert.equal(formatSecretsFooterLabel(2, 2), 'All secrets found')
   })
 })
 
-describe('getSecretsProgressLabel', () => {
+describe('formatSecretsProgressLabel', () => {
   test('counts found eggs until all are found', () => {
-    assert.equal(getSecretsProgressLabel(0, 2), 'Secrets: 0 of 2 found')
-    assert.equal(getSecretsProgressLabel(1, 2), 'Secrets: 1 of 2 found')
-    assert.equal(getSecretsProgressLabel(2, 2), 'All secrets found')
+    assert.equal(formatSecretsProgressLabel(0, 2), 'Secrets: 0 of 2 found')
+    assert.equal(formatSecretsProgressLabel(1, 2), 'Secrets: 1 of 2 found')
+    assert.equal(formatSecretsProgressLabel(2, 2), 'All secrets found')
   })
 })
 

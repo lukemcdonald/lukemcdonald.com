@@ -1,16 +1,16 @@
 import type { APIRoute } from 'astro'
 
-import { getTodayVerse } from '@/features/verse/verse.server'
-import { verseCacheHeaders } from '@/features/verse/verse.utils'
+import { loadTodayVerse } from '@/features/verse/verse.server'
+import { buildVerseCacheHeaders } from '@/features/verse/verse.utils'
 
 export const prerender = false
 
 export const GET: APIRoute = async () => {
-  const verse = await getTodayVerse()
+  const verse = await loadTodayVerse()
 
   return new Response(JSON.stringify(verse), {
     headers: {
-      ...verseCacheHeaders(),
+      ...buildVerseCacheHeaders(),
       'Content-Type': 'application/json',
     },
   })

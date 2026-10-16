@@ -62,7 +62,7 @@ function isValidDate(value: Date) {
   return !Number.isNaN(value.getTime())
 }
 
-function validDateOrNull(value: Date) {
+function getValidDateOrNull(value: Date) {
   if (!isValidDate(value)) {
     return null
   }
@@ -71,11 +71,11 @@ function validDateOrNull(value: Date) {
 }
 
 function parseDateNumber(value: number) {
-  return validDateOrNull(new Date(value))
+  return getValidDateOrNull(new Date(value))
 }
 
 function parseDateString(value: string) {
-  return validDateOrNull(new Date(value))
+  return getValidDateOrNull(new Date(value))
 }
 
 function sortByDateKeysDesc<T>(items: T[], dateKeys: string[]): T[] {
@@ -140,7 +140,7 @@ export function sortExperienceByEndDate<T extends HasEndDate>(items: T[]): T[] {
 
 export function toDate(value: DateLike): Date | null {
   if (value instanceof Date) {
-    return validDateOrNull(value)
+    return getValidDateOrNull(value)
   }
 
   if (typeof value === 'string') {

@@ -35,7 +35,7 @@ export function applyLampVerse(root: HTMLElement, verse: Verse) {
   }
 }
 
-export function lampPos(x: number, y: number) {
+export function formatLampPosition(x: number, y: number) {
   return `${x}px ${y}px`
 }
 
@@ -107,7 +107,7 @@ function mountVerse() {
 }
 
 function onPointer(event: PointerEvent) {
-  lampRoot()?.style.setProperty(POS_VAR, lampPos(event.clientX, event.clientY))
+  lampRoot()?.style.setProperty(POS_VAR, formatLampPosition(event.clientX, event.clientY))
 }
 
 function unbindPointer() {

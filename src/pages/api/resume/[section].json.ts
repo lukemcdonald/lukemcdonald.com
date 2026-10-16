@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro'
 
 import { getCollection } from 'astro:content'
 
-import { getResumeSection } from '@/features/resume/resume.server'
+import { loadResumeSection } from '@/features/resume/resume.server'
 import { parseContentId } from '@/utils/content'
 
 /** Required by Astro for dynamic routes. */
@@ -30,7 +30,7 @@ export const GET: APIRoute = async ({ params }) => {
     return new Response(null, { status: 400 })
   }
 
-  const payload = await getResumeSection(section)
+  const payload = await loadResumeSection(section)
 
   if (payload === null) {
     return new Response(null, { status: 404 })

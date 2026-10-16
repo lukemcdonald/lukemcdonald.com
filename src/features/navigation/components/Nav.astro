@@ -1,10 +1,10 @@
 ---
-import { getNavigationGroups } from '@/features/navigation/navigation.server'
+import { loadNavigationGroups } from '@/features/navigation/navigation.server'
 
 import MobileMenu from './MobileMenu.astro'
 import NavMenu from './NavMenu.astro'
 
-const groups = await getNavigationGroups()
+const groups = await loadNavigationGroups()
 ---
 
 <nav

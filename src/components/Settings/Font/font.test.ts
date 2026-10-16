@@ -4,7 +4,7 @@ import { afterEach, before, beforeEach, describe, mock, test } from 'node:test'
 import { STORAGE_KEYS } from '@/utils/storage'
 
 import { DEFAULT_FONT_PAIRING, getFontPairing, selectFontOption } from './font.ts'
-import { fontPairingStyleId } from './load-pairing.ts'
+import { buildFontPairingStyleId } from './load-pairing.ts'
 import { FONT_PAIRING_CSS_SCRIPT_ID } from './pairings.ts'
 
 function createFontStorage() {
@@ -103,7 +103,7 @@ describe('selectFontOption', () => {
     assert.equal(getFontPairing(), 'live')
     assert.equal(document.documentElement.dataset.font, 'live')
     assert.equal(store.get(STORAGE_KEYS.font), 'live')
-    assert.equal(document.getElementById(fontPairingStyleId('live'))?.textContent, '.live{}')
+    assert.equal(document.getElementById(buildFontPairingStyleId('live'))?.textContent, '.live{}')
   })
 
   test('toggles the active pairing back to default', () => {

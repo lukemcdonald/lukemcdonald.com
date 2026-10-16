@@ -3,9 +3,9 @@ import { describe, test } from 'node:test'
 
 import {
   buildNavigationGroups,
-  getExternalLinkAttrs,
   isExternalHref,
   RESUME_LINK,
+  toExternalLinkAttrs,
   toHrefTestId,
   toNavMenuId,
   toTestIdSlug,
@@ -70,16 +70,16 @@ describe('isExternalHref', () => {
   })
 })
 
-describe('getExternalLinkAttrs', () => {
+describe('toExternalLinkAttrs', () => {
   test('adds blank target and rel for external hrefs', () => {
-    assert.deepEqual(getExternalLinkAttrs('https://gettreadtalks.com'), {
+    assert.deepEqual(toExternalLinkAttrs('https://gettreadtalks.com'), {
       rel: 'noopener noreferrer',
       target: '_blank',
     })
   })
 
   test('returns an empty object for internal hrefs', () => {
-    assert.deepEqual(getExternalLinkAttrs('/resume'), {})
+    assert.deepEqual(toExternalLinkAttrs('/resume'), {})
   })
 })
 

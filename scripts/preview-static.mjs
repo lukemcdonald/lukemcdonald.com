@@ -30,7 +30,7 @@ function isInsideDist(filePath) {
   return filePath.startsWith(distDir) && (relative === '' || relative.startsWith(sep))
 }
 
-function existingFile(filePath) {
+function resolveExistingFile(filePath) {
   if (!isInsideDist(filePath) || !existsSync(filePath) || !statSync(filePath).isFile()) {
     return null
   }
@@ -38,7 +38,7 @@ function existingFile(filePath) {
   return filePath
 }
 
-function decodeRequestPath(requestPath) {
+function parseRequestPath(requestPath) {
   try {
     return decodeURIComponent(requestPath.split('?')[0] ?? '/')
   } catch {
@@ -46,7 +46,7 @@ function decodeRequestPath(requestPath) {
   }
 }
 
-function resolveFile(decodedPath) {
+function resolveFilePath(decodedPath) {
   const relative = posix
     .normalize(decodedPath)
     .replaceAll(/^(?:\.\.(?:\/|$))+/g, '')
@@ -57,9 +57,9 @@ function resolveFile(decodedPath) {
   const candidate = resolve(distDir, ...segments)
 
   return (
-    existingFile(candidate) ??
-    existingFile(resolve(candidate, 'index.html')) ??
-    existingFile(`${candidate}.html`)
+    resolveExistingFile(candidate) ??
+    resolveExistingFile(resolve(candidate, 'index.html')) ??
+    resolveExistingFile(`${candidate}.html`)
   )
 }
 
@@ -72,7 +72,7 @@ function sendFile(res, status, file) {
 }
 
 function sendMissing(res) {
-  const notFound = existingFile(resolve(distDir, '404.html'))
+  const notFound = resolveExistingFile(resolve(distDir, '404.html'))
 
   if (notFound) {
     sendFile(res, 404, notFound)
@@ -84,7 +84,7 @@ function sendMissing(res) {
 }
 
 function handleRequest(req, res) {
-  const decodedPath = decodeRequestPath(req.url ?? '/')
+  const decodedPath = parseRequestPath(req.url ?? '/')
 
   if (decodedPath === null) {
     res.writeHead(400)
@@ -92,7 +92,7 @@ function handleRequest(req, res) {
     return
   }
 
-  const filePath = resolveFile(decodedPath)
+  const filePath = resolveFilePath(decodedPath)
 
   if (filePath) {
     sendFile(res, 200, filePath)

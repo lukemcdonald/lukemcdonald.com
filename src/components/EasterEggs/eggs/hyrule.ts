@@ -79,7 +79,7 @@ function mountHyrule(silent = false) {
 }
 
 function onPointerDown(event: PointerEvent) {
-  if (event.button !== 0 || prefersReducedMotion()) {
+  if (event.button !== 0 || isReducedMotionPreferred()) {
     return
   }
 
@@ -116,7 +116,7 @@ function playTone(frequency: number, duration: number) {
   oscillator.stop(now + duration)
 }
 
-function prefersReducedMotion() {
+function isReducedMotionPreferred() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 

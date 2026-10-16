@@ -1,6 +1,6 @@
 import { FONT_PAIRING_CSS_SCRIPT_ID, FONT_PAIRINGS } from './pairings'
 
-export function fontPairingStyleId(pairing: string) {
+export function buildFontPairingStyleId(pairing: string) {
   return `font-pairing-${pairing}`
 }
 
@@ -17,7 +17,7 @@ export function loadFontPairing(pairing: string) {
 }
 
 function injectFontPairingCss(pairing: string, css: string) {
-  const id = fontPairingStyleId(pairing)
+  const id = buildFontPairingStyleId(pairing)
 
   if (!css || document.getElementById(id)) {
     return

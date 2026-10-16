@@ -9,14 +9,14 @@ import {
   YOUVERSION_BSB_ID,
 } from './verse.constants.ts'
 import {
-  dayOfYear,
+  buildVerseCacheHeaders,
+  buildYouVersionVerseUrl,
   fetchTodayVerse,
+  formatVerseCacheControl,
+  formatVerseLead,
+  getDayOfYear,
   isVerse,
   secondsUntilUtcMidnight,
-  verseCacheControl,
-  verseCacheHeaders,
-  verseLead,
-  youVersionVerseUrl,
 } from './verse.utils.ts'
 
 function jsonResponse(body: unknown, status = 200) {
@@ -36,10 +36,10 @@ function requestUrl(call: { arguments: readonly unknown[] }) {
   return String(call.arguments[0])
 }
 
-describe('youVersionVerseUrl', () => {
+describe('buildYouVersionVerseUrl', () => {
   test('builds a BSB bible.com link from USFM', () => {
     assert.equal(
-      youVersionVerseUrl('PSA.119.105'),
+      buildYouVersionVerseUrl('PSA.119.105'),
       `https://www.bible.com/bible/${YOUVERSION_BSB_ID}/PSA.119.105.BSB`,
     )
   })
@@ -51,7 +51,7 @@ describe('FALLBACK_VERSE', () => {
       reference: 'Psalm 119:105',
       source: 'fallback',
       text: 'Your word is a lamp to my feet and a light to my path.',
-      url: youVersionVerseUrl('PSA.119.105'),
+      url: buildYouVersionVerseUrl('PSA.119.105'),
     })
   })
 })
@@ -62,11 +62,11 @@ describe('LOADING_VERSE_LABEL', () => {
   })
 })
 
-describe('dayOfYear', () => {
+describe('getDayOfYear', () => {
   test('counts from January 1 including leap days', () => {
-    assert.equal(dayOfYear(new Date('2026-01-01T00:00:00Z')), 1)
-    assert.equal(dayOfYear(new Date('2025-12-31T12:00:00Z')), 365)
-    assert.equal(dayOfYear(new Date('2024-12-31T12:00:00Z')), 366)
+    assert.equal(getDayOfYear(new Date('2026-01-01T00:00:00Z')), 1)
+    assert.equal(getDayOfYear(new Date('2025-12-31T12:00:00Z')), 365)
+    assert.equal(getDayOfYear(new Date('2024-12-31T12:00:00Z')), 366)
   })
 })
 
@@ -87,29 +87,29 @@ describe('secondsUntilUtcMidnight', () => {
   })
 })
 
-describe('verseCacheControl', () => {
+describe('formatVerseCacheControl', () => {
   test('caps s-maxage at four hours and stays fresh until midnight', () => {
     assert.equal(
-      verseCacheControl(new Date('2026-01-15T10:00:00Z')),
+      formatVerseCacheControl(new Date('2026-01-15T10:00:00Z')),
       'public, s-maxage=14400, stale-while-revalidate=50400',
     )
     assert.equal(
-      verseCacheControl(new Date('2026-01-15T23:00:00Z')),
+      formatVerseCacheControl(new Date('2026-01-15T23:00:00Z')),
       'public, s-maxage=3600, stale-while-revalidate=3600',
     )
   })
 })
 
-describe('verseLead', () => {
+describe('formatVerseLead', () => {
   test('uses today copy for an API verse and fallback copy otherwise', () => {
-    assert.equal(verseLead('api'), "Here's today's verse.")
-    assert.equal(verseLead('fallback'), "Here's a verse.")
+    assert.equal(formatVerseLead('api'), "Here's today's verse.")
+    assert.equal(formatVerseLead('fallback'), "Here's a verse.")
   })
 })
 
-describe('verseCacheHeaders', () => {
+describe('buildVerseCacheHeaders', () => {
   test('sets Cache-Control and a durable CDN header', () => {
-    assert.deepEqual(verseCacheHeaders(new Date('2026-01-15T23:00:00Z')), {
+    assert.deepEqual(buildVerseCacheHeaders(new Date('2026-01-15T23:00:00Z')), {
       'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=3600',
       'CDN-Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=3600, durable',
     })
@@ -156,7 +156,7 @@ describe('fetchTodayVerse', () => {
         reference: 'John 3:16',
         source: 'api',
         text: 'For God so loved the world that He gave His one and only Son.',
-        url: youVersionVerseUrl('JHN.3.16'),
+        url: buildYouVersionVerseUrl('JHN.3.16'),
       },
     )
 

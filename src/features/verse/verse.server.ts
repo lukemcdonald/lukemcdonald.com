@@ -4,6 +4,6 @@ import { YVP_APP_KEY } from 'astro:env/server'
 
 import { fetchTodayVerse } from './verse.utils'
 
-export async function getTodayVerse(): Promise<Verse> {
+export async function loadTodayVerse(): Promise<Verse> {
   return fetchTodayVerse({ appKey: YVP_APP_KEY })
 }

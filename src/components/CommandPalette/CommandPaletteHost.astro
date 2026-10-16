@@ -1,8 +1,8 @@
 ---
 import CommandPalette from '@/components/CommandPalette/CommandPalette.astro'
-import { getNavigationGroups } from '@/features/navigation/navigation.server'
+import { loadNavigationGroups } from '@/features/navigation/navigation.server'
 
-const groups = await getNavigationGroups()
+const groups = await loadNavigationGroups()
 const navigationItems = groups.flatMap((group) => group.links)
 ---
 
