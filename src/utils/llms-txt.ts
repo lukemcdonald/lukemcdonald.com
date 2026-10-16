@@ -17,17 +17,19 @@ type LlmsPage = {
   id: string
 }
 
+type LlmsBasics = {
+  email?: string
+  intro?: string
+  label?: string
+  profiles?: Array<{
+    network: string
+    url: string
+  }>
+}
+
 type LlmsResume = {
-  basics: {
-    email?: string
-    intro?: string
-    label?: string
-    profiles?: Array<{
-      network: string
-      url: string
-    }>
-  }
-} & Record<string, unknown>
+  basics: LlmsBasics
+}
 
 function toAbsoluteUrl(path: string, origin: string | URL) {
   return new URL(path, origin).href
@@ -138,7 +140,7 @@ function contactLinks(resume: LlmsResume): LlmsLink[] {
   return links
 }
 
-export function createLlmsTxt({
+export function createLlmsTxt<T extends LlmsResume>({
   name,
   origin,
   pages,
@@ -147,7 +149,7 @@ export function createLlmsTxt({
   name: string
   origin: string | URL
   pages: LlmsPage[]
-  resume: LlmsResume
+  resume: T
 }) {
   const summary = resolveSummary(pages, resume)
   const parts = [`# ${name}`]

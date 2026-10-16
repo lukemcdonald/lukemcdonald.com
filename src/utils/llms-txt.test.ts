@@ -88,6 +88,9 @@ describe('createLlmsTxt', () => {
     })
 
     assert.match(markdown, /^# Luke McDonald\n\n> Hands-on engineer building products\.\n/)
-    assert.match(markdown, /## Resume\n\n- \[Full resume\]\(https:\/\/lukemcdonald\.com\/api\/resume\.json\)/)
+    assert.match(
+      markdown,
+      /## Resume\n\n- \[Full resume\]\(https:\/\/lukemcdonald\.com\/api\/resume\.json\)/,
+    )
   })
 })
