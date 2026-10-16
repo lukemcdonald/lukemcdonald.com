@@ -6,5 +6,8 @@
   X-Frame-Options: SAMEORIGIN
   Content-Security-Policy: frame-ancestors 'self'
 
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+
 /api/*
   X-Robots-Tag: noindex
