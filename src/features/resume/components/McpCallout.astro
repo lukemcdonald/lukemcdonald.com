@@ -40,5 +40,7 @@ import { COPY_BUTTON_LABEL, COPY_LABEL } from './mcp-callout'
 <script>
   import { bindMcpCallouts } from './mcp-callout'
 
-  document.addEventListener('astro:page-load', bindMcpCallouts)
+  document.addEventListener('astro:page-load', () => {
+    bindMcpCallouts()
+  })
 </script>
