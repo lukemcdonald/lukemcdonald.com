@@ -10,7 +10,16 @@ const SITE_URLS = {
 
 export const GLOBAL_CONFIG = {
   author: {
+    email: 'thelukemcdonald@gmail.com',
     name: SITE_NAME,
+    profiles: [
+      { network: 'GitHub', url: 'https://github.com/lukemcdonald', username: 'lukemcdonald' },
+      {
+        network: 'LinkedIn',
+        url: 'https://www.linkedin.com/in/thelukemcdonald',
+        username: 'thelukemcdonald',
+      },
+    ],
     url: SITE_URLS.origin,
   },
   dir: 'ltr',

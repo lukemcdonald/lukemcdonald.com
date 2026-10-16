@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
+import { GLOBAL_CONFIG } from '@/configs/global'
+
 import { assembleResumeData, pickResumeSection } from './resume.utils.ts'
 
 type ResumeStub = Parameters<typeof assembleResumeData>[0][number]
@@ -13,10 +15,16 @@ function entry(id: string, data: unknown): ResumeStub {
 }
 
 describe('assembleResumeData', () => {
-  test('assigns top-level files as section objects', () => {
-    const data = assembleResumeData([entry('basics.yaml', { name: 'Luke McDonald' })])
+  test('assigns top-level files and fills contact from site config', () => {
+    const data = assembleResumeData([
+      entry('basics.yaml', { email: 'other@example.com', intro: 'Hi', name: 'Other' }),
+    ])
 
-    assert.deepEqual(data.basics, { name: 'Luke McDonald' })
+    assert.equal(data.basics.email, GLOBAL_CONFIG.author.email)
+    assert.equal(data.basics.intro, 'Hi')
+    assert.equal(data.basics.name, GLOBAL_CONFIG.author.name)
+    assert.deepEqual(data.basics.profiles, [...GLOBAL_CONFIG.author.profiles])
+    assert.equal(data.basics.website, GLOBAL_CONFIG.author.url)
   })
 
   test('nests section files and sorts experience present-first', () => {
@@ -57,12 +65,18 @@ describe('assembleResumeData', () => {
 
 describe('pickResumeSection', () => {
   const data = assembleResumeData([
-    entry('basics.yaml', { name: 'Luke' }),
+    entry('basics.yaml', { intro: 'Hi' }),
     entry('skills.yaml', ['TypeScript']),
   ])
 
   test('returns the named section', () => {
-    assert.deepEqual(pickResumeSection(data, 'basics'), { name: 'Luke' })
+    assert.deepEqual(pickResumeSection(data, 'basics'), {
+      email: GLOBAL_CONFIG.author.email,
+      intro: 'Hi',
+      name: GLOBAL_CONFIG.author.name,
+      profiles: [...GLOBAL_CONFIG.author.profiles],
+      website: GLOBAL_CONFIG.author.url,
+    })
     assert.deepEqual(pickResumeSection(data, 'skills'), ['TypeScript'])
   })
 

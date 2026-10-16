@@ -1,6 +1,7 @@
 import type { ResumeData } from './resume.types'
 import type { CollectionEntry } from 'astro:content'
 
+import { GLOBAL_CONFIG } from '@/configs/global'
 import { parseContentId } from '@/utils/content'
 import { sortByDateDesc, sortExperienceByEndDate } from '@/utils/dates'
 
@@ -49,6 +50,16 @@ export function assembleResumeData(entries: ResumeEntry[]): ResumeData {
 
   for (const [key, value] of Object.entries(result)) {
     result[key] = sortResumeValue(key, value)
+  }
+
+  const { email, name, profiles, url } = GLOBAL_CONFIG.author
+
+  result.basics = {
+    ...((result.basics ?? {}) as object),
+    email,
+    name,
+    profiles: [...profiles],
+    website: url,
   }
 
   return result as unknown as ResumeData

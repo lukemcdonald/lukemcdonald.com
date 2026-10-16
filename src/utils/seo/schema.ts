@@ -10,11 +10,6 @@ const CONTENT_TYPE_MAP: Record<SeoContentType, SchemaType> = {
   page: 'WebPage',
 } as const
 
-const PERSON_SAME_AS = [
-  'https://github.com/lukemcdonald',
-  'https://www.linkedin.com/in/thelukemcdonald/',
-] as const
-
 function personId() {
   return `${GLOBAL_CONFIG.site.origin}/#person`
 }
@@ -29,7 +24,9 @@ function buildPersonJsonLd() {
     '@id': personId(),
     '@type': 'Person',
     name: GLOBAL_CONFIG.author.name,
-    sameAs: PERSON_SAME_AS,
+    sameAs: GLOBAL_CONFIG.author.profiles.map((profile) => {
+      return profile.url
+    }),
     url: GLOBAL_CONFIG.author.url,
   }
 }

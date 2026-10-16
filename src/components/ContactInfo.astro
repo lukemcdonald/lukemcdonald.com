@@ -2,13 +2,16 @@
 import Heading from '@/components/Heading.astro'
 import Link from '@/components/Link.astro'
 import { HOVER_NAV_CUE_PROPS } from '@/components/Sound'
+import { GLOBAL_CONFIG } from '@/configs/global'
 
 const { title } = Astro.props
 
+const { email, profiles } = GLOBAL_CONFIG.author
 const contactLinks = [
-  { href: 'mailto:thelukemcdonald@gmail.com', name: 'Email' },
-  { href: 'https://github.com/lukemcdonald', name: 'GitHub' },
-  { href: 'https://www.linkedin.com/in/thelukemcdonald/', name: 'LinkedIn' },
+  { href: `mailto:${email}`, name: 'Email' },
+  ...profiles.map((profile) => {
+    return { href: profile.url, name: profile.network }
+  }),
 ]
 ---
 

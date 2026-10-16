@@ -1,17 +1,7 @@
-name: Luke McDonald
-email: thelukemcdonald@gmail.com
 label: Senior Staff Full-Stack Product & Platform Engineer
 location:
   city: Monticello
   region: IA (Remote only)
 phone: (319) 480-7088
-profiles:
-  - network: GitHub
-    username: lukemcdonald
-    url: https://github.com/lukemcdonald
-  - network: LinkedIn
-    username: thelukemcdonald
-    url: https://linkedin.com/in/thelukemcdonald
-website: https://lukemcdonald.com
 intro: |
   Hands-on Senior Staff Engineer with 15+ years of experience building customer-facing products, shared platforms, and engineering systems across the stack. I specialize in React, TypeScript, frontend architecture, design systems, developer tooling, and agentic engineering workflows, with experience spanning GraphQL, integrations, observability, and cloud infrastructure. Proven impact modernizing engineering platforms, improving delivery speed and reliability, and building AI-enabled systems that make engineering teams more effective.

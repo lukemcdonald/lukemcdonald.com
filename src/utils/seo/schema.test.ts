@@ -93,7 +93,9 @@ describe('Person JSON-LD', () => {
       '@id': personId(),
       '@type': 'Person',
       name: GLOBAL_CONFIG.author.name,
-      sameAs: ['https://github.com/lukemcdonald', 'https://www.linkedin.com/in/thelukemcdonald/'],
+      sameAs: GLOBAL_CONFIG.author.profiles.map((profile) => {
+        return profile.url
+      }),
       url: origin(),
     })
   })
