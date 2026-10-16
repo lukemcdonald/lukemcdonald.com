@@ -1,6 +1,7 @@
 import type { HomePage } from '../pages/home.page'
 import type { Locator } from '@playwright/test'
 
+import { TEST_ID } from '../constants'
 import { expect, test } from '../fixtures'
 
 async function fontFamily(locator: Locator) {
@@ -89,9 +90,9 @@ test.describe('font', { tag: '@smoke' }, () => {
     await homePage.goto()
     await homePage.header.nav.openMobileMenu()
 
-    const fieldLabel = homePage.header.nav.mobileMenu
-      .locator('label')
-      .filter({ has: homePage.header.nav.mobileAppearance })
+    const fieldLabel = homePage.page.locator('label').filter({
+      has: homePage.page.getByTestId(TEST_ID.mobileAppearance),
+    })
     const groupLabel = homePage.header.nav.mobileMenu.getByRole('heading', { name: 'Work' })
 
     for (const pairing of ['live', 'play', 'work']) {
