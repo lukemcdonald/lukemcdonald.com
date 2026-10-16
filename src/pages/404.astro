@@ -9,8 +9,8 @@ import { createErrorData } from '@/utils/error'
 const verse = await getTodayVerse()
 const errorMessage =
   verse.source === 'api' ?
-    "The page you're looking for doesn't exist, but here's today's verse."
-  : "The page you're looking for doesn't exist, but here's a verse."
+    "Page not found. Here's today's verse."
+  : "Page not found. Here's a verse."
 const errorData = createErrorData(404, errorMessage)
 const { html, image, imageAlt, subtitle, title } = errorData
 ---
