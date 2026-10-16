@@ -37,11 +37,7 @@
   --color-secondary-950: color-mix(in oklch, var(--color-secondary-base), black 85%);
 }
 
-/*
- * These rules key off `[data-theme]` rather than `html[data-theme]` so the
- * same tokens can be scoped locally (e.g. a theme-color swatch previewing a
- * theme that isn't the active one) as well as globally on `<html>`.
- */
+/* `[data-theme]` (not `html[data-theme]`) so tokens can also be scoped locally, e.g. a swatch preview. */
 [data-theme='default'] {
   --color-primary-50: oklch(98.4% 0.001 106);
   --color-primary-100: oklch(96.9% 0.001 106);

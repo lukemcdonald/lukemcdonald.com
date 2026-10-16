@@ -52,7 +52,6 @@ function logHint() {
   }
 
   hinted = true
-  // Discovery hint for this decorative egg; keep it quiet and original.
   // eslint-disable-next-line no-console -- intentional easter-egg hint
   console.info('%cA little song still sleeps in the keys.', 'color:#3f6b46')
 }

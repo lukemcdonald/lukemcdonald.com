@@ -24,7 +24,6 @@ export function buildSocialMetaTags(meta: SeoMeta, site: string | URL = GLOBAL_C
   const absoluteCanonical = canonicalUrl ? toAbsoluteUrl(canonicalUrl, site) : undefined
 
   return {
-    // Open Graph / Facebook
     'og:description': description,
     'og:image': socialImageUrl,
     'og:image:height': String(OG_IMAGE_HEIGHT),
@@ -33,8 +32,6 @@ export function buildSocialMetaTags(meta: SeoMeta, site: string | URL = GLOBAL_C
     'og:title': title,
     'og:type': ogType,
     'og:url': absoluteCanonical,
-
-    // Twitter
     'twitter:card': 'summary_large_image',
     'twitter:description': description,
     'twitter:image': socialImageUrl,

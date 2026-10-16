@@ -59,7 +59,7 @@ const meta: SeoMeta = {
 
     <EasterEggs />
 
-    <!-- iOS 26 Safari samples a fixed top bar (>=3px, not display:none) for chrome tint. Hidden from lg+; html already matches the shell. -->
+    <!-- Safari samples a fixed top bar (>=3px, not display:none) for chrome tint. Hidden from lg+; html already matches the shell. -->
     <div
       aria-hidden="true"
       class="pointer-events-none fixed inset-x-0 top-0 z-50 h-1.5 bg-primary-500 lg:hidden"
@@ -98,7 +98,6 @@ const meta: SeoMeta = {
 
     <slot />
 
-    <!-- Theme initialization, system preference watcher, and sound bootstrap -->
     <script>
       import { applyFontPairing, getFontPairing } from '@/components/Settings/Font/font'
       import { applyGlassLevel, getGlassLevel } from '@/components/Settings/Glass/utils'
@@ -116,16 +115,13 @@ const meta: SeoMeta = {
       function setupTheme() {
         applyFontPairing(getFontPairing())
         applyGlassLevel(getGlassLevel())
-        // Initialize theme first to set the correct mode from localStorage
         applyThemeColor(getThemeColor())
         applyThemeMode(getEffectiveThemeMode())
 
-        // Clean up previous watcher if it exists
         if (cleanupWatcher) {
           cleanupWatcher()
         }
 
-        // Watch for system preference changes after initialization
         cleanupWatcher = watchSystemPreference()
       }
 
@@ -145,14 +141,12 @@ const meta: SeoMeta = {
         playPageArrival()
       }
 
-      // Initialize theme and sound on page load (backup for inline script)
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', setup)
       } else {
         setup()
       }
 
-      // Cleanup on page unload (for view transitions)
       document.addEventListener('astro:before-preparation', () => {
         if (cleanupWatcher) {
           cleanupWatcher()
@@ -160,10 +154,7 @@ const meta: SeoMeta = {
         }
       })
 
-      // Re-initialize theme right after the DOM swap, and both theme and
-      // sound once the navigation fully completes -- sound has no FOUC
-      // concern, so it only needs to run once per navigation rather than
-      // on both view-transition events.
+      // Theme on swap (FOUC); sound on page-load only, once per navigation.
       document.addEventListener('astro:after-swap', setupTheme)
       document.addEventListener('astro:page-load', onAstroPageLoad)
     </script>

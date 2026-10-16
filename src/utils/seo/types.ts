@@ -1,9 +1,6 @@
 export type SeoContentType = 'article' | 'blog' | 'page'
 
 export interface SeoMeta {
-  /**
-   * Absolute canonical URL (e.g., https://example.com/path)
-   */
   author?: {
     name: string
     url?: string
