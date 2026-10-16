@@ -2,6 +2,11 @@
   --lamp-pos: 50vw 50vh;
 }
 
+html[data-easter-egg='lamp'],
+html[data-easter-egg='lamp'] * {
+  cursor: none;
+}
+
 html[data-easter-egg='lamp']::before {
   filter: brightness(0.42) saturate(0.58);
   mix-blend-mode: screen;
@@ -170,6 +175,25 @@ html[data-easter-egg='lamp'] [data-lamp] [data-aurora-firefly] {
   --wander-y: 10.9s;
   left: 38%;
   top: 93%;
+}
+
+[data-lamp-cursor] {
+  color: oklch(96% 0.02 80);
+  filter: drop-shadow(0 0 6px oklch(78% 0.1 75 / 0.42));
+  left: 0;
+  opacity: 0.88;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  translate: var(--lamp-pos);
+  z-index: 63;
+}
+
+[data-lamp-cursor] svg {
+  display: block;
+  height: 22px;
+  translate: -50% -50%;
+  width: 22px;
 }
 
 [data-lamp-verse] {

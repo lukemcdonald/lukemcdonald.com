@@ -56,15 +56,7 @@ function mountVerse() {
 }
 
 function onPointer(event: PointerEvent) {
-  if (prefersReducedMotion()) {
-    return
-  }
-
   lampRoot()?.style.setProperty(POS_VAR, lampPos(event.clientX, event.clientY))
-}
-
-function prefersReducedMotion() {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
 function unbindPointer() {
