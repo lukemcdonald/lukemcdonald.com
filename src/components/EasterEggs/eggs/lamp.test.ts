@@ -4,10 +4,10 @@ import { describe, test } from 'node:test'
 import { lampEgg, lampPos } from './lamp.ts'
 
 describe('lampEgg', () => {
-  test('triggers from L and dismisses on escape', () => {
+  test('is cycle-only and dismisses on escape', () => {
     assert.equal(lampEgg.dismissOnEscape, true)
     assert.equal(lampEgg.id, 'lamp')
-    assert.deepEqual(lampEgg.sequence, ['KeyL'])
+    assert.deepEqual(lampEgg.sequence, [])
   })
 })
 

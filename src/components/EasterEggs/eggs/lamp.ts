@@ -7,7 +7,7 @@ export const lampEgg = {
   id: 'lamp',
   onActivate: mountLamp,
   onDismiss: unmountLamp,
-  sequence: ['KeyL'],
+  sequence: [],
   soundOff: 'close',
   soundOn: 'success',
 } as const

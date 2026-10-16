@@ -98,29 +98,6 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
     await expect.poll(() => homePage.storedThemeMode()).toBe('light')
   })
 
-  test('shows Selah for selah and turns on the lamp', async ({ homePage }) => {
-    const palette = homePage.header.commandPalette
-    const selah = palette.command('selah')
-
-    await homePage.goto()
-    await palette.openWithKeyboard()
-
-    await palette.input.fill('lamp')
-    await expect(homePage.page.getByText('No matching pages')).toBeVisible()
-    await expect(selah).toBeHidden()
-
-    await palette.input.fill('selah')
-    await expect(selah).toBeVisible()
-    await expect(selah).toHaveText('Selah')
-    await expect(homePage.page.getByText('Press Enter to apply')).toBeHidden()
-
-    await homePage.page.keyboard.press('Enter')
-    await expect(palette.dialog).toBeHidden()
-    await expect(homePage.page.locator('html')).toHaveAttribute('data-easter-egg', 'lamp')
-    await expect(homePage.page.locator('[data-lamp-verse]')).toBeVisible()
-    await expect(homePage.page.locator('[data-lamp-veil]')).toBeVisible()
-  })
-
   test('closes when the backdrop is clicked', async ({ homePage }) => {
     await homePage.goto()
     await homePage.header.commandPalette.openWithKeyboard()

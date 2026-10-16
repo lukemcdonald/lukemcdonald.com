@@ -5,7 +5,6 @@ import type { ThemeMode } from '@/components/Settings/ThemeMode/types'
 import { THEME_COLORS, THEME_LABELS } from '@/components/Settings/ThemeColor/constants'
 import { MODE_LABELS, THEME_MODES } from '@/components/Settings/ThemeMode/constants'
 
-export const PALETTE_EGG_COMMANDS = [{ eggId: 'lamp', name: 'Selah', query: 'selah' }] as const
 const SECRETS_BACK_LABEL = 'Back'
 const SECRETS_BACK_SHORTCUT_LABEL = 'esc'
 const SOUND_LABELS = ['sound', 'sounds off', 'sounds on']
@@ -19,13 +18,11 @@ export type ApplyHighlightedCommandActions = {
   onPreferenceApplied: () => void
   setThemeColor: (color: ThemeColor) => void
   setThemeMode: (mode: ThemeMode) => void
-  toggleEgg: (id: string) => void
   toggleSound: () => void
 }
 
 export type HighlightedCommand =
   | { color: ThemeColor; type: 'color' }
-  | { eggId: string; type: 'egg' }
   | { href: string; type: 'nav' }
   | { mode: ThemeMode; type: 'mode' }
   | { type: 'sound' }
@@ -64,12 +61,6 @@ export function getHighlightedCommand(
     return { type: 'sound' }
   }
 
-  const eggCommand = PALETTE_EGG_COMMANDS.find((item) => item.query.includes(needle))
-
-  if (eggCommand) {
-    return { eggId: eggCommand.eggId, type: 'egg' }
-  }
-
   return undefined
 }
 
@@ -96,12 +87,6 @@ export function applyHighlightedCommand(
   if (command.type === 'mode') {
     actions.setThemeMode(command.mode)
     actions.onPreferenceApplied()
-    return
-  }
-
-  if (command.type === 'egg') {
-    actions.close()
-    actions.toggleEgg(command.eggId)
     return
   }
 

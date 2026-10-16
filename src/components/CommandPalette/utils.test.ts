@@ -11,7 +11,6 @@ import {
   getSecretsProgressLabel,
   isPaletteBackKey,
   isSecretsShortcut,
-  PALETTE_EGG_COMMANDS,
 } from './utils.ts'
 
 function createActions() {
@@ -31,9 +30,6 @@ function createActions() {
   const mockSetThemeMode = mock.fn((mode: string) => {
     calls.push(`setThemeMode:${mode}`)
   })
-  const mockToggleEgg = mock.fn((id: string) => {
-    calls.push(`toggleEgg:${id}`)
-  })
   const mockToggleSound = mock.fn(() => {
     calls.push('toggleSound')
   })
@@ -45,7 +41,6 @@ function createActions() {
       onPreferenceApplied: mockOnPreferenceApplied,
       setThemeColor: mockSetThemeColor,
       setThemeMode: mockSetThemeMode,
-      toggleEgg: mockToggleEgg,
       toggleSound: mockToggleSound,
     },
     calls,
@@ -107,24 +102,8 @@ describe('getHighlightedCommand', () => {
   test('does not match an egg name from the main search', () => {
     assert.equal(getHighlightedCommand(navItems, 'aurora'), undefined)
     assert.equal(getHighlightedCommand(navItems, 'hyrule'), undefined)
-  })
-
-  test('matches selah as the lamp egg command', () => {
     assert.equal(getHighlightedCommand(navItems, 'lamp'), undefined)
-    assert.deepEqual(getHighlightedCommand(navItems, 'sel'), {
-      eggId: 'lamp',
-      type: 'egg',
-    })
-    assert.deepEqual(getHighlightedCommand(navItems, 'selah'), {
-      eggId: 'lamp',
-      type: 'egg',
-    })
-  })
-})
-
-describe('PALETTE_EGG_COMMANDS', () => {
-  test('exposes selah as the lamp trigger', () => {
-    assert.deepEqual(PALETTE_EGG_COMMANDS, [{ eggId: 'lamp', name: 'Selah', query: 'selah' }])
+    assert.equal(getHighlightedCommand(navItems, 'selah'), undefined)
   })
 })
 
@@ -171,14 +150,6 @@ describe('applyHighlightedCommand', () => {
     applyHighlightedCommand(actions, { type: 'sound' })
 
     assert.deepEqual(calls, ['toggleSound', 'onPreferenceApplied'])
-  })
-
-  test('closes and toggles the lamp egg', () => {
-    const { actions, calls } = createActions()
-
-    applyHighlightedCommand(actions, { eggId: 'lamp', type: 'egg' })
-
-    assert.deepEqual(calls, ['close', 'toggleEgg:lamp'])
   })
 })
 

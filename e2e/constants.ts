@@ -33,10 +33,6 @@ export const WCAG_TAGS = [
   'wcag22aa',
 ] as const
 
-export function commandPaletteCommandTestId(query: string): string {
-  return `command-palette-command-${query}`
-}
-
 export function commandPaletteEggTestId(id: string): string {
   return `command-palette-egg-${id}`
 }

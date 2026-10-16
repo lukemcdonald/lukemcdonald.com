@@ -426,6 +426,10 @@ function showEgg(egg: Egg, silent = false) {
 }
 
 function stepEgg(egg: Egg, code: string): boolean {
+  if (egg.sequence.length === 0) {
+    return false
+  }
+
   const next = advanceProgress(progressById.get(egg.id) ?? 0, code, egg.sequence)
 
   if (next >= egg.sequence.length) {
