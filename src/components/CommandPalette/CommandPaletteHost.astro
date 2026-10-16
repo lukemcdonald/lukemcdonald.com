@@ -2,8 +2,10 @@
 import CommandPalette from '@/components/CommandPalette/CommandPalette.astro'
 import { getNavigationGroups } from '@/features/navigation/navigation.server'
 
+import { toCommandPaletteNavItems } from './nav-items'
+
 const groups = await getNavigationGroups()
-const navigationItems = groups.flatMap((group) => group.links)
+const navigationItems = toCommandPaletteNavItems(groups)
 ---
 
 <CommandPalette navigationItems={navigationItems} />
