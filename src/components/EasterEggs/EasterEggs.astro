@@ -8,6 +8,21 @@ const verse = await getTodayVerse()
   <div data-lamp>
     <div data-lamp-veil></div>
     <div data-lamp-glow></div>
+    <div
+      aria-hidden="true"
+      data-lamp-fireflies
+    >
+      <span data-aurora-firefly="a"></span>
+      <span data-aurora-firefly="b"></span>
+      <span data-aurora-firefly="c"></span>
+      <span data-aurora-firefly="a"></span>
+      <span data-aurora-firefly="b"></span>
+      <span data-aurora-firefly="c"></span>
+      <span data-aurora-firefly="a"></span>
+      <span data-aurora-firefly="b"></span>
+      <span data-aurora-firefly="c"></span>
+      <span data-aurora-firefly="a"></span>
+    </div>
     <div data-lamp-verse>
       <p>{verse.text}</p>
       <cite>{verse.reference}</cite>

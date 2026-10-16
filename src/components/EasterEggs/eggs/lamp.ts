@@ -32,7 +32,10 @@ function lampRoot() {
   return document.querySelector<HTMLElement>(`[${LAMP_ATTR}]`)
 }
 
-function mountLamp() {
+async function mountLamp() {
+  const { loadEggStyles } = await import('../load-egg-styles')
+
+  await loadEggStyles('aurora')
   mountVerse()
   bindPointer()
 }
