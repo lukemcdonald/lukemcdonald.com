@@ -30,7 +30,7 @@ function isInsideDist(filePath) {
   return filePath.startsWith(distDir) && (relative === '' || relative.startsWith(sep))
 }
 
-function loadExistingFile(filePath) {
+function resolveExistingFile(filePath) {
   if (!isInsideDist(filePath) || !existsSync(filePath) || !statSync(filePath).isFile()) {
     return null
   }
@@ -46,7 +46,7 @@ function parseRequestPath(requestPath) {
   }
 }
 
-function loadFilePath(decodedPath) {
+function resolveFilePath(decodedPath) {
   const relative = posix
     .normalize(decodedPath)
     .replaceAll(/^(?:\.\.(?:\/|$))+/g, '')
@@ -57,9 +57,9 @@ function loadFilePath(decodedPath) {
   const candidate = resolve(distDir, ...segments)
 
   return (
-    loadExistingFile(candidate) ??
-    loadExistingFile(resolve(candidate, 'index.html')) ??
-    loadExistingFile(`${candidate}.html`)
+    resolveExistingFile(candidate) ??
+    resolveExistingFile(resolve(candidate, 'index.html')) ??
+    resolveExistingFile(`${candidate}.html`)
   )
 }
 
@@ -72,7 +72,7 @@ function sendFile(res, status, file) {
 }
 
 function sendMissing(res) {
-  const notFound = loadExistingFile(resolve(distDir, '404.html'))
+  const notFound = resolveExistingFile(resolve(distDir, '404.html'))
 
   if (notFound) {
     sendFile(res, 404, notFound)
@@ -92,7 +92,7 @@ function handleRequest(req, res) {
     return
   }
 
-  const filePath = loadFilePath(decodedPath)
+  const filePath = resolveFilePath(decodedPath)
 
   if (filePath) {
     sendFile(res, 200, filePath)

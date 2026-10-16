@@ -4,7 +4,7 @@ import { afterEach, describe, mock, test } from 'node:test'
 import { FALLBACK_VERSE, VERSE_ENDPOINT } from '@/features/verse/verse.constants'
 import { toYouVersionVerseUrl } from '@/features/verse/verse.utils'
 
-import { applyLampVerse, lampEgg, loadLampVerse, toLampPos } from './lamp.ts'
+import { applyLampVerse, lampEgg, loadLampVerse, toLampPosition } from './lamp.ts'
 
 describe('applyLampVerse', () => {
   test('writes the verse and clears the loading state', () => {
@@ -55,9 +55,9 @@ describe('lampEgg', () => {
   })
 })
 
-describe('toLampPos', () => {
+describe('toLampPosition', () => {
   test('formats the pointer as one CSS value', () => {
-    assert.equal(toLampPos(12, 40), '12px 40px')
+    assert.equal(toLampPosition(12, 40), '12px 40px')
   })
 })
 

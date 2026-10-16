@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro'
 
 import { GLOBAL_CONFIG } from '@/configs/global'
 import { loadPublishedPages } from '@/features/pages/pages.server'
-import { loadOgPhotoPath, renderOgPng } from '@/utils/og.render'
+import { renderOgPng, resolveOgPhotoPath } from '@/utils/og.render'
 
 export const prerender = true
 
@@ -33,7 +33,7 @@ export async function getStaticPaths() {
 
 export const GET: APIRoute = ({ props }) => {
   const png = renderOgPng({
-    photoPath: loadOgPhotoPath(props.image),
+    photoPath: resolveOgPhotoPath(props.image),
     title: props.title,
   })
 

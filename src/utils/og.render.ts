@@ -10,7 +10,7 @@ import { buildOgSvg, OG_IMAGE_WIDTH } from './og'
 const INTER_FONT_PATH = join(process.cwd(), 'src/assets/fonts/inter/Inter-SemiBold.ttf')
 const PAGE_IMAGE_DIR = join(process.cwd(), 'src/assets/images')
 
-function loadInterFontPath() {
+function resolveInterFontPath() {
   if (!existsSync(INTER_FONT_PATH)) {
     throw new Error(`OG image font not found at ${INTER_FONT_PATH}`)
   }
@@ -26,7 +26,7 @@ function loadPhotoDataUri(photoPath: string) {
   return `data:${mime};base64,${bytes.toString('base64')}`
 }
 
-export function loadOgPhotoPath(image?: OgImageSource) {
+export function resolveOgPhotoPath(image?: OgImageSource) {
   if (!image?.src) {
     return
   }
@@ -77,7 +77,7 @@ export function renderOgPng({
     },
     font: {
       defaultFontFamily: 'Inter',
-      fontFiles: [loadInterFontPath()],
+      fontFiles: [resolveInterFontPath()],
       loadSystemFonts: false,
     },
   })

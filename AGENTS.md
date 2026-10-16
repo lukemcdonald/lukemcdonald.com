@@ -23,7 +23,8 @@ Use the Fallow skill for deeper audit and debug workflows.
 ## Naming
 
 - `get*`: cheap sync read of existing data; never async or side effects
-- `load*` / `fetch*`: async or I/O (`fetch*` for network)
+- `load*` / `fetch*`: read data/content via async or I/O (`fetch*` for network)
+- `resolve*`: find or compute a path/value via lookup; returns the location, not contents
 - `to*`: pure shape conversion
 - `create*` / `build*`: construct a new object, handler, or output
 - `is*` / `has*` / `can*`: booleans
