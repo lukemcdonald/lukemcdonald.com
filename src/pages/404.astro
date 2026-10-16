@@ -17,12 +17,17 @@ const { image, imageAlt, subtitle, title } = createErrorData(404)
       subtitle={subtitle}
       title={title}
     >
-      <Verse server:defer>
-        <Verse
-          slot="fallback"
-          verse={FALLBACK_VERSE}
-        />
-      </Verse>
+      <pre
+        class="text-base leading-7 whitespace-normal">
+        <span class="rounded-xs bg-primary-500 px-1 py-px font-sans text-sm font-medium text-primary-900 uppercase">
+          Error
+        </span>
+        <span class="mt-2 block">
+          Page not found. <Verse server:defer>
+            <Verse slot="fallback" verse={FALLBACK_VERSE} />
+          </Verse>
+        </span>
+      </pre>
     </Entry>
   </Main>
 </Layout>

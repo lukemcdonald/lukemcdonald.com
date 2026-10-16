@@ -65,6 +65,14 @@ export function verseCacheHeaders(now = new Date()) {
   }
 }
 
+export function verseLead(source: Verse['source']) {
+  if (source === 'api') {
+    return "Here's today's verse."
+  }
+
+  return "Here's a verse."
+}
+
 type VerseFetch = (url: string, init?: RequestInit) => Promise<Response>
 
 export async function fetchTodayVerse(

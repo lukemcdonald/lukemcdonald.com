@@ -4,7 +4,7 @@ import type { Verse } from '../verse.types'
 import Link from '@/components/Link.astro'
 
 import { getTodayVerse } from '../verse.server'
-import { verseCacheHeaders } from '../verse.utils'
+import { verseCacheHeaders, verseLead } from '../verse.utils'
 
 interface Props {
   verse?: Verse
@@ -18,24 +18,13 @@ if (!providedVerse) {
     Astro.response.headers.set(name, value)
   }
 }
-
-const errorMessage =
-  verse.source === 'api' ?
-    "Page not found. Here's today's verse."
-  : "Page not found. Here's a verse."
 ---
 
-<pre
-  class="text-base leading-7 whitespace-normal">
-  <span class="rounded-xs bg-primary-500 px-1 py-px font-sans text-sm font-medium text-primary-900 uppercase">
-    Error
-  </span>
-  <span class="mt-2 block">{errorMessage}</span>
-</pre>
-<blockquote class="mt-8">
+{verseLead(verse.source)}
+<blockquote class="mt-8 font-sans text-lg leading-normal">
   <p>{verse.text}</p>
 </blockquote>
-<p class="mt-3 text-sm text-white/50">
+<p class="mt-3 font-sans text-sm text-white/50">
   <Link
     href={verse.url}
     target="_blank"

@@ -9,6 +9,7 @@ import {
   secondsUntilUtcMidnight,
   verseCacheControl,
   verseCacheHeaders,
+  verseLead,
   YOUVERSION_API_ORIGIN,
   YOUVERSION_APP_KEY_HEADER,
   YOUVERSION_BSB_ID,
@@ -87,6 +88,13 @@ describe('verseCacheControl', () => {
       verseCacheControl(new Date('2026-01-15T23:00:00Z')),
       'public, s-maxage=3600, stale-while-revalidate=3600',
     )
+  })
+})
+
+describe('verseLead', () => {
+  test('uses today copy for an API verse and fallback copy otherwise', () => {
+    assert.equal(verseLead('api'), "Here's today's verse.")
+    assert.equal(verseLead('fallback'), "Here's a verse.")
   })
 })
 
