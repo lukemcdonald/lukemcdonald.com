@@ -1,7 +1,5 @@
 ---
-import { getTodayVerse } from '@/features/verse/verse.server'
-
-const verse = await getTodayVerse()
+import { LOADING_VERSE_LABEL } from '@/features/verse/verse.constants'
 ---
 
 <template data-lamp-template>
@@ -23,9 +21,28 @@ const verse = await getTodayVerse()
       <span data-aurora-firefly="c"></span>
       <span data-aurora-firefly="a"></span>
     </div>
-    <div data-lamp-verse>
-      <p>{verse.text}</p>
-      <cite>{verse.reference}</cite>
+    <div
+      aria-busy="true"
+      data-lamp-verse
+    >
+      <p>
+        <span class="sr-only">{LOADING_VERSE_LABEL}</span>
+        <span
+          aria-hidden="true"
+          data-lamp-skeleton
+        >
+          <span data-lamp-skeleton-line></span>
+          <span data-lamp-skeleton-line></span>
+        </span>
+      </p>
+      <cite>
+        <span
+          aria-hidden="true"
+          data-lamp-skeleton
+        >
+          <span data-lamp-skeleton-line></span>
+        </span>
+      </cite>
     </div>
     <div
       aria-hidden="true"

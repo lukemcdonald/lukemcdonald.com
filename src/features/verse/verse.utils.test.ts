@@ -2,12 +2,20 @@ import assert from 'node:assert/strict'
 import { afterEach, describe, mock, test } from 'node:test'
 
 import {
-  dayOfYear,
   FALLBACK_VERSE,
-  fetchTodayVerse,
+  LOADING_VERSE_LABEL,
   YOUVERSION_API_ORIGIN,
   YOUVERSION_APP_KEY_HEADER,
   YOUVERSION_BSB_ID,
+} from './verse.constants.ts'
+import {
+  dayOfYear,
+  fetchTodayVerse,
+  isVerse,
+  secondsUntilUtcMidnight,
+  verseCacheControl,
+  verseCacheHeaders,
+  verseLead,
   youVersionVerseUrl,
 } from './verse.utils.ts'
 
@@ -48,11 +56,63 @@ describe('FALLBACK_VERSE', () => {
   })
 })
 
+describe('LOADING_VERSE_LABEL', () => {
+  test('names the pending verse for assistive text', () => {
+    assert.equal(LOADING_VERSE_LABEL, 'Loading verse')
+  })
+})
+
 describe('dayOfYear', () => {
   test('counts from January 1 including leap days', () => {
     assert.equal(dayOfYear(new Date('2026-01-01T00:00:00Z')), 1)
     assert.equal(dayOfYear(new Date('2025-12-31T12:00:00Z')), 365)
     assert.equal(dayOfYear(new Date('2024-12-31T12:00:00Z')), 366)
+  })
+})
+
+describe('isVerse', () => {
+  test('accepts a complete verse payload', () => {
+    assert.equal(isVerse(FALLBACK_VERSE), true)
+  })
+
+  test('rejects a partial payload', () => {
+    assert.equal(isVerse({ reference: 'John 3:16', text: 'For God so loved the world.' }), false)
+  })
+})
+
+describe('secondsUntilUtcMidnight', () => {
+  test('counts seconds remaining in the UTC day', () => {
+    assert.equal(secondsUntilUtcMidnight(new Date('2026-01-15T00:00:00Z')), 86_400)
+    assert.equal(secondsUntilUtcMidnight(new Date('2026-01-15T23:00:00Z')), 3_600)
+  })
+})
+
+describe('verseCacheControl', () => {
+  test('caps s-maxage at four hours and stays fresh until midnight', () => {
+    assert.equal(
+      verseCacheControl(new Date('2026-01-15T10:00:00Z')),
+      'public, s-maxage=14400, stale-while-revalidate=50400',
+    )
+    assert.equal(
+      verseCacheControl(new Date('2026-01-15T23:00:00Z')),
+      'public, s-maxage=3600, stale-while-revalidate=3600',
+    )
+  })
+})
+
+describe('verseLead', () => {
+  test('uses today copy for an API verse and fallback copy otherwise', () => {
+    assert.equal(verseLead('api'), "Here's today's verse.")
+    assert.equal(verseLead('fallback'), "Here's a verse.")
+  })
+})
+
+describe('verseCacheHeaders', () => {
+  test('sets Cache-Control and a durable CDN header', () => {
+    assert.deepEqual(verseCacheHeaders(new Date('2026-01-15T23:00:00Z')), {
+      'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=3600',
+      'CDN-Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=3600, durable',
+    })
   })
 })
 

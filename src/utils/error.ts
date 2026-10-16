@@ -4,28 +4,22 @@ import notFoundImage from '@/assets/images/not-found.jpg'
 
 export interface ErrorData {
   description?: string
-  html?: string
   image?: ImageMetadata | string
   imageAlt?: string
   subtitle?: string
   title: string
 }
 
-export function createErrorData(status: number, errorMessage?: string): ErrorData {
+export function createErrorData(status: number): ErrorData {
   const { description, statusText } = ERROR_TYPES[status as keyof typeof ERROR_TYPES]
-  const baseData: ErrorData = {
+
+  return {
     description,
     image: notFoundImage,
     imageAlt: 'Little Carly coding.',
     subtitle: statusText,
     title: status.toString(),
   }
-
-  if (errorMessage) {
-    baseData.html = `<pre class="text-base leading-7 whitespace-normal"><span class="px-1 py-px font-sans text-sm font-medium uppercase rounded-xs text-primary-900 bg-primary-500">Error</span> <span class="block mt-2">${errorMessage}</span></pre>`
-  }
-
-  return baseData
 }
 
 const ERROR_TYPES = {

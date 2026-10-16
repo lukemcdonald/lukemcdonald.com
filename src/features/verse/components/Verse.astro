@@ -1,0 +1,26 @@
+---
+import Link from '@/components/Link.astro'
+
+import { getTodayVerse } from '../verse.server'
+import { verseCacheHeaders, verseLead } from '../verse.utils'
+
+const verse = await getTodayVerse()
+
+for (const [name, value] of Object.entries(verseCacheHeaders())) {
+  Astro.response.headers.set(name, value)
+}
+---
+
+{verseLead(verse.source)}
+<blockquote class="mt-8 font-sans text-lg leading-normal">
+  <p>{verse.text}</p>
+</blockquote>
+<p class="mt-3 font-sans text-sm text-white/50">
+  <Link
+    href={verse.url}
+    target="_blank"
+    underline="hover"
+  >
+    — {verse.reference}
+  </Link>
+</p>

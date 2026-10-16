@@ -1,21 +1,18 @@
 import type { Verse } from './verse.types'
 
-export const YOUVERSION_API_ORIGIN = 'https://api.youversion.com/v1'
-export const YOUVERSION_APP_KEY_HEADER = 'X-YVP-App-Key'
-export const YOUVERSION_BSB_ID = 3034
+import {
+  FALLBACK_VERSE,
+  YOUVERSION_API_ORIGIN,
+  YOUVERSION_APP_KEY_HEADER,
+  YOUVERSION_BSB_ID,
+} from './verse.constants'
 
 const DAY_MS = 86_400_000
 const REQUEST_TIMEOUT_MS = 8_000
+const S_MAXAGE_SECONDS = 4 * 60 * 60
 
 export function youVersionVerseUrl(usfm: string, version = 'BSB') {
   return `https://www.bible.com/bible/${YOUVERSION_BSB_ID}/${usfm}.${version}`
-}
-
-export const FALLBACK_VERSE: Verse = {
-  reference: 'Psalm 119:105',
-  source: 'fallback',
-  text: 'Your word is a lamp to my feet and a light to my path.',
-  url: youVersionVerseUrl('PSA.119.105'),
 }
 
 export function dayOfYear(date: Date) {
@@ -24,6 +21,51 @@ export function dayOfYear(date: Date) {
   const current = Date.UTC(year, date.getUTCMonth(), date.getUTCDate())
 
   return Math.floor((current - start) / DAY_MS) + 1
+}
+
+export function isVerse(value: unknown): value is Verse {
+  const record = asRecord(value)
+
+  if (!record) {
+    return false
+  }
+
+  return (
+    typeof record.reference === 'string' &&
+    (record.source === 'api' || record.source === 'fallback') &&
+    typeof record.text === 'string' &&
+    typeof record.url === 'string'
+  )
+}
+
+export function secondsUntilUtcMidnight(now = new Date()) {
+  const next = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1)
+
+  return Math.max(1, Math.floor((next - now.getTime()) / 1_000))
+}
+
+export function verseCacheControl(now = new Date()) {
+  const untilMidnight = secondsUntilUtcMidnight(now)
+  const sMaxAge = Math.min(untilMidnight, S_MAXAGE_SECONDS)
+
+  return `public, s-maxage=${sMaxAge}, stale-while-revalidate=${untilMidnight}`
+}
+
+export function verseCacheHeaders(now = new Date()) {
+  const cacheControl = verseCacheControl(now)
+
+  return {
+    'Cache-Control': cacheControl,
+    'CDN-Cache-Control': `${cacheControl}, durable`,
+  }
+}
+
+export function verseLead(source: Verse['source']) {
+  if (source === 'api') {
+    return "Here's today's verse."
+  }
+
+  return "Here's a verse."
 }
 
 type VerseFetch = (url: string, init?: RequestInit) => Promise<Response>

@@ -1,0 +1,22 @@
+---
+import { LOADING_VERSE_LABEL } from '../verse.constants'
+---
+
+<span aria-busy="true">
+  <span class="sr-only">{LOADING_VERSE_LABEL}</span>
+  <span
+    aria-hidden="true"
+    class="mt-8 block font-sans text-lg leading-normal"
+  >
+    <span
+      class="block h-[1lh] w-[min(100%,36ch)] animate-pulse rounded-sm bg-white/15 motion-reduce:animate-none"
+    ></span>
+    <span
+      class="block h-[1lh] w-[min(92%,28ch)] animate-pulse rounded-sm bg-white/15 motion-reduce:animate-none"
+    ></span>
+  </span>
+  <span
+    aria-hidden="true"
+    class="mt-3 block h-[1lh] w-[12ch] animate-pulse rounded-sm bg-white/10 font-sans text-sm motion-reduce:animate-none"
+  ></span>
+</span>
