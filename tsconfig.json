@@ -4,6 +4,7 @@
     ".astro/types.d.ts",
     "astro.config.mjs",
     "e2e/**/*",
+    "netlify/**/*",
     "playwright.config.ts",
     "src/**/*"
   ],

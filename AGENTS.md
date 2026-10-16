@@ -50,8 +50,13 @@ Always use the **lukemcdonald.com** project (`f04167ed-3a9c-48ad-ac93-bea8ca3890
 - `src/configs/` — Site, env, content, and sound config
 - `src/utils/` — Generic utilities
 - `src/assets/` — Images and global styles
+- `netlify/functions/` — Netlify Functions (scheduled rebuild)
 
 **Path Alias:** `@/*` maps to `src/*`
+
+### Environment
+
+- `NETLIFY_BUILD_HOOK_URL` — Netlify build hook URL. The scheduled function POSTs to it daily so the YouVersion verse of the day stays current. If unset, the function logs and exits. Do not commit the value.
 
 ### Feature Structure
 
@@ -87,7 +92,7 @@ Prefer native HTML (`<dialog>`, `<select>`, popover) plus a small vanilla TypeSc
 
 ## Testing
 
-- Runner: `pnpm test` (`tsx --test 'src/**/*.test.ts'`)
+- Runner: `pnpm test` (`tsx --test 'src/**/*.test.ts' 'netlify/**/*.test.ts'`)
 - Use `node:test` and `node:assert/strict`
 - Colocate tests as `*.test.ts` next to the module
 - End-to-end: Playwright in `e2e/` (`*.spec.ts`). Import `test`/`expect` from `../fixtures`. See `e2e/README.md`.
