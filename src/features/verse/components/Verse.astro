@@ -1,22 +1,13 @@
 ---
-import type { Verse } from '../verse.types'
-
 import Link from '@/components/Link.astro'
 
 import { getTodayVerse } from '../verse.server'
 import { verseCacheHeaders, verseLead } from '../verse.utils'
 
-interface Props {
-  verse?: Verse
-}
+const verse = await getTodayVerse()
 
-const { verse: providedVerse } = Astro.props
-const verse = providedVerse ?? (await getTodayVerse())
-
-if (!providedVerse) {
-  for (const [name, value] of Object.entries(verseCacheHeaders())) {
-    Astro.response.headers.set(name, value)
-  }
+for (const [name, value] of Object.entries(verseCacheHeaders())) {
+  Astro.response.headers.set(name, value)
 }
 ---
 

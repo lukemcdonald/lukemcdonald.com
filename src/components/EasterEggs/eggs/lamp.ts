@@ -1,6 +1,7 @@
 import type { Verse } from '@/features/verse/verse.types'
 
-import { FALLBACK_VERSE, isVerse, VERSE_ENDPOINT } from '@/features/verse/verse.utils'
+import { FALLBACK_VERSE, VERSE_ENDPOINT } from '@/features/verse/verse.constants'
+import { isVerse } from '@/features/verse/verse.utils'
 
 const LAMP_ATTR = 'data-lamp'
 const POS_VAR = '--lamp-pos'
@@ -17,6 +18,22 @@ export const lampEgg = {
 } as const
 
 let listening = false
+
+export function applyLampVerse(root: HTMLElement, verse: Verse) {
+  const holder = root.querySelector('[data-lamp-verse]')
+  const reference = holder?.querySelector('cite')
+  const text = holder?.querySelector('p')
+
+  holder?.removeAttribute('aria-busy')
+
+  if (reference) {
+    reference.textContent = verse.reference
+  }
+
+  if (text) {
+    text.textContent = verse.text
+  }
+}
 
 export function lampPos(x: number, y: number) {
   return `${x}px ${y}px`
@@ -39,19 +56,6 @@ export async function loadLampVerse(fetchFn: typeof fetch = globalThis.fetch): P
     return payload
   } catch {
     return FALLBACK_VERSE
-  }
-}
-
-function applyLampVerse(root: HTMLElement, verse: Verse) {
-  const reference = root.querySelector('[data-lamp-verse] cite')
-  const text = root.querySelector('[data-lamp-verse] p')
-
-  if (reference) {
-    reference.textContent = verse.reference
-  }
-
-  if (text) {
-    text.textContent = verse.text
   }
 }
 

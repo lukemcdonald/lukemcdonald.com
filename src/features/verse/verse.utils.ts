@@ -1,9 +1,11 @@
 import type { Verse } from './verse.types'
 
-export const YOUVERSION_API_ORIGIN = 'https://api.youversion.com/v1'
-export const YOUVERSION_APP_KEY_HEADER = 'X-YVP-App-Key'
-export const YOUVERSION_BSB_ID = 3034
-export const VERSE_ENDPOINT = '/api/verse.json'
+import {
+  FALLBACK_VERSE,
+  YOUVERSION_API_ORIGIN,
+  YOUVERSION_APP_KEY_HEADER,
+  YOUVERSION_BSB_ID,
+} from './verse.constants'
 
 const DAY_MS = 86_400_000
 const REQUEST_TIMEOUT_MS = 8_000
@@ -11,13 +13,6 @@ const S_MAXAGE_SECONDS = 4 * 60 * 60
 
 export function youVersionVerseUrl(usfm: string, version = 'BSB') {
   return `https://www.bible.com/bible/${YOUVERSION_BSB_ID}/${usfm}.${version}`
-}
-
-export const FALLBACK_VERSE: Verse = {
-  reference: 'Psalm 119:105',
-  source: 'fallback',
-  text: 'Your word is a lamp to my feet and a light to my path.',
-  url: youVersionVerseUrl('PSA.119.105'),
 }
 
 export function dayOfYear(date: Date) {

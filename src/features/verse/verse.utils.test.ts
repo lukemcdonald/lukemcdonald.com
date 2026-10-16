@@ -2,17 +2,20 @@ import assert from 'node:assert/strict'
 import { afterEach, describe, mock, test } from 'node:test'
 
 import {
-  dayOfYear,
   FALLBACK_VERSE,
+  LOADING_VERSE_LABEL,
+  YOUVERSION_API_ORIGIN,
+  YOUVERSION_APP_KEY_HEADER,
+  YOUVERSION_BSB_ID,
+} from './verse.constants.ts'
+import {
+  dayOfYear,
   fetchTodayVerse,
   isVerse,
   secondsUntilUtcMidnight,
   verseCacheControl,
   verseCacheHeaders,
   verseLead,
-  YOUVERSION_API_ORIGIN,
-  YOUVERSION_APP_KEY_HEADER,
-  YOUVERSION_BSB_ID,
   youVersionVerseUrl,
 } from './verse.utils.ts'
 
@@ -50,6 +53,12 @@ describe('FALLBACK_VERSE', () => {
       text: 'Your word is a lamp to my feet and a light to my path.',
       url: youVersionVerseUrl('PSA.119.105'),
     })
+  })
+})
+
+describe('LOADING_VERSE_LABEL', () => {
+  test('names the pending verse for assistive text', () => {
+    assert.equal(LOADING_VERSE_LABEL, 'Loading verse')
   })
 })
 

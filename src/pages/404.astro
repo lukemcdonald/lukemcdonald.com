@@ -1,7 +1,7 @@
 ---
 import Entry from '@/components/Entry/Entry.astro'
 import Verse from '@/features/verse/components/Verse.astro'
-import { FALLBACK_VERSE } from '@/features/verse/verse.utils'
+import VerseSkeleton from '@/features/verse/components/VerseSkeleton.astro'
 import Layout from '@/layouts/Layout.astro'
 import Main from '@/layouts/Main.astro'
 import { createErrorData } from '@/utils/error'
@@ -24,7 +24,7 @@ const { image, imageAlt, subtitle, title } = createErrorData(404)
         </span>
         <span class="mt-2 block">
           Page not found. <Verse server:defer>
-            <Verse slot="fallback" verse={FALLBACK_VERSE} />
+            <VerseSkeleton slot="fallback" />
           </Verse>
         </span>
       </pre>
