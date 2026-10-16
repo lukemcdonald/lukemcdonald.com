@@ -4,7 +4,7 @@ export const RESUME_LINK: MenuLinkItem = { href: '/resume', name: 'Resume' }
 
 type NavPage = {
   data: {
-    section?: 'live' | 'play' | 'work'
+    navGroup?: 'live' | 'play' | 'work'
     title: string
   }
   id: string
@@ -17,19 +17,19 @@ function toPageLink(page: NavPage): MenuLinkItem {
   }
 }
 
-function linksForSection(pages: NavPage[], section: 'live' | 'play' | 'work'): MenuLinkItem[] {
+function linksForNavGroup(pages: NavPage[], navGroup: 'live' | 'play' | 'work'): MenuLinkItem[] {
   return pages
     .filter((page) => {
-      return page.data.section === section
+      return page.data.navGroup === navGroup
     })
     .map(toPageLink)
 }
 
 export function buildNavigationGroups(pages: NavPage[]): NavigationGroup[] {
   return [
-    { links: [RESUME_LINK, ...linksForSection(pages, 'work')], name: 'Work' },
-    { links: linksForSection(pages, 'play'), name: 'Play' },
-    { links: linksForSection(pages, 'live'), name: 'Live' },
+    { links: [RESUME_LINK, ...linksForNavGroup(pages, 'work')], name: 'Work' },
+    { links: linksForNavGroup(pages, 'play'), name: 'Play' },
+    { links: linksForNavGroup(pages, 'live'), name: 'Live' },
   ]
 }
 

@@ -13,11 +13,11 @@ import {
 
 describe('buildNavigationGroups', () => {
   const pages = [
-    { data: { section: 'live' as const, title: 'Christian' }, id: 'i-am-a/christian' },
-    { data: { section: 'live' as const, title: 'Husband' }, id: 'i-am-a/husband' },
-    { data: { section: 'live' as const, title: 'Father' }, id: 'i-am-a/father' },
-    { data: { section: 'live' as const, title: 'Coach' }, id: 'i-am-a/coach' },
-    { data: { section: 'play' as const, title: 'TREAD Talks' }, id: 'tread-talks' },
+    { data: { navGroup: 'live' as const, title: 'Christian' }, id: 'i-am-a/christian' },
+    { data: { navGroup: 'live' as const, title: 'Husband' }, id: 'i-am-a/husband' },
+    { data: { navGroup: 'live' as const, title: 'Father' }, id: 'i-am-a/father' },
+    { data: { navGroup: 'live' as const, title: 'Coach' }, id: 'i-am-a/coach' },
+    { data: { navGroup: 'play' as const, title: 'TREAD Talks' }, id: 'tread-talks' },
     { data: { title: 'Greetings' }, id: 'index' },
   ]
 
@@ -28,7 +28,7 @@ describe('buildNavigationGroups', () => {
     )
   })
 
-  test('keeps Resume in Work and groups pages by section', () => {
+  test('keeps Resume in Work and groups pages by navGroup', () => {
     assert.deepEqual(buildNavigationGroups(pages), [
       { links: [RESUME_LINK], name: 'Work' },
       { links: [{ href: '/tread-talks', name: 'TREAD Talks' }], name: 'Play' },
@@ -44,11 +44,11 @@ describe('buildNavigationGroups', () => {
     ])
   })
 
-  test('places Resume first in Work before section pages', () => {
+  test('places Resume first in Work before navGroup pages', () => {
     assert.deepEqual(
       buildNavigationGroups([
         ...pages,
-        { data: { section: 'work' as const, title: 'Consulting' }, id: 'consulting' },
+        { data: { navGroup: 'work' as const, title: 'Consulting' }, id: 'consulting' },
       ])[0],
       {
         links: [RESUME_LINK, { href: '/consulting', name: 'Consulting' }],
