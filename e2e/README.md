@@ -1,6 +1,6 @@
 # End-to-end tests
 
-Playwright suite for browser-level behavior and automated accessibility checks. Unit tests stay in `src/**/*.test.ts` and `netlify/**/*.test.ts` (`node:test` via `pnpm test`). This suite lives here, uses `*.spec.ts`, and is run with `pnpm test:e2e`.
+Playwright suite for browser-level behavior and automated accessibility checks. Unit tests stay in `src/**/*.test.ts` (`node:test` via `pnpm test`). This suite lives here, uses `*.spec.ts`, and is run with `pnpm test:e2e`.
 
 The `@astrojs/netlify` adapter does not implement `astro preview`. Playwright instead builds the production output and serves `dist/` with `scripts/preview-static.mjs`, which maps Astro directory routes (`/resume` → `dist/resume/index.html`) without trailing slashes.
 

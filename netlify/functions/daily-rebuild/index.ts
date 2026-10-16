@@ -4,7 +4,6 @@ type DailyRebuildOptions = {
   log?: Pick<Console, 'info'>
 }
 
-/** Daily at 10:00 UTC (~5am CT) so the YouVersion verse of the day stays current. */
 export const config = {
   schedule: '0 10 * * *',
 }
