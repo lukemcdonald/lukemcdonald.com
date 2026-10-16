@@ -1,23 +1,35 @@
 import type { MenuLinkItem, NavigationGroup } from './navigation.types'
 
-export const PLAY_LINKS: MenuLinkItem[] = [{ href: '/tread-talks', name: 'TREAD Talks' }]
+export const RESUME_LINK: MenuLinkItem = { href: '/resume', name: 'Resume' }
 
-export const WORK_LINKS: MenuLinkItem[] = [{ href: '/resume', name: 'Resume' }]
-
-export function toLiveLinks(pages: Array<{ data: { title: string }; id: string }>): MenuLinkItem[] {
-  return pages.map((page) => {
-    return {
-      href: `/${page.id}`,
-      name: page.data.title,
-    }
-  })
+type NavPage = {
+  data: {
+    section?: 'live' | 'play' | 'work'
+    title: string
+  }
+  id: string
 }
 
-export function buildNavigationGroups(liveLinks: MenuLinkItem[]): NavigationGroup[] {
+function toPageLink(page: NavPage): MenuLinkItem {
+  return {
+    href: `/${page.id}`,
+    name: page.data.title,
+  }
+}
+
+function linksForSection(pages: NavPage[], section: 'live' | 'play' | 'work'): MenuLinkItem[] {
+  return pages
+    .filter((page) => {
+      return page.data.section === section
+    })
+    .map(toPageLink)
+}
+
+export function buildNavigationGroups(pages: NavPage[]): NavigationGroup[] {
   return [
-    { links: WORK_LINKS, name: 'Work' },
-    { links: PLAY_LINKS, name: 'Play' },
-    { links: liveLinks, name: 'Live' },
+    { links: [RESUME_LINK, ...linksForSection(pages, 'work')], name: 'Work' },
+    { links: linksForSection(pages, 'play'), name: 'Play' },
+    { links: linksForSection(pages, 'live'), name: 'Live' },
   ]
 }
 

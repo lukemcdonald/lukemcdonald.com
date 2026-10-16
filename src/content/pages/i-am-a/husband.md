@@ -1,5 +1,6 @@
 ---
 order: 2
+section: live
 subtitle: 'I am a'
 title: 'Husband'
 image: '@/assets/images/luke-and-heather.jpg'

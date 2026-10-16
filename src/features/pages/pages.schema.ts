@@ -11,6 +11,7 @@ export function createPagesSchema(image: () => z.ZodType<ImageMetadata>) {
       image: image().optional(),
       imageAlt: z.string().optional(),
       order: z.number().optional(),
+      section: z.enum(['live', 'play', 'work']).optional(),
       seo: z
         .object({
           description: z.string().optional(),

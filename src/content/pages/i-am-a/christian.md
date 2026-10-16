@@ -1,5 +1,6 @@
 ---
 order: 1
+section: live
 subtitle: 'I am a'
 title: 'Christian'
 image: '@/assets/images/luke-baptism.jpg'
