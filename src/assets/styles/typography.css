@@ -84,6 +84,10 @@
   }
 }
 
+@utility eyebrow {
+  @apply text-xs font-medium tracking-wider text-primary-800 uppercase dark:text-white/50;
+}
+
 @utility font-inherit {
   font-weight: inherit;
 }
@@ -106,10 +110,10 @@
   font-family: inherit;
 }
 
-[data-font] :is(.site-header, footer) {
+[data-font] :is(.eyebrow, footer, .site-header) {
   font-family: var(--font-ui);
 }
 
-:where(h1, h2, h3, h4, h5, h6) {
+:where(h1, h2, h3, h4, h5, h6):not(.eyebrow) {
   font-family: var(--font-heading, inherit);
 }

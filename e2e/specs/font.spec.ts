@@ -9,6 +9,21 @@ async function fontFamily(locator: Locator) {
   })
 }
 
+async function labelStyle(locator: Locator) {
+  return locator.evaluate((el) => {
+    const style = getComputedStyle(el)
+
+    return {
+      color: style.color,
+      fontFamily: style.fontFamily,
+      fontSize: style.fontSize,
+      fontWeight: style.fontWeight,
+      letterSpacing: style.letterSpacing,
+      textTransform: style.textTransform,
+    }
+  })
+}
+
 async function selectFont(homePage: HomePage, isMobile: boolean, pairing: string) {
   if (isMobile) {
     await homePage.header.nav.openMobileMenu()
@@ -66,5 +81,32 @@ test.describe('font', { tag: '@smoke' }, () => {
 
     await expect.poll(() => homePage.storedFontPairing()).toBeNull()
     await expect(homePage.page.locator('html')).not.toHaveAttribute('data-font')
+  })
+
+  test('mobile menu group and field labels share the UI face', async ({ homePage, isMobile }) => {
+    test.skip(!isMobile, 'Uppercase field labels live in the mobile menu')
+
+    await homePage.goto()
+    await homePage.header.nav.openMobileMenu()
+
+    const fieldLabel = homePage.header.nav.mobileMenu
+      .locator('label')
+      .filter({ has: homePage.header.nav.mobileAppearance })
+    const groupLabel = homePage.header.nav.mobileMenu.getByRole('heading', { name: 'Work' })
+
+    for (const pairing of ['live', 'play', 'work']) {
+      await homePage.header.nav.mobileFont.selectOption(pairing)
+      await expect(homePage.page.locator('html')).toHaveAttribute('data-font', pairing)
+      await homePage.page.evaluate(() => document.fonts.ready)
+
+      const field = await labelStyle(fieldLabel)
+      await expect.poll(() => labelStyle(groupLabel)).toEqual(field)
+    }
+
+    await homePage.header.nav.mobileAppearance.selectOption('dark')
+    await expect.poll(() => homePage.isDarkMode()).toBe(true)
+
+    const darkField = await labelStyle(fieldLabel)
+    await expect.poll(() => labelStyle(groupLabel)).toEqual(darkField)
   })
 })

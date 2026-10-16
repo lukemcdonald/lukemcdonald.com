@@ -19,9 +19,6 @@ export interface Props {
 }
 
 const { groups } = Astro.props
-
-const labelClass =
-  'text-xs font-medium tracking-wider text-primary-800 uppercase dark:text-white/50'
 ---
 
 <div
@@ -81,7 +78,7 @@ const labelClass =
           {
             groups.map((group) => (
               <section class="flex flex-col gap-1">
-                <h3 class={labelClass}>{group.name}</h3>
+                <h3 class="eyebrow">{group.name}</h3>
 
                 <ul>
                   {group.links.map((link) => (
