@@ -3,9 +3,9 @@ import { describe, test } from 'node:test'
 
 import { GLOBAL_CONFIG } from '@/configs/global'
 
-import { assembleResumeData, pickResumeSection } from './resume.utils.ts'
+import { buildResumeData, pickResumeSection } from './resume.utils.ts'
 
-type ResumeStub = Parameters<typeof assembleResumeData>[0][number]
+type ResumeStub = Parameters<typeof buildResumeData>[0][number]
 
 function entry(id: string, data: unknown): ResumeStub {
   return {
@@ -14,9 +14,9 @@ function entry(id: string, data: unknown): ResumeStub {
   } as ResumeStub
 }
 
-describe('assembleResumeData', () => {
+describe('buildResumeData', () => {
   test('assigns top-level files and fills contact from site config', () => {
-    const data = assembleResumeData([
+    const data = buildResumeData([
       entry('basics.yaml', { email: 'other@example.com', intro: 'Hi', name: 'Other' }),
     ])
 
@@ -28,7 +28,7 @@ describe('assembleResumeData', () => {
   })
 
   test('nests section files and sorts experience present-first', () => {
-    const data = assembleResumeData([
+    const data = buildResumeData([
       entry('experience/old.yaml', {
         company: 'Old Co',
         endDate: '2020-01-01',
@@ -51,7 +51,7 @@ describe('assembleResumeData', () => {
   })
 
   test('sorts dated arrays newest first', () => {
-    const data = assembleResumeData([
+    const data = buildResumeData([
       entry('awards/early.yaml', { date: '2019-01-01', title: 'Early' }),
       entry('awards/late.yaml', { date: '2024-01-01', title: 'Late' }),
     ])
@@ -64,7 +64,7 @@ describe('assembleResumeData', () => {
 })
 
 describe('pickResumeSection', () => {
-  const data = assembleResumeData([
+  const data = buildResumeData([
     entry('basics.yaml', { intro: 'Hi' }),
     entry('skills.yaml', ['TypeScript']),
   ])

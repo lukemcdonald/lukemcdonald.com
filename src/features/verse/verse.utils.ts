@@ -11,11 +11,11 @@ const DAY_MS = 86_400_000
 const REQUEST_TIMEOUT_MS = 8_000
 const S_MAXAGE_SECONDS = 4 * 60 * 60
 
-export function youVersionVerseUrl(usfm: string, version = 'BSB') {
+export function toYouVersionVerseUrl(usfm: string, version = 'BSB') {
   return `https://www.bible.com/bible/${YOUVERSION_BSB_ID}/${usfm}.${version}`
 }
 
-export function dayOfYear(date: Date) {
+export function toDayOfYear(date: Date) {
   const year = date.getUTCFullYear()
   const start = Date.UTC(year, 0, 1)
   const current = Date.UTC(year, date.getUTCMonth(), date.getUTCDate())
@@ -44,15 +44,15 @@ export function secondsUntilUtcMidnight(now = new Date()) {
   return Math.max(1, Math.floor((next - now.getTime()) / 1_000))
 }
 
-export function verseCacheControl(now = new Date()) {
+export function formatVerseCacheControl(now = new Date()) {
   const untilMidnight = secondsUntilUtcMidnight(now)
   const sMaxAge = Math.min(untilMidnight, S_MAXAGE_SECONDS)
 
   return `public, s-maxage=${sMaxAge}, stale-while-revalidate=${untilMidnight}`
 }
 
-export function verseCacheHeaders(now = new Date()) {
-  const cacheControl = verseCacheControl(now)
+export function buildVerseCacheHeaders(now = new Date()) {
+  const cacheControl = formatVerseCacheControl(now)
 
   return {
     'Cache-Control': cacheControl,
@@ -60,7 +60,7 @@ export function verseCacheHeaders(now = new Date()) {
   }
 }
 
-export function verseLead(source: Verse['source']) {
+export function formatVerseLead(source: Verse['source']) {
   if (source === 'api') {
     return "Here's today's verse."
   }
@@ -147,7 +147,7 @@ async function loadYouVersionVerse(appKey: string, fetchFn: VerseFetch, now: Dat
   const passageId = readPassageId(
     await requestJson(
       fetchFn,
-      `${YOUVERSION_API_ORIGIN}/verse-of-the-days/${dayOfYear(now)}`,
+      `${YOUVERSION_API_ORIGIN}/verse-of-the-days/${toDayOfYear(now)}`,
       appKey,
     ),
   )
@@ -172,6 +172,6 @@ async function loadYouVersionVerse(appKey: string, fetchFn: VerseFetch, now: Dat
     reference: passage.reference,
     source: 'api' as const,
     text: passage.content,
-    url: youVersionVerseUrl(passageId),
+    url: toYouVersionVerseUrl(passageId),
   }
 }

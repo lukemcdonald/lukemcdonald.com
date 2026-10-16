@@ -82,7 +82,7 @@ function loadCuelume() {
   return cuelumePromise
 }
 
-function soundsAreEnabled() {
+function isSoundEnabled() {
   return SOUND_CONFIG.enableSounds && getSoundPreference() === 'on'
 }
 
@@ -95,7 +95,7 @@ async function startCuelume() {
     started = true
   }
 
-  mod.setEnabled(soundsAreEnabled())
+  mod.setEnabled(isSoundEnabled())
 
   return mod
 }

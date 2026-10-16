@@ -2,13 +2,13 @@
 import { render } from 'astro:content'
 
 import Entry from '@/components/Entry/Entry.astro'
-import { getPublishedPages } from '@/features/pages/pages.server'
-import { omitIndexPage, resolvePageSeo } from '@/features/pages/pages.utils'
+import { loadPublishedPages } from '@/features/pages/pages.server'
+import { omitIndexPage, toPageSeo } from '@/features/pages/pages.utils'
 import Layout from '@/layouts/Layout.astro'
 import Main from '@/layouts/Main.astro'
 
 export async function getStaticPaths() {
-  const pages = await getPublishedPages()
+  const pages = await loadPublishedPages()
 
   return omitIndexPage(pages).map((page) => ({
     params: { slug: page.id },
@@ -24,7 +24,7 @@ if (!page) {
 
 const { description, image, imageAlt, modDate, pubDate, subtitle, title } = page.data
 const { Content } = await render(page)
-const { description: seoDescription, ogImage, title: seoTitle } = resolvePageSeo(page)
+const { description: seoDescription, ogImage, title: seoTitle } = toPageSeo(page)
 ---
 
 <Layout

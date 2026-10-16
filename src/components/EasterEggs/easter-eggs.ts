@@ -73,7 +73,7 @@ function advanceProgress(progress: number, code: string, sequence: readonly stri
   let length = Math.min(attempted.length, sequence.length)
 
   while (length > 0) {
-    if (matchesPrefix(attempted, length, sequence)) {
+    if (hasSequencePrefix(attempted, length, sequence)) {
       return length
     }
 
@@ -215,7 +215,11 @@ function markFound(id: string) {
   setStorageItem(STORAGE_KEYS.easterEggFound, JSON.stringify([...found, id]))
 }
 
-function matchesPrefix(attempted: string[], length: number, sequence: readonly string[]): boolean {
+function hasSequencePrefix(
+  attempted: string[],
+  length: number,
+  sequence: readonly string[],
+): boolean {
   const suffix = attempted.slice(-length)
 
   return suffix.every((item, index) => item === sequence[index])
@@ -234,7 +238,7 @@ function onEscape() {
 }
 
 function onKeyDown(event: KeyboardEvent) {
-  if (shouldIgnore(event)) {
+  if (isIgnoredKeyEvent(event)) {
     return
   }
 
@@ -383,7 +387,7 @@ function setProgress(id: string, next: number) {
   progressById.set(id, next)
 }
 
-function shouldIgnore(event: KeyboardEvent): boolean {
+function isIgnoredKeyEvent(event: KeyboardEvent): boolean {
   if (hasBlockingFlags(event) || hasOpenDialog()) {
     return true
   }

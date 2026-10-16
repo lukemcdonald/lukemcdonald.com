@@ -98,19 +98,23 @@ export function getFoundEggs(eggs: readonly CommandPaletteEggItem[], foundIds: r
   return eggs.filter((egg) => foundIds.includes(egg.id))
 }
 
-export function getPaletteFooterLabel(onSecrets: boolean, foundCount: number, totalCount: number) {
+export function formatPaletteFooterLabel(
+  onSecrets: boolean,
+  foundCount: number,
+  totalCount: number,
+) {
   if (onSecrets) {
     return SECRETS_BACK_LABEL
   }
 
-  return getSecretsFooterLabel(foundCount, totalCount)
+  return formatSecretsFooterLabel(foundCount, totalCount)
 }
 
-export function getPaletteFooterShortcut(onSecrets: boolean) {
+export function formatPaletteFooterShortcut(onSecrets: boolean) {
   return onSecrets ? SECRETS_BACK_SHORTCUT_LABEL : SECRETS_SHORTCUT_LABEL
 }
 
-export function getSecretsFooterLabel(foundCount: number, totalCount: number) {
+export function formatSecretsFooterLabel(foundCount: number, totalCount: number) {
   if (foundCount >= totalCount) {
     return 'All secrets found'
   }
@@ -118,7 +122,7 @@ export function getSecretsFooterLabel(foundCount: number, totalCount: number) {
   return `Secrets ${foundCount}/${totalCount}`
 }
 
-export function getSecretsProgressLabel(foundCount: number, totalCount: number) {
+export function formatSecretsProgressLabel(foundCount: number, totalCount: number) {
   if (foundCount >= totalCount) {
     return 'All secrets found'
   }

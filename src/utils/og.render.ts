@@ -10,7 +10,7 @@ import { buildOgSvg, OG_IMAGE_WIDTH } from './og'
 const INTER_FONT_PATH = join(process.cwd(), 'src/assets/fonts/inter/Inter-SemiBold.ttf')
 const PAGE_IMAGE_DIR = join(process.cwd(), 'src/assets/images')
 
-function getInterFontPath() {
+function loadInterFontPath() {
   if (!existsSync(INTER_FONT_PATH)) {
     throw new Error(`OG image font not found at ${INTER_FONT_PATH}`)
   }
@@ -18,7 +18,7 @@ function getInterFontPath() {
   return INTER_FONT_PATH
 }
 
-function toPhotoDataUri(photoPath: string) {
+function loadPhotoDataUri(photoPath: string) {
   const bytes = readFileSync(photoPath)
   const ext = extname(photoPath).slice(1).toLowerCase()
   const mime = ext === 'jpg' || ext === 'jpeg' ? 'image/jpeg' : `image/${ext || 'jpeg'}`
@@ -26,7 +26,7 @@ function toPhotoDataUri(photoPath: string) {
   return `data:${mime};base64,${bytes.toString('base64')}`
 }
 
-export function resolveOgPhotoPath(image?: OgImageSource) {
+export function loadOgPhotoPath(image?: OgImageSource) {
   if (!image?.src) {
     return
   }
@@ -69,7 +69,7 @@ export function renderOgPng({
   photoPath,
   title,
 }: Pick<OgImageInput, 'mark' | 'title'> & { photoPath?: string }) {
-  const photoDataUri = photoPath && existsSync(photoPath) ? toPhotoDataUri(photoPath) : undefined
+  const photoDataUri = photoPath && existsSync(photoPath) ? loadPhotoDataUri(photoPath) : undefined
   const resvg = new Resvg(buildOgSvg({ mark, photoDataUri, title }), {
     fitTo: {
       mode: 'width',
@@ -77,7 +77,7 @@ export function renderOgPng({
     },
     font: {
       defaultFontFamily: 'Inter',
-      fontFiles: [getInterFontPath()],
+      fontFiles: [loadInterFontPath()],
       loadSystemFonts: false,
     },
   })

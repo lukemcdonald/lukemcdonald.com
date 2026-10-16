@@ -15,7 +15,7 @@ import {
 import { DEFAULT_GLASS_LEVEL, GLASS_LEVELS } from '@/components/Settings/Glass/constants'
 import { DEFAULT_THEME_COLOR, THEME_COLORS } from '@/components/Settings/ThemeColor/constants'
 import { DEFAULT_THEME_MODE } from '@/components/Settings/ThemeMode/constants'
-import { CLOUDFLARE_WEB_ANALYTICS, getCloudflareBeaconConfig } from '@/configs/analytics'
+import { CLOUDFLARE_WEB_ANALYTICS, createCloudflareBeaconConfig } from '@/configs/analytics'
 import { GLOBAL_CONFIG } from '@/configs/global'
 import { buildGraphJsonLd, buildSocialMetaTags } from '@/utils/seo'
 import { STORAGE_KEYS } from '@/utils/storage'
@@ -316,7 +316,7 @@ const themeColors = THEME_COLORS
   {
     CONTEXT === 'production' && CLOUDFLARE_ANALYTICS_TOKEN && (
       <script
-        data-cf-beacon={JSON.stringify(getCloudflareBeaconConfig(CLOUDFLARE_ANALYTICS_TOKEN))}
+        data-cf-beacon={JSON.stringify(createCloudflareBeaconConfig(CLOUDFLARE_ANALYTICS_TOKEN))}
         defer
         is:inline
         src={CLOUDFLARE_WEB_ANALYTICS.scriptPath}

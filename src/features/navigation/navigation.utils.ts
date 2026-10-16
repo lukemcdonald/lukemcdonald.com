@@ -37,7 +37,7 @@ export function isExternalHref(href: string): boolean {
   return href.startsWith('http://') || href.startsWith('https://')
 }
 
-export function getExternalLinkAttrs(href: string): { rel?: string; target?: string } {
+export function toExternalLinkAttrs(href: string): { rel?: string; target?: string } {
   if (!isExternalHref(href)) {
     return {}
   }

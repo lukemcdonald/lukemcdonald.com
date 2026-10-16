@@ -6,7 +6,7 @@ export const CLOUDFLARE_WEB_ANALYTICS = {
   scriptProxy: 'https://static.cloudflareinsights.com/beacon.min.js',
 } as const
 
-export function getCloudflareBeaconConfig(token: string) {
+export function createCloudflareBeaconConfig(token: string) {
   return {
     send: { to: CLOUDFLARE_WEB_ANALYTICS.rumPath },
     token,

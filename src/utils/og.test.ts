@@ -2,44 +2,41 @@ import assert from 'node:assert/strict'
 import { join } from 'node:path'
 import { describe, test } from 'node:test'
 
-import { renderOgPng, resolveOgPhotoPath } from './og.render.ts'
+import { loadOgPhotoPath, renderOgPng } from './og.render.ts'
 import {
   buildOgSvg,
   DEFAULT_OG_IMAGE_PATH,
-  getOgImagePath,
   OG_IMAGE_HEIGHT,
   OG_IMAGE_MARK,
   OG_IMAGE_WIDTH,
   OG_PHOTO_WIDTH,
+  toOgImagePath,
 } from './og.ts'
 
 function mustachioPath() {
   return join(process.cwd(), 'src/assets/images/luke-mustachio.jpg')
 }
 
-describe('getOgImagePath', () => {
+describe('toOgImagePath', () => {
   test('maps the homepage to the default generated image', () => {
-    assert.equal(getOgImagePath('/'), DEFAULT_OG_IMAGE_PATH)
+    assert.equal(toOgImagePath('/'), DEFAULT_OG_IMAGE_PATH)
   })
 
   test('maps nested routes onto /og/*.png', () => {
-    assert.equal(getOgImagePath('/resume'), '/og/resume.png')
-    assert.equal(getOgImagePath('/i-am-a/father/'), '/og/i-am-a/father.png')
+    assert.equal(toOgImagePath('/resume'), '/og/resume.png')
+    assert.equal(toOgImagePath('/i-am-a/father/'), '/og/i-am-a/father.png')
   })
 })
 
-describe('resolveOgPhotoPath', () => {
+describe('loadOgPhotoPath', () => {
   test('resolves a content image src to the local asset', () => {
-    assert.equal(
-      resolveOgPhotoPath({ src: '/src/assets/images/luke-mustachio.jpg' }),
-      mustachioPath(),
-    )
-    assert.equal(resolveOgPhotoPath({ src: '/_astro/luke-mustachio.Dabc12.jpg' }), mustachioPath())
+    assert.equal(loadOgPhotoPath({ src: '/src/assets/images/luke-mustachio.jpg' }), mustachioPath())
+    assert.equal(loadOgPhotoPath({ src: '/_astro/luke-mustachio.Dabc12.jpg' }), mustachioPath())
   })
 
   test('returns undefined when the image is missing', () => {
-    assert.equal(resolveOgPhotoPath(), undefined)
-    assert.equal(resolveOgPhotoPath({ src: '/src/assets/images/nope.jpg' }), undefined)
+    assert.equal(loadOgPhotoPath(), undefined)
+    assert.equal(loadOgPhotoPath({ src: '/src/assets/images/nope.jpg' }), undefined)
   })
 })
 

@@ -24,11 +24,11 @@ import { wrapIndex } from '@/utils/wrap-index'
 import { PALETTE_CHROME } from './chrome'
 import {
   applyHighlightedCommand,
+  formatPaletteFooterLabel,
+  formatPaletteFooterShortcut,
+  formatSecretsProgressLabel,
   getFoundEggs,
   getHighlightedCommand,
-  getPaletteFooterLabel,
-  getPaletteFooterShortcut,
-  getSecretsProgressLabel,
   isPaletteBackKey,
   isSecretsShortcut,
   SECRETS_PAGE,
@@ -86,12 +86,12 @@ function visibleItems(palette: Palette) {
   return [...palette.root.querySelectorAll<HTMLElement>(selector)].filter((item) => !item.hidden)
 }
 
-function eggMatches(name: string, needle: string) {
+function isEggNameMatch(name: string, needle: string) {
   return needle === '' || name.includes(needle)
 }
 
 function isFoundEgg(id: string, foundIds: readonly string[], name: string, needle: string) {
-  return foundIds.includes(id) && eggMatches(name, needle)
+  return foundIds.includes(id) && isEggNameMatch(name, needle)
 }
 
 function syncEggButton(
@@ -118,7 +118,7 @@ function syncEggs(palette: Palette, query: string) {
   })
 
   if (palette.secretsTitle) {
-    palette.secretsTitle.textContent = getSecretsProgressLabel(
+    palette.secretsTitle.textContent = formatSecretsProgressLabel(
       foundEggs.length,
       palette.eggs.length,
     )
@@ -131,11 +131,11 @@ function syncFooterHint(palette: Palette, foundCount: number, totalCount: number
   const onSecrets = palette.state.page === SECRETS_PAGE
 
   if (palette.footerLabel) {
-    palette.footerLabel.textContent = getPaletteFooterLabel(onSecrets, foundCount, totalCount)
+    palette.footerLabel.textContent = formatPaletteFooterLabel(onSecrets, foundCount, totalCount)
   }
 
   if (palette.footerKbd) {
-    palette.footerKbd.textContent = getPaletteFooterShortcut(onSecrets)
+    palette.footerKbd.textContent = formatPaletteFooterShortcut(onSecrets)
   }
 }
 

@@ -6,7 +6,7 @@ import ExternalLinkIcon from '@lucide/astro/icons/external-link'
 
 import { HOVER_NAV_CUE_PROPS, TOGGLE_CUE_PROPS } from '@/components/Sound'
 import {
-  getExternalLinkAttrs,
+  toExternalLinkAttrs,
   toHrefTestId,
   toNavMenuId,
 } from '@/features/navigation/navigation.utils'
@@ -54,7 +54,7 @@ const popoverId = toNavMenuId(group.name)
     <ul>
       {
         group.links.map((item) => {
-          const externalAttrs = getExternalLinkAttrs(item.href)
+          const externalAttrs = toExternalLinkAttrs(item.href)
 
           return (
             <li>

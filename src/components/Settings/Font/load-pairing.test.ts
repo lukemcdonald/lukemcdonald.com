@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { afterEach, before, beforeEach, describe, mock, test } from 'node:test'
 
-import { fontPairingStyleId, loadAllFontPairings, loadFontPairing } from './load-pairing.ts'
+import { loadAllFontPairings, loadFontPairing, toFontPairingStyleId } from './load-pairing.ts'
 import { FONT_PAIRING_CSS_SCRIPT_ID } from './pairings.ts'
 
 type StyleNode = {
@@ -75,7 +75,7 @@ describe('loadFontPairing', () => {
     loadFontPairing('work')
     loadFontPairing('work')
 
-    assert.equal(fontDocument.styles.get(fontPairingStyleId('work'))?.textContent, '.work{}')
+    assert.equal(fontDocument.styles.get(toFontPairingStyleId('work'))?.textContent, '.work{}')
     assert.equal(fontDocument.styles.size, 1)
   })
 
@@ -112,9 +112,9 @@ describe('loadAllFontPairings', () => {
   test('injects every pairing stylesheet', () => {
     loadAllFontPairings()
 
-    assert.equal(fontDocument.styles.get(fontPairingStyleId('live'))?.textContent, '.live{}')
-    assert.equal(fontDocument.styles.get(fontPairingStyleId('play'))?.textContent, '.play{}')
-    assert.equal(fontDocument.styles.get(fontPairingStyleId('work'))?.textContent, '.work{}')
+    assert.equal(fontDocument.styles.get(toFontPairingStyleId('live'))?.textContent, '.live{}')
+    assert.equal(fontDocument.styles.get(toFontPairingStyleId('play'))?.textContent, '.play{}')
+    assert.equal(fontDocument.styles.get(toFontPairingStyleId('work'))?.textContent, '.work{}')
     assert.equal(fontDocument.styles.size, 3)
   })
 })

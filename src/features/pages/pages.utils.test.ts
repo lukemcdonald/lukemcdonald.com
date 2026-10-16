@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
-import { buildPagesFilter, omitIndexPage, resolvePageSeo, sortPages } from './pages.utils.ts'
+import { buildPagesFilter, omitIndexPage, sortPages, toPageSeo } from './pages.utils.ts'
 
 type PageStub = Parameters<typeof sortPages>[0][number]
 
@@ -55,9 +55,9 @@ describe('omitIndexPage', () => {
   })
 })
 
-describe('resolvePageSeo', () => {
+describe('toPageSeo', () => {
   test('prefers seo.description over frontmatter description and rendered html', () => {
-    const seo = resolvePageSeo({
+    const seo = toPageSeo({
       data: {
         description: 'Frontmatter summary.',
         seo: { description: 'SEO override.' },
@@ -70,7 +70,7 @@ describe('resolvePageSeo', () => {
   })
 
   test('prefers frontmatter description over rendered html', () => {
-    const seo = resolvePageSeo({
+    const seo = toPageSeo({
       data: {
         description: 'Frontmatter summary.',
         title: 'About',
@@ -82,7 +82,7 @@ describe('resolvePageSeo', () => {
   })
 
   test('falls back to rendered html when no description fields exist', () => {
-    const seo = resolvePageSeo({
+    const seo = toPageSeo({
       data: { title: 'About' },
       rendered: { html: '<p>Rendered body.</p>' },
     })
@@ -91,7 +91,7 @@ describe('resolvePageSeo', () => {
   })
 
   test('prefers seo.title over the page title', () => {
-    const seo = resolvePageSeo({
+    const seo = toPageSeo({
       data: {
         seo: { title: 'Custom title' },
         title: 'About',
@@ -102,7 +102,7 @@ describe('resolvePageSeo', () => {
   })
 
   test('passes through seo.ogImage', () => {
-    const seo = resolvePageSeo({
+    const seo = toPageSeo({
       data: {
         seo: { ogImage: '/custom-share.jpg' },
         title: 'About',
@@ -113,7 +113,7 @@ describe('resolvePageSeo', () => {
   })
 
   test('leaves ogImage undefined when omitted', () => {
-    const seo = resolvePageSeo({
+    const seo = toPageSeo({
       data: { title: 'About' },
     })
 

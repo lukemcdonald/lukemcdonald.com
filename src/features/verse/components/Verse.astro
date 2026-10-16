@@ -1,17 +1,17 @@
 ---
 import Link from '@/components/Link.astro'
 
-import { getTodayVerse } from '../verse.server'
-import { verseCacheHeaders, verseLead } from '../verse.utils'
+import { loadTodayVerse } from '../verse.server'
+import { buildVerseCacheHeaders, formatVerseLead } from '../verse.utils'
 
-const verse = await getTodayVerse()
+const verse = await loadTodayVerse()
 
-for (const [name, value] of Object.entries(verseCacheHeaders())) {
+for (const [name, value] of Object.entries(buildVerseCacheHeaders())) {
   Astro.response.headers.set(name, value)
 }
 ---
 
-{verseLead(verse.source)}
+{formatVerseLead(verse.source)}
 <blockquote class="mt-8 font-sans text-lg leading-normal">
   <p>{verse.text}</p>
 </blockquote>

@@ -1,17 +1,17 @@
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
-import { getSoundToggleCopy } from './sound.ts'
+import { toSoundToggleCopy } from './sound.ts'
 import { playSound } from './utils.ts'
 
-describe('getSoundToggleCopy', () => {
+describe('toSoundToggleCopy', () => {
   test('describes the next action and current state', () => {
-    assert.deepEqual(getSoundToggleCopy(false), {
+    assert.deepEqual(toSoundToggleCopy(false), {
       label: 'Sounds off',
       pressed: 'false',
       toggle: 'Enable interaction sounds',
     })
-    assert.deepEqual(getSoundToggleCopy(true), {
+    assert.deepEqual(toSoundToggleCopy(true), {
       label: 'Sounds on',
       pressed: 'true',
       toggle: 'Disable interaction sounds',

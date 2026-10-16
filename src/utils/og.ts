@@ -67,7 +67,7 @@ function wrapTitle(title: string, maxChars: number) {
   return visible
 }
 
-export function getOgImagePath(pathname: string) {
+export function toOgImagePath(pathname: string) {
   const trimmed = pathname.replace(/\/+$/, '')
   const slug = trimmed === '' || trimmed === '/' ? 'index' : trimmed.replace(/^\/+/, '')
 

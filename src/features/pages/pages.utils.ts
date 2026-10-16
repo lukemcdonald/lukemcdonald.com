@@ -15,7 +15,7 @@ function compareByTitle(a: PageEntry, b: PageEntry) {
   return a.data.title.localeCompare(b.data.title)
 }
 
-function getContentDirectory(id: string) {
+function toContentDirectory(id: string) {
   if (!id.includes('/')) {
     return ''
   }
@@ -23,20 +23,20 @@ function getContentDirectory(id: string) {
   return id.split('/')[0]
 }
 
-function matchesInclude(id: string, included: Set<string> | null) {
+function isIncluded(id: string, included: Set<string> | null) {
   if (!included) {
     return true
   }
 
-  return included.has(id) || included.has(getContentDirectory(id))
+  return included.has(id) || included.has(toContentDirectory(id))
 }
 
-function matchesPageFilter(entry: PageEntry, included: Set<string> | null) {
+function isMatchingPageFilter(entry: PageEntry, included: Set<string> | null) {
   if (entry.data.draft) {
     return false
   }
 
-  return matchesInclude(entry.id, included)
+  return isIncluded(entry.id, included)
 }
 
 function sortByOrder(pages: PageEntry[]) {
@@ -63,7 +63,7 @@ const SORT_BY_FIELD = {
 export function buildPagesFilter(options: PageFilterOptions = {}) {
   const included = options.include ? new Set(options.include) : null
 
-  return (entry: PageEntry) => matchesPageFilter(entry, included)
+  return (entry: PageEntry) => isMatchingPageFilter(entry, included)
 }
 
 export function omitIndexPage<T extends { id: string }>(pages: T[]) {
@@ -72,7 +72,7 @@ export function omitIndexPage<T extends { id: string }>(pages: T[]) {
   })
 }
 
-export function resolvePageSeo(page: {
+export function toPageSeo(page: {
   data: Pick<PageEntry['data'], 'description' | 'seo' | 'title'>
   rendered?: { html?: string } | null
 }) {

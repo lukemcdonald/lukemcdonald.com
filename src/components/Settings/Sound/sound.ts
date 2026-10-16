@@ -4,7 +4,7 @@ import { toggleClasses } from '@/utils/toggle-classes'
 import { afterSettingChange, type SettingChange } from '../picker'
 import { getSoundPreference, toggleSoundPreference } from './utils'
 
-export function getSoundToggleCopy(isOn: boolean) {
+export function toSoundToggleCopy(isOn: boolean) {
   return {
     label: isOn ? 'Sounds on' : 'Sounds off',
     pressed: isOn ? 'true' : 'false',
@@ -20,7 +20,7 @@ export function syncSound(root: Element, highlighted = false) {
   }
 
   const preference = getSoundPreference()
-  const copy = getSoundToggleCopy(preference === 'on')
+  const copy = toSoundToggleCopy(preference === 'on')
 
   soundToggle.setAttribute('aria-label', copy.toggle)
   soundToggle.setAttribute('aria-pressed', copy.pressed)

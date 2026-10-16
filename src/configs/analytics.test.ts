@@ -2,13 +2,13 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { describe, test } from 'node:test'
 
-import { CLOUDFLARE_WEB_ANALYTICS, getCloudflareBeaconConfig } from './analytics.ts'
+import { CLOUDFLARE_WEB_ANALYTICS, createCloudflareBeaconConfig } from './analytics.ts'
 
 const REDIRECTS = readFileSync(new URL('../../public/_redirects', import.meta.url), 'utf8')
 
-describe('getCloudflareBeaconConfig', () => {
+describe('createCloudflareBeaconConfig', () => {
   test('sends RUM to the first-party proxy path', () => {
-    assert.deepEqual(getCloudflareBeaconConfig('site-token'), {
+    assert.deepEqual(createCloudflareBeaconConfig('site-token'), {
       send: { to: CLOUDFLARE_WEB_ANALYTICS.rumPath },
       token: 'site-token',
     })

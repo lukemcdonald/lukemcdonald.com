@@ -5,7 +5,7 @@ import type { ResumeData } from '@/features/resume/resume.types'
 import { z } from 'astro/zod'
 
 import { GLOBAL_CONFIG } from '@/configs/global'
-import { resolvePageSeo } from '@/features/pages/pages.utils'
+import { toPageSeo } from '@/features/pages/pages.utils'
 import { resumeDataSchema } from '@/features/resume/resume.schema'
 import { pickResumeSection } from '@/features/resume/resume.utils'
 import { toPageHref } from '@/utils/content'
@@ -44,7 +44,7 @@ export const MCP_TOOLS: McpToolDefinition[] = [
         email,
         name,
         profiles: [...profiles],
-        summary: home ? (resolvePageSeo(home).description ?? '') : '',
+        summary: home ? (toPageSeo(home).description ?? '') : '',
         url,
       })
     },
@@ -88,7 +88,7 @@ export const MCP_TOOLS: McpToolDefinition[] = [
       return toJsonResult(
         pages.map((page) => {
           return {
-            description: resolvePageSeo(page).description ?? '',
+            description: toPageSeo(page).description ?? '',
             id: page.id,
             title: page.data.title,
             url: toPageHref(page.id, GLOBAL_CONFIG.site.origin),
@@ -117,7 +117,7 @@ export const MCP_TOOLS: McpToolDefinition[] = [
 
       return toJsonResult({
         body: page.body?.trim() ?? '',
-        description: resolvePageSeo(page).description ?? '',
+        description: toPageSeo(page).description ?? '',
         id: page.id,
         title: page.data.title,
         url: toPageHref(page.id, GLOBAL_CONFIG.site.origin),

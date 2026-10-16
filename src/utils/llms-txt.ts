@@ -36,7 +36,7 @@ function toTitleCase(value: string) {
   return `${value.charAt(0).toUpperCase()}${value.slice(1)}`
 }
 
-function notesFrom(value?: string) {
+function formatNotes(value?: string) {
   return stripHtmlAndTruncate(value) || undefined
 }
 
@@ -52,15 +52,15 @@ function formatSection(title: string, links: LlmsLink[]) {
   return `## ${title}\n\n${links.map(formatLink).join('\n')}`
 }
 
-function resolveSummary(pages: LlmsPage[], resume: LlmsResume) {
+function formatSummary(pages: LlmsPage[], resume: LlmsResume) {
   const home = pages.find((page) => {
     return page.id === 'index'
   })
 
   return (
-    notesFrom(home?.data.seo?.description) ||
-    notesFrom(home?.data.description) ||
-    notesFrom(resume.basics.intro) ||
+    formatNotes(home?.data.seo?.description) ||
+    formatNotes(home?.data.description) ||
+    formatNotes(resume.basics.intro) ||
     ''
   )
 }
@@ -83,7 +83,7 @@ function pageLinks(pages: LlmsPage[], resume: LlmsResume, origin: string | URL):
       .map((page) => {
         return {
           href: toPageHref(page.id, origin),
-          notes: notesFrom(page.data.description),
+          notes: formatNotes(page.data.description),
           title: page.data.title,
         }
       }),
@@ -137,7 +137,7 @@ export function createLlmsTxt<T extends LlmsResume>({
   pages: LlmsPage[]
   resume: T
 }) {
-  const summary = resolveSummary(pages, resume)
+  const summary = formatSummary(pages, resume)
   const parts = [`# ${name}`]
 
   if (summary) {

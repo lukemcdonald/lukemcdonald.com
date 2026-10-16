@@ -13,13 +13,13 @@ function toAbsoluteUrl(path: string | URL, site: string | URL) {
   return new URL(path, site).toString()
 }
 
-function getSocialImageUrl(ogImage: string | undefined, site: string | URL) {
+function toSocialImageUrl(ogImage: string | undefined, site: string | URL) {
   return toAbsoluteUrl(ogImage || DEFAULT_OG_IMAGE_PATH, site)
 }
 
 export function buildSocialMetaTags(meta: SeoMeta, site: string | URL = GLOBAL_CONFIG.site.origin) {
   const { canonicalUrl, contentType = 'page', description, ogImage, title } = meta
-  const socialImageUrl = getSocialImageUrl(ogImage, site)
+  const socialImageUrl = toSocialImageUrl(ogImage, site)
   const ogType = OG_TYPE_MAP[contentType]
   const absoluteCanonical = canonicalUrl ? toAbsoluteUrl(canonicalUrl, site) : undefined
 
