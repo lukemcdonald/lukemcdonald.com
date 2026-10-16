@@ -22,13 +22,13 @@ Use the Fallow skill for deeper audit and debug workflows.
 
 ## Naming
 
-- `get*`: cheap sync read of existing data; never async or side effects
+- `get*`: cheap sync read of existing data, or a computed value from inputs; never async or side effects
 - `load*` / `fetch*`: read data/content via async or I/O (`fetch*` for network)
 - `resolve*`: find or compute a path/value via lookup; returns the location, not contents
-- `to*`: pure shape conversion
-- `create*` / `build*`: construct a new object, handler, or output
+- `to*`: data shape in, data shape out (pure conversion)
+- `create*` / `build*`: construct a new object, handler, or output (`build*` for a URL, string, or object from parts)
 - `is*` / `has*` / `can*`: booleans
-- `normalize*` / `parse*` / `format*`: clean input, validate, or display string
+- `normalize*` / `parse*` / `format*`: clean input, validate, or display string (`format*` for labels, CSS values, and human text)
 - `handle*` / `on*`: request and event handlers
 - Constants `SCREAMING_CASE`; types and components PascalCase nouns; only standard abbreviations (`id`, `url`)
 - Leave framework-required names unchanged (`getStaticPaths`, `GET`)

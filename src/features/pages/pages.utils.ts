@@ -15,7 +15,7 @@ function compareByTitle(a: PageEntry, b: PageEntry) {
   return a.data.title.localeCompare(b.data.title)
 }
 
-function toContentDirectory(id: string) {
+function getContentDirectory(id: string) {
   if (!id.includes('/')) {
     return ''
   }
@@ -28,7 +28,7 @@ function isIncluded(id: string, included: Set<string> | null) {
     return true
   }
 
-  return included.has(id) || included.has(toContentDirectory(id))
+  return included.has(id) || included.has(getContentDirectory(id))
 }
 
 function isMatchingPageFilter(entry: PageEntry, included: Set<string> | null) {

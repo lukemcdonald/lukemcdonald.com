@@ -28,11 +28,11 @@ type LlmsResume = {
   basics: LlmsBasics
 }
 
-function toAbsoluteUrl(path: string, origin: string | URL) {
+function buildAbsoluteUrl(path: string, origin: string | URL) {
   return new URL(path, origin).href
 }
 
-function toTitleCase(value: string) {
+function formatTitleCase(value: string) {
   return `${value.charAt(0).toUpperCase()}${value.slice(1)}`
 }
 
@@ -72,7 +72,7 @@ function pageLinks(pages: LlmsPage[], resume: LlmsResume, origin: string | URL):
       title: 'Home',
     },
     {
-      href: toAbsoluteUrl('/resume', origin),
+      href: buildAbsoluteUrl('/resume', origin),
       notes: resume.basics.label,
       title: 'Resume',
     },
@@ -93,7 +93,7 @@ function pageLinks(pages: LlmsPage[], resume: LlmsResume, origin: string | URL):
 function resumeLinks(resume: LlmsResume, origin: string | URL): LlmsLink[] {
   return [
     {
-      href: toAbsoluteUrl('/api/resume.json', origin),
+      href: buildAbsoluteUrl('/api/resume.json', origin),
       title: 'Full resume',
     },
     ...Object.keys(resume)
@@ -102,8 +102,8 @@ function resumeLinks(resume: LlmsResume, origin: string | URL): LlmsLink[] {
       })
       .map((section) => {
         return {
-          href: toAbsoluteUrl(`/api/resume/${section}.json`, origin),
-          title: toTitleCase(section),
+          href: buildAbsoluteUrl(`/api/resume/${section}.json`, origin),
+          title: formatTitleCase(section),
         }
       }),
   ]
@@ -150,7 +150,7 @@ export function createLlmsTxt<T extends LlmsResume>({
     formatSection('Contact', contactLinks()),
     formatSection('MCP', [
       {
-        href: toAbsoluteUrl('/mcp', origin),
+        href: buildAbsoluteUrl('/mcp', origin),
         notes: 'Read-only tools for profile, resume, and pages',
         title: 'Site MCP server',
       },

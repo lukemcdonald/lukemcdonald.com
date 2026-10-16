@@ -10,13 +10,13 @@ import {
 } from './verse.constants.ts'
 import {
   buildVerseCacheHeaders,
+  buildYouVersionVerseUrl,
   fetchTodayVerse,
   formatVerseCacheControl,
   formatVerseLead,
+  getDayOfYear,
   isVerse,
   secondsUntilUtcMidnight,
-  toDayOfYear,
-  toYouVersionVerseUrl,
 } from './verse.utils.ts'
 
 function jsonResponse(body: unknown, status = 200) {
@@ -36,10 +36,10 @@ function requestUrl(call: { arguments: readonly unknown[] }) {
   return String(call.arguments[0])
 }
 
-describe('toYouVersionVerseUrl', () => {
+describe('buildYouVersionVerseUrl', () => {
   test('builds a BSB bible.com link from USFM', () => {
     assert.equal(
-      toYouVersionVerseUrl('PSA.119.105'),
+      buildYouVersionVerseUrl('PSA.119.105'),
       `https://www.bible.com/bible/${YOUVERSION_BSB_ID}/PSA.119.105.BSB`,
     )
   })
@@ -51,7 +51,7 @@ describe('FALLBACK_VERSE', () => {
       reference: 'Psalm 119:105',
       source: 'fallback',
       text: 'Your word is a lamp to my feet and a light to my path.',
-      url: toYouVersionVerseUrl('PSA.119.105'),
+      url: buildYouVersionVerseUrl('PSA.119.105'),
     })
   })
 })
@@ -62,11 +62,11 @@ describe('LOADING_VERSE_LABEL', () => {
   })
 })
 
-describe('toDayOfYear', () => {
+describe('getDayOfYear', () => {
   test('counts from January 1 including leap days', () => {
-    assert.equal(toDayOfYear(new Date('2026-01-01T00:00:00Z')), 1)
-    assert.equal(toDayOfYear(new Date('2025-12-31T12:00:00Z')), 365)
-    assert.equal(toDayOfYear(new Date('2024-12-31T12:00:00Z')), 366)
+    assert.equal(getDayOfYear(new Date('2026-01-01T00:00:00Z')), 1)
+    assert.equal(getDayOfYear(new Date('2025-12-31T12:00:00Z')), 365)
+    assert.equal(getDayOfYear(new Date('2024-12-31T12:00:00Z')), 366)
   })
 })
 
@@ -156,7 +156,7 @@ describe('fetchTodayVerse', () => {
         reference: 'John 3:16',
         source: 'api',
         text: 'For God so loved the world that He gave His one and only Son.',
-        url: toYouVersionVerseUrl('JHN.3.16'),
+        url: buildYouVersionVerseUrl('JHN.3.16'),
       },
     )
 

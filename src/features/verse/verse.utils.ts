@@ -11,11 +11,11 @@ const DAY_MS = 86_400_000
 const REQUEST_TIMEOUT_MS = 8_000
 const S_MAXAGE_SECONDS = 4 * 60 * 60
 
-export function toYouVersionVerseUrl(usfm: string, version = 'BSB') {
+export function buildYouVersionVerseUrl(usfm: string, version = 'BSB') {
   return `https://www.bible.com/bible/${YOUVERSION_BSB_ID}/${usfm}.${version}`
 }
 
-export function toDayOfYear(date: Date) {
+export function getDayOfYear(date: Date) {
   const year = date.getUTCFullYear()
   const start = Date.UTC(year, 0, 1)
   const current = Date.UTC(year, date.getUTCMonth(), date.getUTCDate())
@@ -147,7 +147,7 @@ async function loadYouVersionVerse(appKey: string, fetchFn: VerseFetch, now: Dat
   const passageId = readPassageId(
     await requestJson(
       fetchFn,
-      `${YOUVERSION_API_ORIGIN}/verse-of-the-days/${toDayOfYear(now)}`,
+      `${YOUVERSION_API_ORIGIN}/verse-of-the-days/${getDayOfYear(now)}`,
       appKey,
     ),
   )
@@ -172,6 +172,6 @@ async function loadYouVersionVerse(appKey: string, fetchFn: VerseFetch, now: Dat
     reference: passage.reference,
     source: 'api' as const,
     text: passage.content,
-    url: toYouVersionVerseUrl(passageId),
+    url: buildYouVersionVerseUrl(passageId),
   }
 }

@@ -2,9 +2,9 @@ import assert from 'node:assert/strict'
 import { afterEach, describe, mock, test } from 'node:test'
 
 import { FALLBACK_VERSE, VERSE_ENDPOINT } from '@/features/verse/verse.constants'
-import { toYouVersionVerseUrl } from '@/features/verse/verse.utils'
+import { buildYouVersionVerseUrl } from '@/features/verse/verse.utils'
 
-import { applyLampVerse, lampEgg, loadLampVerse, toLampPosition } from './lamp.ts'
+import { applyLampVerse, formatLampPosition, lampEgg, loadLampVerse } from './lamp.ts'
 
 describe('applyLampVerse', () => {
   test('writes the verse and clears the loading state', () => {
@@ -55,9 +55,9 @@ describe('lampEgg', () => {
   })
 })
 
-describe('toLampPosition', () => {
+describe('formatLampPosition', () => {
   test('formats the pointer as one CSS value', () => {
-    assert.equal(toLampPosition(12, 40), '12px 40px')
+    assert.equal(formatLampPosition(12, 40), '12px 40px')
   })
 })
 
@@ -71,7 +71,7 @@ describe('loadLampVerse', () => {
       reference: 'John 3:16',
       source: 'api',
       text: 'For God so loved the world that He gave His one and only Son.',
-      url: toYouVersionVerseUrl('JHN.3.16'),
+      url: buildYouVersionVerseUrl('JHN.3.16'),
     }
     const fetchMock = mock.fn(async (input: RequestInfo | URL) => {
       assert.equal(String(input), VERSE_ENDPOINT)

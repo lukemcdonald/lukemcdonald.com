@@ -4,27 +4,27 @@ import { describe, test } from 'node:test'
 
 import { renderOgPng, resolveOgPhotoPath } from './og.render.ts'
 import {
+  buildOgImagePath,
   buildOgSvg,
   DEFAULT_OG_IMAGE_PATH,
   OG_IMAGE_HEIGHT,
   OG_IMAGE_MARK,
   OG_IMAGE_WIDTH,
   OG_PHOTO_WIDTH,
-  toOgImagePath,
 } from './og.ts'
 
 function mustachioPath() {
   return join(process.cwd(), 'src/assets/images/luke-mustachio.jpg')
 }
 
-describe('toOgImagePath', () => {
+describe('buildOgImagePath', () => {
   test('maps the homepage to the default generated image', () => {
-    assert.equal(toOgImagePath('/'), DEFAULT_OG_IMAGE_PATH)
+    assert.equal(buildOgImagePath('/'), DEFAULT_OG_IMAGE_PATH)
   })
 
   test('maps nested routes onto /og/*.png', () => {
-    assert.equal(toOgImagePath('/resume'), '/og/resume.png')
-    assert.equal(toOgImagePath('/i-am-a/father/'), '/og/i-am-a/father.png')
+    assert.equal(buildOgImagePath('/resume'), '/og/resume.png')
+    assert.equal(buildOgImagePath('/i-am-a/father/'), '/og/i-am-a/father.png')
   })
 })
 
