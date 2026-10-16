@@ -75,7 +75,7 @@ describe('createLlmsTxt', () => {
         '',
         '## MCP',
         '',
-        `- [Site MCP server](${ORIGIN}/mcp): Read-only tools for resume, pages, contact, and verse of the day`,
+        `- [Site MCP server](${ORIGIN}/mcp): Read-only tools for profile, resume, and pages`,
         '',
       ].join('\n'),
     )

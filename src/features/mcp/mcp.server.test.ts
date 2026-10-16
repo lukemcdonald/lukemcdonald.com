@@ -3,25 +3,26 @@ import type { McpToolDeps } from './mcp.tools.ts'
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
-import { FALLBACK_VERSE } from '@/features/verse/verse.constants'
-
-import { CORS_HEADERS, createSiteMcpHandler, handleMcpRequest } from './mcp.server.ts'
+import { createSiteMcpHandler, handleMcpRequest } from './mcp.server.ts'
 
 const ORIGIN = 'https://lukemcdonald.com'
 
 const deps: McpToolDeps = {
-  getContact: () => ({
+  author: {
     email: 'luke@example.com',
     name: 'Luke McDonald',
     profiles: [
       { network: 'GitHub', url: 'https://github.com/lukemcdonald', username: 'lukemcdonald' },
     ],
     url: ORIGIN,
-  }),
+  },
   getPublishedPages: async () => [
     {
       body: 'Home body.',
-      data: { description: 'Hello from home.', title: 'Greetings' },
+      data: {
+        seo: { description: "I'm Luke, a Christian, husband, father and wrestling coach." },
+        title: 'Greetings',
+      },
       id: 'index',
     },
   ],
@@ -34,7 +35,6 @@ const deps: McpToolDeps = {
     personal: [],
     skills: [],
   }),
-  getTodayVerse: async () => FALLBACK_VERSE,
   origin: ORIGIN,
 }
 
@@ -85,10 +85,18 @@ describe('handleMcpRequest', () => {
 
     assert.equal(response.status, 204)
     assert.equal(response.headers.get('Access-Control-Allow-Origin'), '*')
-    assert.equal(
-      response.headers.get('Access-Control-Allow-Methods'),
-      CORS_HEADERS['Access-Control-Allow-Methods'],
+    assert.equal(response.headers.get('Access-Control-Allow-Methods'), 'OPTIONS, POST')
+  })
+
+  test('returns 405 with Allow on GET', async () => {
+    const response = await handleMcpRequest(
+      new Request('https://lukemcdonald.com/mcp', { method: 'GET' }),
+      createSiteMcpHandler(deps),
     )
+
+    assert.equal(response.status, 405)
+    assert.equal(response.headers.get('Allow'), 'OPTIONS, POST')
+    assert.equal(response.headers.get('Access-Control-Allow-Origin'), '*')
   })
 
   test('adds CORS headers to MCP responses', async () => {
@@ -117,11 +125,16 @@ describe('createSiteMcpHandler', () => {
       },
     })
     const initializeResult = initialize.payload.result as {
+      instructions: string
       serverInfo: { name: string }
     }
 
     assert.equal(initialize.payload.jsonrpc, '2.0')
     assert.equal(initializeResult.serverInfo.name, 'lukemcdonald.com')
+    assert.match(initializeResult.instructions, /get_profile/)
+    assert.match(initializeResult.instructions, /get_resume/)
+    assert.match(initializeResult.instructions, /list_pages/)
+    assert.match(initializeResult.instructions, /get_page/)
 
     const listed = await mcpRpc(mcpHandler, {
       id: 2,
@@ -134,13 +147,7 @@ describe('createSiteMcpHandler', () => {
       },
     )
 
-    assert.deepEqual(tools.sort(), [
-      'get_contact',
-      'get_page',
-      'get_resume',
-      'get_verse_of_the_day',
-      'list_pages',
-    ])
+    assert.deepEqual(tools.sort(), ['get_page', 'get_profile', 'get_resume', 'list_pages'])
 
     const called = await mcpRpc(mcpHandler, {
       id: 3,
@@ -148,36 +155,34 @@ describe('createSiteMcpHandler', () => {
       method: 'tools/call',
       params: {
         arguments: {},
-        name: 'get_contact',
+        name: 'get_profile',
       },
     })
     const content = (called.payload.result as { content: Array<{ text: string }> }).content[0]
-    const contact = JSON.parse(content?.text ?? '{}') as { email: string; name: string }
+    const profile = JSON.parse(content?.text ?? '{}') as {
+      email: string
+      name: string
+      summary: string
+    }
 
-    assert.equal(contact.email, 'luke@example.com')
-    assert.equal(contact.name, 'Luke McDonald')
+    assert.equal(profile.email, 'luke@example.com')
+    assert.equal(profile.name, 'Luke McDonald')
+    assert.equal(profile.summary, "I'm Luke, a Christian, husband, father and wrestling coach.")
   })
 
-  test('get_verse_of_the_day falls back when the loader throws', async () => {
-    const mcpHandler = createSiteMcpHandler({
-      ...deps,
-      getTodayVerse: async () => {
-        throw new Error('YouVersion unavailable')
-      },
-    })
-    const called = await mcpRpc(mcpHandler, {
+  test('rejects a slug longer than 200 characters', async () => {
+    const called = await mcpRpc(createSiteMcpHandler(deps), {
       id: 1,
       jsonrpc: '2.0',
       method: 'tools/call',
       params: {
-        arguments: {},
-        name: 'get_verse_of_the_day',
+        arguments: { slug: 'a'.repeat(201) },
+        name: 'get_page',
       },
     })
-    const content = (called.payload.result as { content: Array<{ text: string }> }).content[0]
-    const verse = JSON.parse(content?.text ?? '{}') as { source: string; text: string }
+    const result = called.payload.result as { content: Array<{ text: string }>; isError?: boolean }
 
-    assert.equal(verse.source, 'fallback')
-    assert.equal(verse.text, FALLBACK_VERSE.text)
+    assert.equal(result.isError, true)
+    assert.match(result.content[0]?.text ?? '', /200/)
   })
 })

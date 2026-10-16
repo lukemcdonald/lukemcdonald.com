@@ -158,7 +158,7 @@ export function createLlmsTxt<T extends LlmsResume>({
     formatSection('MCP', [
       {
         href: toAbsoluteUrl('/mcp', origin),
-        notes: 'Read-only tools for resume, pages, contact, and verse of the day',
+        notes: 'Read-only tools for profile, resume, and pages',
         title: 'Site MCP server',
       },
     ]),

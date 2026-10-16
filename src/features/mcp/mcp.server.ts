@@ -1,40 +1,22 @@
-import type { McpToolDeps } from './mcp.tools'
+import { createMcpHandler, McpServer } from '@modelcontextprotocol/server'
 
-import { createMcpHandler, fromJsonSchema, McpServer } from '@modelcontextprotocol/server'
+import { MCP_TOOLS, type McpToolDeps } from './mcp.tools'
 
-import {
-  getContactResult,
-  getPageResult,
-  getResumeResult,
-  getVerseResult,
-  listPagesResult,
-  loadVerseOrFallback,
-  RESUME_SECTIONS,
-} from './mcp.tools'
-
-const READ_ONLY_SITE = {
+const READ_ONLY = {
   destructiveHint: false,
   idempotentHint: true,
   openWorldHint: false,
   readOnlyHint: true,
 } as const
 
-const READ_ONLY_VERSE = {
-  destructiveHint: false,
-  idempotentHint: true,
-  openWorldHint: true,
-  readOnlyHint: true,
-} as const
-
-export const CORS_HEADERS = {
-  'Access-Control-Allow-Headers':
-    'Accept, Authorization, Content-Type, Last-Event-ID, MCP-Protocol-Version, MCP-Session-Id',
-  'Access-Control-Allow-Methods': 'DELETE, GET, OPTIONS, POST',
+const CORS_HEADERS = {
+  'Access-Control-Allow-Headers': 'Accept, Content-Type, MCP-Protocol-Version',
+  'Access-Control-Allow-Methods': 'OPTIONS, POST',
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Expose-Headers':
-    'Last-Event-ID, MCP-Protocol-Version, MCP-Session-Id, WWW-Authenticate',
   'Access-Control-Max-Age': '86400',
 } as const
+
+const ALLOWED_METHODS = 'OPTIONS, POST'
 
 type McpFetchHandler = {
   fetch: (request: Request) => Promise<Response>
@@ -43,108 +25,38 @@ type McpFetchHandler = {
 export function createSiteMcpHandler(deps: McpToolDeps) {
   return createMcpHandler(
     () => {
-      const server = new McpServer({
-        description:
-          "Read-only tools for Luke McDonald's personal site. Use them to learn about Luke, his resume, published pages, contact details, and the verse of the day.",
-        name: 'lukemcdonald.com',
-        version: '1.0.0',
-      })
-
-      server.registerTool(
-        'get_contact',
+      const server = new McpServer(
         {
-          annotations: READ_ONLY_SITE,
-          description:
-            "Return Luke McDonald's contact details from the site author config (name, email, URL, and profiles).",
-          title: 'Get contact',
+          name: 'lukemcdonald.com',
+          version: '1.0.0',
         },
-        () => {
-          return getContactResult(deps.getContact())
+        {
+          instructions:
+            "Luke McDonald's personal site. Use get_profile for who Luke is and how to reach him, get_resume for his work history (optional section), list_pages to browse published pages, and get_page for one page's full content.",
         },
       )
 
-      server.registerTool(
-        'get_page',
-        {
-          annotations: READ_ONLY_SITE,
-          description:
-            'Return one published page (title, description, URL, and body text) by slug, path, or URL.',
-          inputSchema: fromJsonSchema<{ slug: string }>({
-            properties: {
-              slug: {
-                description: 'Page id, path, or URL, such as tread-talks or /i-am-a/christian',
-                type: 'string',
-              },
-            },
-            required: ['slug'],
-            type: 'object',
-          }),
-          title: 'Get page',
-        },
-        async ({ slug }) => {
-          const pages = await deps.getPublishedPages()
-
-          return getPageResult(pages, slug, deps.origin)
-        },
-      )
-
-      server.registerTool(
-        'get_resume',
-        {
-          annotations: READ_ONLY_SITE,
-          description:
-            "Return Luke McDonald's resume as JSON. Omit section for the full resume. section matches /api/resume/[section].",
-          inputSchema: fromJsonSchema<{ section?: string }>({
-            properties: {
-              section: {
-                description: `Resume section: ${RESUME_SECTIONS.join(', ')}`,
-                enum: [...RESUME_SECTIONS],
-                type: 'string',
-              },
-            },
-            type: 'object',
-          }),
-          title: 'Get resume',
-        },
-        async ({ section }) => {
-          const data = await deps.getResumeData()
-
-          return getResumeResult(data, section)
-        },
-      )
-
-      server.registerTool(
-        'get_verse_of_the_day',
-        {
-          annotations: READ_ONLY_VERSE,
-          description:
-            "Return today's Bible verse of the day. Falls back to Psalm 119:105 if the live lookup fails.",
-          title: 'Get verse of the day',
-        },
-        async () => {
-          const verse = await loadVerseOrFallback(deps.getTodayVerse)
-
-          return getVerseResult(verse)
-        },
-      )
-
-      server.registerTool(
-        'list_pages',
-        {
-          annotations: READ_ONLY_SITE,
-          description: 'List published pages with title, description, URL, and body text.',
-          title: 'List pages',
-        },
-        async () => {
-          const pages = await deps.getPublishedPages()
-
-          return listPagesResult(pages, deps.origin)
-        },
-      )
+      for (const { description, handler, inputSchema, name, title } of MCP_TOOLS) {
+        server.registerTool(
+          name,
+          {
+            annotations: READ_ONLY,
+            description,
+            inputSchema,
+            title,
+          },
+          (args) => {
+            return handler(args as Record<string, unknown>, deps)
+          },
+        )
+      }
 
       return server
     },
-    { responseMode: 'json' },
+    {
+      legacy: 'stateless',
+      responseMode: 'json',
+    },
   )
 }
 
@@ -153,6 +65,16 @@ export async function handleMcpRequest(request: Request, mcpHandler: McpFetchHan
     return new Response(null, {
       headers: CORS_HEADERS,
       status: 204,
+    })
+  }
+
+  if (request.method !== 'POST') {
+    return new Response(null, {
+      headers: {
+        ...CORS_HEADERS,
+        Allow: ALLOWED_METHODS,
+      },
+      status: 405,
     })
   }
 

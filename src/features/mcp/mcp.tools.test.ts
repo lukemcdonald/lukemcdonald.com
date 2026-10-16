@@ -1,37 +1,19 @@
-import type { McpPageEntry } from './mcp.tools.ts'
+import type { McpPageEntry, McpToolDeps } from './mcp.tools.ts'
 import type { ResumeData } from '@/features/resume/resume.types'
 
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
-import { FALLBACK_VERSE } from '@/features/verse/verse.constants'
-
-import {
-  getContactResult,
-  getPageResult,
-  getResumeResult,
-  getVerseResult,
-  listPagesResult,
-  loadVerseOrFallback,
-  RESUME_SECTIONS,
-} from './mcp.tools.ts'
+import { MCP_TOOLS } from './mcp.tools.ts'
 
 const ORIGIN = 'https://lukemcdonald.com'
-
-const contact = {
-  email: 'luke@example.com',
-  name: 'Luke McDonald',
-  profiles: [
-    { network: 'GitHub', url: 'https://github.com/lukemcdonald', username: 'lukemcdonald' },
-  ],
-  url: ORIGIN,
-}
 
 const pages: McpPageEntry[] = [
   {
     body: '  Home body.  ',
     data: {
-      description: 'Hello from home.',
+      description: 'Frontmatter summary.',
+      seo: { description: "I'm Luke, a Christian, husband, father and wrestling coach." },
       title: 'Greetings',
     },
     id: 'index',
@@ -62,58 +44,96 @@ const resume = {
   skills: [{ category: 'Languages', items: ['TypeScript'] }],
 } as ResumeData
 
+const deps: McpToolDeps = {
+  author: {
+    email: 'luke@example.com',
+    name: 'Luke McDonald',
+    profiles: [
+      { network: 'GitHub', url: 'https://github.com/lukemcdonald', username: 'lukemcdonald' },
+    ],
+    url: ORIGIN,
+  },
+  getPublishedPages: async () => pages,
+  getResumeData: async () => resume,
+  origin: ORIGIN,
+}
+
 function parseToolJson(result: { content: Array<{ text: string }> }) {
   return JSON.parse(result.content[0]?.text ?? 'null') as unknown
 }
 
-describe('getResumeResult', () => {
-  test('returns the full resume when section is omitted', () => {
-    assert.deepEqual(parseToolJson(getResumeResult(resume)), resume)
+async function callTool(name: string, args: Record<string, unknown> = {}) {
+  const tool = MCP_TOOLS.find((entry) => {
+    return entry.name === name
   })
 
-  test('returns a named section', () => {
-    assert.deepEqual(parseToolJson(getResumeResult(resume, 'basics')), resume.basics)
-  })
+  assert.ok(tool, `missing tool ${name}`)
 
-  test('returns an error for an unknown section', () => {
-    const result = getResumeResult(resume, 'talks')
+  return tool.handler(args, deps)
+}
 
-    assert.equal(result.isError, true)
-    assert.match(result.content[0]?.text ?? '', /Unknown resume section: talks/)
-    assert.match(result.content[0]?.text ?? '', new RegExp(RESUME_SECTIONS.join(', ')))
+describe('get_profile', () => {
+  test('returns name, SEO summary, site URL, email, and profiles', async () => {
+    assert.deepEqual(parseToolJson(await callTool('get_profile')), {
+      email: 'luke@example.com',
+      name: 'Luke McDonald',
+      profiles: [
+        { network: 'GitHub', url: 'https://github.com/lukemcdonald', username: 'lukemcdonald' },
+      ],
+      summary: "I'm Luke, a Christian, husband, father and wrestling coach.",
+      url: ORIGIN,
+    })
   })
 })
 
-describe('listPagesResult', () => {
-  test('returns title, description, url, and body text for each page', () => {
-    assert.deepEqual(parseToolJson(listPagesResult(pages, ORIGIN)), [
+describe('get_resume', () => {
+  test('returns the full resume when section is omitted', async () => {
+    assert.deepEqual(parseToolJson(await callTool('get_resume')), resume)
+  })
+
+  test('returns a named section', async () => {
+    assert.deepEqual(
+      parseToolJson(await callTool('get_resume', { section: 'basics' })),
+      resume.basics,
+    )
+  })
+})
+
+describe('list_pages', () => {
+  test('returns id, title, description, and url without body', async () => {
+    const listed = parseToolJson(await callTool('list_pages')) as Array<Record<string, unknown>>
+
+    assert.deepEqual(listed, [
       {
-        body: 'Home body.',
-        description: 'Hello from home.',
+        description: "I'm Luke, a Christian, husband, father and wrestling coach.",
         id: 'index',
         title: 'Greetings',
         url: `${ORIGIN}/`,
       },
       {
-        body: 'Talks body.',
         description: '',
         id: 'tread-talks',
         title: 'TREAD Talks',
         url: `${ORIGIN}/tread-talks`,
       },
       {
-        body: 'Faith body.',
         description: '',
         id: 'i-am-a/christian',
         title: 'Christian',
         url: `${ORIGIN}/i-am-a/christian`,
       },
     ])
+    assert.equal(
+      listed.every((page) => {
+        return !Object.hasOwn(page, 'body')
+      }),
+      true,
+    )
   })
 })
 
-describe('getPageResult', () => {
-  test('returns one published page by slug, path, or URL', () => {
+describe('get_page', () => {
+  test('returns one published page by slug, path, or URL', async () => {
     const expected = {
       body: 'Talks body.',
       description: '',
@@ -122,10 +142,13 @@ describe('getPageResult', () => {
       url: `${ORIGIN}/tread-talks`,
     }
 
-    assert.deepEqual(parseToolJson(getPageResult(pages, 'tread-talks', ORIGIN)), expected)
-    assert.deepEqual(parseToolJson(getPageResult(pages, '/tread-talks', ORIGIN)), expected)
-    assert.deepEqual(parseToolJson(getPageResult(pages, `${ORIGIN}/tread-talks`, ORIGIN)), expected)
-    assert.deepEqual(parseToolJson(getPageResult(pages, '/i-am-a/christian/', ORIGIN)), {
+    assert.deepEqual(parseToolJson(await callTool('get_page', { slug: 'tread-talks' })), expected)
+    assert.deepEqual(parseToolJson(await callTool('get_page', { slug: '/tread-talks' })), expected)
+    assert.deepEqual(
+      parseToolJson(await callTool('get_page', { slug: `${ORIGIN}/tread-talks` })),
+      expected,
+    )
+    assert.deepEqual(parseToolJson(await callTool('get_page', { slug: '/i-am-a/christian/' })), {
       body: 'Faith body.',
       description: '',
       id: 'i-am-a/christian',
@@ -134,48 +157,16 @@ describe('getPageResult', () => {
     })
   })
 
-  test('returns the home page for / and index', () => {
-    const result = parseToolJson(getPageResult(pages, '/', ORIGIN)) as { id: string }
+  test('returns the home page for /', async () => {
+    const result = parseToolJson(await callTool('get_page', { slug: '/' })) as { id: string }
 
     assert.equal(result.id, 'index')
   })
 
-  test('returns an error for an unknown page', () => {
-    const result = getPageResult(pages, 'missing', ORIGIN)
+  test('returns an error for an unknown page', async () => {
+    const result = await callTool('get_page', { slug: 'missing' })
 
     assert.equal(result.isError, true)
     assert.equal(result.content[0]?.text, 'Unknown page: missing')
-  })
-})
-
-describe('getContactResult', () => {
-  test('returns name, email, url, and profiles', () => {
-    assert.deepEqual(parseToolJson(getContactResult(contact)), {
-      email: contact.email,
-      name: contact.name,
-      profiles: [...contact.profiles],
-      url: contact.url,
-    })
-  })
-})
-
-describe('getVerseResult', () => {
-  test('returns the verse payload', () => {
-    assert.deepEqual(parseToolJson(getVerseResult(FALLBACK_VERSE)), FALLBACK_VERSE)
-  })
-})
-
-describe('loadVerseOrFallback', () => {
-  test('returns the loaded verse', async () => {
-    assert.equal(await loadVerseOrFallback(async () => FALLBACK_VERSE), FALLBACK_VERSE)
-  })
-
-  test('returns the fallback verse when loading fails', async () => {
-    assert.equal(
-      await loadVerseOrFallback(async () => {
-        throw new Error('network')
-      }),
-      FALLBACK_VERSE,
-    )
   })
 })

@@ -20,7 +20,6 @@
     "format:fix": "prettier . --write --ignore-unknown",
     "lint": "eslint ./src ./e2e playwright.config.ts --report-unused-disable-directives",
     "lint:fix": "eslint ./src ./e2e playwright.config.ts --fix --report-unused-disable-directives",
-    "mcp:smoke": "node scripts/mcp-smoke.mjs",
     "preinstall": "npx only-allow pnpm",
     "prepare": "skills-npm --agents cursor,claude-code --yes",
     "preview": "netlify deploy --build --message \"preview $(git rev-parse --short HEAD)\"",
