@@ -10,10 +10,24 @@ const CONTENT_TYPE_MAP: Record<SeoContentType, SchemaType> = {
   page: 'WebPage',
 } as const
 
-const PERSON_SAME_AS = [
-  'https://github.com/lukemcdonald',
-  'https://www.linkedin.com/in/thelukemcdonald/',
-] as const
+export function personSameAsFromBasics(basics: unknown) {
+  if (!basics || typeof basics !== 'object' || Array.isArray(basics)) {
+    return []
+  }
+
+  const { profiles } = basics as { profiles?: Array<{ url: string }> }
+
+  return (profiles ?? []).map((profile) => {
+    return profile.url
+  })
+}
+
+export async function loadPersonSameAs() {
+  const { getEntry } = await import('astro:content')
+  const basics = await getEntry('resume', 'basics')
+
+  return personSameAsFromBasics(basics?.data)
+}
 
 function personId() {
   return `${GLOBAL_CONFIG.site.origin}/#person`
@@ -23,13 +37,13 @@ function personRef() {
   return { '@id': personId() }
 }
 
-function buildPersonJsonLd() {
+function buildPersonJsonLd(sameAs: readonly string[]) {
   return {
     '@context': 'https://schema.org',
     '@id': personId(),
     '@type': 'Person',
     name: GLOBAL_CONFIG.author.name,
-    sameAs: PERSON_SAME_AS,
+    sameAs,
     url: GLOBAL_CONFIG.author.url,
   }
 }
@@ -78,9 +92,9 @@ function buildPageJsonLd(meta: SeoMeta) {
   return { ...base, publisher: person }
 }
 
-export function buildGraphJsonLd(meta: SeoMeta) {
+export function buildGraphJsonLd(meta: SeoMeta, sameAs: readonly string[]) {
   return {
     '@context': 'https://schema.org',
-    '@graph': [buildWebsiteJsonLd(), buildPageJsonLd(meta), buildPersonJsonLd()],
+    '@graph': [buildWebsiteJsonLd(), buildPageJsonLd(meta), buildPersonJsonLd(sameAs)],
   }
 }

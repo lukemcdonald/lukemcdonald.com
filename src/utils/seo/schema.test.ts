@@ -5,7 +5,12 @@ import { describe, test } from 'node:test'
 
 import { GLOBAL_CONFIG } from '@/configs/global'
 
-import { buildGraphJsonLd } from './schema.ts'
+import { buildGraphJsonLd, personSameAsFromBasics } from './schema.ts'
+
+const SAME_AS = [
+  'https://github.com/lukemcdonald',
+  'https://www.linkedin.com/in/thelukemcdonald',
+] as const
 
 type PageJsonLd = {
   '@id'?: string
@@ -23,7 +28,7 @@ type PageJsonLd = {
 }
 
 function graph(meta: SeoMeta) {
-  return buildGraphJsonLd(meta)
+  return buildGraphJsonLd(meta, SAME_AS)
 }
 
 function meta(overrides: Partial<SeoMeta> = {}): SeoMeta {
@@ -84,6 +89,24 @@ describe('buildGraphJsonLd', () => {
   })
 })
 
+describe('personSameAsFromBasics', () => {
+  test('uses profile urls in source order', () => {
+    assert.deepEqual(
+      personSameAsFromBasics({
+        profiles: [
+          { url: 'https://github.com/lukemcdonald' },
+          { url: 'https://www.linkedin.com/in/thelukemcdonald' },
+        ],
+      }),
+      SAME_AS,
+    )
+  })
+
+  test('returns an empty list when profiles are missing', () => {
+    assert.deepEqual(personSameAsFromBasics({}), [])
+  })
+})
+
 describe('Person JSON-LD', () => {
   test('describes Luke McDonald with profile sameAs links', () => {
     const person = personNode(meta())
@@ -93,7 +116,7 @@ describe('Person JSON-LD', () => {
       '@id': personId(),
       '@type': 'Person',
       name: GLOBAL_CONFIG.author.name,
-      sameAs: ['https://github.com/lukemcdonald', 'https://www.linkedin.com/in/thelukemcdonald/'],
+      sameAs: SAME_AS,
       url: origin(),
     })
   })
