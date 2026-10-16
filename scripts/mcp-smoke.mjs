@@ -1,4 +1,4 @@
-const MCP_URL = process.env.MCP_URL ?? 'http://127.0.0.1:3000/mcp'
+const MCP_URL = process.env.MCP_URL ?? 'http://localhost:3000/mcp'
 
 function parseMcpJson(body) {
   const trimmed = body.trim()
