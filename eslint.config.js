@@ -88,7 +88,7 @@ export default [
     },
   },
   {
-    files: ['e2e/**/*.ts', 'netlify/**/*.ts', 'src/**/*.{js,jsx,ts,tsx,astro}'],
+    files: ['e2e/**/*.ts', 'src/**/*.{js,jsx,ts,tsx,astro}'],
     ignores: ['**/*.config.*'],
     plugins: {
       perfectionist,

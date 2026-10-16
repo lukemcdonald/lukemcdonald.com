@@ -1,3 +1,7 @@
+import type { Verse } from '@/features/verse/verse.types'
+
+import { FALLBACK_VERSE, isVerse, VERSE_ENDPOINT } from '@/features/verse/verse.utils'
+
 const LAMP_ATTR = 'data-lamp'
 const POS_VAR = '--lamp-pos'
 const TEMPLATE_ATTR = 'data-lamp-template'
@@ -18,6 +22,39 @@ export function lampPos(x: number, y: number) {
   return `${x}px ${y}px`
 }
 
+export async function loadLampVerse(fetchFn: typeof fetch = globalThis.fetch): Promise<Verse> {
+  try {
+    const response = await fetchFn(VERSE_ENDPOINT)
+
+    if (!response.ok) {
+      return FALLBACK_VERSE
+    }
+
+    const payload: unknown = await response.json()
+
+    if (!isVerse(payload)) {
+      return FALLBACK_VERSE
+    }
+
+    return payload
+  } catch {
+    return FALLBACK_VERSE
+  }
+}
+
+function applyLampVerse(root: HTMLElement, verse: Verse) {
+  const reference = root.querySelector('[data-lamp-verse] cite')
+  const text = root.querySelector('[data-lamp-verse] p')
+
+  if (reference) {
+    reference.textContent = verse.reference
+  }
+
+  if (text) {
+    text.textContent = verse.text
+  }
+}
+
 function bindPointer() {
   if (listening) {
     return
@@ -36,7 +73,15 @@ async function mountLamp() {
   const { loadEggStyles } = await import('../load-egg-styles')
 
   await loadEggStyles('aurora')
-  mountVerse()
+
+  const root = mountVerse()
+
+  if (root) {
+    void loadLampVerse().then((verse) => {
+      applyLampVerse(root, verse)
+    })
+  }
+
   bindPointer()
 }
 
@@ -53,6 +98,8 @@ function mountVerse() {
   }
 
   document.body.append(node)
+
+  return node
 }
 
 function onPointer(event: PointerEvent) {

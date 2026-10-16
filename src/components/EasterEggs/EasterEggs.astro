@@ -1,7 +1,5 @@
 ---
-import { getTodayVerse } from '@/features/verse/verse.server'
-
-const verse = await getTodayVerse()
+import { FALLBACK_VERSE } from '@/features/verse/verse.utils'
 ---
 
 <template data-lamp-template>
@@ -24,8 +22,8 @@ const verse = await getTodayVerse()
       <span data-aurora-firefly="a"></span>
     </div>
     <div data-lamp-verse>
-      <p>{verse.text}</p>
-      <cite>{verse.reference}</cite>
+      <p>{FALLBACK_VERSE.text}</p>
+      <cite>{FALLBACK_VERSE.reference}</cite>
     </div>
     <div
       aria-hidden="true"

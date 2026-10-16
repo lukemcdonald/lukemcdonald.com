@@ -1,18 +1,12 @@
 ---
 import Entry from '@/components/Entry/Entry.astro'
-import Link from '@/components/Link.astro'
-import { getTodayVerse } from '@/features/verse/verse.server'
+import Verse from '@/features/verse/components/Verse.astro'
+import { FALLBACK_VERSE } from '@/features/verse/verse.utils'
 import Layout from '@/layouts/Layout.astro'
 import Main from '@/layouts/Main.astro'
 import { createErrorData } from '@/utils/error'
 
-const verse = await getTodayVerse()
-const errorMessage =
-  verse.source === 'api' ?
-    "Page not found. Here's today's verse."
-  : "Page not found. Here's a verse."
-const errorData = createErrorData(404, errorMessage)
-const { html, image, imageAlt, subtitle, title } = errorData
+const { image, imageAlt, subtitle, title } = createErrorData(404)
 ---
 
 <Layout title={subtitle ?? title}>
@@ -23,19 +17,12 @@ const { html, image, imageAlt, subtitle, title } = errorData
       subtitle={subtitle}
       title={title}
     >
-      <Fragment set:html={html} />
-      <blockquote class="mt-8">
-        <p>{verse.text}</p>
-      </blockquote>
-      <p class="mt-3 text-sm text-white/50">
-        <Link
-          href={verse.url}
-          target="_blank"
-          underline="hover"
-        >
-          — {verse.reference}
-        </Link>
-      </p>
+      <Verse server:defer>
+        <Verse
+          slot="fallback"
+          verse={FALLBACK_VERSE}
+        />
+      </Verse>
     </Entry>
   </Main>
 </Layout>
