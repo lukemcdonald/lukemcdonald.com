@@ -5,12 +5,13 @@ test.describe('not found', { tag: '@smoke' }, () => {
     await sitePage.goto({ path: '/missing-page' })
 
     await expect(sitePage.page.getByRole('heading', { level: 1 })).toHaveText('404.')
+    await expect(sitePage.page.getByText('Error', { exact: true })).toBeVisible()
     await expect(
       sitePage.page.getByText('The page you are looking for does not exist.'),
     ).toBeVisible()
     await expect(sitePage.page.getByText('Verse of the day', { exact: true })).toHaveCount(0)
     await expect(sitePage.page.locator('blockquote')).toContainText(/.+/)
-    await expect(sitePage.page.locator('blockquote a')).toHaveAttribute(
+    await expect(sitePage.page.getByRole('link', { name: /^— / })).toHaveAttribute(
       'href',
       /https:\/\/www\.bible\.com\/bible\/3034\//,
     )
