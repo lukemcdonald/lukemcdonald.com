@@ -1,5 +1,7 @@
 import { z } from 'astro/zod'
 
+import { authorSchema } from '@/configs/global'
+
 /**
  * Date string validator that accepts ISO date strings (YYYY-MM or YYYY-MM-DD)
  */
@@ -27,6 +29,7 @@ const experienceSchema = z.object({
   company: z.string(),
   endDate: endDateSchema,
   highlights: z.array(z.string()).optional(),
+  id: z.string().optional(),
   location: z.string().optional(),
   position: z.string(),
   startDate: dateStringSchema,
@@ -76,10 +79,14 @@ const locationSchema = z.object({
  * Basics schema
  */
 const basicsSchema = z.object({
+  email: authorSchema.shape.email.optional(),
   intro: z.string().optional(),
   label: z.string().optional(),
   location: locationSchema.optional(),
+  name: authorSchema.shape.name.optional(),
   phone: z.string().optional(),
+  profiles: authorSchema.shape.profiles.optional(),
+  website: authorSchema.shape.url.optional(),
 })
 
 const skillCategorySchema = z.object({
@@ -115,23 +122,10 @@ export function createResumeSchema() {
 /** Assembled resume document. Section keys are the get_resume enum. */
 export const resumeDataSchema = z.object({
   awards: z.array(awardSchema),
-  basics: basicsSchema.extend({
-    email: z.string().optional(),
-    name: z.string(),
-    profiles: z
-      .array(
-        z.object({
-          network: z.string(),
-          url: z.string(),
-          username: z.string(),
-        }),
-      )
-      .optional(),
-    website: z.string().optional(),
-  }),
+  basics: basicsSchema,
   community: z.array(communitySchema),
   education: z.array(educationSchema),
-  experience: z.array(experienceSchema.extend({ id: z.string().optional() })),
+  experience: z.array(experienceSchema),
   personal: z.array(z.string()),
   skills: z.array(skillCategorySchema),
 })
