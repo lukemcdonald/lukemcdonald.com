@@ -1,0 +1,44 @@
+---
+import { PRESS_CUE_PROPS } from '@/components/Sound'
+import { MCP_PATH, MCP_URL } from '@/features/mcp/mcp.constants'
+
+import { COPY_BUTTON_LABEL, COPY_LABEL } from './mcp-callout'
+---
+
+<p
+  class="print:hidden"
+  data-mcp-callout
+  data-testid="resume-mcp-callout"
+>
+  Connect an AI assistant to{' '}
+  <a
+    data-cuelume-hover="tick"
+    data-testid="resume-mcp-url"
+    href={MCP_PATH}
+  >
+    {MCP_URL}
+  </a>
+  {' '}to ask about this resume.{' '}
+  <button
+    aria-label={COPY_BUTTON_LABEL}
+    class="cursor-pointer border-0 bg-transparent p-0 font-inherit underline focus-ring"
+    data-mcp-copy={MCP_URL}
+    data-testid="resume-mcp-copy"
+    type="button"
+    {...PRESS_CUE_PROPS}
+  >
+    {COPY_LABEL}
+  </button>
+  <span
+    aria-live="polite"
+    class="sr-only"
+    data-mcp-copy-status
+    data-testid="resume-mcp-copy-status"
+  ></span>
+</p>
+
+<script>
+  import { bindMcpCallouts } from './mcp-callout'
+
+  document.addEventListener('astro:page-load', bindMcpCallouts)
+</script>

@@ -6,6 +6,7 @@ import BriefcaseIcon from '@lucide/astro/icons/handshake'
 import MailIcon from '@lucide/astro/icons/mail'
 
 import GithubIcon from '@/components/Icons/Github.astro'
+import McpCallout from '@/features/resume/components/McpCallout.astro'
 
 export interface Props {
   basics: BasicsItem
@@ -92,4 +93,5 @@ const introParagraphs = intro
   }
 
   {introParagraphs?.map((paragraph) => <p>{paragraph}</p>)}
+  <McpCallout />
 </header>

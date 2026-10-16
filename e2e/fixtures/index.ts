@@ -9,11 +9,13 @@ import { ThemeToggle } from '../components/theme-toggle'
 import { WCAG_TAGS } from '../constants'
 import { BasePage } from '../pages/base.page'
 import { HomePage } from '../pages/home.page'
+import { ResumePage } from '../pages/resume.page'
 
 type Fixtures = {
   commandPalette: CommandPalette
   homePage: HomePage
   makeAxeBuilder: () => AxeBuilder
+  resumePage: ResumePage
   siteHeader: SiteHeader
   siteNav: SiteNav
   sitePage: BasePage
@@ -34,6 +36,9 @@ export const test = base.extend<Fixtures>({
     }
 
     await use(makeAxeBuilder)
+  },
+  resumePage: async ({ page }, use) => {
+    await use(new ResumePage(page))
   },
   siteHeader: async ({ page }, use) => {
     await use(new SiteHeader(page))

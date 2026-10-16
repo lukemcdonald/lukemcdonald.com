@@ -6,10 +6,8 @@ import { describe, test } from 'node:test'
 
 import { GLOBAL_CONFIG } from '@/configs/global'
 
-import { PAGE_SLUG_MAX, SERVER_INSTRUCTIONS } from './mcp.constants.ts'
+import { MCP_URL, PAGE_SLUG_MAX, SERVER_INSTRUCTIONS } from './mcp.constants.ts'
 import { createSiteMcpHandler, handleMcpRequest } from './mcp.server.ts'
-
-const MCP_URL = `${GLOBAL_CONFIG.site.origin}/mcp`
 
 const deps: McpToolDeps = {
   loadPublishedPages: async () =>
