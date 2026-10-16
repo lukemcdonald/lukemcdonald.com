@@ -6,7 +6,7 @@ import { describe, test } from 'node:test'
 
 import { GLOBAL_CONFIG } from '@/configs/global'
 
-import { PAGE_SLUG_MAX } from './mcp.constants.ts'
+import { PAGE_SLUG_MAX, SERVER_INSTRUCTIONS } from './mcp.constants.ts'
 import { createSiteMcpHandler, handleMcpRequest } from './mcp.server.ts'
 
 const deps: McpToolDeps = {
@@ -124,11 +124,8 @@ describe('createSiteMcpHandler', () => {
     }
 
     assert.equal(initialize.payload.jsonrpc, '2.0')
-    assert.equal(initializeResult.serverInfo.name, 'lukemcdonald.com')
-    assert.match(initializeResult.instructions, /get_profile/)
-    assert.match(initializeResult.instructions, /get_resume/)
-    assert.match(initializeResult.instructions, /list_pages/)
-    assert.match(initializeResult.instructions, /get_page/)
+    assert.equal(initializeResult.serverInfo.name, GLOBAL_CONFIG.site.hostname)
+    assert.equal(initializeResult.instructions, SERVER_INSTRUCTIONS)
 
     const listed = await mcpRpc(mcpHandler, {
       id: 2,
