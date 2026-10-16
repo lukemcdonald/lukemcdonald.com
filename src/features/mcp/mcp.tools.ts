@@ -29,109 +29,112 @@ type McpToolDefinition = {
   title: string
 }
 
-export const MCP_TOOLS: McpToolDefinition[] = [
-  {
-    description:
-      "Return one published page's full content (title, description, URL, and body) by id, path, or URL.",
-    handler: async (args, deps) => {
-      const slug = typeof args.slug === 'string' ? args.slug : ''
-      const pages = await deps.getPublishedPages()
-      const id = normalizePageId(slug)
-      const page = pages.find((entry) => {
-        return entry.id === id
-      })
+const getProfileTool: McpToolDefinition = {
+  description:
+    "Return Luke McDonald's profile: name, short summary, site URL, email, and social profiles.",
+  handler: async (_args, deps) => {
+    const pages = await deps.getPublishedPages()
+    const home = pages.find((page) => {
+      return page.id === 'index'
+    })
+    const { email, name, profiles, url } = GLOBAL_CONFIG.author
 
-      if (!page) {
-        return errorResult(`Unknown page: ${slug}`)
-      }
-
-      return jsonResult({
-        body: page.body?.trim() ?? '',
-        description: resolvePageSeo(page).description ?? '',
-        id: page.id,
-        title: page.data.title,
-        url: pageHref(page.id, GLOBAL_CONFIG.site.origin),
-      })
-    },
-    inputSchema: z.object({
-      slug: z
-        .string()
-        .trim()
-        .min(1)
-        .max(PAGE_SLUG_MAX)
-        .describe('Page id, path, or URL, such as tread-talks or /i-am-a/christian'),
-    }),
-    name: 'get_page',
-    title: 'Get page',
+    return jsonResult({
+      email,
+      name,
+      profiles: [...profiles],
+      summary: home ? (resolvePageSeo(home).description ?? '') : '',
+      url,
+    })
   },
-  {
-    description:
-      "Return Luke McDonald's profile: name, short summary, site URL, email, and social profiles.",
-    handler: async (_args, deps) => {
-      const pages = await deps.getPublishedPages()
-      const home = pages.find((page) => {
-        return page.id === 'index'
-      })
-      const { email, name, profiles, url } = GLOBAL_CONFIG.author
+  inputSchema: z.object({}),
+  name: 'get_profile',
+  title: 'Get profile',
+}
 
-      return jsonResult({
-        email,
-        name,
-        profiles: [...profiles],
-        summary: home ? (resolvePageSeo(home).description ?? '') : '',
-        url,
-      })
-    },
-    inputSchema: z.object({}),
-    name: 'get_profile',
-    title: 'Get profile',
+const getResumeTool: McpToolDefinition = {
+  description:
+    "Return Luke McDonald's resume as JSON. Omit section for the full resume; section matches /api/resume/[section].",
+  handler: async (args, deps) => {
+    const data = await deps.getResumeData()
+    const section = typeof args.section === 'string' ? args.section : undefined
+
+    if (!section) {
+      return jsonResult(data)
+    }
+
+    const payload = pickResumeSection(data, section)
+
+    if (payload === null) {
+      return errorResult(`Unknown resume section: ${section}`)
+    }
+
+    return jsonResult(payload)
   },
-  {
-    description:
-      "Return Luke McDonald's resume as JSON. Omit section for the full resume; section matches /api/resume/[section].",
-    handler: async (args, deps) => {
-      const data = await deps.getResumeData()
-      const section = typeof args.section === 'string' ? args.section : undefined
+  inputSchema: z.object({
+    section: resumeDataSchema
+      .keyof()
+      .optional()
+      .describe(`Resume section: ${resumeDataSchema.keyof().options.join(', ')}`),
+  }),
+  name: 'get_resume',
+  title: 'Get resume',
+}
 
-      if (!section) {
-        return jsonResult(data)
-      }
+const listPagesTool: McpToolDefinition = {
+  description: 'List published pages with id, title, description, and URL.',
+  handler: async (_args, deps) => {
+    const pages = await deps.getPublishedPages()
 
-      const payload = pickResumeSection(data, section)
-
-      if (payload === null) {
-        return errorResult(`Unknown resume section: ${section}`)
-      }
-
-      return jsonResult(payload)
-    },
-    inputSchema: z.object({
-      section: resumeDataSchema
-        .keyof()
-        .optional()
-        .describe(`Resume section: ${resumeDataSchema.keyof().options.join(', ')}`),
-    }),
-    name: 'get_resume',
-    title: 'Get resume',
+    return jsonResult(
+      pages.map((page) => {
+        return {
+          description: resolvePageSeo(page).description ?? '',
+          id: page.id,
+          title: page.data.title,
+          url: pageHref(page.id, GLOBAL_CONFIG.site.origin),
+        }
+      }),
+    )
   },
-  {
-    description: 'List published pages with id, title, description, and URL.',
-    handler: async (_args, deps) => {
-      const pages = await deps.getPublishedPages()
+  inputSchema: z.object({}),
+  name: 'list_pages',
+  title: 'List pages',
+}
 
-      return jsonResult(
-        pages.map((page) => {
-          return {
-            description: resolvePageSeo(page).description ?? '',
-            id: page.id,
-            title: page.data.title,
-            url: pageHref(page.id, GLOBAL_CONFIG.site.origin),
-          }
-        }),
-      )
-    },
-    inputSchema: z.object({}),
-    name: 'list_pages',
-    title: 'List pages',
+const getPageTool: McpToolDefinition = {
+  description:
+    "Return one published page's full content (title, description, URL, and body) by id, path, or URL.",
+  handler: async (args, deps) => {
+    const slug = typeof args.slug === 'string' ? args.slug : ''
+    const pages = await deps.getPublishedPages()
+    const id = normalizePageId(slug)
+    const page = pages.find((entry) => {
+      return entry.id === id
+    })
+
+    if (!page) {
+      return errorResult(`Unknown page: ${slug}`)
+    }
+
+    return jsonResult({
+      body: page.body?.trim() ?? '',
+      description: resolvePageSeo(page).description ?? '',
+      id: page.id,
+      title: page.data.title,
+      url: pageHref(page.id, GLOBAL_CONFIG.site.origin),
+    })
   },
-]
+  inputSchema: z.object({
+    slug: z
+      .string()
+      .trim()
+      .min(1)
+      .max(PAGE_SLUG_MAX)
+      .describe('Page id, path, or URL, such as tread-talks or /i-am-a/christian'),
+  }),
+  name: 'get_page',
+  title: 'Get page',
+}
+
+export const MCP_TOOLS = [getProfileTool, getResumeTool, listPagesTool, getPageTool]
