@@ -1,4 +1,5 @@
 import { GLOBAL_CONFIG } from '@/configs/global'
+import { toPageHref } from '@/utils/content'
 import { stripHtmlAndTruncate } from '@/utils/text'
 
 type LlmsLink = {
@@ -51,14 +52,6 @@ function formatSection(title: string, links: LlmsLink[]) {
   return `## ${title}\n\n${links.map(formatLink).join('\n')}`
 }
 
-function pagePath(id: string) {
-  if (id === 'index') {
-    return '/'
-  }
-
-  return `/${id}`
-}
-
 function resolveSummary(pages: LlmsPage[], resume: LlmsResume) {
   const home = pages.find((page) => {
     return page.id === 'index'
@@ -75,7 +68,7 @@ function resolveSummary(pages: LlmsPage[], resume: LlmsResume) {
 function pageLinks(pages: LlmsPage[], resume: LlmsResume, origin: string | URL): LlmsLink[] {
   return [
     {
-      href: toAbsoluteUrl('/', origin),
+      href: toPageHref('index', origin),
       title: 'Home',
     },
     {
@@ -89,7 +82,7 @@ function pageLinks(pages: LlmsPage[], resume: LlmsResume, origin: string | URL):
       })
       .map((page) => {
         return {
-          href: toAbsoluteUrl(pagePath(page.id), origin),
+          href: toPageHref(page.id, origin),
           notes: notesFrom(page.data.description),
           title: page.data.title,
         }
@@ -155,6 +148,13 @@ export function createLlmsTxt<T extends LlmsResume>({
     formatSection('Pages', pageLinks(pages, resume, origin)),
     formatSection('Resume', resumeLinks(resume, origin)),
     formatSection('Contact', contactLinks()),
+    formatSection('MCP', [
+      {
+        href: toAbsoluteUrl('/mcp', origin),
+        notes: 'Read-only tools for profile, resume, and pages',
+        title: 'Site MCP server',
+      },
+    ]),
   )
 
   return `${parts.join('\n\n')}\n`

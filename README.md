@@ -4,6 +4,8 @@ My personal website re-built with [Astro](https://astro.build). This is my playg
 
 🌐 **Live Site**: [lukemcdonald.com](https://lukemcdonald.com)
 
+Read-only MCP endpoint for AI assistants: https://lukemcdonald.com/mcp
+
 ## Tech Stack
 
 - **[Astro](https://astro.build)** - Static site generator with vanilla scripts

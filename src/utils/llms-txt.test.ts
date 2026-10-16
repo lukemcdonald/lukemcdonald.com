@@ -73,6 +73,10 @@ describe('createLlmsTxt', () => {
           return `- [${profile.network}](${profile.url})`
         }),
         '',
+        '## MCP',
+        '',
+        `- [Site MCP server](${ORIGIN}/mcp): Read-only tools for profile, resume, and pages`,
+        '',
       ].join('\n'),
     )
   })

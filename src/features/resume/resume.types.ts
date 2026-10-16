@@ -1,56 +1,10 @@
-export interface AwardItem {
-  date?: string
-  org?: string
-  title: string
-}
+import type { resumeDataSchema } from './resume.schema'
+import type { z } from 'astro/zod'
 
-export interface BasicsItem {
-  email?: string
-  intro?: string
-  label?: string
-  name: string
-  profiles?: Array<{
-    network: string
-    url: string
-    username: string
-  }>
-  website?: string
-}
-
-export interface CommunityItem {
-  description?: string
-  title: string
-}
-
-export interface EducationItem {
-  area?: string
-  institution: string
-  studyType?: string
-}
-
-export interface ExperienceItem {
-  company: string
-  endDate?: string | null
-  highlights?: string[]
-  id?: string
-  location?: string
-  position: string
-  startDate: string
-  summary?: string
-  website?: string
-}
-
-export interface SkillCategory {
-  category: string
-  items: string[]
-}
-
-export interface ResumeData {
-  awards: AwardItem[]
-  basics: BasicsItem
-  community: CommunityItem[]
-  education: EducationItem[]
-  experience: ExperienceItem[]
-  personal: string[]
-  skills: SkillCategory[]
-}
+export type ResumeData = z.infer<typeof resumeDataSchema>
+export type AwardItem = ResumeData['awards'][number]
+export type BasicsItem = ResumeData['basics']
+export type CommunityItem = ResumeData['community'][number]
+export type EducationItem = ResumeData['education'][number]
+export type ExperienceItem = ResumeData['experience'][number]
+export type SkillCategory = ResumeData['skills'][number]

@@ -1,3 +1,20 @@
+import { z } from 'astro/zod'
+
+const authorProfileSchema = z.object({
+  network: z.string(),
+  url: z.string(),
+  username: z.string(),
+})
+
+export const authorSchema = z.object({
+  email: z.string(),
+  name: z.string(),
+  profiles: z.array(authorProfileSchema),
+  url: z.string(),
+})
+
+type Author = z.infer<typeof authorSchema>
+
 const SITE_NAME = 'Luke McDonald'
 const DOMAIN = 'lukemcdonald.com'
 
@@ -21,7 +38,7 @@ export const GLOBAL_CONFIG = {
       },
     ],
     url: SITE_URLS.origin,
-  },
+  } satisfies Author,
   dir: 'ltr',
   lang: 'en',
   name: SITE_NAME,

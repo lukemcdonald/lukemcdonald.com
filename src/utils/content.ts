@@ -18,3 +18,15 @@ export function parseContentId(id: string): {
     section,
   }
 }
+
+export function toPagePath(id: string) {
+  if (id === 'index') {
+    return '/'
+  }
+
+  return `/${id}`
+}
+
+export function toPageHref(id: string, origin: string | URL) {
+  return new URL(toPagePath(id), origin).href
+}
