@@ -246,12 +246,12 @@ function currentCommand(palette: Palette) {
   return getHighlightedCommand(palette.navItems, palette.input.value)
 }
 
-function commandHref(command: ReturnType<typeof getHighlightedCommand>) {
-  return command?.type === 'nav' ? command.href : undefined
-}
-
 function commandColor(command: ReturnType<typeof getHighlightedCommand>) {
   return command?.type === 'color' ? command.color : undefined
+}
+
+function commandHref(command: ReturnType<typeof getHighlightedCommand>) {
+  return command?.type === 'nav' ? command.href : undefined
 }
 
 function syncList(palette: Palette) {
@@ -336,10 +336,7 @@ function selectListItem(palette: Palette) {
     return false
   }
 
-  if (item instanceof HTMLAnchorElement) {
-    item.click()
-  }
-
+  item?.click()
   return true
 }
 

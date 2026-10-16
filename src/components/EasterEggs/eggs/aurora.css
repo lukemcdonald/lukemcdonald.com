@@ -6,7 +6,7 @@ html[data-easter-egg='aurora'] {
   --aurora-landscape-opacity: 0.3;
 }
 
-html[data-easter-egg='aurora']::before {
+html:is([data-easter-egg='aurora'], [data-easter-egg='lamp'])::before {
   animation: aurora-wash 14s ease-in-out infinite;
   background:
     radial-gradient(
@@ -32,7 +32,7 @@ html[data-easter-egg='aurora']::before {
   z-index: 1;
 }
 
-.dark[data-easter-egg='aurora']::before {
+.dark:is([data-easter-egg='aurora'], [data-easter-egg='lamp'])::before {
   mix-blend-mode: screen;
 }
 
@@ -59,7 +59,7 @@ html[data-easter-egg='aurora']::before {
   syntax: '<length>';
 }
 
-html[data-easter-egg='aurora'] [data-aurora-firefly] {
+html:is([data-easter-egg='aurora'], [data-easter-egg='lamp']) [data-aurora-firefly] {
   animation-delay:
     var(--aurora-firefly-delay, 0s), var(--wander-delay-x, -4s), var(--wander-delay-y, -7s);
   animation-direction: normal, alternate, alternate;
@@ -78,11 +78,11 @@ html[data-easter-egg='aurora'] [data-aurora-firefly] {
   z-index: 2;
 }
 
-html[data-easter-egg='aurora'] [data-aurora-firefly='b'] {
+html:is([data-easter-egg='aurora'], [data-easter-egg='lamp']) [data-aurora-firefly='b'] {
   background: color-mix(in oklab, var(--color-primary-400) 80%, white);
 }
 
-html[data-easter-egg='aurora'] [data-aurora-firefly='c'] {
+html:is([data-easter-egg='aurora'], [data-easter-egg='lamp']) [data-aurora-firefly='c'] {
   background: color-mix(in oklab, var(--color-primary-300) 80%, white);
 }
 
@@ -154,7 +154,7 @@ html[data-easter-egg='aurora'] [data-aurora-firefly='c'] {
 }
 
 @media print {
-  html[data-easter-egg='aurora']::before,
+  html:is([data-easter-egg='aurora'], [data-easter-egg='lamp'])::before,
   [data-aurora-firefly] {
     display: none;
   }

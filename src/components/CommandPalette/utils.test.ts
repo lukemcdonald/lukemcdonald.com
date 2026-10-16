@@ -102,6 +102,8 @@ describe('getHighlightedCommand', () => {
   test('does not match an egg name from the main search', () => {
     assert.equal(getHighlightedCommand(navItems, 'aurora'), undefined)
     assert.equal(getHighlightedCommand(navItems, 'hyrule'), undefined)
+    assert.equal(getHighlightedCommand(navItems, 'lamp'), undefined)
+    assert.equal(getHighlightedCommand(navItems, 'selah'), undefined)
   })
 })
 

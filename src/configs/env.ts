@@ -16,4 +16,9 @@ export const ENV_SCHEMA = {
     context: 'client',
     optional: true,
   }),
+  YVP_APP_KEY: envField.string({
+    access: 'secret',
+    context: 'server',
+    optional: true,
+  }),
 }
