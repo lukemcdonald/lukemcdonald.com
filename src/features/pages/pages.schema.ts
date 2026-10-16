@@ -10,6 +10,7 @@ export function createPagesSchema(image: () => z.ZodType<ImageMetadata>) {
       draft: z.boolean().default(false),
       image: image().optional(),
       imageAlt: z.string().optional(),
+      navGroup: z.enum(['live', 'play', 'work']).optional(),
       order: z.number().optional(),
       seo: z
         .object({

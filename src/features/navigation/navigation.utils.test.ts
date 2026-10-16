@@ -5,56 +5,55 @@ import {
   buildNavigationGroups,
   getExternalLinkAttrs,
   isExternalHref,
-  PLAY_LINKS,
+  RESUME_LINK,
   toHrefTestId,
-  toLiveLinks,
   toNavMenuId,
   toTestIdSlug,
-  WORK_LINKS,
 } from './navigation.utils.ts'
 
-describe('toLiveLinks', () => {
-  test('maps published pages to href and title', () => {
-    assert.deepEqual(
-      toLiveLinks([
-        { data: { title: 'Christian' }, id: 'i-am-a/christian' },
-        { data: { title: 'Coach' }, id: 'i-am-a/coach' },
-      ]),
-      [
-        { href: '/i-am-a/christian', name: 'Christian' },
-        { href: '/i-am-a/coach', name: 'Coach' },
-      ],
-    )
-  })
-})
-
 describe('buildNavigationGroups', () => {
-  const liveLinks = [
-    { href: '/i-am-a/christian', name: 'Christian' },
-    { href: '/i-am-a/husband', name: 'Husband' },
-    { href: '/i-am-a/father', name: 'Father' },
-    { href: '/i-am-a/coach', name: 'Coach' },
+  const pages = [
+    { data: { navGroup: 'live' as const, title: 'Christian' }, id: 'i-am-a/christian' },
+    { data: { navGroup: 'live' as const, title: 'Husband' }, id: 'i-am-a/husband' },
+    { data: { navGroup: 'live' as const, title: 'Father' }, id: 'i-am-a/father' },
+    { data: { navGroup: 'live' as const, title: 'Coach' }, id: 'i-am-a/coach' },
+    { data: { navGroup: 'play' as const, title: 'TREAD Talks' }, id: 'tread-talks' },
+    { data: { title: 'Greetings' }, id: 'index' },
   ]
 
   test('returns Work, Play, then Live in that order', () => {
     assert.deepEqual(
-      buildNavigationGroups(liveLinks).map((group) => group.name),
+      buildNavigationGroups(pages).map((group) => group.name),
       ['Work', 'Play', 'Live'],
     )
   })
 
-  test('keeps Work and Play static and Live from published pages', () => {
-    assert.deepEqual(buildNavigationGroups(liveLinks), [
-      { links: WORK_LINKS, name: 'Work' },
-      { links: PLAY_LINKS, name: 'Play' },
-      { links: liveLinks, name: 'Live' },
+  test('keeps Resume in Work and groups pages by navGroup', () => {
+    assert.deepEqual(buildNavigationGroups(pages), [
+      { links: [RESUME_LINK], name: 'Work' },
+      { links: [{ href: '/tread-talks', name: 'TREAD Talks' }], name: 'Play' },
+      {
+        links: [
+          { href: '/i-am-a/christian', name: 'Christian' },
+          { href: '/i-am-a/husband', name: 'Husband' },
+          { href: '/i-am-a/father', name: 'Father' },
+          { href: '/i-am-a/coach', name: 'Coach' },
+        ],
+        name: 'Live',
+      },
     ])
   })
 
-  test('flattens to the same destination order as Cmd+K', () => {
+  test('places Resume first in Work before navGroup pages', () => {
     assert.deepEqual(
-      buildNavigationGroups(liveLinks).flatMap((group) => group.links),
-      [...WORK_LINKS, ...PLAY_LINKS, ...liveLinks],
+      buildNavigationGroups([
+        ...pages,
+        { data: { navGroup: 'work' as const, title: 'Consulting' }, id: 'consulting' },
+      ])[0],
+      {
+        links: [RESUME_LINK, { href: '/consulting', name: 'Consulting' }],
+        name: 'Work',
+      },
     )
   })
 })

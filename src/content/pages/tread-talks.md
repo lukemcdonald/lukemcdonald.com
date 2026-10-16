@@ -1,4 +1,5 @@
 ---
+navGroup: play
 title: 'TREAD Talks'
 subtitle: 'Website'
 image: '@/assets/images/tread-talks-billy-graham.jpg'

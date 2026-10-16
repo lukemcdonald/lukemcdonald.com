@@ -1,5 +1,6 @@
 ---
 order: 4
+navGroup: live
 subtitle: 'I am a'
 title: 'Coach'
 image: '@/assets/images/luke-coach.jpg'

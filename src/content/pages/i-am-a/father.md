@@ -1,5 +1,6 @@
 ---
 order: 3
+navGroup: live
 subtitle: 'I am a'
 title: 'Father'
 image: '@/assets/images/luke-and-kids.jpg'
