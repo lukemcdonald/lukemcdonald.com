@@ -82,6 +82,11 @@ const basicsSchema = z.object({
   phone: z.string().optional(),
 })
 
+const skillCategorySchema = z.object({
+  category: z.string(),
+  items: z.array(z.string()),
+})
+
 /**
  * Resume collection schema.
  * Validates all possible resume entry shapes:
@@ -99,10 +104,34 @@ export function createResumeSchema() {
     educationSchema,
     awardSchema,
     basicsSchema,
-    z.array(z.object({ category: z.string(), items: z.array(z.string()) })),
+    z.array(skillCategorySchema),
     z.array(educationSchema),
     z.array(communitySchema),
     z.array(awardSchema),
     z.array(z.string()),
   ])
 }
+
+/** Assembled resume document. Section keys are the get_resume enum. */
+export const resumeDataSchema = z.object({
+  awards: z.array(awardSchema),
+  basics: basicsSchema.extend({
+    email: z.string().optional(),
+    name: z.string(),
+    profiles: z
+      .array(
+        z.object({
+          network: z.string(),
+          url: z.string(),
+          username: z.string(),
+        }),
+      )
+      .optional(),
+    website: z.string().optional(),
+  }),
+  community: z.array(communitySchema),
+  education: z.array(educationSchema),
+  experience: z.array(experienceSchema.extend({ id: z.string().optional() })),
+  personal: z.array(z.string()),
+  skills: z.array(skillCategorySchema),
+})

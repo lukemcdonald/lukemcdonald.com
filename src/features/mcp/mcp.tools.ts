@@ -6,10 +6,11 @@ import { z } from 'astro/zod'
 
 import { GLOBAL_CONFIG } from '@/configs/global'
 import { resolvePageSeo } from '@/features/pages/pages.utils'
+import { resumeDataSchema } from '@/features/resume/resume.schema'
 import { pickResumeSection } from '@/features/resume/resume.utils'
 import { pageHref } from '@/utils/content'
 
-import { PAGE_SLUG_MAX, RESUME_SECTIONS } from './mcp.constants'
+import { PAGE_SLUG_MAX } from './mcp.constants'
 import { errorResult, jsonResult, normalizePageId } from './mcp.utils'
 
 export type McpToolDeps = {
@@ -105,10 +106,10 @@ export const MCP_TOOLS: McpToolDefinition[] = [
       return jsonResult(payload)
     },
     inputSchema: z.object({
-      section: z
-        .enum(RESUME_SECTIONS)
+      section: resumeDataSchema
+        .keyof()
         .optional()
-        .describe(`Resume section: ${RESUME_SECTIONS.join(', ')}`),
+        .describe(`Resume section: ${resumeDataSchema.keyof().options.join(', ')}`),
     }),
     name: 'get_resume',
     title: 'Get resume',

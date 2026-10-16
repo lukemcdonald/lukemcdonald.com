@@ -6,6 +6,7 @@ import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
 import { GLOBAL_CONFIG } from '@/configs/global'
+import { resumeDataSchema } from '@/features/resume/resume.schema.ts'
 
 import { MCP_TOOLS } from './mcp.tools.ts'
 
@@ -81,6 +82,20 @@ describe('get_resume', () => {
       parseToolJson(await callTool('get_resume', { section: 'basics' })),
       resume.basics,
     )
+  })
+
+  test('accepts resumeDataSchema keys and rejects unknown sections', () => {
+    const tool = MCP_TOOLS.find((entry) => {
+      return entry.name === 'get_resume'
+    })
+
+    assert.ok(tool)
+
+    for (const section of resumeDataSchema.keyof().options) {
+      assert.equal(tool.inputSchema.safeParse({ section }).success, true)
+    }
+
+    assert.equal(tool.inputSchema.safeParse({ section: 'not-a-section' }).success, false)
   })
 })
 
