@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
+import { GLOBAL_CONFIG } from '@/configs/global'
+
 import { createLlmsTxt } from './llms-txt.ts'
 
 const ORIGIN = 'https://lukemcdonald.com'
@@ -37,9 +39,7 @@ describe('createLlmsTxt', () => {
       resume: {
         awards: [],
         basics: {
-          email: 'thelukemcdonald@gmail.com',
           label: 'Full-Stack Engineer',
-          profiles: [{ network: 'GitHub', url: 'https://github.com/lukemcdonald' }],
         },
         skills: [],
       },
@@ -68,8 +68,10 @@ describe('createLlmsTxt', () => {
         '',
         '## Contact',
         '',
-        '- [Email](mailto:thelukemcdonald@gmail.com)',
-        '- [GitHub](https://github.com/lukemcdonald)',
+        `- [Email](mailto:${GLOBAL_CONFIG.author.email})`,
+        ...GLOBAL_CONFIG.author.profiles.map((profile) => {
+          return `- [${profile.network}](${profile.url})`
+        }),
         '',
       ].join('\n'),
     )
