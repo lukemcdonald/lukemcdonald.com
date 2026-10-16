@@ -1,3 +1,4 @@
+import type { SiteTheme } from '../routes'
 import type { Page } from '@playwright/test'
 
 import { TEST_ID } from '../constants'
@@ -15,5 +16,26 @@ export class ResumePage extends BasePage {
     this.copyButton = page.getByTestId(TEST_ID.resumeMcpCopy)
     this.copyStatus = page.getByTestId(TEST_ID.resumeMcpCopyStatus)
     this.mcpUrl = page.getByTestId(TEST_ID.resumeMcpUrl)
+  }
+
+  override async goto(options: { path?: string; theme?: SiteTheme } = {}) {
+    await this.page.addInitScript(() => {
+      let value = ''
+
+      Object.defineProperty(navigator, 'clipboard', {
+        configurable: true,
+        value: {
+          readText() {
+            return Promise.resolve(value)
+          },
+          writeText(text: string) {
+            value = text
+            return Promise.resolve()
+          },
+        },
+      })
+    })
+
+    await super.goto(options)
   }
 }

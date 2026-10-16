@@ -18,17 +18,20 @@ import { COPY_BUTTON_LABEL, COPY_LABEL } from './mcp-callout'
   >
     {MCP_URL}
   </a>
-  {' '}to ask about this resume.{' '}
-  <button
-    aria-label={COPY_BUTTON_LABEL}
-    class="cursor-pointer border-0 bg-transparent p-0 font-inherit underline focus-ring"
-    data-mcp-copy={MCP_URL}
-    data-testid="resume-mcp-copy"
-    type="button"
-    {...PRESS_CUE_PROPS}
-  >
-    {COPY_LABEL}
-  </button>
+  {' '}to ask about this{' '}
+  <span class="whitespace-nowrap">
+    resume.{' '}
+    <button
+      aria-label={COPY_BUTTON_LABEL}
+      class="cursor-pointer border-0 bg-transparent p-0 font-inherit underline focus-ring"
+      data-mcp-copy={MCP_URL}
+      data-testid="resume-mcp-copy"
+      type="button"
+      {...PRESS_CUE_PROPS}
+    >
+      {COPY_LABEL}
+    </button>
+  </span>
   <span
     aria-live="polite"
     class="sr-only"
