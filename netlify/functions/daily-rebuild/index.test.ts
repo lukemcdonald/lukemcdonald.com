@@ -5,6 +5,14 @@ import { config, triggerDailyRebuild } from './index.ts'
 
 const BUILD_HOOK_URL = 'https://api.netlify.com/build_hooks/test'
 
+function requestInit(call: { arguments: readonly unknown[] }) {
+  return call.arguments[1] as RequestInit | undefined
+}
+
+function requestUrl(call: { arguments: readonly unknown[] }) {
+  return String(call.arguments[0])
+}
+
 describe('config', () => {
   test('schedules a daily run at 10:00 UTC', () => {
     assert.deepEqual(config, { schedule: '0 10 * * *' })
@@ -49,8 +57,8 @@ describe('triggerDailyRebuild', () => {
     assert.equal(response.status, 200)
     assert.equal(fetchMock.mock.calls.length, 1)
     assert.ok(call)
-    assert.equal(call.arguments[0], BUILD_HOOK_URL)
-    assert.deepEqual(call.arguments[1], { method: 'POST' })
+    assert.equal(requestUrl(call), BUILD_HOOK_URL)
+    assert.deepEqual(requestInit(call), { method: 'POST' })
   })
 
   test('throws when the build hook request fails', async () => {
