@@ -1,3 +1,4 @@
+import { GLOBAL_CONFIG } from '@/configs/global'
 import { stripHtmlAndTruncate } from '@/utils/text'
 
 type LlmsLink = {
@@ -18,13 +19,8 @@ type LlmsPage = {
 }
 
 type LlmsBasics = {
-  email?: string
   intro?: string
   label?: string
-  profiles?: Array<{
-    network: string
-    url: string
-  }>
 }
 
 type LlmsResume = {
@@ -120,24 +116,21 @@ function resumeLinks(resume: LlmsResume, origin: string | URL): LlmsLink[] {
   ]
 }
 
-function contactLinks(resume: LlmsResume): LlmsLink[] {
-  const links: LlmsLink[] = []
+function contactLinks(): LlmsLink[] {
+  const { email, profiles } = GLOBAL_CONFIG.author
 
-  if (resume.basics.email) {
-    links.push({
-      href: `mailto:${resume.basics.email}`,
+  return [
+    {
+      href: `mailto:${email}`,
       title: 'Email',
-    })
-  }
-
-  for (const profile of resume.basics.profiles ?? []) {
-    links.push({
-      href: profile.url,
-      title: profile.network,
-    })
-  }
-
-  return links
+    },
+    ...profiles.map((profile) => {
+      return {
+        href: profile.url,
+        title: profile.network,
+      }
+    }),
+  ]
 }
 
 export function createLlmsTxt<T extends LlmsResume>({
@@ -161,7 +154,7 @@ export function createLlmsTxt<T extends LlmsResume>({
   parts.push(
     formatSection('Pages', pageLinks(pages, resume, origin)),
     formatSection('Resume', resumeLinks(resume, origin)),
-    formatSection('Contact', contactLinks(resume)),
+    formatSection('Contact', contactLinks()),
   )
 
   return `${parts.join('\n\n')}\n`
