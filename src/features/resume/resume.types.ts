@@ -11,8 +11,8 @@ export interface BasicsItem {
   name: string
   profiles?: Array<{
     network: string
-    username: string
     url: string
+    username: string
   }>
   website?: string
 }

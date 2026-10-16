@@ -65,15 +65,6 @@ const communitySchema = z
   .strict()
 
 /**
- * Profile schema for basics
- */
-const profileSchema = z.object({
-  network: z.string(),
-  url: z.url(),
-  username: z.string(),
-})
-
-/**
  * Location schema for basics
  */
 const locationSchema = z.object({
@@ -85,14 +76,10 @@ const locationSchema = z.object({
  * Basics schema
  */
 const basicsSchema = z.object({
-  email: z.email().optional(),
   intro: z.string().optional(),
   label: z.string().optional(),
   location: locationSchema.optional(),
-  name: z.string(),
   phone: z.string().optional(),
-  profiles: z.array(profileSchema).optional(),
-  website: z.url().optional(),
 })
 
 /**
