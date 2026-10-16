@@ -1,22 +1,22 @@
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
-import { errorResult, jsonResult, normalizePageId } from './mcp.utils.ts'
+import { normalizePageId, toErrorResult, toJsonResult } from './mcp.utils.ts'
 
 const ORIGIN = 'https://lukemcdonald.com'
 
-describe('errorResult', () => {
+describe('toErrorResult', () => {
   test('returns an isError tool result with the message', () => {
-    assert.deepEqual(errorResult('Unknown page: missing'), {
+    assert.deepEqual(toErrorResult('Unknown page: missing'), {
       content: [{ text: 'Unknown page: missing', type: 'text' }],
       isError: true,
     })
   })
 })
 
-describe('jsonResult', () => {
+describe('toJsonResult', () => {
   test('stringifies the payload as pretty-printed JSON text', () => {
-    assert.deepEqual(jsonResult({ id: 'index', title: 'Greetings' }), {
+    assert.deepEqual(toJsonResult({ id: 'index', title: 'Greetings' }), {
       content: [
         {
           text: '{\n  "id": "index",\n  "title": "Greetings"\n}',

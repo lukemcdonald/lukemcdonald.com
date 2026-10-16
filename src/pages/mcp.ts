@@ -7,8 +7,8 @@ import { getResumeData } from '@/features/resume/resume.server'
 export const prerender = false
 
 const mcpHandler = createSiteMcpHandler({
-  getPublishedPages,
-  getResumeData,
+  loadPublishedPages: getPublishedPages,
+  loadResumeData: getResumeData,
 })
 
 export const ALL: APIRoute = async ({ request }) => {

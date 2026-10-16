@@ -47,7 +47,7 @@ export function createSiteMcpHandler(deps: McpToolDeps) {
   }, HANDLER_OPTIONS)
 }
 
-function withCors(response: Response) {
+function createCorsResponse(response: Response) {
   const headers = new Headers(response.headers)
 
   for (const [name, value] of Object.entries(CORS_HEADERS)) {
@@ -79,5 +79,5 @@ export async function handleMcpRequest(request: Request, mcpHandler: McpFetchHan
     })
   }
 
-  return withCors(await mcpHandler.fetch(request))
+  return createCorsResponse(await mcpHandler.fetch(request))
 }

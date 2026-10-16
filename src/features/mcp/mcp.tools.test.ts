@@ -40,8 +40,8 @@ const resume = {
 } as ResumeData
 
 const deps: McpToolDeps = {
-  getPublishedPages: async () => pages,
-  getResumeData: async () => resume,
+  loadPublishedPages: async () => pages,
+  loadResumeData: async () => resume,
 }
 
 function parseToolJson(result: { content: Array<{ text: string }> }) {

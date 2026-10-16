@@ -3,14 +3,14 @@ export type JsonToolResult = {
   isError?: boolean
 }
 
-export function errorResult(message: string): JsonToolResult {
+export function toErrorResult(message: string): JsonToolResult {
   return {
     content: [{ text: message, type: 'text' }],
     isError: true,
   }
 }
 
-export function jsonResult(data: unknown): JsonToolResult {
+export function toJsonResult(data: unknown): JsonToolResult {
   return {
     content: [{ text: JSON.stringify(data, null, 2), type: 'text' }],
   }

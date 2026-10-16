@@ -1,5 +1,5 @@
 import { GLOBAL_CONFIG } from '@/configs/global'
-import { pageHref } from '@/utils/content'
+import { toPageHref } from '@/utils/content'
 import { stripHtmlAndTruncate } from '@/utils/text'
 
 type LlmsLink = {
@@ -68,7 +68,7 @@ function resolveSummary(pages: LlmsPage[], resume: LlmsResume) {
 function pageLinks(pages: LlmsPage[], resume: LlmsResume, origin: string | URL): LlmsLink[] {
   return [
     {
-      href: pageHref('index', origin),
+      href: toPageHref('index', origin),
       title: 'Home',
     },
     {
@@ -82,7 +82,7 @@ function pageLinks(pages: LlmsPage[], resume: LlmsResume, origin: string | URL):
       })
       .map((page) => {
         return {
-          href: pageHref(page.id, origin),
+          href: toPageHref(page.id, origin),
           notes: notesFrom(page.data.description),
           title: page.data.title,
         }

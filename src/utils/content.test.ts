@@ -1,23 +1,23 @@
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
-import { pageHref, pagePath, parseContentId } from './content.ts'
+import { parseContentId, toPageHref, toPagePath } from './content.ts'
 
 const ORIGIN = 'https://lukemcdonald.com'
 
-describe('pageHref', () => {
+describe('toPageHref', () => {
   test('builds absolute URLs, using / for the home page', () => {
-    assert.equal(pageHref('index', ORIGIN), `${ORIGIN}/`)
-    assert.equal(pageHref('tread-talks', ORIGIN), `${ORIGIN}/tread-talks`)
-    assert.equal(pageHref('i-am-a/christian', ORIGIN), `${ORIGIN}/i-am-a/christian`)
+    assert.equal(toPageHref('index', ORIGIN), `${ORIGIN}/`)
+    assert.equal(toPageHref('tread-talks', ORIGIN), `${ORIGIN}/tread-talks`)
+    assert.equal(toPageHref('i-am-a/christian', ORIGIN), `${ORIGIN}/i-am-a/christian`)
   })
 })
 
-describe('pagePath', () => {
+describe('toPagePath', () => {
   test('maps index to / and other ids to slash-prefixed paths', () => {
-    assert.equal(pagePath('index'), '/')
-    assert.equal(pagePath('tread-talks'), '/tread-talks')
-    assert.equal(pagePath('i-am-a/christian'), '/i-am-a/christian')
+    assert.equal(toPagePath('index'), '/')
+    assert.equal(toPagePath('tread-talks'), '/tread-talks')
+    assert.equal(toPagePath('i-am-a/christian'), '/i-am-a/christian')
   })
 })
 

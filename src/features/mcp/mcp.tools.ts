@@ -8,14 +8,14 @@ import { GLOBAL_CONFIG } from '@/configs/global'
 import { resolvePageSeo } from '@/features/pages/pages.utils'
 import { resumeDataSchema } from '@/features/resume/resume.schema'
 import { pickResumeSection } from '@/features/resume/resume.utils'
-import { pageHref } from '@/utils/content'
+import { toPageHref } from '@/utils/content'
 
 import { PAGE_SLUG_MAX } from './mcp.constants'
-import { errorResult, jsonResult, normalizePageId } from './mcp.utils'
+import { normalizePageId, toErrorResult, toJsonResult } from './mcp.utils'
 
 export type McpToolDeps = {
-  getPublishedPages: () => Promise<readonly PageEntry[]>
-  getResumeData: () => Promise<ResumeData>
+  loadPublishedPages: () => Promise<readonly PageEntry[]>
+  loadResumeData: () => Promise<ResumeData>
 }
 
 type McpToolDefinition = {
@@ -33,13 +33,13 @@ const getProfileTool: McpToolDefinition = {
   description:
     "Return Luke McDonald's profile: name, short summary, site URL, email, and social profiles.",
   handler: async (_args, deps) => {
-    const pages = await deps.getPublishedPages()
+    const pages = await deps.loadPublishedPages()
     const home = pages.find((page) => {
       return page.id === 'index'
     })
     const { email, name, profiles, url } = GLOBAL_CONFIG.author
 
-    return jsonResult({
+    return toJsonResult({
       email,
       name,
       profiles: [...profiles],
@@ -56,20 +56,20 @@ const getResumeTool: McpToolDefinition = {
   description:
     "Return Luke McDonald's resume as JSON. Omit section for the full resume; section matches /api/resume/[section].",
   handler: async (args, deps) => {
-    const data = await deps.getResumeData()
+    const data = await deps.loadResumeData()
     const section = typeof args.section === 'string' ? args.section : undefined
 
     if (!section) {
-      return jsonResult(data)
+      return toJsonResult(data)
     }
 
     const payload = pickResumeSection(data, section)
 
     if (payload === null) {
-      return errorResult(`Unknown resume section: ${section}`)
+      return toErrorResult(`Unknown resume section: ${section}`)
     }
 
-    return jsonResult(payload)
+    return toJsonResult(payload)
   },
   inputSchema: z.object({
     section: resumeDataSchema
@@ -84,15 +84,15 @@ const getResumeTool: McpToolDefinition = {
 const listPagesTool: McpToolDefinition = {
   description: 'List published pages with id, title, description, and URL.',
   handler: async (_args, deps) => {
-    const pages = await deps.getPublishedPages()
+    const pages = await deps.loadPublishedPages()
 
-    return jsonResult(
+    return toJsonResult(
       pages.map((page) => {
         return {
           description: resolvePageSeo(page).description ?? '',
           id: page.id,
           title: page.data.title,
-          url: pageHref(page.id, GLOBAL_CONFIG.site.origin),
+          url: toPageHref(page.id, GLOBAL_CONFIG.site.origin),
         }
       }),
     )
@@ -107,22 +107,22 @@ const getPageTool: McpToolDefinition = {
     "Return one published page's full content (title, description, URL, and body) by id, path, or URL.",
   handler: async (args, deps) => {
     const slug = typeof args.slug === 'string' ? args.slug : ''
-    const pages = await deps.getPublishedPages()
+    const pages = await deps.loadPublishedPages()
     const id = normalizePageId(slug)
     const page = pages.find((entry) => {
       return entry.id === id
     })
 
     if (!page) {
-      return errorResult(`Unknown page: ${slug}`)
+      return toErrorResult(`Unknown page: ${slug}`)
     }
 
-    return jsonResult({
+    return toJsonResult({
       body: page.body?.trim() ?? '',
       description: resolvePageSeo(page).description ?? '',
       id: page.id,
       title: page.data.title,
-      url: pageHref(page.id, GLOBAL_CONFIG.site.origin),
+      url: toPageHref(page.id, GLOBAL_CONFIG.site.origin),
     })
   },
   inputSchema: z.object({

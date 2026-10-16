@@ -19,7 +19,7 @@ export function parseContentId(id: string): {
   }
 }
 
-export function pagePath(id: string) {
+export function toPagePath(id: string) {
   if (id === 'index') {
     return '/'
   }
@@ -27,6 +27,6 @@ export function pagePath(id: string) {
   return `/${id}`
 }
 
-export function pageHref(id: string, origin: string | URL) {
-  return new URL(pagePath(id), origin).href
+export function toPageHref(id: string, origin: string | URL) {
+  return new URL(toPagePath(id), origin).href
 }

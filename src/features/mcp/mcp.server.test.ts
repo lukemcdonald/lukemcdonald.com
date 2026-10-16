@@ -10,7 +10,7 @@ import { PAGE_SLUG_MAX, SERVER_INSTRUCTIONS } from './mcp.constants.ts'
 import { createSiteMcpHandler, handleMcpRequest } from './mcp.server.ts'
 
 const deps: McpToolDeps = {
-  getPublishedPages: async () =>
+  loadPublishedPages: async () =>
     [
       {
         body: 'Home body.',
@@ -21,7 +21,7 @@ const deps: McpToolDeps = {
         id: 'index',
       },
     ] as PageEntry[],
-  getResumeData: async () => ({
+  loadResumeData: async () => ({
     awards: [],
     basics: { name: 'Luke McDonald' },
     community: [],
