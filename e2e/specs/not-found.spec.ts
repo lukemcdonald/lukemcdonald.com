@@ -7,7 +7,7 @@ test.describe('not found', { tag: '@smoke' }, () => {
     await expect(sitePage.page.getByRole('heading', { level: 1 })).toHaveText('404.')
     await expect(sitePage.page.getByText('Error', { exact: true })).toBeVisible()
     await expect(
-      sitePage.page.getByText('The page you are looking for does not exist.'),
+      sitePage.page.getByText("The page you're looking for doesn't exist, but here's a verse."),
     ).toBeVisible()
     await expect(sitePage.page.getByText('Verse of the day', { exact: true })).toHaveCount(0)
     await expect(sitePage.page.locator('blockquote')).toContainText(/.+/)
