@@ -1,9 +1,11 @@
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
+import { GLOBAL_CONFIG } from '@/configs/global'
+
 import { normalizePageId, toErrorResult, toJsonResult } from './mcp.utils.ts'
 
-const ORIGIN = 'https://lukemcdonald.com'
+const ORIGIN = GLOBAL_CONFIG.site.origin
 
 describe('toErrorResult', () => {
   test('returns an isError tool result with the message', () => {

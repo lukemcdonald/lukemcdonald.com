@@ -9,6 +9,8 @@ import { GLOBAL_CONFIG } from '@/configs/global'
 import { PAGE_SLUG_MAX, SERVER_INSTRUCTIONS } from './mcp.constants.ts'
 import { createSiteMcpHandler, handleMcpRequest } from './mcp.server.ts'
 
+const MCP_URL = `${GLOBAL_CONFIG.site.origin}/mcp`
+
 const deps: McpToolDeps = {
   loadPublishedPages: async () =>
     [
@@ -55,7 +57,7 @@ async function mcpRpc(
   message: Record<string, unknown>,
 ) {
   const response = await handleMcpRequest(
-    new Request('https://lukemcdonald.com/mcp', {
+    new Request(MCP_URL, {
       body: JSON.stringify(message),
       headers: {
         Accept: 'application/json, text/event-stream',
@@ -73,7 +75,7 @@ async function mcpRpc(
 describe('handleMcpRequest', () => {
   test('answers OPTIONS with CORS headers', async () => {
     const response = await handleMcpRequest(
-      new Request('https://lukemcdonald.com/mcp', { method: 'OPTIONS' }),
+      new Request(MCP_URL, { method: 'OPTIONS' }),
       createSiteMcpHandler(deps),
     )
 
@@ -84,7 +86,7 @@ describe('handleMcpRequest', () => {
 
   test('returns 405 with Allow on GET', async () => {
     const response = await handleMcpRequest(
-      new Request('https://lukemcdonald.com/mcp', { method: 'GET' }),
+      new Request(MCP_URL, { method: 'GET' }),
       createSiteMcpHandler(deps),
     )
 
