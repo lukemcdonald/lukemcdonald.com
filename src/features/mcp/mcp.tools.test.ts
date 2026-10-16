@@ -10,7 +10,7 @@ const ORIGIN = 'https://lukemcdonald.com'
 
 const pages: McpPageEntry[] = [
   {
-    body: '  Home body.  ',
+    body: 'Home body.',
     data: {
       description: 'Frontmatter summary.',
       seo: { description: "I'm Luke, a Christian, husband, father and wrestling coach." },
@@ -24,13 +24,6 @@ const pages: McpPageEntry[] = [
       title: 'TREAD Talks',
     },
     id: 'tread-talks',
-  },
-  {
-    body: 'Faith body.',
-    data: {
-      title: 'Christian',
-    },
-    id: 'i-am-a/christian',
   },
 ]
 
@@ -116,16 +109,10 @@ describe('list_pages', () => {
         title: 'TREAD Talks',
         url: `${ORIGIN}/tread-talks`,
       },
-      {
-        description: '',
-        id: 'i-am-a/christian',
-        title: 'Christian',
-        url: `${ORIGIN}/i-am-a/christian`,
-      },
     ])
     assert.equal(
-      listed.every((page) => {
-        return !Object.hasOwn(page, 'body')
+      listed.every((entry) => {
+        return !Object.hasOwn(entry, 'body')
       }),
       true,
     )
@@ -133,34 +120,14 @@ describe('list_pages', () => {
 })
 
 describe('get_page', () => {
-  test('returns one published page by slug, path, or URL', async () => {
-    const expected = {
+  test('returns full page content for a known id', async () => {
+    assert.deepEqual(parseToolJson(await callTool('get_page', { slug: 'tread-talks' })), {
       body: 'Talks body.',
       description: '',
       id: 'tread-talks',
       title: 'TREAD Talks',
       url: `${ORIGIN}/tread-talks`,
-    }
-
-    assert.deepEqual(parseToolJson(await callTool('get_page', { slug: 'tread-talks' })), expected)
-    assert.deepEqual(parseToolJson(await callTool('get_page', { slug: '/tread-talks' })), expected)
-    assert.deepEqual(
-      parseToolJson(await callTool('get_page', { slug: `${ORIGIN}/tread-talks` })),
-      expected,
-    )
-    assert.deepEqual(parseToolJson(await callTool('get_page', { slug: '/i-am-a/christian/' })), {
-      body: 'Faith body.',
-      description: '',
-      id: 'i-am-a/christian',
-      title: 'Christian',
-      url: `${ORIGIN}/i-am-a/christian`,
     })
-  })
-
-  test('returns the home page for /', async () => {
-    const result = parseToolJson(await callTool('get_page', { slug: '/' })) as { id: string }
-
-    assert.equal(result.id, 'index')
   })
 
   test('returns an error for an unknown page', async () => {

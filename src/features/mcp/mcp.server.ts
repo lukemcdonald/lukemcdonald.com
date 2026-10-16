@@ -60,6 +60,20 @@ export function createSiteMcpHandler(deps: McpToolDeps) {
   )
 }
 
+function withCors(response: Response) {
+  const headers = new Headers(response.headers)
+
+  for (const [name, value] of Object.entries(CORS_HEADERS)) {
+    headers.set(name, value)
+  }
+
+  return new Response(response.body, {
+    headers,
+    status: response.status,
+    statusText: response.statusText,
+  })
+}
+
 export async function handleMcpRequest(request: Request, mcpHandler: McpFetchHandler) {
   if (request.method === 'OPTIONS') {
     return new Response(null, {
@@ -79,18 +93,4 @@ export async function handleMcpRequest(request: Request, mcpHandler: McpFetchHan
   }
 
   return withCors(await mcpHandler.fetch(request))
-}
-
-function withCors(response: Response) {
-  const headers = new Headers(response.headers)
-
-  for (const [name, value] of Object.entries(CORS_HEADERS)) {
-    headers.set(name, value)
-  }
-
-  return new Response(response.body, {
-    headers,
-    status: response.status,
-    statusText: response.statusText,
-  })
 }

@@ -3,6 +3,7 @@ import type { McpToolDeps } from './mcp.tools.ts'
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
+import { PAGE_SLUG_MAX } from './mcp.constants.ts'
 import { createSiteMcpHandler, handleMcpRequest } from './mcp.server.ts'
 
 const ORIGIN = 'https://lukemcdonald.com'
@@ -176,7 +177,7 @@ describe('createSiteMcpHandler', () => {
       jsonrpc: '2.0',
       method: 'tools/call',
       params: {
-        arguments: { slug: 'a'.repeat(201) },
+        arguments: { slug: 'a'.repeat(PAGE_SLUG_MAX + 1) },
         name: 'get_page',
       },
     })

@@ -4,17 +4,15 @@ import { z } from 'astro/zod'
 
 import { pickResumeSection } from '@/features/resume/resume.utils'
 
-const RESUME_SECTIONS = [
-  'awards',
-  'basics',
-  'community',
-  'education',
-  'experience',
-  'personal',
-  'skills',
-] as const
-
-const PAGE_SLUG_MAX = 200
+import { PAGE_SLUG_MAX, RESUME_SECTIONS } from './mcp.constants'
+import {
+  errorResult,
+  jsonResult,
+  normalizePageId,
+  pageDescription,
+  pageHref,
+  toPagePayload,
+} from './mcp.utils'
 
 type McpAuthor = {
   email: string
@@ -46,7 +44,7 @@ export type McpToolDeps = {
   origin: string
 }
 
-type JsonToolResult = {
+export type JsonToolResult = {
   content: Array<{ text: string; type: 'text' }>
   isError?: boolean
 }
@@ -78,13 +76,7 @@ export const MCP_TOOLS: McpToolDefinition[] = [
         return errorResult(`Unknown page: ${slug}`)
       }
 
-      return jsonResult({
-        body: page.body?.trim() ?? '',
-        description: pageDescription(page),
-        id: page.id,
-        title: page.data.title,
-        url: pageUrl(page.id, deps.origin),
-      })
+      return jsonResult(toPagePayload(page, deps.origin))
     },
     inputSchema: z.object({
       slug: z
@@ -158,7 +150,7 @@ export const MCP_TOOLS: McpToolDefinition[] = [
             description: pageDescription(page),
             id: page.id,
             title: page.data.title,
-            url: pageUrl(page.id, deps.origin),
+            url: pageHref(page.id, deps.origin),
           }
         }),
       )
@@ -168,45 +160,3 @@ export const MCP_TOOLS: McpToolDefinition[] = [
     title: 'List pages',
   },
 ]
-
-function errorResult(message: string): JsonToolResult {
-  return {
-    content: [{ text: message, type: 'text' }],
-    isError: true,
-  }
-}
-
-function jsonResult(data: unknown): JsonToolResult {
-  return {
-    content: [{ text: JSON.stringify(data, null, 2), type: 'text' }],
-  }
-}
-
-function normalizePageId(value: string) {
-  const trimmed = value.trim()
-  let path = trimmed
-
-  try {
-    path = new URL(trimmed).pathname
-  } catch {
-    // Keep relative slugs and paths as written.
-  }
-
-  const id = path.replace(/^\/+|\/+$/g, '')
-
-  if (id === '' || id === 'index') {
-    return 'index'
-  }
-
-  return id
-}
-
-function pageDescription(page: McpPageEntry) {
-  return page.data.seo?.description ?? page.data.description ?? ''
-}
-
-function pageUrl(id: string, origin: string) {
-  const path = id === 'index' ? '/' : `/${id}`
-
-  return new URL(path, origin).href
-}
