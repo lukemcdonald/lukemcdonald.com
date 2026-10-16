@@ -1,4 +1,7 @@
-import type { JsonToolResult, McpPageEntry } from './mcp.tools'
+export type JsonToolResult = {
+  content: Array<{ text: string; type: 'text' }>
+  isError?: boolean
+}
 
 export function errorResult(message: string): JsonToolResult {
   return {
@@ -30,24 +33,4 @@ export function normalizePageId(value: string) {
   }
 
   return id
-}
-
-export function pageDescription(page: McpPageEntry) {
-  return page.data.seo?.description ?? page.data.description ?? ''
-}
-
-export function pageHref(id: string, origin: string) {
-  const path = id === 'index' ? '/' : `/${id}`
-
-  return new URL(path, origin).href
-}
-
-export function toPagePayload(page: McpPageEntry, origin: string) {
-  return {
-    body: page.body?.trim() ?? '',
-    description: pageDescription(page),
-    id: page.id,
-    title: page.data.title,
-    url: pageHref(page.id, origin),
-  }
 }

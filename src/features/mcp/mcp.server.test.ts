@@ -1,32 +1,26 @@
 import type { McpToolDeps } from './mcp.tools.ts'
+import type { PageEntry } from '@/features/pages/pages.types.ts'
 
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
+import { GLOBAL_CONFIG } from '@/configs/global'
+
 import { PAGE_SLUG_MAX } from './mcp.constants.ts'
 import { createSiteMcpHandler, handleMcpRequest } from './mcp.server.ts'
 
-const ORIGIN = 'https://lukemcdonald.com'
-
 const deps: McpToolDeps = {
-  author: {
-    email: 'luke@example.com',
-    name: 'Luke McDonald',
-    profiles: [
-      { network: 'GitHub', url: 'https://github.com/lukemcdonald', username: 'lukemcdonald' },
-    ],
-    url: ORIGIN,
-  },
-  getPublishedPages: async () => [
-    {
-      body: 'Home body.',
-      data: {
-        seo: { description: "I'm Luke, a Christian, husband, father and wrestling coach." },
-        title: 'Greetings',
+  getPublishedPages: async () =>
+    [
+      {
+        body: 'Home body.',
+        data: {
+          seo: { description: "I'm Luke, a Christian, husband, father and wrestling coach." },
+          title: 'Greetings',
+        },
+        id: 'index',
       },
-      id: 'index',
-    },
-  ],
+    ] as PageEntry[],
   getResumeData: async () => ({
     awards: [],
     basics: { name: 'Luke McDonald' },
@@ -36,7 +30,6 @@ const deps: McpToolDeps = {
     personal: [],
     skills: [],
   }),
-  origin: ORIGIN,
 }
 
 function parseMcpJson(body: string) {
@@ -166,8 +159,8 @@ describe('createSiteMcpHandler', () => {
       summary: string
     }
 
-    assert.equal(profile.email, 'luke@example.com')
-    assert.equal(profile.name, 'Luke McDonald')
+    assert.equal(profile.email, GLOBAL_CONFIG.author.email)
+    assert.equal(profile.name, GLOBAL_CONFIG.author.name)
     assert.equal(profile.summary, "I'm Luke, a Christian, husband, father and wrestling coach.")
   })
 

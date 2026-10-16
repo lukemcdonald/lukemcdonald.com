@@ -1,16 +1,17 @@
-import type { McpPageEntry, McpToolDeps } from './mcp.tools.ts'
+import type { McpToolDeps } from './mcp.tools.ts'
+import type { PageEntry } from '@/features/pages/pages.types.ts'
 import type { ResumeData } from '@/features/resume/resume.types'
 
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
+import { GLOBAL_CONFIG } from '@/configs/global'
+
 import { MCP_TOOLS } from './mcp.tools.ts'
 
-const ORIGIN = 'https://lukemcdonald.com'
-
-const pages: McpPageEntry[] = [
+const pages = [
   {
-    body: 'Home body.',
+    body: '  Home body.  ',
     data: {
       description: 'Frontmatter summary.',
       seo: { description: "I'm Luke, a Christian, husband, father and wrestling coach." },
@@ -19,13 +20,13 @@ const pages: McpPageEntry[] = [
     id: 'index',
   },
   {
-    body: 'Talks body.',
+    body: '  Talks body.  ',
     data: {
       title: 'TREAD Talks',
     },
     id: 'tread-talks',
   },
-]
+] as PageEntry[]
 
 const resume = {
   awards: [{ title: 'Award' }],
@@ -38,17 +39,8 @@ const resume = {
 } as ResumeData
 
 const deps: McpToolDeps = {
-  author: {
-    email: 'luke@example.com',
-    name: 'Luke McDonald',
-    profiles: [
-      { network: 'GitHub', url: 'https://github.com/lukemcdonald', username: 'lukemcdonald' },
-    ],
-    url: ORIGIN,
-  },
   getPublishedPages: async () => pages,
   getResumeData: async () => resume,
-  origin: ORIGIN,
 }
 
 function parseToolJson(result: { content: Array<{ text: string }> }) {
@@ -67,14 +59,14 @@ async function callTool(name: string, args: Record<string, unknown> = {}) {
 
 describe('get_profile', () => {
   test('returns name, SEO summary, site URL, email, and profiles', async () => {
+    const { email, name, profiles, url } = GLOBAL_CONFIG.author
+
     assert.deepEqual(parseToolJson(await callTool('get_profile')), {
-      email: 'luke@example.com',
-      name: 'Luke McDonald',
-      profiles: [
-        { network: 'GitHub', url: 'https://github.com/lukemcdonald', username: 'lukemcdonald' },
-      ],
+      email,
+      name,
+      profiles: [...profiles],
       summary: "I'm Luke, a Christian, husband, father and wrestling coach.",
-      url: ORIGIN,
+      url,
     })
   })
 })
@@ -95,19 +87,20 @@ describe('get_resume', () => {
 describe('list_pages', () => {
   test('returns id, title, description, and url without body', async () => {
     const listed = parseToolJson(await callTool('list_pages')) as Array<Record<string, unknown>>
+    const origin = GLOBAL_CONFIG.site.origin
 
     assert.deepEqual(listed, [
       {
         description: "I'm Luke, a Christian, husband, father and wrestling coach.",
         id: 'index',
         title: 'Greetings',
-        url: `${ORIGIN}/`,
+        url: `${origin}/`,
       },
       {
         description: '',
         id: 'tread-talks',
         title: 'TREAD Talks',
-        url: `${ORIGIN}/tread-talks`,
+        url: `${origin}/tread-talks`,
       },
     ])
     assert.equal(
@@ -126,7 +119,7 @@ describe('get_page', () => {
       description: '',
       id: 'tread-talks',
       title: 'TREAD Talks',
-      url: `${ORIGIN}/tread-talks`,
+      url: `${GLOBAL_CONFIG.site.origin}/tread-talks`,
     })
   })
 

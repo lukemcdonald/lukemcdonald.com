@@ -1,52 +1,20 @@
+import type { JsonToolResult } from './mcp.utils'
+import type { PageEntry } from '@/features/pages/pages.types'
 import type { ResumeData } from '@/features/resume/resume.types'
 
 import { z } from 'astro/zod'
 
+import { GLOBAL_CONFIG } from '@/configs/global'
+import { resolvePageSeo } from '@/features/pages/pages.utils'
 import { pickResumeSection } from '@/features/resume/resume.utils'
+import { pageHref } from '@/utils/content'
 
 import { PAGE_SLUG_MAX, RESUME_SECTIONS } from './mcp.constants'
-import {
-  errorResult,
-  jsonResult,
-  normalizePageId,
-  pageDescription,
-  pageHref,
-  toPagePayload,
-} from './mcp.utils'
-
-type McpAuthor = {
-  email: string
-  name: string
-  profiles: ReadonlyArray<{
-    network: string
-    url: string
-    username: string
-  }>
-  url: string
-}
-
-export type McpPageEntry = {
-  body?: string
-  data: {
-    description?: string
-    seo?: {
-      description?: string
-    }
-    title: string
-  }
-  id: string
-}
+import { errorResult, jsonResult, normalizePageId } from './mcp.utils'
 
 export type McpToolDeps = {
-  author: McpAuthor
-  getPublishedPages: () => Promise<readonly McpPageEntry[]>
+  getPublishedPages: () => Promise<readonly PageEntry[]>
   getResumeData: () => Promise<ResumeData>
-  origin: string
-}
-
-export type JsonToolResult = {
-  content: Array<{ text: string; type: 'text' }>
-  isError?: boolean
 }
 
 type McpToolDefinition = {
@@ -76,7 +44,13 @@ export const MCP_TOOLS: McpToolDefinition[] = [
         return errorResult(`Unknown page: ${slug}`)
       }
 
-      return jsonResult(toPagePayload(page, deps.origin))
+      return jsonResult({
+        body: page.body?.trim() ?? '',
+        description: resolvePageSeo(page).description ?? '',
+        id: page.id,
+        title: page.data.title,
+        url: pageHref(page.id, GLOBAL_CONFIG.site.origin),
+      })
     },
     inputSchema: z.object({
       slug: z
@@ -97,13 +71,13 @@ export const MCP_TOOLS: McpToolDefinition[] = [
       const home = pages.find((page) => {
         return page.id === 'index'
       })
-      const { email, name, profiles, url } = deps.author
+      const { email, name, profiles, url } = GLOBAL_CONFIG.author
 
       return jsonResult({
         email,
         name,
         profiles: [...profiles],
-        summary: home ? pageDescription(home) : '',
+        summary: home ? (resolvePageSeo(home).description ?? '') : '',
         url,
       })
     },
@@ -147,10 +121,10 @@ export const MCP_TOOLS: McpToolDefinition[] = [
       return jsonResult(
         pages.map((page) => {
           return {
-            description: pageDescription(page),
+            description: resolvePageSeo(page).description ?? '',
             id: page.id,
             title: page.data.title,
-            url: pageHref(page.id, deps.origin),
+            url: pageHref(page.id, GLOBAL_CONFIG.site.origin),
           }
         }),
       )
