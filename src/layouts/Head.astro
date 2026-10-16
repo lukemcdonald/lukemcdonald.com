@@ -34,10 +34,8 @@ const baseTitle = (inTitle ?? GLOBAL_CONFIG.name).trim()
 const hasSiteName = baseTitle.toLowerCase().includes(siteNameLower)
 const title = hasSiteName ? baseTitle : `${baseTitle} - ${GLOBAL_CONFIG.name}`
 
-// Clean and optimize the description for meta tags
 const description = stripHtmlAndTruncate(inDescription, 160, '...')
 
-// Create JSON-LD graph ([WebSite, Page]) and social meta tags
 const defaultGlassLevel = DEFAULT_GLASS_LEVEL
 const defaultThemeColor = DEFAULT_THEME_COLOR
 const defaultThemeMode = DEFAULT_THEME_MODE
@@ -61,7 +59,7 @@ const themeColors = THEME_COLORS
     set:html={JSON.stringify(pairingFontCss)}
     type="application/json"
   />
-  <!-- Theme and easter-egg initialization (prevents flash) - must run before any CSS -->
+  <!-- Apply stored theme and easter egg before CSS to prevent flash. -->
   <script
     define:vars={{
       defaultGlassLevel,
@@ -155,7 +153,6 @@ const themeColors = THEME_COLORS
     })()
   </script>
 
-  <!-- Basic HTML Head Elements -->
   <meta charset="UTF-8" />
   <meta
     name="viewport"
@@ -181,7 +178,6 @@ const themeColors = THEME_COLORS
     )
   }
 
-  <!-- Favicon -->
   <link
     href="/favicon.svg"
     rel="icon"
@@ -192,13 +188,11 @@ const themeColors = THEME_COLORS
     rel="apple-touch-icon"
   />
 
-  <!-- Sitemap -->
   <link
     rel="sitemap"
     href="/sitemap-index.xml"
   />
 
-  <!-- General Meta Tags -->
   <title>{title}</title>
   <link
     rel="canonical"
@@ -229,7 +223,6 @@ const themeColors = THEME_COLORS
     )
   }
 
-  <!-- Article Published/Modified time -->
   {
     pubDate && (
       <meta
@@ -247,7 +240,6 @@ const themeColors = THEME_COLORS
     )
   }
 
-  <!-- Open Graph / Facebook -->
   <meta
     property="og:title"
     content={socialMetaTags['og:title']}
@@ -285,7 +277,6 @@ const themeColors = THEME_COLORS
     )
   }
 
-  <!-- Twitter -->
   <meta
     name="twitter:card"
     content={socialMetaTags['twitter:card']}
@@ -311,14 +302,12 @@ const themeColors = THEME_COLORS
     )
   }
 
-  <!-- Google JSON-LD Structured data (@graph) -->
   <script
     type="application/ld+json"
     is:inline
     set:html={JSON.stringify(structuredData)}
   />
 
-  <!-- Theme color -->
   <meta
     name="theme-color"
     content={GLOBAL_CONFIG.themeColor}
@@ -335,6 +324,5 @@ const themeColors = THEME_COLORS
     )
   }
 
-  <!-- View Transitions API -->
   <ClientRouter />
 </head>

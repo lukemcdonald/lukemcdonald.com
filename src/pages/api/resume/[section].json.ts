@@ -5,10 +5,7 @@ import { getCollection } from 'astro:content'
 import { getResumeSection } from '@/features/resume/resume.server'
 import { parseContentId } from '@/utils/content'
 
-/**
- * Required by Astro for dynamic routes.
- * Returns a list of all resume sections to generate static paths at build time.
- */
+/** Required by Astro for dynamic routes. */
 export async function getStaticPaths() {
   const entries = await getCollection('resume')
   const sections = new Set<string>()
@@ -26,12 +23,6 @@ export async function getStaticPaths() {
   }))
 }
 
-/**
- * Returns a JSON payload for a given resume section.
- *
- * @param params - The route parameters
- * @returns A JSON payload for the given resume section
- */
 export const GET: APIRoute = async ({ params }) => {
   const { section } = params
 

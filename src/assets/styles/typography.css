@@ -1,5 +1,4 @@
 @plugin '@tailwindcss/typography';
-/* @config './typography.config.ts'; */
 
 @layer utilities {
   .prose {
@@ -8,7 +7,6 @@
     --font-weight-normal: 400;
     --font-weight-light: 300;
 
-    /* Default */
     --tw-prose-body: var(--color-primary-700);
     --tw-prose-bold: var(--color-primary-950);
     --tw-prose-bullets: var(--color-primary-400);
@@ -26,7 +24,6 @@
     --tw-prose-td-borders: var(--color-primary-200);
     --tw-prose-th-borders: var(--color-primary-300);
 
-    /* Dark mode */
     --tw-prose-invert-body: var(--color-primary-200);
     --tw-prose-invert-bold: var(--color-white);
     --tw-prose-invert-bullets: var(--color-primary-600);

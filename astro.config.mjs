@@ -9,7 +9,6 @@ import { FONT_SOURCE_FAMILIES } from './src/components/Settings/Font/pairings.js
 import { ENV_SCHEMA } from './src/configs/env.js'
 import { GLOBAL_CONFIG } from './src/configs/global.js'
 
-// Sitemap exclusions
 const SITEMAP_EXCLUSIONS = new Set([`${GLOBAL_CONFIG.site.origin}/index`])
 
 function resolveSiteUrl() {
@@ -23,7 +22,6 @@ function resolveSiteUrl() {
   return GLOBAL_CONFIG.site.origin
 }
 
-// https://astro.build/config
 export default defineConfig({
   adapter: netlify(),
   build: {
@@ -40,7 +38,7 @@ export default defineConfig({
   }),
   image: {
     layout: 'constrained',
-    responsiveStyles: false, // issue with Tailwind v4 if enabled
+    responsiveStyles: false, // breaks with Tailwind if enabled
   },
   integrations: [
     sitemap({

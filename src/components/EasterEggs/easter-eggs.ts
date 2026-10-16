@@ -1,8 +1,4 @@
-/**
- * Tiny Konami-style extras. Add eggs/<id>.ts + eggs/<id>.css and one line in
- * EGGS. Delete those to remove it. CSS is loaded when an egg is shown. Active-egg
- * keys use the shared storage prefix, applied by the inline head script in Head.astro.
- */
+/** Add eggs/<id>.ts + eggs/<id>.css and one line in EGGS. Head.astro applies active-egg storage keys. */
 import type { SoundName } from 'cuelume'
 
 import { playSound } from '@/components/Settings/Sound/utils'
