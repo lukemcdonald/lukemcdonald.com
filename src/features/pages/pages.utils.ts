@@ -1,7 +1,5 @@
 import type { PageEntry, PageFilterOptions } from './pages.types'
 
-import { getContentDirectory } from '@/utils/collections'
-
 function compareByOrder(a: PageEntry, b: PageEntry) {
   const orderA = a.data.order ?? 999
   const orderB = b.data.order ?? 999
@@ -15,6 +13,14 @@ function compareByOrder(a: PageEntry, b: PageEntry) {
 
 function compareByTitle(a: PageEntry, b: PageEntry) {
   return a.data.title.localeCompare(b.data.title)
+}
+
+function getContentDirectory(id: string) {
+  if (!id.includes('/')) {
+    return ''
+  }
+
+  return id.split('/')[0]
 }
 
 function matchesInclude(id: string, included: Set<string> | null) {
