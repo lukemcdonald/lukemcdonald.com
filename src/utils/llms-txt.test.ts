@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
 import { GLOBAL_CONFIG } from '@/configs/global'
+import { MCP_PATH } from '@/features/mcp/mcp.constants'
 
 import { createLlmsTxt } from './llms-txt.ts'
 
@@ -75,7 +76,7 @@ describe('createLlmsTxt', () => {
         '',
         '## MCP',
         '',
-        `- [Site MCP server](${ORIGIN}/mcp): Read-only tools for profile, resume, and pages`,
+        `- [Site MCP server](${ORIGIN}${MCP_PATH}): Read-only tools for profile, resume, and pages`,
         '',
       ].join('\n'),
     )

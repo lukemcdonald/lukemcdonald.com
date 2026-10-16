@@ -1,4 +1,5 @@
 import { GLOBAL_CONFIG } from '@/configs/global'
+import { MCP_PATH } from '@/features/mcp/mcp.constants'
 import { toPageHref } from '@/utils/content'
 import { stripHtmlAndTruncate } from '@/utils/text'
 
@@ -150,7 +151,7 @@ export function createLlmsTxt<T extends LlmsResume>({
     formatSection('Contact', contactLinks()),
     formatSection('MCP', [
       {
-        href: buildAbsoluteUrl('/mcp', origin),
+        href: buildAbsoluteUrl(MCP_PATH, origin),
         notes: 'Read-only tools for profile, resume, and pages',
         title: 'Site MCP server',
       },
