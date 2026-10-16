@@ -1,6 +1,6 @@
 import { z } from 'astro/zod'
 
-export const authorProfileSchema = z.object({
+const authorProfileSchema = z.object({
   network: z.string(),
   url: z.string(),
   username: z.string(),
@@ -13,7 +13,7 @@ export const authorSchema = z.object({
   url: z.string(),
 })
 
-export type Author = z.infer<typeof authorSchema>
+type Author = z.infer<typeof authorSchema>
 
 const SITE_NAME = 'Luke McDonald'
 const DOMAIN = 'lukemcdonald.com'
