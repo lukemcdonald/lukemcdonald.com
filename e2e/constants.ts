@@ -16,8 +16,6 @@ export const TEST_ID = {
   mobileMenu: 'mobile-menu',
   mobileMenuTrigger: 'mobile-menu-trigger',
   resumeMcpCallout: 'resume-mcp-callout',
-  resumeMcpCopy: 'resume-mcp-copy',
-  resumeMcpCopyStatus: 'resume-mcp-copy-status',
   resumeMcpUrl: 'resume-mcp-url',
   siteHeader: 'site-header',
   siteHomeLink: 'site-home-link',

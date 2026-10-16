@@ -13,15 +13,14 @@ export class ResumePage extends BasePage {
   constructor(page: Page) {
     super(page, '/resume')
     this.callout = page.getByTestId(TEST_ID.resumeMcpCallout)
-    this.copyButton = page.getByTestId(TEST_ID.resumeMcpCopy)
-    this.copyStatus = page.getByTestId(TEST_ID.resumeMcpCopyStatus)
-    this.mcpUrl = page.getByTestId(TEST_ID.resumeMcpUrl)
+    this.copyButton = this.callout.getByRole('button', { name: 'Copy MCP URL' })
+    this.copyStatus = this.callout.locator('[data-copy-status]')
+    this.mcpUrl = this.callout.getByTestId(TEST_ID.resumeMcpUrl)
   }
 
   override async goto(options: { path?: string; theme?: SiteTheme } = {}) {
     await this.page.addInitScript(() => {
       let value = ''
-
       Object.defineProperty(navigator, 'clipboard', {
         configurable: true,
         value: {
@@ -35,7 +34,6 @@ export class ResumePage extends BasePage {
         },
       })
     })
-
     await super.goto(options)
   }
 }

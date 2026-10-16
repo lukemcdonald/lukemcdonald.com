@@ -1,17 +1,12 @@
 ---
-import CheckIcon from '@lucide/astro/icons/check'
-import CopyIcon from '@lucide/astro/icons/copy'
 import SparklesIcon from '@lucide/astro/icons/sparkles'
 
-import { PRESS_CUE_PROPS } from '@/components/Sound'
+import CopyButton from '@/components/CopyButton.astro'
 import { MCP_URL } from '@/features/mcp/mcp.constants'
-
-import { COPY_BUTTON_LABEL } from './mcp-callout'
 ---
 
 <aside
   class="not-prose my-5 flex gap-2.5 rounded-md border-l-2 border-primary-500 bg-primary-500/10 px-3 py-2.5 text-sm text-primary-800 dark:border-primary-400 dark:bg-primary-400/12 dark:text-primary-100 print:hidden"
-  data-mcp-callout
   data-testid="resume-mcp-callout"
 >
   <SparklesIcon
@@ -31,39 +26,10 @@ import { COPY_BUTTON_LABEL } from './mcp-callout'
       >
         {MCP_URL}
       </code>
-      <button
-        aria-label={COPY_BUTTON_LABEL}
-        class="inline-flex size-6 shrink-0 items-center justify-center rounded-sm text-primary-700 focus-ring transition-colors hover:bg-primary-900/8 motion-reduce:transition-none dark:text-primary-200 dark:hover:bg-white/10"
-        data-mcp-copy={MCP_URL}
-        data-testid="resume-mcp-copy"
-        type="button"
-        {...PRESS_CUE_PROPS}
-      >
-        <CopyIcon
-          aria-hidden="true"
-          class="size-3.5"
-          data-mcp-copy-icon="idle"
-        />
-        <CheckIcon
-          aria-hidden="true"
-          class="hidden size-3.5"
-          data-mcp-copy-icon="done"
-        />
-      </button>
-      <span
-        aria-live="polite"
-        class="hidden pr-1 font-sans text-xs font-medium"
-        data-mcp-copy-status
-        data-testid="resume-mcp-copy-status"
-      ></span>
+      <CopyButton
+        label="Copy MCP URL"
+        value={MCP_URL}
+      />
     </div>
   </div>
 </aside>
-
-<script>
-  import { bindMcpCallouts } from './mcp-callout'
-
-  document.addEventListener('astro:page-load', () => {
-    bindMcpCallouts()
-  })
-</script>

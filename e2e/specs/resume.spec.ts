@@ -14,7 +14,7 @@ test.describe('resume MCP callout', { tag: '@smoke' }, () => {
 
     await resumePage.copyButton.click()
 
-    await expect(resumePage.copyButton).toHaveAccessibleName('Copied MCP URL')
+    await expect(resumePage.copyButton).toHaveAccessibleName('Copy MCP URL')
     await expect(resumePage.copyStatus).toHaveText('Copied')
     await expect(resumePage.copyStatus).toBeVisible()
     await expect
@@ -34,7 +34,6 @@ test.describe('resume MCP callout', { tag: '@smoke' }, () => {
 
     await resumePage.copyButton.press('Enter')
 
-    await expect(resumePage.copyButton).toHaveAccessibleName('Copied MCP URL')
     await expect(resumePage.copyStatus).toHaveText('Copied')
     await expect(resumePage.copyStatus).toBeVisible()
   })

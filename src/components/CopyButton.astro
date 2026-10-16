@@ -1,0 +1,88 @@
+---
+import CheckIcon from '@lucide/astro/icons/check'
+import CopyIcon from '@lucide/astro/icons/copy'
+
+import { PRESS_CUE_PROPS } from '@/components/Sound'
+
+interface Props {
+  class?: string
+  label: string
+  value: string
+}
+
+const { class: className, label, value } = Astro.props
+---
+
+<span class="inline-flex items-center gap-1">
+  <button
+    aria-label={label}
+    class:list={[
+      'inline-flex size-6 shrink-0 items-center justify-center rounded-sm text-primary-700 focus-ring transition-colors hover:bg-primary-900/8 motion-reduce:transition-none dark:text-primary-200 dark:hover:bg-white/10',
+      className,
+    ]}
+    data-copy={value}
+    type="button"
+    {...PRESS_CUE_PROPS}
+  >
+    <CopyIcon
+      aria-hidden="true"
+      class="size-3.5"
+      data-copy-idle
+    />
+    <CheckIcon
+      aria-hidden="true"
+      class="hidden size-3.5"
+      data-copy-done
+    />
+  </button>
+  <span
+    aria-live="polite"
+    class="hidden pr-1 font-sans text-xs font-medium"
+    data-copy-status
+  ></span>
+</span>
+
+<script>
+  let registered = false
+
+  document.addEventListener('astro:page-load', () => {
+    if (registered) {
+      return
+    }
+
+    registered = true
+    document.addEventListener('click', (event) => {
+      const target = event.target
+      if (!(target instanceof Element)) {
+        return
+      }
+
+      const button = target.closest('button[data-copy]')
+      if (!(button instanceof HTMLButtonElement) || !button.dataset.copy) {
+        return
+      }
+
+      const done = button.querySelector('[data-copy-done]')
+      const idle = button.querySelector('[data-copy-idle]')
+      const status = button.parentElement?.querySelector('[data-copy-status]')
+
+      void navigator.clipboard.writeText(button.dataset.copy).then(() => {
+        done?.classList.remove('hidden')
+        idle?.classList.add('hidden')
+        if (status) {
+          status.classList.remove('hidden')
+          status.textContent = 'Copied'
+        }
+
+        window.setTimeout(() => {
+          done?.classList.add('hidden')
+          idle?.classList.remove('hidden')
+          if (status) {
+            status.classList.add('hidden')
+            status.textContent = ''
+          }
+        }, 2000)
+      })
+    })
+  })
+</script>
