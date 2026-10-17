@@ -6,6 +6,7 @@
   --breakpoint-md: 768px;
   --breakpoint-sm: 576px;
   --breakpoint-xs: 420px;
+  --font-heading: inherit;
   --max-height-site: 720px;
   --spacing-30vw: 30vw;
   --transition-delay-0: 0ms;
