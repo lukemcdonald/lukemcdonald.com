@@ -112,7 +112,7 @@ export const FONT_PAIRING_CONFIGS = [
 
 export const FONT_PAIRING_CSS_SCRIPT_ID = 'font-pairing-css'
 
-/** Headings that are UI labels opt out via `.eyebrow` so they keep the pairing's UI face. */
+/** Eyebrow headings keep `.eyebrow` weight instead of pairing heading weight. */
 export const FONT_PAIRING_HEADING_SELECTOR = ':is(h1, h2, h3, h4, h5, h6):not(.eyebrow)'
 
 export const FONT_PAIRINGS = FONT_PAIRING_CONFIGS.map((pairing) => pairing.id)

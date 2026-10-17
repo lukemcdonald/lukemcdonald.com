@@ -1,27 +1,67 @@
 import type { HomePage } from '../pages/home.page'
 import type { Locator } from '@playwright/test'
 
-import { TEST_ID } from '../constants'
+import { FONT_PAIRINGS } from '../../src/components/Settings/Font/pairings'
 import { expect, test } from '../fixtures'
+
+async function chooseAppearance(homePage: HomePage, isMobile: boolean, mode: 'dark' | 'light') {
+  if (isMobile) {
+    await homePage.header.nav.mobileAppearance.selectOption(mode)
+    return
+  }
+
+  await homePage.header.commandPalette.themeToggle.select(mode)
+}
+
+async function chooseFont(homePage: HomePage, isMobile: boolean, pairing: string) {
+  if (isMobile) {
+    await homePage.header.nav.mobileFont.selectOption(pairing)
+    return
+  }
+
+  await homePage.header.commandPalette.fontToggle.select(pairing)
+}
+
+async function expectEyebrowsUseHeadingFace(homePage: HomePage) {
+  const heading = homePage.page.getByRole('heading', { level: 1 })
+
+  await expect
+    .poll(async () => {
+      await homePage.page.evaluate(() => {
+        return document.fonts.ready
+      })
+
+      const headingFamily = await fontFamily(heading)
+      const faces = await eyebrowFaces(homePage)
+      const [first] = faces
+
+      if (!first || faces.length < 2) {
+        return false
+      }
+
+      return faces.every((face) => {
+        return face.fontFamily === headingFamily && face.fontWeight === first.fontWeight
+      })
+    })
+    .toBe(true)
+}
+
+async function eyebrowFaces(homePage: HomePage) {
+  return homePage.page.locator('.eyebrow').evaluateAll((elements) => {
+    return elements.map((el) => {
+      const style = getComputedStyle(el)
+
+      return {
+        fontFamily: style.fontFamily,
+        fontWeight: style.fontWeight,
+      }
+    })
+  })
+}
 
 async function fontFamily(locator: Locator) {
   return locator.evaluate((el) => {
     return getComputedStyle(el).fontFamily
-  })
-}
-
-async function labelStyle(locator: Locator) {
-  return locator.evaluate((el) => {
-    const style = getComputedStyle(el)
-
-    return {
-      color: style.color,
-      fontFamily: style.fontFamily,
-      fontSize: style.fontSize,
-      fontWeight: style.fontWeight,
-      letterSpacing: style.letterSpacing,
-      textTransform: style.textTransform,
-    }
   })
 }
 
@@ -84,30 +124,31 @@ test.describe('font', { tag: '@smoke' }, () => {
     await expect(homePage.page.locator('html')).not.toHaveAttribute('data-font')
   })
 
-  test('mobile menu group and field labels share the UI face', async ({ homePage, isMobile }) => {
-    test.skip(!isMobile, 'Uppercase field labels live in the mobile menu')
-
+  test('uppercase labels share the pairing heading face and weight', async ({
+    homePage,
+    isMobile,
+  }) => {
     await homePage.goto()
-    await homePage.header.nav.openMobileMenu()
 
-    const fieldLabel = homePage.page.locator('label').filter({
-      has: homePage.page.getByTestId(TEST_ID.mobileAppearance),
-    })
-    const groupLabel = homePage.header.nav.mobileMenu.getByRole('heading', { name: 'Work' })
-
-    for (const pairing of ['live', 'play', 'work']) {
-      await homePage.header.nav.mobileFont.selectOption(pairing)
-      await expect(homePage.page.locator('html')).toHaveAttribute('data-font', pairing)
-      await homePage.page.evaluate(() => document.fonts.ready)
-
-      const field = await labelStyle(fieldLabel)
-      await expect.poll(() => labelStyle(groupLabel)).toEqual(field)
+    if (isMobile) {
+      await homePage.header.nav.openMobileMenu()
+    } else {
+      await homePage.header.commandPalette.openWithKeyboard()
     }
 
-    await homePage.header.nav.mobileAppearance.selectOption('dark')
+    for (const pairing of FONT_PAIRINGS) {
+      await chooseFont(homePage, isMobile, pairing)
+      await expect(homePage.page.locator('html')).toHaveAttribute('data-font', pairing)
+      await expectEyebrowsUseHeadingFace(homePage)
+    }
+
+    await chooseAppearance(homePage, isMobile, 'dark')
     await expect.poll(() => homePage.isDarkMode()).toBe(true)
 
-    const darkField = await labelStyle(fieldLabel)
-    await expect.poll(() => labelStyle(groupLabel)).toEqual(darkField)
+    for (const pairing of FONT_PAIRINGS) {
+      await chooseFont(homePage, isMobile, pairing)
+      await expect(homePage.page.locator('html')).toHaveAttribute('data-font', pairing)
+      await expectEyebrowsUseHeadingFace(homePage)
+    }
   })
 })

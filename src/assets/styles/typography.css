@@ -86,6 +86,7 @@
 
 @utility eyebrow {
   @apply text-xs font-medium tracking-wider text-primary-800 uppercase dark:text-white/50;
+  font-family: var(--font-heading, inherit);
 }
 
 @utility font-inherit {
@@ -110,10 +111,10 @@
   font-family: inherit;
 }
 
-[data-font] :is(.eyebrow, footer, .site-header) {
+[data-font] :is(.site-header, footer) {
   font-family: var(--font-ui);
 }
 
-:where(h1, h2, h3, h4, h5, h6):not(.eyebrow) {
+:where(h1, h2, h3, h4, h5, h6) {
   font-family: var(--font-heading, inherit);
 }

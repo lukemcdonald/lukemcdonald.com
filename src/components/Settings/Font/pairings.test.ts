@@ -18,13 +18,13 @@ function pairingConfig(id: string) {
 }
 
 describe('FONT_PAIRING_HEADING_SELECTOR', () => {
-  test('opts UI labels out of the heading face', () => {
+  test('keeps pairing heading weight off eyebrow labels', () => {
     assert.equal(FONT_PAIRING_HEADING_SELECTOR, ':is(h1, h2, h3, h4, h5, h6):not(.eyebrow)')
   })
 })
 
 describe('fontPairingCss', () => {
-  test('maps sans and UI tokens to the pairing nav/body face on every pairing', () => {
+  test('maps heading, sans, and UI tokens on every pairing', () => {
     const css = fontPairingCss()
 
     for (const pairing of FONT_PAIRING_CONFIGS) {
@@ -35,7 +35,7 @@ describe('fontPairingCss', () => {
     }
   })
 
-  test('keeps heading face declarations off UI labels', () => {
+  test('keeps heading weight declarations off eyebrow labels', () => {
     const css = fontPairingCss()
 
     for (const pairing of FONT_PAIRING_CONFIGS) {
