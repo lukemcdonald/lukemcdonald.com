@@ -1,15 +1,45 @@
 # Luke McDonald
 
-My personal website re-built with [Astro](https://astro.build). This is my playground.
+Personal website at [lukemcdonald.com](https://lukemcdonald.com). This is my playground.
 
-🌐 **Live Site**: [lukemcdonald.com](https://lukemcdonald.com)
+Read-only MCP at `/mcp`. LLM summary at `/llms.txt`.
 
-Read-only MCP endpoint for AI assistants: https://lukemcdonald.com/mcp
+## Stack
 
-## Tech Stack
+- **App:** [Astro](https://docs.astro.build/), [Tailwind CSS](https://tailwindcss.com/docs) v4, [TypeScript](https://www.typescriptlang.org/docs/)
+- **Analytics:** [Cloudflare Web Analytics](https://developers.cloudflare.com/web-analytics/)
+- **Lint/format:** [ESLint](https://eslint.org/docs/latest/) + [Prettier](https://prettier.io/docs/en/)
+- **Testing:** node:test + [Playwright](https://playwright.dev/docs/intro)
+- **Deploy:** [Netlify](https://docs.netlify.com/)
 
-- **[Astro](https://astro.build)** - Static site generator with vanilla scripts
-- **[Netlify](https://netlify.com)** - Deployment and hosting.
-- **[Cloudflare Web Analytics](https://www.cloudflare.com/web-analytics/)** - Analytics. Token from Cloudflare dashboard, Analytics & Logs, Web Analytics, Add a site; set `CLOUDFLARE_ANALYTICS_TOKEN` as a Netlify environment variable (production or all contexts; the beacon only loads when `CONTEXT` is `production`, via first-party paths proxied in `public/_redirects`).
-- **[TailwindCSS](https://tailwindcss.com)** - Utility-first CSS framework
-- **[TypeScript](https://typescriptlang.org)** - Type-safe development
+## Setup
+
+**Needs:** Node.js 24+ (see `.nvmrc`), pnpm
+
+1. Clone and install:
+
+```bash
+pnpm install
+```
+
+2. Copy `.env.example` to `.env`. Only needed for production analytics.
+3. Start local development:
+
+```bash
+pnpm dev
+```
+
+### Useful scripts
+
+| Script           | What it does                                |
+| ---------------- | ------------------------------------------- |
+| `pnpm fix`       | Lint + format fix                           |
+| `pnpm typecheck` | TypeScript check                            |
+| `pnpm test`      | node:test (`src/**/*.test.ts`)              |
+| `pnpm test:e2e`  | Playwright (`e2e/specs/*.spec.ts`)          |
+| `pnpm validate`  | Lint, format check, astro check, unit tests |
+| `pnpm build`     | Production Astro build                      |
+
+### Deploy
+
+Netlify. `pnpm preview` is a draft deploy; `pnpm deploy:prod` publishes production.
