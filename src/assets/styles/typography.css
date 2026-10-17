@@ -111,6 +111,10 @@
   font-family: inherit;
 }
 
+[data-font] .eyebrow :where(button, input, select, textarea, kbd) {
+  font-family: var(--font-ui);
+}
+
 [data-font] :is(.site-header, footer) {
   font-family: var(--font-ui);
 }

@@ -2,6 +2,7 @@ import type { HomePage } from '../pages/home.page'
 import type { Locator } from '@playwright/test'
 
 import { FONT_PAIRINGS } from '../../src/components/Settings/Font/pairings'
+import { TEST_ID } from '../constants'
 import { expect, test } from '../fixtures'
 
 async function chooseAppearance(homePage: HomePage, isMobile: boolean, mode: 'dark' | 'light') {
@@ -41,6 +42,36 @@ async function expectEyebrowsUseHeadingFace(homePage: HomePage) {
 
       return faces.every((face) => {
         return face.fontFamily === headingFamily && face.fontWeight === first.fontWeight
+      })
+    })
+    .toBe(true)
+}
+
+async function expectSelectsUseUiFace(homePage: HomePage) {
+  const heading = homePage.page.getByRole('heading', { level: 1 })
+  const selects = homePage.header.nav.mobileMenu.locator('select')
+  const ui = homePage.page.getByTestId(TEST_ID.siteHeader)
+
+  await expect
+    .poll(async () => {
+      await homePage.page.evaluate(() => {
+        return document.fonts.ready
+      })
+
+      const headingFamily = await fontFamily(heading)
+      const uiFamily = await fontFamily(ui)
+      const faces = await selects.evaluateAll((elements) => {
+        return elements.map((el) => {
+          return getComputedStyle(el).fontFamily
+        })
+      })
+
+      if (faces.length === 0) {
+        return false
+      }
+
+      return faces.every((family) => {
+        return family === uiFamily && family !== headingFamily
       })
     })
     .toBe(true)
@@ -140,6 +171,7 @@ test.describe('font', { tag: '@smoke' }, () => {
       await chooseFont(homePage, isMobile, pairing)
       await expect(homePage.page.locator('html')).toHaveAttribute('data-font', pairing)
       await expectEyebrowsUseHeadingFace(homePage)
+      await expectSelectsUseUiFace(homePage)
     }
 
     await chooseAppearance(homePage, isMobile, 'dark')
@@ -149,6 +181,7 @@ test.describe('font', { tag: '@smoke' }, () => {
       await chooseFont(homePage, isMobile, pairing)
       await expect(homePage.page.locator('html')).toHaveAttribute('data-font', pairing)
       await expectEyebrowsUseHeadingFace(homePage)
+      await expectSelectsUseUiFace(homePage)
     }
   })
 })
