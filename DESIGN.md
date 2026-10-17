@@ -3,19 +3,19 @@ version: alpha
 name: lukemcdonald.com
 description: Personal site design system as implemented today. Tokens are the default theme (`@theme` in src/assets/styles/theme.css) and default font (no `data-font`). Runtime themes and pairings remap the same CSS variables.
 colors:
-  on-primary: "{colors.primary-900}"
-  on-surface: "{colors.primary-900}"
-  primary: "oklch(73.7% 0.019 106)"
-  primary-50: "oklch(98.4% 0.001 106)"
-  primary-200: "oklch(92.3% 0.002 480)"
-  primary-500: "{colors.primary}"
-  primary-700: "oklch(39.6% 0.022 192)"
-  primary-800: "oklch(32.7% 0.052 117)"
-  primary-900: "oklch(17.1% 0.025 212)"
-  primary-950: "oklch(6% 0.02 212)"
-  secondary: "oklch(73.7% 0.08 25)"
-  surface: "#ffffff"
-  white: "#ffffff"
+  on-primary: '{colors.primary-900}'
+  on-surface: '{colors.primary-900}'
+  primary: 'oklch(73.7% 0.019 106)'
+  primary-50: 'oklch(98.4% 0.001 106)'
+  primary-200: 'oklch(92.3% 0.002 480)'
+  primary-500: '{colors.primary}'
+  primary-700: 'oklch(39.6% 0.022 192)'
+  primary-800: 'oklch(32.7% 0.052 117)'
+  primary-900: 'oklch(17.1% 0.025 212)'
+  primary-950: 'oklch(6% 0.02 212)'
+  secondary: 'oklch(73.7% 0.08 25)'
+  surface: '#ffffff'
+  white: '#ffffff'
 typography:
   body-lg:
     fontFamily: ui-sans-serif
@@ -68,77 +68,77 @@ spacing:
   xs: 0.25rem
 components:
   button-icon:
-    backgroundColor: "{colors.surface}"
-    height: "{spacing.touch}"
-    rounded: "{rounded.lg}"
-    textColor: "{colors.on-surface}"
-    width: "{spacing.touch}"
+    backgroundColor: '{colors.surface}'
+    height: '{spacing.touch}'
+    rounded: '{rounded.lg}'
+    textColor: '{colors.on-surface}'
+    width: '{spacing.touch}'
   button-nav:
-    backgroundColor: "{colors.primary-500}"
+    backgroundColor: '{colors.primary-500}'
     padding: 0.5rem
-    rounded: "{rounded.md}"
-    textColor: "{colors.on-primary}"
-    typography: "{typography.nav}"
+    rounded: '{rounded.md}'
+    textColor: '{colors.on-primary}'
+    typography: '{typography.nav}'
   button-nav-hover:
-    backgroundColor: "{colors.primary-500}"
-    textColor: "{colors.on-primary}"
+    backgroundColor: '{colors.primary-500}'
+    textColor: '{colors.on-primary}'
   button-primary:
-    backgroundColor: "{colors.primary-700}"
+    backgroundColor: '{colors.primary-700}'
     padding: 0.5rem
-    rounded: "{rounded.md}"
-    textColor: "{colors.primary-50}"
+    rounded: '{rounded.md}'
+    textColor: '{colors.primary-50}'
   button-primary-hover:
-    backgroundColor: "color-mix(in oklab, var(--color-primary-700) 80%, transparent)"
-    textColor: "{colors.primary-50}"
+    backgroundColor: 'color-mix(in oklab, var(--color-primary-700) 80%, transparent)'
+    textColor: '{colors.primary-50}'
   card-connect:
-    backgroundColor: "{colors.surface}"
-    padding: "{spacing.lg}"
-    textColor: "{colors.primary-800}"
+    backgroundColor: '{colors.surface}'
+    padding: '{spacing.lg}'
+    textColor: '{colors.primary-800}'
   card-content:
-    backgroundColor: "{colors.primary-900}"
-    padding: "{spacing.lg}"
-    textColor: "{colors.white}"
-    typography: "{typography.body-lg}"
+    backgroundColor: '{colors.primary-900}'
+    padding: '{spacing.lg}'
+    textColor: '{colors.white}'
+    typography: '{typography.body-lg}'
   card-entry:
-    backgroundColor: "{colors.primary-800}"
+    backgroundColor: '{colors.primary-800}'
   card-glass:
-    backgroundColor: "color-mix(in oklab, white 64%, transparent)"
+    backgroundColor: 'color-mix(in oklab, white 64%, transparent)'
     padding: 0.25rem
-    rounded: "{rounded.md}"
-    textColor: "{colors.on-surface}"
+    rounded: '{rounded.md}'
+    textColor: '{colors.on-surface}'
   card-hero:
-    backgroundColor: "{colors.primary-500}"
-    padding: "{spacing.lg}"
-    textColor: "{colors.on-primary}"
+    backgroundColor: '{colors.primary-500}'
+    padding: '{spacing.lg}'
+    textColor: '{colors.on-primary}'
   card-site:
-    backgroundColor: "{colors.surface}"
-    width: "{spacing.site-max}"
+    backgroundColor: '{colors.surface}'
+    width: '{spacing.site-max}'
   divider:
-    backgroundColor: "{colors.primary-200}"
+    backgroundColor: '{colors.primary-200}'
   input-select:
-    backgroundColor: "{colors.surface}"
-    height: "{spacing.touch}"
+    backgroundColor: '{colors.surface}'
+    height: '{spacing.touch}'
     padding: 0.5rem
-    rounded: "{rounded.lg}"
-    textColor: "{colors.on-surface}"
-    typography: "{typography.body-md}"
+    rounded: '{rounded.lg}'
+    textColor: '{colors.on-surface}'
+    typography: '{typography.body-md}'
   pill:
-    backgroundColor: "{colors.primary}"
+    backgroundColor: '{colors.primary}'
     padding: 0.25rem
-    rounded: "{rounded.xs}"
-    textColor: "{colors.on-primary}"
+    rounded: '{rounded.xs}'
+    textColor: '{colors.on-primary}'
   prose-heading:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.primary-950}"
-    typography: "{typography.headline-md}"
+    backgroundColor: '{colors.surface}'
+    textColor: '{colors.primary-950}'
+    typography: '{typography.headline-md}'
   quote-invert:
-    backgroundColor: "{colors.primary-900}"
-    textColor: "{colors.secondary}"
+    backgroundColor: '{colors.primary-900}'
+    textColor: '{colors.secondary}'
   skip-link:
-    backgroundColor: "{colors.primary-900}"
+    backgroundColor: '{colors.primary-900}'
     padding: 0.5rem
-    rounded: "{rounded.md}"
-    textColor: "{colors.primary-50}"
+    rounded: '{rounded.md}'
+    textColor: '{colors.primary-50}'
 ---
 
 ## Overview
@@ -160,11 +160,11 @@ Default (no `data-font`): Tailwind `--font-sans` (`ui-sans-serif`). Headings use
 
 Selectable pairings (`src/components/Settings/Font/pairings.ts`) set `html[data-font]`:
 
-| Pairing | `--font-heading` | `--font-sans` / `--font-ui` |
-| --- | --- | --- |
-| Work | Space Grotesk 700 | IBM Plex Sans |
-| Play | Fredoka 700 | Nunito |
-| Live | Lora 700 | Source Sans 3 |
+| Pairing | `--font-heading`  | `--font-sans` / `--font-ui` |
+| ------- | ----------------- | --------------------------- |
+| Work    | Space Grotesk 700 | IBM Plex Sans               |
+| Play    | Fredoka 700       | Nunito                      |
+| Live    | Lora 700          | Source Sans 3               |
 
 Pairing CSS also sets `--default-font-family` and `--font-mono` to the nav face. `[data-font]` applies `--font-sans` on the document; `.site-header` and `footer` use `--font-ui`; `button, input, select, textarea, kbd` inherit the sans/UI face (not the heading face). Use `font-sans`, not arbitrary `[font-family:var(--font-heading)]`.
 
