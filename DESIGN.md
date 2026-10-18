@@ -39,3 +39,9 @@ Reuse these; copy from the file instead of inventing variants.
 - Do keep overlay chrome in `PALETTE_CHROME` (or the same class strings). Don't mix new hover fills when nav `hover:bg-black/5` or list `hover:bg-primary-900/8 dark:hover:bg-white/10` already exist.
 - Do respect reduced motion and `min-h-11` on pointer/touch controls. Don't add uncancellable animation or sub-44px tap targets on menu/palette controls.
 - Do prefer `Heading`, `Text`, `Link`, `Prose`, and existing button classes. Don't introduce a second type ramp or button API.
+
+## Updating this file
+
+- Add or update when a pattern is shared or settled, a shared component is added, moved, or renamed, or a rule is corrected in review.
+- Don't add token values (`theme.css` is the source of truth), one-off page styling, or anything the code already makes obvious.
+- Remove rules whose component is gone.
