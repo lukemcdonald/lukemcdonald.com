@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets'
+import { Picture } from 'astro:assets'
 
 const { image, imageAlt } = Astro.props
 ---
@@ -8,9 +8,11 @@ const { image, imageAlt } = Astro.props
   {
     image && (
       <figure class="entry__media relative bg-primary-500 mix-blend-lighten">
-        <Image
+        <Picture
           alt={imageAlt || ''}
           class="block h-full w-full grayscale xs:object-cover"
+          formats={['avif', 'webp']}
+          pictureAttributes={{ class: 'block h-full w-full' }}
           priority
           quality={70}
           src={image}
