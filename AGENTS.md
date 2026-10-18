@@ -15,6 +15,7 @@ Use the Fallow skill for deeper audit and debug workflows.
 ## Conventions
 
 - No emojis anywhere: code, commits, descriptions, PR titles
+- UI and styling: follow DESIGN.md, and update it in the same PR when a UI pattern changes
 - Alphabetize: imports, object keys, destructured props, component prop lists
   - Exception: group related items together if alphabetical order hurts readability
 - Put `return` on its own line. Do not use inline returns.
