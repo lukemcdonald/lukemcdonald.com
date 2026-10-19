@@ -34,7 +34,7 @@
   "dependencies": {
     "@lucide/astro": "^1.53.0",
     "@modelcontextprotocol/server": "^2.3.1",
-    "astro-og-kit": "0.2.0",
+    "astro-og-kit": "0.4.0",
     "cuelume": "0.2.4",
     "sharp": "^0.35.5"
   },

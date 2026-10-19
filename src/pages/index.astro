@@ -3,6 +3,7 @@ import { getEntry, render } from 'astro:content'
 
 import Entry from '@/components/Entry/Entry.astro'
 import GreetingLinks from '@/components/GreetingLinks.astro'
+import { GLOBAL_CONFIG } from '@/configs/global'
 import { toPageSeo } from '@/features/pages/pages.utils'
 import Layout from '@/layouts/Layout.astro'
 import Main from '@/layouts/Main.astro'
@@ -21,8 +22,10 @@ const { Content } = await render(page)
 
 <Layout
   description={seoDescription}
+  heading={GLOBAL_CONFIG.name}
   modDate={modDate}
   ogImage={ogImage}
+  photo={image}
   pubDate={pubDate}
   title={seoTitle}
 >
