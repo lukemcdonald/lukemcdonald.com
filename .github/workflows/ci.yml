@@ -59,7 +59,7 @@ jobs:
           node-version-file: .nvmrc
       - run: pnpm install --frozen-lockfile
       - name: Cache Playwright browsers
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           key: playwright-${{ runner.os }}-${{ env.E2E_BROWSERS }}-${{ hashFiles('pnpm-lock.yaml') }}
           path: ~/.cache/ms-playwright
