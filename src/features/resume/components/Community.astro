@@ -17,13 +17,11 @@ const { community } = Astro.props
   icon={CommunityIcon}
 >
   <ul class="list-none px-0">
-    {
-      community.map((item) => (
-        <li class="p-0 first:mt-0 last:mb-0">
-          <strong>{item.title}</strong>
-          {item.description ? ` — ${item.description}` : ''}
-        </li>
-      ))
-    }
+    {community.map((item) => (
+      <li class="p-0 first:mt-0 last:mb-0">
+        <strong>{item.title}</strong>
+        {item.description ? ` — ${item.description}` : ''}
+      </li>
+    ))}
   </ul>
 </Section>

@@ -48,47 +48,39 @@ const secondaryColors = {
   <h1>Color Palette</h1>
 
   <div class="mt-6 flex flex-wrap gap-2">
-    {
-      themes.map((theme) => (
-        <button
-          aria-pressed="false"
-          class="theme-button rounded-md border border-primary-900/20 px-3 py-1 text-sm text-primary-900 transition-colors hover:bg-primary-900/8 dark:border-white/20 dark:text-primary-50 dark:hover:bg-white/10"
-          data-theme={theme.value}
-        >
-          {theme.name}
-        </button>
-      ))
-    }
+    {themes.map((theme) => (
+      <button
+        aria-pressed="false"
+        class="theme-button rounded-md border border-primary-900/20 px-3 py-1 text-sm text-primary-900 transition-colors hover:bg-primary-900/8 dark:border-white/20 dark:text-primary-50 dark:hover:bg-white/10"
+        data-theme={theme.value}
+      >
+        {theme.name}
+      </button>
+    ))}
   </div>
 
   <div class="mt-6 grid grid-cols-12 gap-3">
-    {
-      colorShades.map((shade) => (
-        <div class="text-center">
-          <div class="text-sm font-semibold text-primary-900 dark:text-primary-50">{shade}</div>
-        </div>
-      ))
-    }
+    {colorShades.map((shade) => (
+      <div class="text-center">
+        <div class="text-sm font-semibold text-primary-900 dark:text-primary-50">{shade}</div>
+      </div>
+    ))}
   </div>
 
   <div class="mt-3 grid grid-cols-12 items-center gap-3">
-    {
-      colorShades.map((shade) => (
-        <div
-          class={`h-16 w-full rounded-lg border border-black/5 shadow-sm ${primaryColors[shade as keyof typeof primaryColors]}`}
-        />
-      ))
-    }
+    {colorShades.map((shade) => (
+      <div
+        class={`h-16 w-full rounded-lg border border-black/5 shadow-sm ${primaryColors[shade as keyof typeof primaryColors]}`}
+      />
+    ))}
   </div>
 
   <div class="mt-3 grid grid-cols-12 items-center gap-3">
-    {
-      colorShades.map((shade) => (
-        <div
-          class={`h-16 w-full rounded-lg border border-black/5 shadow-sm ${secondaryColors[shade as keyof typeof secondaryColors]}`}
-        />
-      ))
-    }
+    {colorShades.map((shade) => (
+      <div
+        class={`h-16 w-full rounded-lg border border-black/5 shadow-sm ${secondaryColors[shade as keyof typeof secondaryColors]}`}
+      />
+    ))}
   </div>
 </ProseLayout>
 

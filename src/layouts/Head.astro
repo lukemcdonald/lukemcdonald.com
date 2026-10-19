@@ -141,7 +141,10 @@ const themeColors = THEME_COLORS
       }
     })()
   </script>
-  <script define:vars={{ STORAGE_KEYS }} is:inline>
+  <script
+    define:vars={{ STORAGE_KEYS }}
+    is:inline
+  >
     ;(function () {
       try {
         const html = document.documentElement
@@ -164,14 +167,16 @@ const themeColors = THEME_COLORS
       } catch {}
     })()
   </script>
-
   <meta charset="UTF-8" />
   <meta
     name="viewport"
     content="width=device-width,initial-scale=1"
   />
 
-  <style is:inline set:html={pairingCss}></style>
+  <style
+    is:inline
+    set:html={pairingCss}
+  ></style>
   <meta
     name="googlebot"
     content="index, follow"
@@ -181,14 +186,12 @@ const themeColors = THEME_COLORS
     content="index, follow, max-image-preview:large"
   />
 
-  {
-    GOOGLE_SITE_VERIFICATION && (
-      <meta
-        name="google-site-verification"
-        content={GOOGLE_SITE_VERIFICATION}
-      />
-    )
-  }
+  {GOOGLE_SITE_VERIFICATION && (
+    <meta
+      name="google-site-verification"
+      content={GOOGLE_SITE_VERIFICATION}
+    />
+  )}
 
   <link
     href="/favicon.svg"
@@ -210,47 +213,37 @@ const themeColors = THEME_COLORS
     rel="canonical"
     href={canonicalUrl}
   />
-  {
-    description && (
-      <meta
-        name="description"
-        content={description}
-      />
-    )
-  }
-  {
-    author?.name && (
-      <meta
-        name="author"
-        content={author.name}
-      />
-    )
-  }
-  {
-    generator && (
-      <meta
-        name="generator"
-        content={generator}
-      />
-    )
-  }
+  {description && (
+    <meta
+      name="description"
+      content={description}
+    />
+  )}
+  {author?.name && (
+    <meta
+      name="author"
+      content={author.name}
+    />
+  )}
+  {generator && (
+    <meta
+      name="generator"
+      content={generator}
+    />
+  )}
 
-  {
-    pubDate && (
-      <meta
-        property="article:published_time"
-        content={pubDate.toISOString()}
-      />
-    )
-  }
-  {
-    modDate && (
-      <meta
-        property="article:modified_time"
-        content={modDate.toISOString()}
-      />
-    )
-  }
+  {pubDate && (
+    <meta
+      property="article:published_time"
+      content={pubDate.toISOString()}
+    />
+  )}
+  {modDate && (
+    <meta
+      property="article:modified_time"
+      content={modDate.toISOString()}
+    />
+  )}
 
   <OgMeta
     description={description}
@@ -268,22 +261,19 @@ const themeColors = THEME_COLORS
     is:inline
     set:html={JSON.stringify(structuredData)}
   />
-
   <meta
     name="theme-color"
     content={GLOBAL_CONFIG.themeColor}
   />
 
-  {
-    CONTEXT === 'production' && CLOUDFLARE_ANALYTICS_TOKEN && (
-      <script
-        data-cf-beacon={JSON.stringify(createCloudflareBeaconConfig(CLOUDFLARE_ANALYTICS_TOKEN))}
-        defer
-        is:inline
-        src={CLOUDFLARE_WEB_ANALYTICS.scriptPath}
-      />
-    )
-  }
+  {CONTEXT === 'production' && CLOUDFLARE_ANALYTICS_TOKEN && (
+    <script
+      data-cf-beacon={JSON.stringify(createCloudflareBeaconConfig(CLOUDFLARE_ANALYTICS_TOKEN))}
+      defer
+      is:inline
+      src={CLOUDFLARE_WEB_ANALYTICS.scriptPath}
+    />
+  )}
 
   <ClientRouter />
 </head>

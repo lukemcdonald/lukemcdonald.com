@@ -14,21 +14,17 @@ const { description, subtitle, title } = Astro.props
 const hasDescription = Boolean(description)
 ---
 
-<header
-  class="entry__header relative flex grow flex-col justify-center overflow-hidden bg-primary-500 px-5 pt-32 pb-30vw text-primary-900 sm:px-10 lg:grow-0 lg:pb-10 xl:py-20"
->
+<header class="entry__header relative flex grow flex-col justify-center overflow-hidden bg-primary-500 px-5 pt-32 pb-30vw text-primary-900 sm:px-10 lg:grow-0 lg:pb-10 xl:py-20">
   <div class="relative z-10">
-    {
-      subtitle && (
-        <Text
-          as="span"
-          class="mb-1 tracking-wider uppercase"
-          size="sm"
-        >
-          {subtitle}
-        </Text>
-      )
-    }
+    {subtitle && (
+      <Text
+        as="span"
+        class="mb-1 tracking-wider uppercase"
+        size="sm"
+      >
+        {subtitle}
+      </Text>
+    )}
     <Heading
       as="h1"
       class="mb-6"
@@ -36,13 +32,11 @@ const hasDescription = Boolean(description)
     >
       {title}.
     </Heading>
-    {
-      hasDescription && (
-        <div class="text-lg leading-normal text-pretty">
-          <Fragment set:html={description} />
-        </div>
-      )
-    }
+    {hasDescription && (
+      <div class="text-lg leading-normal text-pretty">
+        <Fragment set:html={description} />
+      </div>
+    )}
   </div>
 
   <Mountains class="absolute bottom-0 left-0 z-0 w-full" />

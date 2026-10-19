@@ -16,11 +16,9 @@ const groups = await loadNavigationGroups()
     class="hidden [@media(hover:hover)_and_(pointer:fine)]:contents"
     data-testid="desktop-nav"
   >
-    {
-      groups.map((group) => {
-        return <NavMenu group={group} />
-      })
-    }
+    {groups.map((group) => {
+      return <NavMenu group={group} />
+    })}
   </div>
 
   <MobileMenu groups={groups} />
