@@ -13,51 +13,49 @@ const { variant } = Astro.props
 const iconClass = 'h-5 w-5'
 ---
 
-{
-  variant === 'menu' ? null : (
-    <PreferencePicker
-      kind="glass"
-      label="Glass: Tinted"
-      options={GLASS_LEVELS.map((value) => ({
-        label: GLASS_LABELS[value],
-        value,
-      }))}
-      optionTestIdPrefix="glass-option"
-      pickerId="palette-glass"
-      testId="glass-toggle"
-    >
-      <span slot="icon">
-        <CopyIcon
-          aria-hidden="true"
-          class={`${iconClass} hidden`}
-          data-picker-icon="clear"
-        />
-        <CopyIcon
-          aria-hidden="true"
-          class={`${iconClass} hidden [&_rect]:fill-current`}
-          data-picker-icon="solid"
-        />
-        <CopyIcon
-          aria-hidden="true"
-          class={`${iconClass} [&_rect]:fill-current/30`}
-          data-picker-icon="tinted"
-        />
-      </span>
+{variant === 'menu' ? null : (
+  <PreferencePicker
+    kind="glass"
+    label="Glass: Tinted"
+    options={GLASS_LEVELS.map((value) => ({
+      label: GLASS_LABELS[value],
+      value,
+    }))}
+    optionTestIdPrefix="glass-option"
+    pickerId="palette-glass"
+    testId="glass-toggle"
+  >
+    <span slot="icon">
       <CopyIcon
-        slot="icon-clear"
         aria-hidden="true"
-        class={iconClass}
+        class={`${iconClass} hidden`}
+        data-picker-icon="clear"
       />
       <CopyIcon
-        slot="icon-solid"
         aria-hidden="true"
-        class={`${iconClass} [&_rect]:fill-current`}
+        class={`${iconClass} hidden [&_rect]:fill-current`}
+        data-picker-icon="solid"
       />
       <CopyIcon
-        slot="icon-tinted"
         aria-hidden="true"
         class={`${iconClass} [&_rect]:fill-current/30`}
+        data-picker-icon="tinted"
       />
-    </PreferencePicker>
-  )
-}
+    </span>
+    <CopyIcon
+      slot="icon-clear"
+      aria-hidden="true"
+      class={iconClass}
+    />
+    <CopyIcon
+      slot="icon-solid"
+      aria-hidden="true"
+      class={`${iconClass} [&_rect]:fill-current`}
+    />
+    <CopyIcon
+      slot="icon-tinted"
+      aria-hidden="true"
+      class={`${iconClass} [&_rect]:fill-current/30`}
+    />
+  </PreferencePicker>
+)}

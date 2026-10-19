@@ -12,32 +12,30 @@ const { variant } = Astro.props
 const iconClass = 'h-5 w-5'
 ---
 
-{
-  variant === 'menu' ? null : (
-    <button
-      aria-label="Enable interaction sounds"
-      aria-pressed="false"
-      class={`flex min-h-11 items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${PALETTE_CHROME.focusRing} ${PALETTE_CHROME.ink} ${PALETTE_CHROME.hoverFill}`}
-      data-sound-toggle
-      title="Sounds off"
-      type="button"
+{variant === 'menu' ? null : (
+  <button
+    aria-label="Enable interaction sounds"
+    aria-pressed="false"
+    class={`flex min-h-11 items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${PALETTE_CHROME.focusRing} ${PALETTE_CHROME.ink} ${PALETTE_CHROME.hoverFill}`}
+    data-sound-toggle
+    title="Sounds off"
+    type="button"
+  >
+    <VolumeXIcon
+      aria-hidden="true"
+      class={iconClass}
+      data-sound-icon="off"
+    />
+    <Volume2Icon
+      aria-hidden="true"
+      class={`${iconClass} hidden`}
+      data-sound-icon="on"
+    />
+    <span
+      class="sr-only"
+      data-sound-label
     >
-      <VolumeXIcon
-        aria-hidden="true"
-        class={iconClass}
-        data-sound-icon="off"
-      />
-      <Volume2Icon
-        aria-hidden="true"
-        class={`${iconClass} hidden`}
-        data-sound-icon="on"
-      />
-      <span
-        class="sr-only"
-        data-sound-label
-      >
-        Sounds off
-      </span>
-    </button>
-  )
-}
+      Sounds off
+    </span>
+  </button>
+)}

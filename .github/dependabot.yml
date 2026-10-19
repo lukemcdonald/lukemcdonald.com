@@ -5,12 +5,9 @@ updates:
       prefix: chore
     directory: /
     groups:
-      actions-minor-and-patch:
+      actions:
         patterns:
           - '*'
-        update-types:
-          - minor
-          - patch
     schedule:
       interval: weekly
 
