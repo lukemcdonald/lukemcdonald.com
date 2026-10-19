@@ -7,7 +7,15 @@ Tokens live in `src/assets/styles/theme.css`, which is the source of truth; this
 
 ## Overview
 
-Personal site with a landscape-led home shell: tinted page chrome, a white desktop site card, a mid-tone hero with mountains, and a dark content panel. Overlays (nav menus, command palette) use the `glass` utility. Restyle through existing Tailwind theme utilities and CSS variables; do not add a parallel palette or type ramp.
+A personal calling card, set like a flat-color national park poster: faceted mountains in the theme's shades, a grayscale photo, and square blocks of tint, white and near-black. Quiet and plain at first, with play underneath. Visitors can recolor and re-font the whole site, and there are hidden secrets to find. The resume is the exception: a plain, printable document.
+
+- Flat by default. Depth comes from the card on a blurred grayscale backdrop, plus `glass` on overlays only.
+- One hue at a time. Each color theme swaps the whole `primary-*` ramp; mountains, chrome and text all follow it.
+- Photos are grayscale. Color comes from the theme, never from the image.
+- Type changes with the pairing (Work, Play, Live); the layout never does.
+- Motion is short (100–200ms, ease-out) and respects reduced motion. Sound is off until the visitor turns it on. Secrets wait to be found and never interrupt.
+
+Restyle through existing Tailwind theme utilities and CSS variables; do not add a parallel palette or type ramp.
 
 ## Themes and modes
 
