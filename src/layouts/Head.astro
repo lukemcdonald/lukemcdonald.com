@@ -1,6 +1,7 @@
 ---
 import type { SeoMeta } from '@/utils/seo'
 
+import OgMeta from 'astro-og-kit/OgMeta.astro'
 import { CLOUDFLARE_ANALYTICS_TOKEN, GOOGLE_SITE_VERIFICATION } from 'astro:env/client'
 import { CONTEXT } from 'astro:env/server'
 import { ClientRouter } from 'astro:transitions'
@@ -17,7 +18,7 @@ import { DEFAULT_THEME_COLOR, THEME_COLORS } from '@/components/Settings/ThemeCo
 import { DEFAULT_THEME_MODE } from '@/components/Settings/ThemeMode/constants'
 import { CLOUDFLARE_WEB_ANALYTICS, createCloudflareBeaconConfig } from '@/configs/analytics'
 import { GLOBAL_CONFIG } from '@/configs/global'
-import { buildGraphJsonLd, buildSocialMetaTags } from '@/utils/seo'
+import { buildGraphJsonLd } from '@/utils/seo'
 import { STORAGE_KEYS } from '@/utils/storage'
 import { stripHtmlAndTruncate } from '@/utils/text'
 
@@ -27,7 +28,19 @@ export interface Props {
 }
 
 const { generator, meta } = Astro.props
-const { author, canonicalUrl, description: inDescription, modDate, pubDate, title: inTitle } = meta
+const {
+  author,
+  canonicalUrl,
+  contentType,
+  description: inDescription,
+  heading,
+  modDate,
+  ogImage,
+  photo,
+  pubDate,
+  title: inTitle,
+} = meta
+const ogType = contentType === 'article' || contentType === 'blog' ? 'article' : 'website'
 
 const siteNameLower = GLOBAL_CONFIG.name.trim().toLowerCase()
 const baseTitle = (inTitle ?? GLOBAL_CONFIG.name).trim()
@@ -47,7 +60,6 @@ const pairingCss = fontPairingCss()
 const pairingFontCss = fontPairingFacesCss((cssVariable) => {
   return componentDataByCssVariable.get(cssVariable)?.css ?? ''
 })
-const socialMetaTags = buildSocialMetaTags(metaForSeo, Astro.site ?? GLOBAL_CONFIG.site.origin)
 const structuredData = buildGraphJsonLd(metaForSeo)
 const themeColors = THEME_COLORS
 ---
@@ -240,67 +252,16 @@ const themeColors = THEME_COLORS
     )
   }
 
-  <meta
-    property="og:title"
-    content={socialMetaTags['og:title']}
+  <OgMeta
+    description={description}
+    heading={heading}
+    image={ogImage}
+    photo={photo}
+    siteName={GLOBAL_CONFIG.name}
+    title={inTitle}
+    type={ogType}
+    url={canonicalUrl}
   />
-  <meta
-    property="og:url"
-    content={socialMetaTags['og:url']}
-  />
-  <meta
-    property="og:image"
-    content={socialMetaTags['og:image']}
-  />
-  <meta
-    property="og:image:width"
-    content={socialMetaTags['og:image:width']}
-  />
-  <meta
-    property="og:image:height"
-    content={socialMetaTags['og:image:height']}
-  />
-  <meta
-    property="og:site_name"
-    content={socialMetaTags['og:site_name']}
-  />
-  <meta
-    property="og:type"
-    content={socialMetaTags['og:type']}
-  />
-  {
-    socialMetaTags['og:description'] && (
-      <meta
-        property="og:description"
-        content={socialMetaTags['og:description']}
-      />
-    )
-  }
-
-  <meta
-    name="twitter:card"
-    content={socialMetaTags['twitter:card']}
-  />
-  <meta
-    name="twitter:url"
-    content={socialMetaTags['twitter:url']}
-  />
-  <meta
-    name="twitter:title"
-    content={socialMetaTags['twitter:title']}
-  />
-  <meta
-    name="twitter:image"
-    content={socialMetaTags['twitter:image']}
-  />
-  {
-    socialMetaTags['twitter:description'] && (
-      <meta
-        name="twitter:description"
-        content={socialMetaTags['twitter:description']}
-      />
-    )
-  }
 
   <script
     type="application/ld+json"

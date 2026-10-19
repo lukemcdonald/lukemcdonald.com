@@ -1,3 +1,5 @@
+import type { ImageMetadata } from 'astro'
+
 export type SeoContentType = 'article' | 'blog' | 'page'
 
 export interface SeoMeta {
@@ -9,9 +11,11 @@ export interface SeoMeta {
   contentType?: SeoContentType
   description?: string
   dir?: 'ltr' | 'rtl' | 'auto'
+  heading?: string
   lang?: string
   modDate?: Date
   ogImage?: string
+  photo?: ImageMetadata
   pubDate?: Date
   title: string
 }
