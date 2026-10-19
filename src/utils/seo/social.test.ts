@@ -3,8 +3,10 @@ import type { SeoMeta } from './types.ts'
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
+import { HEIGHT, WIDTH } from 'astro-og-kit'
+
 import { GLOBAL_CONFIG } from '@/configs/global'
-import { DEFAULT_OG_IMAGE_PATH, OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH } from '@/utils/og'
+import { og } from '@/og'
 
 import { buildSocialMetaTags } from './social.ts'
 
@@ -18,9 +20,9 @@ function meta(overrides: Partial<SeoMeta> = {}): SeoMeta {
 
 describe('buildSocialMetaTags', () => {
   const origin = GLOBAL_CONFIG.site.origin
-  const defaultImage = `${origin}${DEFAULT_OG_IMAGE_PATH}`
-  const imageHeight = String(OG_IMAGE_HEIGHT)
-  const imageWidth = String(OG_IMAGE_WIDTH)
+  const defaultImage = `${origin}${og.path('/')}`
+  const imageHeight = String(HEIGHT)
+  const imageWidth = String(WIDTH)
   test('sets og:type to website for page content', () => {
     const tags = buildSocialMetaTags(meta({ contentType: 'page' }))
 

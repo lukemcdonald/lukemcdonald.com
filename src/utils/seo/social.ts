@@ -1,7 +1,9 @@
 import type { SeoContentType, SeoMeta } from './types'
 
+import { HEIGHT, WIDTH } from 'astro-og-kit'
+
 import { GLOBAL_CONFIG } from '@/configs/global'
-import { DEFAULT_OG_IMAGE_PATH, OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH } from '@/utils/og'
+import { og } from '@/og'
 
 const OG_TYPE_MAP: Record<SeoContentType, string> = {
   article: 'article',
@@ -14,7 +16,7 @@ function buildAbsoluteUrl(path: string | URL, site: string | URL) {
 }
 
 function buildSocialImageUrl(ogImage: string | undefined, site: string | URL) {
-  return buildAbsoluteUrl(ogImage || DEFAULT_OG_IMAGE_PATH, site)
+  return buildAbsoluteUrl(ogImage || og.path('/'), site)
 }
 
 export function buildSocialMetaTags(meta: SeoMeta, site: string | URL = GLOBAL_CONFIG.site.origin) {
@@ -26,8 +28,8 @@ export function buildSocialMetaTags(meta: SeoMeta, site: string | URL = GLOBAL_C
   return {
     'og:description': description,
     'og:image': socialImageUrl,
-    'og:image:height': String(OG_IMAGE_HEIGHT),
-    'og:image:width': String(OG_IMAGE_WIDTH),
+    'og:image:height': String(HEIGHT),
+    'og:image:width': String(WIDTH),
     'og:site_name': GLOBAL_CONFIG.name,
     'og:title': title,
     'og:type': ogType,

@@ -1,45 +1,26 @@
-import type { APIRoute } from 'astro'
-
 import { GLOBAL_CONFIG } from '@/configs/global'
 import { loadPublishedPages } from '@/features/pages/pages.server'
-import { renderOgPng, resolveOgPhotoPath } from '@/utils/og.render'
+import { og } from '@/og'
 
 export const prerender = true
 
-export async function getStaticPaths() {
+export const { GET, getStaticPaths } = og.route(async () => {
   const pages = await loadPublishedPages()
-  const contentPaths = pages.map((page) => {
+  const contentPages = pages.map((page) => {
     const isHome = page.id === 'index'
-    const slug = isHome ? 'index' : page.id
-    const title = isHome ? GLOBAL_CONFIG.name : page.data.title
 
     return {
-      params: { slug },
-      props: {
-        image: page.data.image,
-        title,
-      },
+      image: page.data.image,
+      pathname: isHome ? '/' : `/${page.id}`,
+      title: isHome ? GLOBAL_CONFIG.name : page.data.title,
     }
   })
 
   return [
-    ...contentPaths,
+    ...contentPages,
     {
-      params: { slug: 'resume' },
-      props: { title: 'Resume' },
+      pathname: '/resume',
+      title: 'Resume',
     },
   ]
-}
-
-export const GET: APIRoute = ({ props }) => {
-  const png = renderOgPng({
-    photoPath: resolveOgPhotoPath(props.image),
-    title: props.title,
-  })
-
-  return new Response(Uint8Array.from(png), {
-    headers: {
-      'Content-Type': 'image/png',
-    },
-  })
-}
+})

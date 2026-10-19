@@ -9,6 +9,7 @@ minimumReleaseAgeExclude:
   - '@astrojs/sitemap@3.7.4'
   - '@lucide/astro@1.53.0'
   - astro@7.3.7
+  - astro-og-kit@0.2.0
 onlyBuiltDependencies:
   - '@parcel/watcher'
   - '@tailwindcss/oxide'

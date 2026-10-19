@@ -34,8 +34,9 @@
   "dependencies": {
     "@lucide/astro": "^1.53.0",
     "@modelcontextprotocol/server": "^2.3.1",
-    "@resvg/resvg-js": "^2.6.2",
-    "cuelume": "0.2.4"
+    "astro-og-kit": "0.2.0",
+    "cuelume": "0.2.4",
+    "sharp": "^0.35.5"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",

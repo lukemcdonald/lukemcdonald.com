@@ -64,8 +64,5 @@ export default defineConfig({
   trailingSlash: 'never',
   vite: {
     plugins: [tailwindcss()],
-    ssr: {
-      external: ['@resvg/resvg-js'],
-    },
   },
 })
