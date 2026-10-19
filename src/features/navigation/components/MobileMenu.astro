@@ -71,36 +71,32 @@ const labelClass =
         Menu
       </h2>
 
-      <div
-        class="flex min-h-0 flex-1 touch-pan-y flex-col gap-8 overflow-auto overscroll-contain px-5 pt-5 pb-10"
-      >
+      <div class="flex min-h-0 flex-1 touch-pan-y flex-col gap-8 overflow-auto overscroll-contain px-5 pt-5 pb-10">
         <nav
           aria-label="Destinations"
           class="flex flex-col gap-6"
         >
-          {
-            groups.map((group) => (
-              <section class="flex flex-col gap-1">
-                <h3 class={labelClass}>{group.name}</h3>
+          {groups.map((group) => (
+            <section class="flex flex-col gap-1">
+              <h3 class={labelClass}>{group.name}</h3>
 
-                <ul>
-                  {group.links.map((link) => (
-                    <li>
-                      <a
-                        class="inline-flex w-fit items-center py-2 text-xl font-semibold tracking-tight focus-ring transition-colors hover:bg-black/5 dark:hover:bg-white/10"
-                        data-mobile-menu-link
-                        data-testid={toHrefTestId('nav-link', link.href)}
-                        href={link.href}
-                        {...HOVER_NAV_CUE_PROPS}
-                      >
-                        {link.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            ))
-          }
+              <ul>
+                {group.links.map((link) => (
+                  <li>
+                    <a
+                      class="inline-flex w-fit items-center py-2 text-xl font-semibold tracking-tight focus-ring transition-colors hover:bg-black/5 dark:hover:bg-white/10"
+                      data-mobile-menu-link
+                      data-testid={toHrefTestId('nav-link', link.href)}
+                      href={link.href}
+                      {...HOVER_NAV_CUE_PROPS}
+                    >
+                      {link.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
         </nav>
 
         <Settings variant="menu" />

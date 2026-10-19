@@ -14,21 +14,19 @@ const linkNumberStyles =
 
 <nav>
   <ol class="inline-flex flex-col numbered-list">
-    {
-      liveLinks.map((link) => {
-        return (
-          <li>
-            <a
-              class={`${linkStyles} ${linkNumberStyles}`}
-              data-cuelume-hover="tick"
-              data-testid={toHrefTestId('greeting-link', link.href)}
-              href={link.href}
-            >
-              {link.name}
-            </a>
-          </li>
-        )
-      })
-    }
+    {liveLinks.map((link) => {
+      return (
+        <li>
+          <a
+            class={`${linkStyles} ${linkNumberStyles}`}
+            data-cuelume-hover="tick"
+            data-testid={toHrefTestId('greeting-link', link.href)}
+            href={link.href}
+          >
+            {link.name}
+          </a>
+        </li>
+      )
+    })}
   </ol>
 </nav>

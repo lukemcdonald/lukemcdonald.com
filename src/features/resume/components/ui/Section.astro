@@ -13,14 +13,12 @@ const { icon: Icon, title, ...delegated } = Astro.props
 <section {...delegated}>
   <header>
     <h2 class="mb-4 flex items-center gap-3">
-      {
-        Icon && (
-          <Icon
-            size={20}
-            class:list={['text-primary-900/90 dark:text-primary-200/90 print:hidden']}
-          />
-        )
-      }
+      {Icon && (
+        <Icon
+          size={20}
+          class:list={['text-primary-900/90 dark:text-primary-200/90 print:hidden']}
+        />
+      )}
       {title}
     </h2>
   </header>

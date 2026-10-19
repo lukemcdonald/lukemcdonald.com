@@ -16,60 +16,59 @@ const { variant } = Astro.props
 const iconClass = 'h-5 w-5'
 ---
 
-{
-  variant === 'menu' ?
-    <MenuSelect
-      kind="mode"
-      label="Appearance"
-      name="appearance"
-      testId="mobile-appearance"
-    >
-      {THEME_MODES.map((mode) => (
-        <option value={mode}>{MODE_LABELS[mode]}</option>
-      ))}
-    </MenuSelect>
-  : <PreferencePicker
-      kind="mode"
-      label="Appearance: System"
-      options={THEME_MODES.map((mode) => ({
-        label: MODE_LABELS[mode],
-        value: mode,
-      }))}
-      optionTestIdPrefix="theme-option"
-      pickerId="palette-mode"
-      testId="theme-toggle"
-    >
-      <span slot="icon">
-        <SunIcon
-          aria-hidden="true"
-          class={`${iconClass} hidden`}
-          data-picker-icon="light"
-        />
-        <MoonIcon
-          aria-hidden="true"
-          class={`${iconClass} hidden`}
-          data-picker-icon="dark"
-        />
-        <MonitorIcon
-          aria-hidden="true"
-          class={iconClass}
-          data-picker-icon="system"
-        />
-      </span>
+{variant === 'menu' ?
+  <MenuSelect
+    kind="mode"
+    label="Appearance"
+    name="appearance"
+    testId="mobile-appearance"
+  >
+    {THEME_MODES.map((mode) => (
+      <option value={mode}>{MODE_LABELS[mode]}</option>
+    ))}
+  </MenuSelect>
+: <PreferencePicker
+    kind="mode"
+    label="Appearance: System"
+    options={THEME_MODES.map((mode) => ({
+      label: MODE_LABELS[mode],
+      value: mode,
+    }))}
+    optionTestIdPrefix="theme-option"
+    pickerId="palette-mode"
+    testId="theme-toggle"
+  >
+    <span slot="icon">
       <SunIcon
-        slot="icon-light"
         aria-hidden="true"
-        class={iconClass}
+        class={`${iconClass} hidden`}
+        data-picker-icon="light"
       />
       <MoonIcon
-        slot="icon-dark"
         aria-hidden="true"
-        class={iconClass}
+        class={`${iconClass} hidden`}
+        data-picker-icon="dark"
       />
       <MonitorIcon
-        slot="icon-system"
         aria-hidden="true"
         class={iconClass}
+        data-picker-icon="system"
       />
-    </PreferencePicker>
+    </span>
+    <SunIcon
+      slot="icon-light"
+      aria-hidden="true"
+      class={iconClass}
+    />
+    <MoonIcon
+      slot="icon-dark"
+      aria-hidden="true"
+      class={iconClass}
+    />
+    <MonitorIcon
+      slot="icon-system"
+      aria-hidden="true"
+      class={iconClass}
+    />
+  </PreferencePicker>
 }

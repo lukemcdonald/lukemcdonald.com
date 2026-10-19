@@ -54,30 +54,28 @@ const optionsId = `${pickerId}-options`
     role="listbox"
     style={`position-anchor: --${pickerId}`}
   >
-    {
-      options.map((option) => (
-        <button
-          class={PALETTE_CHROME.option}
-          data-preference-option={option.value}
-          data-testid={optionTestIdPrefix ? `${optionTestIdPrefix}-${option.value}` : undefined}
-          role="option"
-          tabindex="-1"
-          type="button"
-          {...TOGGLE_CUE_PROPS}
+    {options.map((option) => (
+      <button
+        class={PALETTE_CHROME.option}
+        data-preference-option={option.value}
+        data-testid={optionTestIdPrefix ? `${optionTestIdPrefix}-${option.value}` : undefined}
+        role="option"
+        tabindex="-1"
+        type="button"
+        {...TOGGLE_CUE_PROPS}
+      >
+        <CheckIcon
+          aria-hidden="true"
+          class="invisible h-4 w-4 shrink-0 group-data-selected:visible"
+        />
+        <slot name={`icon-${option.value}`} />
+        <span
+          class="flex-1 text-left"
+          data-font-preview={option.preview}
         >
-          <CheckIcon
-            aria-hidden="true"
-            class="invisible h-4 w-4 shrink-0 group-data-selected:visible"
-          />
-          <slot name={`icon-${option.value}`} />
-          <span
-            class="flex-1 text-left"
-            data-font-preview={option.preview}
-          >
-            {option.label}
-          </span>
-        </button>
-      ))
-    }
+          {option.label}
+        </span>
+      </button>
+    ))}
   </div>
 </div>
