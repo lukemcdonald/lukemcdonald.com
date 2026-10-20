@@ -52,8 +52,12 @@ export function playSound(name: SoundName): void {
   })
 }
 
-export function toggleSoundPreference(): SoundPreference {
-  const next: SoundPreference = getSoundPreference() === 'on' ? 'off' : 'on'
+export function setSoundPreference(enabled: boolean): SoundPreference {
+  const next: SoundPreference = enabled ? 'on' : 'off'
+
+  if (getSoundPreference() === next) {
+    return next
+  }
 
   setStorageItem(STORAGE_KEYS.sound, next)
 
@@ -61,6 +65,7 @@ export function toggleSoundPreference(): SoundPreference {
     void startCuelume().then(({ play }) => {
       play('toggle')
     })
+
     return next
   }
 
@@ -71,6 +76,12 @@ export function toggleSoundPreference(): SoundPreference {
   }
 
   return next
+}
+
+export function toggleSoundPreference(): SoundPreference {
+  const enabled = getSoundPreference() !== 'on'
+
+  return setSoundPreference(enabled)
 }
 
 function loadCuelume() {

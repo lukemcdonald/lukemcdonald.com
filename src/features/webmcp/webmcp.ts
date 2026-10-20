@@ -6,7 +6,7 @@ import {
   getFoundEasterEggIds,
 } from '@/components/EasterEggs/easter-eggs'
 import { getFontPairing, setFontPairing } from '@/components/Settings/Font/font'
-import { getSoundPreference, toggleSoundPreference } from '@/components/Settings/Sound/utils'
+import { getSoundPreference, setSoundPreference } from '@/components/Settings/Sound/utils'
 import { getThemeColor, setThemeColor } from '@/components/Settings/ThemeColor/utils'
 import { getThemeMode, setThemeMode } from '@/components/Settings/ThemeMode/utils'
 
@@ -26,14 +26,14 @@ export function createWebMcpDeps(
     getThemeColor,
     getThemeMode,
     setFontPairing,
+    setSoundPreference,
     setThemeColor,
     setThemeMode,
-    toggleSoundPreference,
     ...overrides,
   }
 }
 
-export function readPalettePages(): WebMcpPage[] {
+export function readWebMcpPages(): WebMcpPage[] {
   const node = document.querySelector('[data-webmcp-pages]')
   const raw = node?.textContent?.trim()
 
