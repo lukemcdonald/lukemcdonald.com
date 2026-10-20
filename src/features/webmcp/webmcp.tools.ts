@@ -12,15 +12,9 @@ import { isThemeMode } from '@/components/Settings/ThemeMode/utils'
 
 const WEBMCP_OUTPUT_MAX = 1500
 
-type WebMcpSecret = {
-  hint: string
-  id: string
-  name: string
-}
-
 export type WebMcpToolDeps = {
   findEasterEgg: (id: string) => Promise<{ alreadyActive: boolean; id: string; name: string }>
-  getEasterEggCatalog: () => readonly WebMcpSecret[]
+  getEasterEggCatalog: () => readonly { hint: string; id: string; name: string }[]
   getFontPairing: () => FontPairing
   getFoundEasterEggIds: () => readonly string[]
   getSoundPreference: () => SoundPreference
@@ -144,7 +138,13 @@ export function createWebMcpTools(deps: WebMcpToolDeps) {
       inputSchema: {
         additionalProperties: false,
         properties: {
-          name: toSecretNameProperty(deps.getEasterEggCatalog()),
+          name: {
+            description: 'Secret to show and mark as found.',
+            enum: deps.getEasterEggCatalog().map((secret) => {
+              return secret.id
+            }),
+            type: 'string' as const,
+          },
         },
         required: ['name'],
         type: 'object',
@@ -152,37 +152,6 @@ export function createWebMcpTools(deps: WebMcpToolDeps) {
       name: 'find_secret',
     },
   ]
-}
-
-function clipToolOutput(payload: string) {
-  if (payload.length <= WEBMCP_OUTPUT_MAX) {
-    return payload
-  }
-
-  return `${payload.slice(0, WEBMCP_OUTPUT_MAX - 1)}...`
-}
-
-function formatFontPairingDescription(config: (typeof FONT_PAIRING_CONFIGS)[number]) {
-  const bodyNav =
-    config.body.name === config.nav.name ?
-      `Body and nav: ${config.body.name}`
-    : `Body: ${config.body.name}. Nav: ${config.nav.name}`
-
-  return `Headings: ${config.heading.name}. ${bodyNav}.`
-}
-
-function formatThemeResult(mode?: ThemeMode, color?: ThemeColor) {
-  const parts: string[] = []
-
-  if (mode !== undefined) {
-    parts.push(`Appearance is now ${MODE_LABELS[mode].toLowerCase()}.`)
-  }
-
-  if (color !== undefined) {
-    parts.push(`Color is now ${THEME_LABELS[color].toLowerCase()}.`)
-  }
-
-  return parts.join(' ')
 }
 
 async function handleFindSecret(
@@ -222,7 +191,11 @@ function handleListSecrets(deps: WebMcpToolDeps): WebMcpToolResult {
   const foundCount = catalog.filter((secret) => foundIds.has(secret.id)).length
   const payload = [`Secrets: ${foundCount} of ${catalog.length} found.`, ...lines].join('\n')
 
-  return clipToolOutput(payload)
+  if (payload.length <= WEBMCP_OUTPUT_MAX) {
+    return payload
+  }
+
+  return `${payload.slice(0, WEBMCP_OUTPUT_MAX - 1)}...`
 }
 
 async function handleNavigateToPage(
@@ -321,15 +294,19 @@ function handleSetTheme(
     )
   }
 
+  const parts: string[] = []
+
   if (mode !== undefined) {
     deps.setThemeMode(mode)
+    parts.push(`Appearance is now ${MODE_LABELS[mode].toLowerCase()}.`)
   }
 
   if (color !== undefined) {
     deps.setThemeColor(color)
+    parts.push(`Color is now ${THEME_LABELS[color].toLowerCase()}.`)
   }
 
-  return formatThemeResult(mode, color)
+  return parts.join(' ')
 }
 
 function isOneOf<T extends string>(values: readonly T[], value: string | undefined): value is T {
@@ -340,9 +317,14 @@ function toFontPairingProperty() {
   return {
     description: 'Font pairing to apply.',
     oneOf: FONT_PAIRING_CONFIGS.map((config) => {
+      const bodyNav =
+        config.body.name === config.nav.name ?
+          `Body and nav: ${config.body.name}`
+        : `Body: ${config.body.name}. Nav: ${config.nav.name}`
+
       return {
         const: config.id,
-        description: formatFontPairingDescription(config),
+        description: `Headings: ${config.heading.name}. ${bodyNav}.`,
         title: config.label,
       }
     }),
@@ -357,36 +339,6 @@ function toPageProperty(pages: readonly MenuLinkItem[]) {
       return {
         const: page.href,
         title: page.name,
-      }
-    }),
-    type: 'string' as const,
-  }
-}
-
-function toSecretNameProperty(secrets: readonly { id: string; name: string }[]) {
-  const description = 'Secret to show and mark as found.'
-  const ids = secrets.map((secret) => {
-    return secret.id
-  })
-
-  if (
-    secrets.every((secret) => {
-      return secret.name.toLowerCase() === secret.id.toLowerCase()
-    })
-  ) {
-    return {
-      description,
-      enum: ids,
-      type: 'string' as const,
-    }
-  }
-
-  return {
-    description,
-    oneOf: secrets.map((secret) => {
-      return {
-        const: secret.id,
-        title: secret.name,
       }
     }),
     type: 'string' as const,
