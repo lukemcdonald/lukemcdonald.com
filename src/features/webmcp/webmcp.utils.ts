@@ -10,9 +10,8 @@ export type FontPairingChoiceSource = {
 
 export type StringChoice = {
   const: string
-  description: string
+  description?: string
   title: string
-  type: 'string'
 }
 
 export type WebMcpPage = {
@@ -33,7 +32,26 @@ function formatFontPairingDescription(config: FontPairingChoiceSource) {
       `Body and nav: ${config.body.name}`
     : `Body: ${config.body.name}. Nav: ${config.nav.name}`
 
-  return `${config.label}. ${heading}. ${bodyNav}.`
+  return `${heading}. ${bodyNav}.`
+}
+
+function hasDistinctName(secret: { id: string; name: string }) {
+  return secret.name.toLowerCase() !== secret.id.toLowerCase()
+}
+
+function toStringChoice(value: string, title: string, description?: string): StringChoice {
+  if (description === undefined) {
+    return {
+      const: value,
+      title,
+    }
+  }
+
+  return {
+    const: value,
+    description,
+    title,
+  }
 }
 
 export function toFontPairingChoices(configs: readonly FontPairingChoiceSource[]) {
@@ -42,47 +60,55 @@ export function toFontPairingChoices(configs: readonly FontPairingChoiceSource[]
   })
 }
 
-export function toHomePage(page: { data: { title: string }; id: string }): WebMcpPage {
+export function toHomePage(page: { id: string }): WebMcpPage {
   return {
     href: toPagePath(page.id),
-    name: page.data.title,
+    name: 'Home',
   }
-}
-
-export function toLabeledChoices(values: readonly string[], labels: Record<string, string>) {
-  return values.map((value) => {
-    return toStringChoice(value, labels[value] ?? value)
-  })
 }
 
 export function toPageChoices(pages: readonly WebMcpPage[]) {
   return pages.map((page) => {
-    return toStringChoice(page.href, page.name, `${page.name} (${page.href})`)
+    return toStringChoice(page.href, page.name)
   })
 }
 
-export function toSecretChoices(secrets: readonly WebMcpSecret[]) {
-  return secrets.map((secret) => {
-    return toStringChoice(secret.id, secret.name, secret.hint)
+export function toSecretNameProperty(
+  description: string,
+  secrets: readonly { id: string; name: string }[],
+) {
+  const values = secrets.map((secret) => {
+    return secret.id
   })
+
+  if (
+    secrets.some((secret) => {
+      return hasDistinctName(secret)
+    })
+  ) {
+    return toStringChoiceProperty(
+      description,
+      secrets.map((secret) => {
+        return toStringChoice(secret.id, secret.name)
+      }),
+    )
+  }
+
+  return toStringEnumProperty(description, values)
 }
 
-function toStringChoice(value: string, title: string, description = title): StringChoice {
+export function toStringChoiceProperty(description: string, choices: readonly StringChoice[]) {
   return {
-    const: value,
     description,
-    title,
-    type: 'string',
+    oneOf: [...choices],
+    type: 'string' as const,
   }
 }
 
-export function toStringEnumProperty(description: string, choices: readonly StringChoice[]) {
+export function toStringEnumProperty<T extends readonly string[]>(description: string, values: T) {
   return {
     description,
-    enum: choices.map((choice) => {
-      return choice.const
-    }),
-    oneOf: [...choices],
+    enum: values,
     type: 'string' as const,
   }
 }

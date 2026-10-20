@@ -3,46 +3,56 @@ import { describe, test } from 'node:test'
 
 import { getEasterEggCatalog } from '@/components/EasterEggs/easter-eggs.ts'
 import { FONT_PAIRING_CONFIGS } from '@/components/Settings/Font/pairings.ts'
-import { THEME_COLORS, THEME_LABELS } from '@/components/Settings/ThemeColor/constants.ts'
 import { toPagePath } from '@/utils/content.ts'
 
 import {
   toFontPairingChoices,
   toHomePage,
-  toLabeledChoices,
   toPageChoices,
-  toSecretChoices,
+  toSecretNameProperty,
+  toStringChoiceProperty,
   toStringEnumProperty,
   toWebMcpPages,
 } from './webmcp.utils.ts'
 
+type ChoiceProperty = ReturnType<typeof toStringChoiceProperty>
+type EnumProperty = ReturnType<typeof toStringEnumProperty>
+
 function assertChoice(
-  property: ReturnType<typeof toStringEnumProperty>,
+  property: ChoiceProperty,
   value: string,
-  expected: { description?: string; includes?: readonly string[]; title: string },
+  expected: { includes?: readonly string[]; title: string },
 ) {
   const choice = property.oneOf.find((entry) => {
     return entry.const === value
   })
 
-  assert.ok(property.enum.includes(value), value)
-  assert.equal(choice?.title, expected.title)
+  assert.equal('enum' in property, false)
+  assert.ok(choice, value)
+  assert.equal(choice.title, expected.title)
 
-  if (expected.description !== undefined) {
-    assert.equal(choice?.description, expected.description)
+  if (expected.includes === undefined) {
+    assert.equal('description' in choice, false)
+    return
   }
 
-  for (const snippet of expected.includes ?? []) {
-    assert.equal((choice?.description ?? '').includes(snippet), true, snippet)
+  for (const snippet of expected.includes) {
+    assert.equal((choice.description ?? '').includes(snippet), true, snippet)
   }
 }
 
+function assertEnum(property: EnumProperty, values: readonly string[]) {
+  assert.equal('oneOf' in property, false)
+  assert.deepEqual([...property.enum], [...values])
+}
+
 describe('toWebMcpPages', () => {
-  test('prepends a missing home page and keeps an existing one', () => {
-    const home = toHomePage({ data: { title: 'Greetings' }, id: 'index' })
+  test('prepends a missing home page labeled Home and keeps an existing one', () => {
+    const home = toHomePage({ id: 'index' })
     const resume = { href: '/resume', name: 'Resume' }
 
     assert.equal(home.href, toPagePath('index'))
+    assert.equal(home.name, 'Home')
     assert.deepEqual(toWebMcpPages([resume], home), [home, resume])
     assert.deepEqual(toWebMcpPages([home, resume], home), [home, resume])
   })
@@ -50,7 +60,7 @@ describe('toWebMcpPages', () => {
 
 describe('generated schemas', () => {
   test('reflect a different input list instead of a copied catalog', () => {
-    const pairing = toStringEnumProperty(
+    const pairing = toStringChoiceProperty(
       'Font pairing to apply.',
       toFontPairingChoices([
         {
@@ -62,35 +72,39 @@ describe('generated schemas', () => {
         },
       ]),
     )
-    const pages = toStringEnumProperty(
+    const pages = toStringChoiceProperty(
       'Path of the page to open.',
       toPageChoices([{ href: '/new-page', name: 'New Page' }]),
     )
-    const secrets = toStringEnumProperty(
-      'Name of the secret to show and mark as found.',
-      toSecretChoices([{ hint: 'Look up', id: 'nova', name: 'Nova' }]),
-    )
+    const secrets = toSecretNameProperty('Secret to show and mark as found.', [
+      { id: 'ember', name: 'Campfire' },
+    ])
+    const colors = toStringEnumProperty("One of the site's theme colors.", ['spark', 'ember'])
 
     assertChoice(pairing, 'spark', {
       includes: ['Display Serif', 'Body Sans', 'Nav Mono'],
       title: 'Spark',
     })
     assertChoice(pages, '/new-page', { title: 'New Page' })
-    assertChoice(secrets, 'nova', { description: 'Look up', title: 'Nova' })
+    assert.equal('oneOf' in secrets, true)
+    if ('oneOf' in secrets) {
+      assertChoice(secrets, 'ember', { title: 'Campfire' })
+    }
+    assertEnum(colors, ['spark', 'ember'])
   })
 
   test('includes the home page from the pages collection path', () => {
-    const home = toHomePage({ data: { title: 'Greetings' }, id: 'index' })
-    const property = toStringEnumProperty(
+    const home = toHomePage({ id: 'index' })
+    const property = toStringChoiceProperty(
       'Path of the page to open.',
       toPageChoices(toWebMcpPages([{ href: '/resume', name: 'Resume' }], home)),
     )
 
-    assertChoice(property, toPagePath('index'), { title: home.name })
+    assertChoice(property, toPagePath('index'), { title: 'Home' })
   })
 
   test('includes each font pairing from FONT_PAIRING_CONFIGS', () => {
-    const property = toStringEnumProperty(
+    const property = toStringChoiceProperty(
       'Font pairing to apply.',
       toFontPairingChoices(FONT_PAIRING_CONFIGS),
     )
@@ -103,29 +117,21 @@ describe('generated schemas', () => {
     }
   })
 
-  test('includes each secret from the egg catalog', () => {
+  test('includes each secret id from the egg catalog without hints', () => {
     const catalog = getEasterEggCatalog()
-    const property = toStringEnumProperty(
-      'Name of the secret to show and mark as found.',
-      toSecretChoices(catalog),
-    )
+    const property = toSecretNameProperty('Secret to show and mark as found.', catalog)
+    const serialized = JSON.stringify(property)
+
+    assert.equal('enum' in property, true)
+    if ('enum' in property) {
+      assertEnum(
+        property,
+        catalog.map((secret) => secret.id),
+      )
+    }
 
     for (const secret of catalog) {
-      assertChoice(property, secret.id, {
-        description: secret.hint,
-        title: secret.name,
-      })
-    }
-  })
-
-  test('includes each theme color label from THEME_LABELS', () => {
-    const property = toStringEnumProperty(
-      "One of the site's theme colors.",
-      toLabeledChoices(THEME_COLORS, THEME_LABELS),
-    )
-
-    for (const color of THEME_COLORS) {
-      assertChoice(property, color, { title: THEME_LABELS[color] })
+      assert.equal(serialized.includes(secret.hint), false, secret.hint)
     }
   })
 })

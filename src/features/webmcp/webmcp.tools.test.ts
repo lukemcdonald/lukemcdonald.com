@@ -20,7 +20,7 @@ const PAGES: readonly WebMcpPage[] = toWebMcpPages(
     { href: '/resume', name: 'Resume' },
     { href: '/tread-talks', name: 'TREAD Talks' },
   ],
-  toHomePage({ data: { title: 'Greetings' }, id: 'index' }),
+  toHomePage({ id: 'index' }),
 )
 
 const SOLUTION_LEAKS = ['ArrowUp', 'KeyA', 'konami', 'sequence']
@@ -107,11 +107,18 @@ async function executeTool(
   return tool.execute(input) as Promise<WebMcpToolResult> | WebMcpToolResult
 }
 
-function getEnum(tool: { inputSchema: { properties?: object } }, key: string) {
+function getValues(tool: { inputSchema: { properties?: object } }, key: string) {
   const properties = tool.inputSchema.properties as
-    Record<string, { enum?: string[] } | undefined> | undefined
+    Record<string, { enum?: string[]; oneOf?: { const: string }[] } | undefined> | undefined
+  const property = properties?.[key]
 
-  return properties?.[key]?.enum
+  if (property?.enum) {
+    return [...property.enum]
+  }
+
+  return property?.oneOf?.map((entry) => {
+    return entry.const
+  })
 }
 
 function isToolError(result: unknown): result is WebMcpToolError {
@@ -157,8 +164,9 @@ describe('createWebMcpTools', () => {
 
     assert.ok(navigate)
     assert.ok(findSecret)
-    assert.deepEqual(getEnum(navigate, 'page'), ['/new-page'])
-    assert.deepEqual(getEnum(findSecret, 'name'), ['nova'])
+    assert.deepEqual(getValues(navigate, 'page'), ['/new-page'])
+    assert.deepEqual(getValues(findSecret, 'name'), ['nova'])
+    assert.equal(JSON.stringify(findSecret.inputSchema).includes('Skyward'), false)
   })
 
   test('keeps tool descriptions generic and uses secret instead of surprise', () => {
@@ -284,7 +292,7 @@ describe('navigate_to_page', () => {
     const home = toPagePath('index')
     const result = await executeTool(deps, 'navigate_to_page', { page: home })
 
-    assert.equal(result, `Opened Greetings (${home}).`)
+    assert.equal(result, `Opened Home (${home}).`)
     assert.equal(mockNavigate.mock.calls.length, 1)
   })
 })

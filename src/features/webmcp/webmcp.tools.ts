@@ -11,9 +11,9 @@ import { isThemeMode } from '@/components/Settings/ThemeMode/utils'
 
 import {
   toFontPairingChoices,
-  toLabeledChoices,
   toPageChoices,
-  toSecretChoices,
+  toSecretNameProperty,
+  toStringChoiceProperty,
   toStringEnumProperty,
   type WebMcpPage,
   type WebMcpSecret,
@@ -55,11 +55,15 @@ export type WebMcpToolError = {
 export type WebMcpToolResult = string | WebMcpToolError
 
 export function createWebMcpTools(deps: WebMcpToolDeps) {
-  const fontPairingChoices = toFontPairingChoices(FONT_PAIRING_CONFIGS)
-  const pages = toPageChoices(deps.pages)
-  const secrets = toSecretChoices(deps.getEasterEggCatalog())
-  const themeColors = toLabeledChoices(THEME_COLORS, THEME_LABELS)
-  const themeModes = toLabeledChoices(THEME_MODES, MODE_LABELS)
+  const fontPairing = toStringChoiceProperty(
+    'Font pairing to apply.',
+    toFontPairingChoices(FONT_PAIRING_CONFIGS),
+  )
+  const pages = toStringChoiceProperty('Path of the page to open.', toPageChoices(deps.pages))
+  const secrets = toSecretNameProperty(
+    'Secret to show and mark as found.',
+    deps.getEasterEggCatalog(),
+  )
 
   return [
     {
@@ -71,8 +75,8 @@ export function createWebMcpTools(deps: WebMcpToolDeps) {
       inputSchema: {
         additionalProperties: false,
         properties: {
-          color: toStringEnumProperty("One of the site's theme colors.", themeColors),
-          mode: toStringEnumProperty('Site appearance.', themeModes),
+          color: toStringEnumProperty("One of the site's theme colors.", THEME_COLORS),
+          mode: toStringEnumProperty('Site appearance.', THEME_MODES),
         },
         type: 'object',
       },
@@ -86,7 +90,7 @@ export function createWebMcpTools(deps: WebMcpToolDeps) {
       inputSchema: {
         additionalProperties: false,
         properties: {
-          pairing: toStringEnumProperty('Font pairing to apply.', fontPairingChoices),
+          pairing: fontPairing,
         },
         required: ['pairing'],
         type: 'object',
@@ -121,7 +125,7 @@ export function createWebMcpTools(deps: WebMcpToolDeps) {
       inputSchema: {
         additionalProperties: false,
         properties: {
-          page: toStringEnumProperty('Path of the page to open.', pages),
+          page: pages,
         },
         required: ['page'],
         type: 'object',
@@ -149,7 +153,7 @@ export function createWebMcpTools(deps: WebMcpToolDeps) {
       inputSchema: {
         additionalProperties: false,
         properties: {
-          name: toStringEnumProperty('Name of the secret to show and mark as found.', secrets),
+          name: secrets,
         },
         required: ['name'],
         type: 'object',
