@@ -1,8 +1,9 @@
 company: CELTIC7 Studio
-position: Founder, Full-Stack Solutions Lead
-startDate: '2008-08'
 endDate: '2014-07'
-location: Iowa
 highlights:
   - Built and ran a full-stack web studio, winning contracts with the University of Iowa, U.S. Olympic Trials, and NFL athletes while leading consulting, scoping, and end-to-end delivery.
   - Designed and delivered 20+ full-stack web applications spanning custom APIs, data-driven WordPress platforms, e-commerce, and third-party integrations.
+location: Iowa
+page: /work/celtic7
+position: Founder, Full-Stack Solutions Lead
+startDate: '2008-08'

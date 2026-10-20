@@ -3,7 +3,7 @@ import { describe, test } from 'node:test'
 
 import { GLOBAL_CONFIG } from '@/configs/global'
 
-import { buildResumeData, pickResumeSection } from './resume.utils.ts'
+import { buildResumeData, pickResumeSection, resolveExperienceHref } from './resume.utils.ts'
 
 type ResumeStub = Parameters<typeof buildResumeData>[0][number]
 
@@ -82,5 +82,28 @@ describe('pickResumeSection', () => {
 
   test('returns null when the section is missing', () => {
     assert.equal(pickResumeSection(data, 'education'), null)
+  })
+})
+
+describe('resolveExperienceHref', () => {
+  test('prefers the work page over the company website', () => {
+    assert.equal(
+      resolveExperienceHref({
+        page: '/work/blazer-six',
+        website: 'https://www.blazersix.com/',
+      }),
+      '/work/blazer-six',
+    )
+  })
+
+  test('uses the website when no work page is set', () => {
+    assert.equal(
+      resolveExperienceHref({ website: 'https://www.littlebird.care/' }),
+      'https://www.littlebird.care/',
+    )
+  })
+
+  test('returns undefined when neither is set', () => {
+    assert.equal(resolveExperienceHref({}), undefined)
   })
 })

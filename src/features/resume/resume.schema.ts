@@ -31,6 +31,7 @@ const experienceSchema = z.object({
   highlights: z.array(z.string()).optional(),
   id: z.string().optional(),
   location: z.string().optional(),
+  page: z.string().startsWith('/').optional(),
   position: z.string(),
   startDate: dateStringSchema,
   summary: z.string().optional(),
