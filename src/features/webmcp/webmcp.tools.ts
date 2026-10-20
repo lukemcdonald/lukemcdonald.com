@@ -2,6 +2,7 @@ import type { FontPairing } from '@/components/Settings/Font/font'
 import type { SoundPreference } from '@/components/Settings/Sound/types'
 import type { ThemeColor } from '@/components/Settings/ThemeColor/types'
 import type { ThemeMode } from '@/components/Settings/ThemeMode/types'
+import type { MenuLinkItem } from '@/features/navigation/navigation.types'
 
 import { FONT_PAIRING_CONFIGS, FONT_PAIRINGS } from '@/components/Settings/Font/pairings'
 import { THEME_COLORS, THEME_LABELS } from '@/components/Settings/ThemeColor/constants'
@@ -9,25 +10,13 @@ import { isThemeColor } from '@/components/Settings/ThemeColor/utils'
 import { MODE_LABELS, THEME_MODES } from '@/components/Settings/ThemeMode/constants'
 import { isThemeMode } from '@/components/Settings/ThemeMode/utils'
 
-import {
-  toFontPairingChoices,
-  toPageChoices,
-  toSecretNameProperty,
-  toStringChoiceProperty,
-  toStringEnumProperty,
-  type WebMcpPage,
-  type WebMcpSecret,
-} from './webmcp.utils'
-
-export type { WebMcpPage, WebMcpSecret }
-
-const EMPTY_INPUT_SCHEMA = {
-  additionalProperties: false,
-  properties: {},
-  type: 'object',
-} as const
-
 const WEBMCP_OUTPUT_MAX = 1500
+
+type WebMcpSecret = {
+  hint: string
+  id: string
+  name: string
+}
 
 export type WebMcpToolDeps = {
   findEasterEgg: (id: string) => Promise<{ alreadyActive: boolean; id: string; name: string }>
@@ -38,7 +27,7 @@ export type WebMcpToolDeps = {
   getThemeColor: () => ThemeColor
   getThemeMode: () => ThemeMode
   navigate: (href: string) => void | Promise<void>
-  pages: readonly WebMcpPage[]
+  pages: readonly MenuLinkItem[]
   setFontPairing: (pairing: FontPairing) => void
   setSoundPreference: (enabled: boolean) => SoundPreference
   setThemeColor: (color: ThemeColor) => void
@@ -55,16 +44,6 @@ export type WebMcpToolError = {
 export type WebMcpToolResult = string | WebMcpToolError
 
 export function createWebMcpTools(deps: WebMcpToolDeps) {
-  const fontPairing = toStringChoiceProperty(
-    'Font pairing to apply.',
-    toFontPairingChoices(FONT_PAIRING_CONFIGS),
-  )
-  const pages = toStringChoiceProperty('Path of the page to open.', toPageChoices(deps.pages))
-  const secrets = toSecretNameProperty(
-    'Secret to show and mark as found.',
-    deps.getEasterEggCatalog(),
-  )
-
   return [
     {
       description:
@@ -75,8 +54,16 @@ export function createWebMcpTools(deps: WebMcpToolDeps) {
       inputSchema: {
         additionalProperties: false,
         properties: {
-          color: toStringEnumProperty("One of the site's theme colors.", THEME_COLORS),
-          mode: toStringEnumProperty('Site appearance.', THEME_MODES),
+          color: {
+            description: "One of the site's theme colors.",
+            enum: THEME_COLORS,
+            type: 'string' as const,
+          },
+          mode: {
+            description: 'Site appearance.',
+            enum: THEME_MODES,
+            type: 'string' as const,
+          },
         },
         type: 'object',
       },
@@ -90,7 +77,7 @@ export function createWebMcpTools(deps: WebMcpToolDeps) {
       inputSchema: {
         additionalProperties: false,
         properties: {
-          pairing: fontPairing,
+          pairing: toFontPairingProperty(),
         },
         required: ['pairing'],
         type: 'object',
@@ -125,7 +112,7 @@ export function createWebMcpTools(deps: WebMcpToolDeps) {
       inputSchema: {
         additionalProperties: false,
         properties: {
-          page: pages,
+          page: toPageProperty(deps.pages),
         },
         required: ['page'],
         type: 'object',
@@ -141,7 +128,11 @@ export function createWebMcpTools(deps: WebMcpToolDeps) {
       execute: () => {
         return handleListSecrets(deps)
       },
-      inputSchema: EMPTY_INPUT_SCHEMA,
+      inputSchema: {
+        additionalProperties: false,
+        properties: {},
+        type: 'object',
+      },
       name: 'list_secrets',
     },
     {
@@ -153,7 +144,7 @@ export function createWebMcpTools(deps: WebMcpToolDeps) {
       inputSchema: {
         additionalProperties: false,
         properties: {
-          name: secrets,
+          name: toSecretNameProperty(deps.getEasterEggCatalog()),
         },
         required: ['name'],
         type: 'object',
@@ -171,6 +162,15 @@ function clipToolOutput(payload: string) {
   return `${payload.slice(0, WEBMCP_OUTPUT_MAX - 1)}...`
 }
 
+function formatFontPairingDescription(config: (typeof FONT_PAIRING_CONFIGS)[number]) {
+  const bodyNav =
+    config.body.name === config.nav.name ?
+      `Body and nav: ${config.body.name}`
+    : `Body: ${config.body.name}. Nav: ${config.nav.name}`
+
+  return `Headings: ${config.heading.name}. ${bodyNav}.`
+}
+
 function formatThemeResult(mode?: ThemeMode, color?: ThemeColor) {
   const parts: string[] = []
 
@@ -185,18 +185,14 @@ function formatThemeResult(mode?: ThemeMode, color?: ThemeColor) {
   return parts.join(' ')
 }
 
-function getSecretIds(deps: WebMcpToolDeps) {
-  return deps.getEasterEggCatalog().map((secret) => {
-    return secret.id
-  })
-}
-
 async function handleFindSecret(
   deps: WebMcpToolDeps,
   input: { name?: string },
 ): Promise<WebMcpToolResult> {
   const name = input.name
-  const secretIds = getSecretIds(deps)
+  const secretIds = deps.getEasterEggCatalog().map((secret) => {
+    return secret.id
+  })
 
   if (!isOneOf(secretIds, name)) {
     return toToolError(
@@ -338,6 +334,63 @@ function handleSetTheme(
 
 function isOneOf<T extends string>(values: readonly T[], value: string | undefined): value is T {
   return value !== undefined && (values as readonly string[]).includes(value)
+}
+
+function toFontPairingProperty() {
+  return {
+    description: 'Font pairing to apply.',
+    oneOf: FONT_PAIRING_CONFIGS.map((config) => {
+      return {
+        const: config.id,
+        description: formatFontPairingDescription(config),
+        title: config.label,
+      }
+    }),
+    type: 'string' as const,
+  }
+}
+
+function toPageProperty(pages: readonly MenuLinkItem[]) {
+  return {
+    description: 'Path of the page to open.',
+    oneOf: pages.map((page) => {
+      return {
+        const: page.href,
+        title: page.name,
+      }
+    }),
+    type: 'string' as const,
+  }
+}
+
+function toSecretNameProperty(secrets: readonly { id: string; name: string }[]) {
+  const description = 'Secret to show and mark as found.'
+  const ids = secrets.map((secret) => {
+    return secret.id
+  })
+
+  if (
+    secrets.every((secret) => {
+      return secret.name.toLowerCase() === secret.id.toLowerCase()
+    })
+  ) {
+    return {
+      description,
+      enum: ids,
+      type: 'string' as const,
+    }
+  }
+
+  return {
+    description,
+    oneOf: secrets.map((secret) => {
+      return {
+        const: secret.id,
+        title: secret.name,
+      }
+    }),
+    type: 'string' as const,
+  }
 }
 
 function toToolError(code: string, error: string, suggestion: string): WebMcpToolError {

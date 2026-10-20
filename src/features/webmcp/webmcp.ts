@@ -1,3 +1,4 @@
+import type { MenuLinkItem } from '@/features/navigation/navigation.types'
 import type { WebMCP } from 'webmcp-types'
 
 import {
@@ -10,7 +11,7 @@ import { getSoundPreference, setSoundPreference } from '@/components/Settings/So
 import { getThemeColor, setThemeColor } from '@/components/Settings/ThemeColor/utils'
 import { getThemeMode, setThemeMode } from '@/components/Settings/ThemeMode/utils'
 
-import { createWebMcpTools, type WebMcpPage, type WebMcpToolDeps } from './webmcp.tools'
+import { createWebMcpTools, type WebMcpToolDeps } from './webmcp.tools'
 
 let registration: AbortController | undefined
 
@@ -33,7 +34,7 @@ export function createWebMcpDeps(
   }
 }
 
-export function readWebMcpPages(): WebMcpPage[] {
+export function readWebMcpPages(): MenuLinkItem[] {
   const node = document.querySelector('[data-webmcp-pages]')
   const raw = node?.textContent?.trim()
 
@@ -41,7 +42,7 @@ export function readWebMcpPages(): WebMcpPage[] {
     return []
   }
 
-  return JSON.parse(raw) as WebMcpPage[]
+  return JSON.parse(raw) as MenuLinkItem[]
 }
 
 export function resetWebMcpRegistration() {
