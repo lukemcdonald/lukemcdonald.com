@@ -65,8 +65,8 @@ describe('registerWebMcpTools', () => {
       'list_secrets',
       'navigate_to_page',
       'set_font_pairing',
+      'set_sound',
       'set_theme',
-      'toggle_sound',
     ])
   })
 })

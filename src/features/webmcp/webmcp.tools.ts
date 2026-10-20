@@ -2,47 +2,30 @@ import type { FontPairing } from '@/components/Settings/Font/font'
 import type { SoundPreference } from '@/components/Settings/Sound/types'
 import type { ThemeColor } from '@/components/Settings/ThemeColor/types'
 import type { ThemeMode } from '@/components/Settings/ThemeMode/types'
+import type { MenuLinkItem } from '@/features/navigation/navigation.types'
 
-import { EASTER_EGG_IDS } from '@/components/EasterEggs/easter-eggs'
-import { FONT_PAIRINGS } from '@/components/Settings/Font/pairings'
+import { FONT_PAIRING_CONFIGS, FONT_PAIRINGS } from '@/components/Settings/Font/pairings'
 import { THEME_COLORS, THEME_LABELS } from '@/components/Settings/ThemeColor/constants'
 import { isThemeColor } from '@/components/Settings/ThemeColor/utils'
 import { MODE_LABELS, THEME_MODES } from '@/components/Settings/ThemeMode/constants'
 import { isThemeMode } from '@/components/Settings/ThemeMode/utils'
 
-const EMPTY_INPUT_SCHEMA = {
-  additionalProperties: false,
-  properties: {},
-  type: 'object',
-} as const
-
 const WEBMCP_OUTPUT_MAX = 1500
-
-export type WebMcpPage = {
-  href: string
-  name: string
-}
-
-export type WebMcpSecret = {
-  hint: string
-  id: string
-  name: string
-}
 
 export type WebMcpToolDeps = {
   findEasterEgg: (id: string) => Promise<{ alreadyActive: boolean; id: string; name: string }>
-  getEasterEggCatalog: () => readonly WebMcpSecret[]
+  getEasterEggCatalog: () => readonly { hint: string; id: string; name: string }[]
   getFontPairing: () => FontPairing
   getFoundEasterEggIds: () => readonly string[]
   getSoundPreference: () => SoundPreference
   getThemeColor: () => ThemeColor
   getThemeMode: () => ThemeMode
   navigate: (href: string) => void | Promise<void>
-  pages: readonly WebMcpPage[]
+  pages: readonly MenuLinkItem[]
   setFontPairing: (pairing: FontPairing) => void
+  setSoundPreference: (enabled: boolean) => SoundPreference
   setThemeColor: (color: ThemeColor) => void
   setThemeMode: (mode: ThemeMode) => void
-  toggleSoundPreference: () => SoundPreference
 }
 
 export type WebMcpToolError = {
@@ -55,14 +38,10 @@ export type WebMcpToolError = {
 export type WebMcpToolResult = string | WebMcpToolError
 
 export function createWebMcpTools(deps: WebMcpToolDeps) {
-  const pageHrefs = deps.pages.map((page) => {
-    return page.href
-  })
-
   return [
     {
       description:
-        'Sets the site appearance and color. Use when the visitor wants a light, dark, or system look, or a different theme color.',
+        'Sets the site appearance and color. Use when the visitor wants a different look or theme color.',
       execute: (input: { color?: string; mode?: string }) => {
         return handleSetTheme(deps, input)
       },
@@ -72,46 +51,51 @@ export function createWebMcpTools(deps: WebMcpToolDeps) {
           color: {
             description: "One of the site's theme colors.",
             enum: THEME_COLORS,
-            type: 'string',
+            type: 'string' as const,
           },
           mode: {
-            description: 'Light, dark, or match the system appearance.',
+            description: 'Site appearance.',
             enum: THEME_MODES,
-            type: 'string',
+            type: 'string' as const,
           },
         },
         type: 'object',
-      } as const,
+      },
       name: 'set_theme',
     },
     {
-      description:
-        "Applies a work, play, or live font pairing. Use when the visitor wants to change the site's fonts.",
+      description: "Applies a font pairing. Use when the visitor wants to change the site's fonts.",
       execute: (input: { pairing?: string }) => {
         return handleSetFontPairing(deps, input)
       },
       inputSchema: {
         additionalProperties: false,
         properties: {
-          pairing: {
-            description: 'Work, play, or live font pairing.',
-            enum: FONT_PAIRINGS,
-            type: 'string',
-          },
+          pairing: toFontPairingProperty(),
         },
         required: ['pairing'],
         type: 'object',
-      } as const,
+      },
       name: 'set_font_pairing',
     },
     {
       description:
         'Turns interaction sounds on or off. Use when the visitor wants to mute or unmute UI sounds.',
-      execute: () => {
-        return handleToggleSound(deps)
+      execute: (input: { enabled?: unknown }) => {
+        return handleSetSound(deps, input)
       },
-      inputSchema: EMPTY_INPUT_SCHEMA,
-      name: 'toggle_sound',
+      inputSchema: {
+        additionalProperties: false,
+        properties: {
+          enabled: {
+            description: 'Whether interaction sounds should play.',
+            type: 'boolean',
+          },
+        },
+        required: ['enabled'],
+        type: 'object',
+      },
+      name: 'set_sound',
     },
     {
       description:
@@ -122,15 +106,11 @@ export function createWebMcpTools(deps: WebMcpToolDeps) {
       inputSchema: {
         additionalProperties: false,
         properties: {
-          page: {
-            description: 'Path of the page to open.',
-            enum: pageHrefs,
-            type: 'string',
-          },
+          page: toPageProperty(deps.pages),
         },
         required: ['page'],
         type: 'object',
-      } as const,
+      },
       name: 'navigate_to_page',
     },
     {
@@ -138,16 +118,20 @@ export function createWebMcpTools(deps: WebMcpToolDeps) {
         readOnlyHint: true,
       },
       description:
-        'Lists hidden surprises with a hint and whether each has been found. Use when the visitor asks what secrets exist or which are still undiscovered.',
+        'Lists hidden secrets with a hint and whether each has been found. Use when the visitor asks what secrets exist or which are still undiscovered.',
       execute: () => {
         return handleListSecrets(deps)
       },
-      inputSchema: EMPTY_INPUT_SCHEMA,
+      inputSchema: {
+        additionalProperties: false,
+        properties: {},
+        type: 'object',
+      },
       name: 'list_secrets',
     },
     {
       description:
-        'Unlocks a named hidden surprise and plays its effect. Use when the visitor wants to find a secret by name.',
+        "Shows a named secret's effect and marks it as found. Use when the visitor wants to find a specific secret.",
       execute: (input: { name?: string }) => {
         return handleFindSecret(deps, input)
       },
@@ -155,39 +139,19 @@ export function createWebMcpTools(deps: WebMcpToolDeps) {
         additionalProperties: false,
         properties: {
           name: {
-            description: 'Name of the secret to unlock.',
-            enum: EASTER_EGG_IDS,
-            type: 'string',
+            description: 'Secret to show and mark as found.',
+            enum: deps.getEasterEggCatalog().map((secret) => {
+              return secret.id
+            }),
+            type: 'string' as const,
           },
         },
         required: ['name'],
         type: 'object',
-      } as const,
+      },
       name: 'find_secret',
     },
   ]
-}
-
-function clipToolOutput(payload: string) {
-  if (payload.length <= WEBMCP_OUTPUT_MAX) {
-    return payload
-  }
-
-  return `${payload.slice(0, WEBMCP_OUTPUT_MAX - 1)}...`
-}
-
-function formatThemeResult(mode?: ThemeMode, color?: ThemeColor) {
-  const parts: string[] = []
-
-  if (mode !== undefined) {
-    parts.push(`Appearance is now ${MODE_LABELS[mode].toLowerCase()}.`)
-  }
-
-  if (color !== undefined) {
-    parts.push(`Color is now ${THEME_LABELS[color].toLowerCase()}.`)
-  }
-
-  return parts.join(' ')
 }
 
 async function handleFindSecret(
@@ -195,12 +159,15 @@ async function handleFindSecret(
   input: { name?: string },
 ): Promise<WebMcpToolResult> {
   const name = input.name
+  const secretIds = deps.getEasterEggCatalog().map((secret) => {
+    return secret.id
+  })
 
-  if (!isOneOf(EASTER_EGG_IDS, name)) {
+  if (!isOneOf(secretIds, name)) {
     return toToolError(
       'UNKNOWN_SECRET',
       name ? `Unknown secret "${name}".` : 'Provide a secret name.',
-      `Use one of: ${EASTER_EGG_IDS.join(', ')}.`,
+      `Use one of: ${secretIds.join(', ')}.`,
     )
   }
 
@@ -224,7 +191,11 @@ function handleListSecrets(deps: WebMcpToolDeps): WebMcpToolResult {
   const foundCount = catalog.filter((secret) => foundIds.has(secret.id)).length
   const payload = [`Secrets: ${foundCount} of ${catalog.length} found.`, ...lines].join('\n')
 
-  return clipToolOutput(payload)
+  if (payload.length <= WEBMCP_OUTPUT_MAX) {
+    return payload
+  }
+
+  return `${payload.slice(0, WEBMCP_OUTPUT_MAX - 1)}...`
 }
 
 async function handleNavigateToPage(
@@ -265,9 +236,31 @@ function handleSetFontPairing(deps: WebMcpToolDeps, input: { pairing?: string })
     )
   }
 
+  const config = FONT_PAIRING_CONFIGS.find((item) => {
+    return item.id === pairing
+  })
+
   deps.setFontPairing(pairing)
 
-  return `Font pairing is now ${pairing}.`
+  return `Font pairing is now ${config?.label ?? pairing}.`
+}
+
+function handleSetSound(deps: WebMcpToolDeps, input: { enabled?: unknown }): WebMcpToolResult {
+  const enabled = input.enabled
+
+  if (typeof enabled !== 'boolean') {
+    return toToolError(
+      'INVALID_INPUT',
+      enabled === undefined ?
+        'Provide enabled as true or false.'
+      : 'enabled must be true or false.',
+      'Pass enabled: true to turn sounds on, or enabled: false to turn them off.',
+    )
+  }
+
+  const next = deps.setSoundPreference(enabled)
+
+  return `Sounds are now ${next}.`
 }
 
 function handleSetTheme(
@@ -301,25 +294,55 @@ function handleSetTheme(
     )
   }
 
+  const parts: string[] = []
+
   if (mode !== undefined) {
     deps.setThemeMode(mode)
+    parts.push(`Appearance is now ${MODE_LABELS[mode].toLowerCase()}.`)
   }
 
   if (color !== undefined) {
     deps.setThemeColor(color)
+    parts.push(`Color is now ${THEME_LABELS[color].toLowerCase()}.`)
   }
 
-  return formatThemeResult(mode, color)
-}
-
-function handleToggleSound(deps: WebMcpToolDeps): WebMcpToolResult {
-  const next = deps.toggleSoundPreference()
-
-  return `Sounds are now ${next}.`
+  return parts.join(' ')
 }
 
 function isOneOf<T extends string>(values: readonly T[], value: string | undefined): value is T {
   return value !== undefined && (values as readonly string[]).includes(value)
+}
+
+function toFontPairingProperty() {
+  return {
+    description: 'Font pairing to apply.',
+    oneOf: FONT_PAIRING_CONFIGS.map((config) => {
+      const bodyNav =
+        config.body.name === config.nav.name ?
+          `Body and nav: ${config.body.name}`
+        : `Body: ${config.body.name}. Nav: ${config.nav.name}`
+
+      return {
+        const: config.id,
+        description: `Headings: ${config.heading.name}. ${bodyNav}.`,
+        title: config.label,
+      }
+    }),
+    type: 'string' as const,
+  }
+}
+
+function toPageProperty(pages: readonly MenuLinkItem[]) {
+  return {
+    description: 'Path of the page to open.',
+    oneOf: pages.map((page) => {
+      return {
+        const: page.href,
+        title: page.name,
+      }
+    }),
+    type: 'string' as const,
+  }
 }
 
 function toToolError(code: string, error: string, suggestion: string): WebMcpToolError {

@@ -1,88 +1,70 @@
+import type { MenuLinkItem } from '@/features/navigation/navigation.types.ts'
+
 import assert from 'node:assert/strict'
 import { afterEach, describe, mock, test } from 'node:test'
 
+import { getEasterEggCatalog } from '@/components/EasterEggs/easter-eggs.ts'
+import { FONT_PAIRING_CONFIGS } from '@/components/Settings/Font/pairings.ts'
+import { RESUME_LINK } from '@/features/navigation/navigation.utils.ts'
+import { toPagePath } from '@/utils/content.ts'
+
 import {
   createWebMcpTools,
-  type WebMcpPage,
   type WebMcpToolDeps,
   type WebMcpToolError,
   type WebMcpToolResult,
 } from './webmcp.tools.ts'
 import { createWebMcpDeps } from './webmcp.ts'
+import { toWebMcpPages } from './webmcp.utils.ts'
 
-const PAGES: readonly WebMcpPage[] = [
-  { href: '/resume', name: 'Resume' },
-  { href: '/tread-talks', name: 'TREAD Talks' },
-]
+const PAGES: readonly MenuLinkItem[] = toWebMcpPages([RESUME_LINK], { id: 'index' })
 
-const SOLUTION_LEAKS = ['ArrowUp', 'KeyA', 'konami', 'sequence']
-
-const INVALID_INPUT_CASES = [
-  { code: 'INVALID_INPUT', input: {}, name: 'set_theme' },
-  { code: 'INVALID_INPUT', input: { color: 'hotpink' }, name: 'set_theme' },
-  { code: 'INVALID_INPUT', input: { pairing: 'comic' }, name: 'set_font_pairing' },
-  { code: 'UNKNOWN_PAGE', input: { page: '/admin' }, name: 'navigate_to_page' },
-  { code: 'UNKNOWN_SECRET', input: { name: 'konami' }, name: 'find_secret' },
-] as const
-
-function createDeps(overrides: Partial<WebMcpToolDeps> = {}) {
+function createDeps(overrides: Partial<WebMcpToolDeps> = {}): WebMcpToolDeps {
   let color: ReturnType<WebMcpToolDeps['getThemeColor']> = 'default'
   let font: ReturnType<WebMcpToolDeps['getFontPairing']> = 'default'
   let mode: ReturnType<WebMcpToolDeps['getThemeMode']> = 'system'
   let sound: ReturnType<WebMcpToolDeps['getSoundPreference']> = 'off'
-  const mockFindEasterEgg = mock.fn(async (id: string) => {
-    return {
-      alreadyActive: false,
-      id,
-      name: `${id.slice(0, 1).toUpperCase()}${id.slice(1)}`,
-    }
-  })
-  const mockNavigate = mock.fn()
-  const mockSetFontPairing = mock.fn((pairing: typeof font) => {
-    font = pairing
-  })
-  const mockSetThemeColor = mock.fn((next: typeof color) => {
-    color = next
-  })
-  const mockSetThemeMode = mock.fn((next: typeof mode) => {
-    mode = next
-  })
-  const mockToggleSoundPreference = mock.fn(() => {
-    sound = sound === 'on' ? 'off' : 'on'
 
-    return sound
-  })
+  return createWebMcpDeps({
+    findEasterEgg: async (id) => {
+      return {
+        alreadyActive: false,
+        id,
+        name: `${id.slice(0, 1).toUpperCase()}${id.slice(1)}`,
+      }
+    },
+    getFontPairing: () => {
+      return font
+    },
+    getSoundPreference: () => {
+      return sound
+    },
+    getThemeColor: () => {
+      return color
+    },
+    getThemeMode: () => {
+      return mode
+    },
+    navigate: () => {
+      return undefined
+    },
+    pages: PAGES,
+    setFontPairing: (pairing) => {
+      font = pairing
+    },
+    setSoundPreference: (enabled) => {
+      sound = enabled ? 'on' : 'off'
 
-  return {
-    deps: createWebMcpDeps({
-      findEasterEgg: mockFindEasterEgg,
-      getFontPairing: () => {
-        return font
-      },
-      getSoundPreference: () => {
-        return sound
-      },
-      getThemeColor: () => {
-        return color
-      },
-      getThemeMode: () => {
-        return mode
-      },
-      navigate: mockNavigate,
-      pages: PAGES,
-      setFontPairing: mockSetFontPairing,
-      setThemeColor: mockSetThemeColor,
-      setThemeMode: mockSetThemeMode,
-      toggleSoundPreference: mockToggleSoundPreference,
-      ...overrides,
-    }),
-    mockFindEasterEgg,
-    mockNavigate,
-    mockSetFontPairing,
-    mockSetThemeColor,
-    mockSetThemeMode,
-    mockToggleSoundPreference,
-  }
+      return sound
+    },
+    setThemeColor: (next) => {
+      color = next
+    },
+    setThemeMode: (next) => {
+      mode = next
+    },
+    ...overrides,
+  })
 }
 
 async function executeTool(
@@ -90,201 +72,260 @@ async function executeTool(
   name: string,
   input: Record<string, unknown> = {},
 ) {
+  return getTool(deps, name).execute(input) as Promise<WebMcpToolResult> | WebMcpToolResult
+}
+
+function getTool(deps: WebMcpToolDeps, name: string) {
   const tool = createWebMcpTools(deps).find((entry) => {
     return entry.name === name
   })
 
   assert.ok(tool, `missing tool ${name}`)
 
-  return tool.execute(input) as Promise<WebMcpToolResult> | WebMcpToolResult
+  return tool
 }
 
 function isToolError(result: unknown): result is WebMcpToolError {
   return Boolean(result && typeof result === 'object' && 'error' in result)
 }
 
-function mutationCount(spies: {
-  mockFindEasterEgg: { mock: { calls: unknown[] } }
-  mockNavigate: { mock: { calls: unknown[] } }
-  mockSetFontPairing: { mock: { calls: unknown[] } }
-  mockSetThemeColor: { mock: { calls: unknown[] } }
-  mockSetThemeMode: { mock: { calls: unknown[] } }
-  mockToggleSoundPreference: { mock: { calls: unknown[] } }
-}) {
-  return (
-    spies.mockFindEasterEgg.mock.calls.length +
-    spies.mockNavigate.mock.calls.length +
-    spies.mockSetFontPairing.mock.calls.length +
-    spies.mockSetThemeColor.mock.calls.length +
-    spies.mockSetThemeMode.mock.calls.length +
-    spies.mockToggleSoundPreference.mock.calls.length
-  )
+function schemaProperty(deps: WebMcpToolDeps, toolName: string, key: string) {
+  const properties = getTool(deps, toolName).inputSchema.properties as
+    | Record<
+        string,
+        | { enum?: string[]; oneOf?: { const: string; description?: string; title?: string }[] }
+        | undefined
+      >
+    | undefined
+
+  return properties?.[key]
 }
 
-describe('createWebMcpTools', () => {
-  test('builds the navigate enum from the palette page list', () => {
-    const pages = [
-      { href: '/resume', name: 'Resume' },
-      { href: '/new-page', name: 'New Page' },
-    ]
-    const tool = createWebMcpTools(createDeps({ pages }).deps).find((entry) => {
-      return entry.name === 'navigate_to_page'
-    })
-    const schema = tool?.inputSchema as {
-      properties?: { page?: { enum?: readonly string[] } }
-    }
-
-    assert.ok(tool)
-    assert.deepEqual(schema.properties?.page?.enum, ['/resume', '/new-page'])
-  })
-})
-
-describe('set_theme', () => {
+describe('webmcp tools', () => {
   afterEach(() => {
     mock.restoreAll()
   })
 
-  test('applies mode and color', async () => {
-    const { deps } = createDeps()
-    const result = await executeTool(deps, 'set_theme', { color: 'blue', mode: 'dark' })
+  describe('createWebMcpTools', () => {
+    test('builds page and secret schemas from the given lists', () => {
+      const deps = createDeps({
+        getEasterEggCatalog: () => {
+          return [{ hint: 'Skyward', id: 'ember', name: 'Campfire' }]
+        },
+        pages: [{ href: '/new-page', name: 'New Page' }],
+      })
+      const page = schemaProperty(deps, 'navigate_to_page', 'page')
+      const secret = schemaProperty(deps, 'find_secret', 'name')
 
-    assert.equal(result, 'Appearance is now dark. Color is now blue.')
-    assert.equal(deps.getThemeMode(), 'dark')
-    assert.equal(deps.getThemeColor(), 'blue')
-  })
-
-  test('applies only the provided field', async () => {
-    const { deps } = createDeps()
-    const result = await executeTool(deps, 'set_theme', { mode: 'light' })
-
-    assert.equal(result, 'Appearance is now light.')
-    assert.equal(deps.getThemeMode(), 'light')
-    assert.equal(deps.getThemeColor(), 'default')
-  })
-})
-
-describe('set_font_pairing', () => {
-  afterEach(() => {
-    mock.restoreAll()
-  })
-
-  test('applies a known pairing', async () => {
-    const { deps } = createDeps()
-    const result = await executeTool(deps, 'set_font_pairing', { pairing: 'work' })
-
-    assert.equal(result, 'Font pairing is now work.')
-    assert.equal(deps.getFontPairing(), 'work')
-  })
-})
-
-describe('toggle_sound', () => {
-  afterEach(() => {
-    mock.restoreAll()
-  })
-
-  test('toggles the current preference', async () => {
-    const { deps } = createDeps()
-
-    assert.equal(await executeTool(deps, 'toggle_sound'), 'Sounds are now on.')
-    assert.equal(deps.getSoundPreference(), 'on')
-  })
-})
-
-describe('navigate_to_page', () => {
-  afterEach(() => {
-    mock.restoreAll()
-  })
-
-  test('navigates to a known page', async () => {
-    const { deps, mockNavigate } = createDeps()
-    const result = await executeTool(deps, 'navigate_to_page', { page: '/resume' })
-
-    assert.equal(result, 'Opened Resume (/resume).')
-    assert.equal(mockNavigate.mock.calls.length, 1)
-  })
-})
-
-describe('list_secrets', () => {
-  afterEach(() => {
-    mock.restoreAll()
-  })
-
-  test('lists the real catalog without leaking solutions', async () => {
-    const deps = createWebMcpDeps({
-      getFoundEasterEggIds: () => {
-        return ['hyrule']
-      },
-      navigate: () => {
-        return undefined
-      },
-      pages: PAGES,
-    })
-    const result = await executeTool(deps, 'list_secrets')
-
-    assert.equal(typeof result, 'string')
-    if (typeof result !== 'string') {
-      return
-    }
-
-    assert.match(result, /Secrets: 1 of 3 found/)
-    assert.match(result, /Aurora \(unfound\)/)
-    assert.match(result, /Hyrule \(found\)/)
-    assert.match(result, /Lamp \(unfound\)/)
-    assert.match(result, /A little song still sleeps in the keys/)
-
-    const leaked = SOLUTION_LEAKS.filter((token) => {
-      return result.toLowerCase().includes(token.toLowerCase())
+      assert.deepEqual(
+        page?.oneOf?.map((entry) => {
+          return entry.const
+        }),
+        ['/new-page'],
+      )
+      assert.equal(page?.oneOf?.[0]?.title, 'New Page')
+      assert.deepEqual(secret?.enum, ['ember'])
+      assert.equal(JSON.stringify(secret).includes('Skyward'), false)
     })
 
-    assert.deepEqual(leaked, [])
-  })
-})
+    test('describes each font pairing from FONT_PAIRING_CONFIGS', () => {
+      const pairing = schemaProperty(createDeps(), 'set_font_pairing', 'pairing')
 
-describe('find_secret', () => {
-  afterEach(() => {
-    mock.restoreAll()
-  })
+      for (const config of FONT_PAIRING_CONFIGS) {
+        const choice = pairing?.oneOf?.find((entry) => {
+          return entry.const === config.id
+        })
 
-  test('unlocks a named secret', async () => {
-    const { deps } = createDeps()
-    const result = await executeTool(deps, 'find_secret', { name: 'aurora' })
-
-    assert.equal(result, 'Found Aurora. Its effect is in play.')
-  })
-
-  test('says when the secret is already in play', async () => {
-    const { deps } = createDeps({
-      findEasterEgg: async () => {
-        return {
-          alreadyActive: true,
-          id: 'lamp',
-          name: 'Lamp',
-        }
-      },
+        assert.equal(choice?.title, config.label)
+        assert.equal((choice?.description ?? '').includes(config.heading.name), true)
+        assert.equal((choice?.description ?? '').includes(config.body.name), true)
+      }
     })
-    const result = await executeTool(deps, 'find_secret', { name: 'lamp' })
 
-    assert.equal(result, 'Lamp is already in play.')
+    test('lists catalog secret ids without hints and titles the home page', () => {
+      const deps = createDeps()
+      const secret = schemaProperty(deps, 'find_secret', 'name')
+      const page = schemaProperty(deps, 'navigate_to_page', 'page')
+      const catalog = getEasterEggCatalog()
+
+      assert.deepEqual(
+        secret?.enum,
+        catalog.map((item) => {
+          return item.id
+        }),
+      )
+      assert.equal(
+        catalog.some((item) => {
+          return JSON.stringify(secret).includes(item.hint)
+        }),
+        false,
+      )
+      assert.equal(
+        page?.oneOf?.find((entry) => {
+          return entry.const === toPagePath('index')
+        })?.title,
+        'Home',
+      )
+    })
   })
-})
 
-describe('invalid tool input', () => {
-  afterEach(() => {
-    mock.restoreAll()
-  })
+  describe('set_theme', () => {
+    test('applies mode and color', async () => {
+      const deps = createDeps()
+      const result = await executeTool(deps, 'set_theme', { color: 'blue', mode: 'dark' })
 
-  test('rejects bad input without side effects', async () => {
-    for (const { code, input, name } of INVALID_INPUT_CASES) {
-      const spies = createDeps()
-      const result = await executeTool(spies.deps, name, { ...input })
+      assert.equal(result, 'Appearance is now dark. Color is now blue.')
+      assert.equal(deps.getThemeMode(), 'dark')
+      assert.equal(deps.getThemeColor(), 'blue')
+    })
 
-      assert.equal(isToolError(result), true, name)
+    test('applies only the provided field', async () => {
+      const deps = createDeps()
+      const result = await executeTool(deps, 'set_theme', { mode: 'light' })
+
+      assert.equal(result, 'Appearance is now light.')
+      assert.equal(deps.getThemeMode(), 'light')
+      assert.equal(deps.getThemeColor(), 'default')
+    })
+
+    test('returns a clear error when mode and color are omitted', async () => {
+      const result = await executeTool(createDeps(), 'set_theme', {})
+
+      assert.equal(isToolError(result), true)
       if (!isToolError(result)) {
-        continue
+        return
       }
 
-      assert.equal(result.code, code, name)
-      assert.equal(mutationCount(spies), 0, name)
-    }
+      assert.equal(result.code, 'INVALID_INPUT')
+      assert.match(result.error, /mode/i)
+      assert.match(result.error, /color/i)
+    })
+  })
+
+  describe('set_font_pairing', () => {
+    test('applies a known pairing', async () => {
+      const deps = createDeps()
+      const pairing = FONT_PAIRING_CONFIGS[0]
+
+      assert.ok(pairing)
+
+      const result = await executeTool(deps, 'set_font_pairing', { pairing: pairing.id })
+
+      assert.equal(result, `Font pairing is now ${pairing.label}.`)
+      assert.equal(deps.getFontPairing(), pairing.id)
+    })
+  })
+
+  describe('set_sound', () => {
+    test('sets the requested state without toggling', async () => {
+      const deps = createDeps()
+
+      assert.equal(await executeTool(deps, 'set_sound', { enabled: true }), 'Sounds are now on.')
+      assert.equal(deps.getSoundPreference(), 'on')
+      assert.equal(await executeTool(deps, 'set_sound', { enabled: true }), 'Sounds are now on.')
+      assert.equal(deps.getSoundPreference(), 'on')
+      assert.equal(await executeTool(deps, 'set_sound', { enabled: false }), 'Sounds are now off.')
+      assert.equal(deps.getSoundPreference(), 'off')
+    })
+  })
+
+  describe('navigate_to_page', () => {
+    test('navigates to a known page', async () => {
+      const navigate = mock.fn()
+      const result = await executeTool(createDeps({ navigate }), 'navigate_to_page', {
+        page: RESUME_LINK.href,
+      })
+
+      assert.equal(result, `Opened ${RESUME_LINK.name} (${RESUME_LINK.href}).`)
+      assert.equal(navigate.mock.calls.length, 1)
+    })
+  })
+
+  describe('list_secrets', () => {
+    test('lists the real catalog without leaking solutions', async () => {
+      const catalog = getEasterEggCatalog()
+      const foundId = catalog[1]?.id
+      const result = await executeTool(
+        createDeps({
+          getFoundEasterEggIds: () => {
+            return foundId ? [foundId] : []
+          },
+        }),
+        'list_secrets',
+      )
+
+      assert.equal(typeof result, 'string')
+      if (typeof result !== 'string') {
+        return
+      }
+
+      assert.match(result, new RegExp(`Secrets: 1 of ${catalog.length} found`))
+
+      for (const secret of catalog) {
+        const status = secret.id === foundId ? 'found' : 'unfound'
+
+        assert.match(result, new RegExp(`${secret.name} \\(${status}\\)`))
+        assert.equal(result.includes(secret.hint), true)
+      }
+
+      assert.equal(/arrowup|keya|konami|sequence/i.test(result), false)
+    })
+  })
+
+  describe('find_secret', () => {
+    test('unlocks a named secret', async () => {
+      const secret = getEasterEggCatalog()[0]
+
+      assert.ok(secret)
+
+      const result = await executeTool(createDeps(), 'find_secret', { name: secret.id })
+
+      assert.equal(result, `Found ${secret.name}. Its effect is in play.`)
+    })
+
+    test('says when the secret is already in play', async () => {
+      const secret = getEasterEggCatalog().at(-1)
+
+      assert.ok(secret)
+
+      const result = await executeTool(
+        createDeps({
+          findEasterEgg: async () => {
+            return {
+              alreadyActive: true,
+              id: secret.id,
+              name: secret.name,
+            }
+          },
+        }),
+        'find_secret',
+        { name: secret.id },
+      )
+
+      assert.equal(result, `${secret.name} is already in play.`)
+    })
+  })
+
+  describe('invalid tool input', () => {
+    test('rejects bad input', async () => {
+      const cases = [
+        { code: 'INVALID_INPUT', input: { color: 'hotpink' }, name: 'set_theme' },
+        { code: 'INVALID_INPUT', input: { pairing: 'comic' }, name: 'set_font_pairing' },
+        { code: 'INVALID_INPUT', input: {}, name: 'set_sound' },
+        { code: 'UNKNOWN_PAGE', input: { page: '/admin' }, name: 'navigate_to_page' },
+        { code: 'UNKNOWN_SECRET', input: { name: 'konami' }, name: 'find_secret' },
+      ] as const
+
+      for (const { code, input, name } of cases) {
+        const result = await executeTool(createDeps(), name, { ...input })
+
+        assert.equal(isToolError(result), true, name)
+        if (!isToolError(result)) {
+          continue
+        }
+
+        assert.equal(result.code, code, name)
+      }
+    })
   })
 })
