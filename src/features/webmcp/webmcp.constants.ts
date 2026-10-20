@@ -38,5 +38,3 @@ export const WEBMCP_OUTPUT_MAX = 1500
 export type FontPairingValue = (typeof FONT_PAIRING_VALUES)[number]
 export type SecretId = (typeof SECRET_IDS)[number]
 export type SitePagePath = (typeof SITE_PAGE_PATHS)[number]
-export type ThemeColorValue = (typeof THEME_COLOR_VALUES)[number]
-export type ThemeModeValue = (typeof THEME_MODE_VALUES)[number]

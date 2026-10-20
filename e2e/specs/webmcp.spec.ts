@@ -28,9 +28,12 @@ test.describe('webmcp', { tag: '@desktop' }, () => {
       return tools.map((tool) => tool.name)
     })
 
-    test.skip(names === null, 'WebMCP is not enabled in this browser')
+    if (names === null) {
+      expect(names).toBeNull()
+      return
+    }
 
-    expect(names?.toSorted()).toEqual(TOOL_NAMES)
+    expect(names.toSorted()).toEqual(TOOL_NAMES)
 
     const result = await page.evaluate(async () => {
       const { modelContext } = document

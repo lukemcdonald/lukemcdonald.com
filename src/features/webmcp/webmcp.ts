@@ -1,3 +1,5 @@
+import type { WebMCP } from 'webmcp-types'
+
 import {
   findEasterEgg,
   getEasterEggCatalog,
@@ -131,7 +133,7 @@ export async function registerWebMcpTools(deps: WebMcpToolDeps) {
   )
 }
 
-function getModelContext() {
+function getModelContext(): WebMCP.ModelContext | undefined {
   if (typeof document === 'undefined' || !('modelContext' in document)) {
     return
   }
