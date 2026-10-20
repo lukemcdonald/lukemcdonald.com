@@ -1,4 +1,4 @@
-import type { CommandPaletteEggItem, CommandPaletteNavItem } from './types'
+import type { CommandPaletteEggItem, CommandPaletteNavGroup, CommandPaletteNavItem } from './types'
 import type { ThemeColor } from '@/components/Settings/ThemeColor/types'
 import type { ThemeMode } from '@/components/Settings/ThemeMode/types'
 
@@ -136,4 +136,13 @@ export function isPaletteBackKey(event: KeyboardEvent, search: string) {
 
 export function isSecretsShortcut(event: KeyboardEvent) {
   return (event.ctrlKey || event.metaKey) && event.key === '.'
+}
+
+export function toPaletteNavigationGroups(
+  groups: CommandPaletteNavGroup[],
+): CommandPaletteNavGroup[] {
+  return groups.map((group) => ({
+    links: [...group.links].toSorted((left, right) => left.name.localeCompare(right.name)),
+    name: group.name,
+  }))
 }

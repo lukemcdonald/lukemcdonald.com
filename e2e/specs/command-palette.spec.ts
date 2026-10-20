@@ -1,5 +1,6 @@
 import type { Locator } from '@playwright/test'
 
+import { commandPalettePageTestId } from '../constants'
 import { expect, test } from '../fixtures'
 
 async function expectHoverHighlightOnly(hovered: Locator, selected: Locator, idle: Locator) {
@@ -30,6 +31,29 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
 
     await homePage.page.keyboard.press('ControlOrMeta+k')
     await expect(homePage.header.commandPalette.dialog).toBeHidden()
+  })
+
+  test('groups pages by menu group and hides empty groups while filtering', async ({
+    homePage,
+  }) => {
+    const palette = homePage.header.commandPalette
+    const work = palette.navGroup('Work')
+    const play = palette.navGroup('Play')
+    const live = palette.navGroup('Live')
+
+    await homePage.goto()
+    await palette.openWithKeyboard()
+
+    await expect(work.getByTestId(commandPalettePageTestId('/resume'))).toBeVisible()
+    await expect(work.getByTestId(commandPalettePageTestId('/work/cedaro'))).toBeVisible()
+    await expect(play.getByTestId(commandPalettePageTestId('/tread-talks'))).toBeVisible()
+    await expect(live.getByTestId(commandPalettePageTestId('/i-am-a/christian'))).toBeVisible()
+
+    await palette.input.fill('ced')
+    await expect(work.getByTestId(commandPalettePageTestId('/work/cedaro'))).toBeVisible()
+    await expect(work.getByTestId(commandPalettePageTestId('/resume'))).toBeHidden()
+    await expect(play).toBeHidden()
+    await expect(live).toBeHidden()
   })
 
   test('arrow keys expose the active command to assistive tech', async ({ homePage }) => {
