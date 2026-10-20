@@ -49,7 +49,12 @@ test.describe('webmcp', { tag: '@desktop' }, () => {
         return null
       }
 
-      return modelContext.executeTool(tool, { mode: 'dark' })
+      try {
+        return await modelContext.executeTool(tool, { mode: 'dark' })
+      } catch {
+        // Chrome 154 still parses a JSON string; object args land in 155.
+        return modelContext.executeTool(tool, JSON.stringify({ mode: 'dark' }) as unknown as object)
+      }
     })
 
     expect(result).toEqual('Appearance is now dark.')
