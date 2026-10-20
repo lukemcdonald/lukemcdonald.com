@@ -1,0 +1,22 @@
+{
+  "version": 3,
+  "skills": {
+    "fallow": {
+      "package": "fallow",
+      "version": "3.34.1",
+      "skillPath": "skills/fallow/SKILL.md"
+    },
+    "fallow-setup": {
+      "package": "fallow",
+      "version": "3.34.1",
+      "skillPath": "skills/fallow-setup/SKILL.md"
+    }
+  },
+  "remote": {
+    "build-webmcp-tools": {
+      "package": ".",
+      "source": "GoogleChromeLabs/webmcp-tools/webmcp-skills",
+      "ref": "9229b1b8e5b59b9028e7a88327c6ad160fbbc265"
+    }
+  }
+}

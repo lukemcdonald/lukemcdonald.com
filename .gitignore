@@ -43,7 +43,7 @@ playwright-report/
 test-results/
 
 # Agents
-**/.agents/skills/**
-**/.claude/skills/**
-**/skills-lock.json
-**/skills-npm-lock.json
+**/.agents/skills/*
+!**/.agents/skills/build-webmcp-tools
+**/.claude/skills/*
+!**/.claude/skills/build-webmcp-tools

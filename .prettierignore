@@ -35,3 +35,7 @@ test-results/
 
 # Git
 .git/
+
+# Committed agent skills
+.agents/
+.claude/
