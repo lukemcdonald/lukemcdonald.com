@@ -3,24 +3,25 @@ import type { SoundPreference } from '@/components/Settings/Sound/types'
 import type { ThemeColor } from '@/components/Settings/ThemeColor/types'
 import type { ThemeMode } from '@/components/Settings/ThemeMode/types'
 
+import { EASTER_EGG_IDS } from '@/components/EasterEggs/easter-eggs'
 import { FONT_PAIRINGS } from '@/components/Settings/Font/pairings'
-import { THEME_LABELS } from '@/components/Settings/ThemeColor/constants'
+import { THEME_COLORS, THEME_LABELS } from '@/components/Settings/ThemeColor/constants'
 import { isThemeColor } from '@/components/Settings/ThemeColor/utils'
-import { MODE_LABELS } from '@/components/Settings/ThemeMode/constants'
+import { MODE_LABELS, THEME_MODES } from '@/components/Settings/ThemeMode/constants'
 import { isThemeMode } from '@/components/Settings/ThemeMode/utils'
 
-import {
-  FONT_PAIRING_VALUES,
-  type FontPairingValue,
-  SECRET_IDS,
-  type SecretId,
-  SITE_PAGE_PATHS,
-  SITE_PAGE_TITLES,
-  type SitePagePath,
-  THEME_COLOR_VALUES,
-  THEME_MODE_VALUES,
-  WEBMCP_OUTPUT_MAX,
-} from './webmcp.constants'
+const EMPTY_INPUT_SCHEMA = {
+  additionalProperties: false,
+  properties: {},
+  type: 'object',
+} as const
+
+const WEBMCP_OUTPUT_MAX = 1500
+
+export type WebMcpPage = {
+  href: string
+  name: string
+}
 
 export type WebMcpSecret = {
   hint: string
@@ -29,9 +30,7 @@ export type WebMcpSecret = {
 }
 
 export type WebMcpToolDeps = {
-  findEasterEgg: (
-    id: string,
-  ) => Promise<{ alreadyActive: boolean; id: string; name: string } | undefined>
+  findEasterEgg: (id: string) => Promise<{ alreadyActive: boolean; id: string; name: string }>
   getEasterEggCatalog: () => readonly WebMcpSecret[]
   getFontPairing: () => FontPairing
   getFoundEasterEggIds: () => readonly string[]
@@ -39,6 +38,7 @@ export type WebMcpToolDeps = {
   getThemeColor: () => ThemeColor
   getThemeMode: () => ThemeMode
   navigate: (href: string) => void | Promise<void>
+  pages: readonly WebMcpPage[]
   setFontPairing: (pairing: FontPairing) => void
   setThemeColor: (color: ThemeColor) => void
   setThemeMode: (mode: ThemeMode) => void
@@ -54,155 +54,166 @@ export type WebMcpToolError = {
 
 export type WebMcpToolResult = string | WebMcpToolError
 
-export const SET_THEME_INPUT_SCHEMA = {
-  additionalProperties: false,
-  properties: {
-    color: {
-      description: "One of the site's theme colors.",
-      enum: THEME_COLOR_VALUES,
-      type: 'string',
+export function createWebMcpTools(deps: WebMcpToolDeps) {
+  const pageHrefs = deps.pages.map((page) => {
+    return page.href
+  })
+
+  return [
+    {
+      description:
+        'Sets the site appearance and color. Use when the visitor wants a light, dark, or system look, or a different theme color.',
+      execute: (input: { color?: string; mode?: string }) => {
+        return handleSetTheme(deps, input)
+      },
+      inputSchema: {
+        additionalProperties: false,
+        properties: {
+          color: {
+            description: "One of the site's theme colors.",
+            enum: THEME_COLORS,
+            type: 'string',
+          },
+          mode: {
+            description: 'Light, dark, or match the system appearance.',
+            enum: THEME_MODES,
+            type: 'string',
+          },
+        },
+        type: 'object',
+      } as const,
+      name: 'set_theme',
     },
-    mode: {
-      description: 'Light, dark, or match the system appearance.',
-      enum: THEME_MODE_VALUES,
-      type: 'string',
+    {
+      description:
+        "Applies a work, play, or live font pairing. Use when the visitor wants to change the site's fonts.",
+      execute: (input: { pairing?: string }) => {
+        return handleSetFontPairing(deps, input)
+      },
+      inputSchema: {
+        additionalProperties: false,
+        properties: {
+          pairing: {
+            description: 'Work, play, or live font pairing.',
+            enum: FONT_PAIRINGS,
+            type: 'string',
+          },
+        },
+        required: ['pairing'],
+        type: 'object',
+      } as const,
+      name: 'set_font_pairing',
     },
-  },
-  type: 'object',
-} as const
-
-export const SET_FONT_PAIRING_INPUT_SCHEMA = {
-  additionalProperties: false,
-  properties: {
-    pairing: {
-      description: 'Work, play, or live font pairing.',
-      enum: FONT_PAIRING_VALUES,
-      type: 'string',
+    {
+      description:
+        'Turns interaction sounds on or off. Use when the visitor wants to mute or unmute UI sounds.',
+      execute: () => {
+        return handleToggleSound(deps)
+      },
+      inputSchema: EMPTY_INPUT_SCHEMA,
+      name: 'toggle_sound',
     },
-  },
-  required: ['pairing'],
-  type: 'object',
-} as const
-
-export const EMPTY_INPUT_SCHEMA = {
-  additionalProperties: false,
-  properties: {},
-  type: 'object',
-} as const
-
-export const NAVIGATE_TO_PAGE_INPUT_SCHEMA = {
-  additionalProperties: false,
-  properties: {
-    page: {
-      description: 'Path of the page to open.',
-      enum: SITE_PAGE_PATHS,
-      type: 'string',
+    {
+      description:
+        "Opens one of the site's pages. Use when the visitor wants to go to a specific page.",
+      execute: (input: { page?: string }) => {
+        return handleNavigateToPage(deps, input)
+      },
+      inputSchema: {
+        additionalProperties: false,
+        properties: {
+          page: {
+            description: 'Path of the page to open.',
+            enum: pageHrefs,
+            type: 'string',
+          },
+        },
+        required: ['page'],
+        type: 'object',
+      } as const,
+      name: 'navigate_to_page',
     },
-  },
-  required: ['page'],
-  type: 'object',
-} as const
-
-export const FIND_SECRET_INPUT_SCHEMA = {
-  additionalProperties: false,
-  properties: {
-    name: {
-      description: 'Name of the secret to unlock.',
-      enum: SECRET_IDS,
-      type: 'string',
+    {
+      annotations: {
+        readOnlyHint: true,
+      },
+      description:
+        'Lists hidden surprises with a hint and whether each has been found. Use when the visitor asks what secrets exist or which are still undiscovered.',
+      execute: () => {
+        return handleListSecrets(deps)
+      },
+      inputSchema: EMPTY_INPUT_SCHEMA,
+      name: 'list_secrets',
     },
-  },
-  required: ['name'],
-  type: 'object',
-} as const
+    {
+      description:
+        'Unlocks a named hidden surprise and plays its effect. Use when the visitor wants to find a secret by name.',
+      execute: (input: { name?: string }) => {
+        return handleFindSecret(deps, input)
+      },
+      inputSchema: {
+        additionalProperties: false,
+        properties: {
+          name: {
+            description: 'Name of the secret to unlock.',
+            enum: EASTER_EGG_IDS,
+            type: 'string',
+          },
+        },
+        required: ['name'],
+        type: 'object',
+      } as const,
+      name: 'find_secret',
+    },
+  ]
+}
 
-export function handleSetTheme(
-  deps: WebMcpToolDeps,
-  input: { color?: string; mode?: string },
-): WebMcpToolResult {
-  const color = input.color
-  const mode = input.mode
-
-  if (color === undefined && mode === undefined) {
-    return toToolError(
-      'INVALID_INPUT',
-      'Provide a mode, a color, or both.',
-      `Modes: ${THEME_MODE_VALUES.join(', ')}. Colors: ${THEME_COLOR_VALUES.join(', ')}.`,
-    )
+function clipToolOutput(payload: string) {
+  if (payload.length <= WEBMCP_OUTPUT_MAX) {
+    return payload
   }
 
-  if (mode !== undefined && !isThemeMode(mode)) {
-    return toToolError(
-      'INVALID_INPUT',
-      `Unknown mode "${mode}".`,
-      `Use one of: ${THEME_MODE_VALUES.join(', ')}.`,
-    )
-  }
+  return `${payload.slice(0, WEBMCP_OUTPUT_MAX - 1)}...`
+}
 
-  if (color !== undefined && !isThemeColor(color)) {
-    return toToolError(
-      'INVALID_INPUT',
-      `Unknown color "${color}".`,
-      `Use one of: ${THEME_COLOR_VALUES.join(', ')}.`,
-    )
-  }
+function formatThemeResult(mode?: ThemeMode, color?: ThemeColor) {
+  const parts: string[] = []
 
   if (mode !== undefined) {
-    deps.setThemeMode(mode)
+    parts.push(`Appearance is now ${MODE_LABELS[mode].toLowerCase()}.`)
   }
 
   if (color !== undefined) {
-    deps.setThemeColor(color)
+    parts.push(`Color is now ${THEME_LABELS[color].toLowerCase()}.`)
   }
 
-  return formatThemeResult(deps.getThemeMode(), deps.getThemeColor(), Boolean(mode), Boolean(color))
+  return parts.join(' ')
 }
 
-export function handleSetFontPairing(
+async function handleFindSecret(
   deps: WebMcpToolDeps,
-  input: { pairing?: string },
-): WebMcpToolResult {
-  const pairing = input.pairing
-
-  if (!isFontPairingValue(pairing)) {
-    return toToolError(
-      'INVALID_INPUT',
-      pairing ? `Unknown font pairing "${pairing}".` : 'Provide a font pairing.',
-      `Use one of: ${FONT_PAIRING_VALUES.join(', ')}.`,
-    )
-  }
-
-  deps.setFontPairing(pairing)
-
-  return `Font pairing is now ${pairing}.`
-}
-
-export function handleToggleSound(deps: WebMcpToolDeps): WebMcpToolResult {
-  const next = deps.toggleSoundPreference()
-
-  return `Sounds are now ${next}.`
-}
-
-export async function handleNavigateToPage(
-  deps: WebMcpToolDeps,
-  input: { page?: string },
+  input: { name?: string },
 ): Promise<WebMcpToolResult> {
-  const page = input.page
+  const name = input.name
 
-  if (!isSitePagePath(page)) {
+  if (!isOneOf(EASTER_EGG_IDS, name)) {
     return toToolError(
-      'UNKNOWN_PAGE',
-      page ? `Unknown page "${page}".` : 'Provide a page path.',
-      `Use one of: ${SITE_PAGE_PATHS.join(', ')}.`,
+      'UNKNOWN_SECRET',
+      name ? `Unknown secret "${name}".` : 'Provide a secret name.',
+      `Use one of: ${EASTER_EGG_IDS.join(', ')}.`,
     )
   }
 
-  await deps.navigate(page)
+  const result = await deps.findEasterEgg(name)
 
-  return `Opened ${SITE_PAGE_TITLES[page]} (${page}).`
+  if (result.alreadyActive) {
+    return `${result.name} is already in play.`
+  }
+
+  return `Found ${result.name}. Its effect is in play.`
 }
 
-export function handleListSecrets(deps: WebMcpToolDeps): WebMcpToolResult {
+function handleListSecrets(deps: WebMcpToolDeps): WebMcpToolResult {
   const catalog = deps.getEasterEggCatalog()
   const foundIds = new Set(deps.getFoundEasterEggIds())
   const lines = catalog.map((secret) => {
@@ -216,74 +227,99 @@ export function handleListSecrets(deps: WebMcpToolDeps): WebMcpToolResult {
   return clipToolOutput(payload)
 }
 
-export async function handleFindSecret(
+async function handleNavigateToPage(
   deps: WebMcpToolDeps,
-  input: { name?: string },
+  input: { page?: string },
 ): Promise<WebMcpToolResult> {
-  const name = input.name
+  const page = input.page
+  const hrefs = deps.pages.map((item) => {
+    return item.href
+  })
 
-  if (!isSecretId(name)) {
+  if (!isOneOf(hrefs, page)) {
     return toToolError(
-      'UNKNOWN_SECRET',
-      name ? `Unknown secret "${name}".` : 'Provide a secret name.',
-      `Use one of: ${SECRET_IDS.join(', ')}.`,
+      'UNKNOWN_PAGE',
+      page ? `Unknown page "${page}".` : 'Provide a page path.',
+      `Use one of: ${hrefs.join(', ')}.`,
     )
   }
 
-  const result = await deps.findEasterEgg(name)
+  await deps.navigate(page)
 
-  if (!result) {
+  const title =
+    deps.pages.find((item) => {
+      return item.href === page
+    })?.name ?? page
+
+  return `Opened ${title} (${page}).`
+}
+
+function handleSetFontPairing(deps: WebMcpToolDeps, input: { pairing?: string }): WebMcpToolResult {
+  const pairing = input.pairing
+
+  if (!isOneOf(FONT_PAIRINGS, pairing)) {
     return toToolError(
-      'UNKNOWN_SECRET',
-      `Unknown secret "${name}".`,
-      `Use one of: ${SECRET_IDS.join(', ')}.`,
+      'INVALID_INPUT',
+      pairing ? `Unknown font pairing "${pairing}".` : 'Provide a font pairing.',
+      `Use one of: ${FONT_PAIRINGS.join(', ')}.`,
     )
   }
 
-  if (result.alreadyActive) {
-    return `${result.name} is already in play.`
+  deps.setFontPairing(pairing)
+
+  return `Font pairing is now ${pairing}.`
+}
+
+function handleSetTheme(
+  deps: WebMcpToolDeps,
+  input: { color?: string; mode?: string },
+): WebMcpToolResult {
+  const color = input.color
+  const mode = input.mode
+
+  if (color === undefined && mode === undefined) {
+    return toToolError(
+      'INVALID_INPUT',
+      'Provide a mode, a color, or both.',
+      `Modes: ${THEME_MODES.join(', ')}. Colors: ${THEME_COLORS.join(', ')}.`,
+    )
   }
 
-  return `Found ${result.name}. Its effect is in play.`
-}
-
-function clipToolOutput(payload: string) {
-  if (payload.length <= WEBMCP_OUTPUT_MAX) {
-    return payload
+  if (mode !== undefined && !isThemeMode(mode)) {
+    return toToolError(
+      'INVALID_INPUT',
+      `Unknown mode "${mode}".`,
+      `Use one of: ${THEME_MODES.join(', ')}.`,
+    )
   }
 
-  return `${payload.slice(0, WEBMCP_OUTPUT_MAX - 1)}...`
-}
-
-function formatThemeResult(
-  mode: ThemeMode,
-  color: ThemeColor,
-  changedMode: boolean,
-  changedColor: boolean,
-) {
-  const parts: string[] = []
-
-  if (changedMode) {
-    parts.push(`Appearance is now ${MODE_LABELS[mode].toLowerCase()}.`)
+  if (color !== undefined && !isThemeColor(color)) {
+    return toToolError(
+      'INVALID_INPUT',
+      `Unknown color "${color}".`,
+      `Use one of: ${THEME_COLORS.join(', ')}.`,
+    )
   }
 
-  if (changedColor) {
-    parts.push(`Color is now ${THEME_LABELS[color].toLowerCase()}.`)
+  if (mode !== undefined) {
+    deps.setThemeMode(mode)
   }
 
-  return parts.join(' ')
+  if (color !== undefined) {
+    deps.setThemeColor(color)
+  }
+
+  return formatThemeResult(mode, color)
 }
 
-function isFontPairingValue(value: string | undefined): value is FontPairingValue {
-  return value !== undefined && (FONT_PAIRINGS as readonly string[]).includes(value)
+function handleToggleSound(deps: WebMcpToolDeps): WebMcpToolResult {
+  const next = deps.toggleSoundPreference()
+
+  return `Sounds are now ${next}.`
 }
 
-function isSecretId(value: string | undefined): value is SecretId {
-  return value !== undefined && (SECRET_IDS as readonly string[]).includes(value)
-}
-
-function isSitePagePath(value: string | undefined): value is SitePagePath {
-  return value !== undefined && (SITE_PAGE_PATHS as readonly string[]).includes(value)
+function isOneOf<T extends string>(values: readonly T[], value: string | undefined): value is T {
+  return value !== undefined && (values as readonly string[]).includes(value)
 }
 
 function toToolError(code: string, error: string, suggestion: string): WebMcpToolError {

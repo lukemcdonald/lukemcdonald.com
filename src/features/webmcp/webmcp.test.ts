@@ -8,6 +8,7 @@ import { createWebMcpDeps, registerWebMcpTools, resetWebMcpRegistration } from '
 function createDeps(): WebMcpToolDeps {
   return createWebMcpDeps({
     navigate: mock.fn(),
+    pages: [{ href: '/resume', name: 'Resume' }],
   })
 }
 

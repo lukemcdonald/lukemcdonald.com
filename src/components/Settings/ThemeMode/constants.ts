@@ -1,6 +1,6 @@
 import type { ThemeMode } from './types'
 
-export const THEME_MODES: readonly ThemeMode[] = ['light', 'dark', 'system'] as const
+export const THEME_MODES = ['light', 'dark', 'system'] as const satisfies readonly ThemeMode[]
 
 export const DEFAULT_THEME_MODE: ThemeMode = 'system'
 

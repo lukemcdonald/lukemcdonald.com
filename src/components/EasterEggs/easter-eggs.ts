@@ -29,6 +29,9 @@ type Egg = {
 const ATTRIBUTE = 'data-easter-egg'
 const EGGS: readonly Egg[] = [auroraEgg, hyruleEgg, lampEgg]
 const CYCLE_STEPS = EGGS.length + 1
+
+export const EASTER_EGG_IDS = [auroraEgg.id, hyruleEgg.id, lampEgg.id] as const
+
 const IDLE_MS = 2500
 const STORAGE_ON = 'on'
 
@@ -77,7 +80,7 @@ export async function findEasterEgg(id: string) {
   const egg = EGGS.find((item) => item.id === id)
 
   if (!egg) {
-    return
+    throw new Error(`Unknown easter egg: ${id}`)
   }
 
   const alreadyActive = currentEggId() === egg.id
@@ -171,7 +174,7 @@ function cycleEgg() {
   }
 
   markFound(egg.id)
-  showEgg(egg)
+  void showEgg(egg)
 }
 
 function dispatchCompleted(completed: readonly Egg[]) {
@@ -398,7 +401,7 @@ function restoreEgg() {
   }
 
   markFound(egg.id)
-  showEgg(egg, true)
+  void showEgg(egg, true)
 }
 
 function scheduleIdleReset() {
@@ -488,7 +491,7 @@ function toggleEgg(egg: Egg | undefined) {
     return
   }
 
-  showEgg(egg)
+  void showEgg(egg)
 }
 
 function writeCycleIndex(index: number) {
