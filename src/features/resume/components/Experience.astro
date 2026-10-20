@@ -5,7 +5,6 @@ import ExperienceIcon from '@lucide/astro/icons/shield-ellipsis'
 
 import Link from '@/components/Link.astro'
 import Section from '@/features/resume/components/ui/Section.astro'
-import { resolveExperienceHref } from '@/features/resume/resume.utils'
 import { formatMonthYear } from '@/utils/dates'
 
 export interface Props {
@@ -23,7 +22,7 @@ const { experience } = Astro.props
     {experience.map((item) => {
       const endDateFormatted = formatMonthYear(item.endDate)
       const endDateLabel = endDateFormatted || item.endDate || 'Present'
-      const href = resolveExperienceHref(item)
+      const href = item.page ?? item.website
       const startDateFormatted = formatMonthYear(item.startDate)
       const startDateLabel = startDateFormatted || item.startDate || 'Unknown'
 

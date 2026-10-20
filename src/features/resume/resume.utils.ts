@@ -72,7 +72,3 @@ export function pickResumeSection(data: ResumeData, sectionId: string) {
 
   return data[sectionId as keyof ResumeData]
 }
-
-export function resolveExperienceHref(item: { page?: string; website?: string }) {
-  return item.page ?? item.website
-}
