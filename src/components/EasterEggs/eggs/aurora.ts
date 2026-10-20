@@ -22,6 +22,7 @@ const KONAMI_SEQUENCE = [
 ] as const
 
 export const auroraEgg = {
+  hint: 'An old arcade handshake still lights the night.',
   id: 'aurora',
   onActivate: mountAuroraFireflies,
   onDismiss: unmountAuroraFireflies,

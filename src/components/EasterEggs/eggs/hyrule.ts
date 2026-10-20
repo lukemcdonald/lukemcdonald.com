@@ -16,6 +16,7 @@ const JINGLE = [
 const MELODY = ['ArrowLeft', 'ArrowDown', 'KeyA', 'ArrowRight', 'ArrowUp', 'ArrowRight'] as const
 
 export const hyruleEgg = {
+  hint: 'A little song still sleeps in the keys.',
   id: 'hyrule',
   onActivate: mountHyrule,
   onDismiss: unmountHyrule,

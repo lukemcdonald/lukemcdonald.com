@@ -9,6 +9,7 @@ const TEMPLATE_ATTR = 'data-lamp-template'
 
 export const lampEgg = {
   dismissOnEscape: true,
+  hint: 'After the first light, keep cycling; a verse waits in the dark.',
   id: 'lamp',
   onActivate: mountLamp,
   onDismiss: unmountLamp,
