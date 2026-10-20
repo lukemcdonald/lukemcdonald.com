@@ -1,10 +1,12 @@
 ---
-title: CELTIC7 Studio
-subtitle: Work
 description: >
-  Full-stack web studio, Iowa, 2008–2014.
+  Iowa full-stack web studio I founded and ran from 2008 to 2014.
+navGroup: work
+order: 4
+seo:
+  description: I founded CELTIC7 Studio in Iowa and ran it as a full-stack web studio from 2008 to 2014, serving the University of Iowa, U.S. Olympic Trials, and NFL athletes.
+subtitle: Work
+title: CELTIC7 Studio
 ---
 
-I founded CELTIC7 Studio in Iowa in 2008 and ran it as Founder and Full-Stack Solutions Lead through 2014.
-
-The studio won contracts with the University of Iowa, U.S. Olympic Trials, and NFL athletes, covering consulting, scoping, and end-to-end delivery. It designed and delivered 20+ full-stack web applications spanning custom APIs, data-driven WordPress platforms, e-commerce, and third-party integrations.
+CELTIC7 Studio delivered custom APIs, WordPress platforms, and e-commerce for clients including the University of Iowa, U.S. Olympic Trials, and NFL athletes.
