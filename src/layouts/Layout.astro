@@ -154,5 +154,12 @@ const meta: SeoMeta = {
       document.addEventListener('astro:after-swap', setupTheme)
       document.addEventListener('astro:page-load', onAstroPageLoad)
     </script>
+    <script>
+      import { navigate } from 'astro:transitions/client'
+
+      import { createWebMcpDeps, registerWebMcpTools } from '@/features/webmcp/webmcp'
+
+      void registerWebMcpTools(createWebMcpDeps({ navigate }))
+    </script>
   </body>
 </html>

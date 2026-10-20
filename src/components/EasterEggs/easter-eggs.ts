@@ -16,8 +16,9 @@ import { lampEgg } from './eggs/lamp'
 
 type Egg = {
   dismissOnEscape?: boolean
+  hint: string
   id: string
-  onActivate?: (silent?: boolean) => void
+  onActivate?: (silent?: boolean) => void | Promise<void>
   onDismiss?: () => void
   onInit?: () => void
   sequence: readonly string[]
@@ -60,8 +61,38 @@ export function getEasterEggs() {
   }))
 }
 
+export function getEasterEggCatalog() {
+  return EGGS.map((egg) => ({
+    hint: egg.hint,
+    id: egg.id,
+    name: eggName(egg.id),
+  }))
+}
+
 export function getFoundEasterEggIds() {
   return readFoundIds()
+}
+
+export async function findEasterEgg(id: string) {
+  const egg = EGGS.find((item) => item.id === id)
+
+  if (!egg) {
+    return
+  }
+
+  const alreadyActive = currentEggId() === egg.id
+
+  markFound(egg.id)
+
+  if (!alreadyActive) {
+    await showEgg(egg)
+  }
+
+  return {
+    alreadyActive,
+    id: egg.id,
+    name: eggName(egg.id),
+  }
 }
 
 export function toggleEasterEgg(id: string) {
@@ -341,13 +372,13 @@ function remountEgg() {
 
   const egg = activeEgg
 
-  void loadEggStyles(egg.id).then(() => {
+  void loadEggStyles(egg.id).then(async () => {
     if (activeEgg !== egg) {
       return
     }
 
     document.documentElement.setAttribute(ATTRIBUTE, egg.id)
-    egg.onActivate?.(true)
+    await egg.onActivate?.(true)
   })
 }
 
@@ -409,20 +440,20 @@ function dismissOtherEgg(nextId: string) {
   hideEgg(true)
 }
 
-function showEgg(egg: Egg, silent = false) {
+async function showEgg(egg: Egg, silent = false) {
   dismissOtherEgg(egg.id)
   activeEgg = egg
   clearStoredEggs()
   setStorageItem(`${STORAGE_KEYS.easterEggPrefix}${egg.id}`, STORAGE_ON)
-  void loadEggStyles(egg.id).then(() => {
-    if (activeEgg !== egg) {
-      return
-    }
+  await loadEggStyles(egg.id)
 
-    document.documentElement.setAttribute(ATTRIBUTE, egg.id)
-    egg.onActivate?.(silent)
-    playEggSound(silent ? undefined : egg.soundOn)
-  })
+  if (activeEgg !== egg) {
+    return
+  }
+
+  document.documentElement.setAttribute(ATTRIBUTE, egg.id)
+  await egg.onActivate?.(silent)
+  playEggSound(silent ? undefined : egg.soundOn)
 }
 
 function stepEgg(egg: Egg, code: string): boolean {

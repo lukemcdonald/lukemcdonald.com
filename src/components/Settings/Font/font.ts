@@ -41,7 +41,7 @@ export function applyFontPairing(pairing: FontPairing): void {
   html.dataset.font = pairing
 }
 
-function setFontPairing(pairing: FontPairing): void {
+export function setFontPairing(pairing: FontPairing): void {
   applyFontPairing(pairing)
 
   if (pairing === DEFAULT_FONT_PAIRING) {

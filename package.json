@@ -31,6 +31,14 @@
     "typecheck": "astro sync && tsc --noEmit",
     "validate": "pnpm run -s lint && pnpm run -s format:check && pnpm run -s check && pnpm run -s test"
   },
+  "skills": [
+    {
+      "skills": [
+        "build-webmcp-tools"
+      ],
+      "source": "GoogleChromeLabs/webmcp-tools/webmcp-skills"
+    }
+  ],
   "dependencies": {
     "@lucide/astro": "^1.58.0",
     "@modelcontextprotocol/server": "^2.3.1",
@@ -60,7 +68,8 @@
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.15",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.71.2"
+    "typescript-eslint": "^8.71.2",
+    "webmcp-types": "^0.1.10"
   },
   "packageManager": "pnpm@12.4.2"
 }
