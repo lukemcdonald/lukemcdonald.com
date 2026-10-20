@@ -4,9 +4,6 @@ https://lukemcdonald.netlify.com/*   https://lukemcdonald.com/:splat 301!
 https://www.lukemcdonald.com/*       https://lukemcdonald.com/:splat 301!
 
 /jplayer-skins/premium-pixels       /
-/work/audiotheme                    /
-/work/blazer-six                    /
-/work/cedaro                        /
 /xmlrpc.php                         /
 
 # Cloudflare Web Analytics first-party proxy (paths must match src/configs/analytics.ts)

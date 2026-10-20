@@ -8,6 +8,7 @@ import {
   toExternalLinkAttrs,
   toHrefTestId,
   toNavMenuId,
+  toPaletteNavGroupId,
   toTestIdSlug,
 } from './navigation.utils.ts'
 
@@ -106,6 +107,14 @@ describe('toNavMenuId', () => {
 
   test('collapses extra characters into a single hyphen', () => {
     assert.equal(toNavMenuId('  TREAD Talks  '), 'nav-menu-tread-talks')
+  })
+})
+
+describe('toPaletteNavGroupId', () => {
+  test('prefixes a slugified group name', () => {
+    assert.equal(toPaletteNavGroupId('Work'), 'command-palette-nav-work')
+    assert.equal(toPaletteNavGroupId('Play'), 'command-palette-nav-play')
+    assert.equal(toPaletteNavGroupId('Live'), 'command-palette-nav-live')
   })
 })
 

@@ -1,4 +1,8 @@
-import { toHrefTestId, toNavMenuId } from '../src/features/navigation/navigation.utils'
+import {
+  toHrefTestId,
+  toNavMenuId,
+  toPaletteNavGroupId,
+} from '../src/features/navigation/navigation.utils'
 
 export const TEST_ID = {
   commandPalette: 'command-palette',
@@ -37,6 +41,14 @@ export const WCAG_TAGS = [
 
 export function commandPaletteEggTestId(id: string): string {
   return `command-palette-egg-${id}`
+}
+
+export function commandPaletteNavGroupTestId(name: string): string {
+  return toPaletteNavGroupId(name)
+}
+
+export function commandPalettePageTestId(href: string): string {
+  return toHrefTestId('command-palette-page', href)
 }
 
 export function fontOptionTestId(pairing: string): string {

@@ -147,6 +147,18 @@ function filterNavItems(root: Element, needle: string) {
   })
 }
 
+function hideEmptyNavGroups(root: Element) {
+  root.querySelectorAll<HTMLElement>('[data-palette-nav-group]').forEach((group) => {
+    const hasVisible = [...group.querySelectorAll<HTMLElement>('[data-palette-nav]')].some(
+      (item) => {
+        return !item.hidden
+      },
+    )
+
+    group.hidden = !hasVisible
+  })
+}
+
 function resolveActiveIndex(palette: Palette, items: HTMLElement[], highlightedHref?: string) {
   if (!palette.state.arrowOverride) {
     palette.state.activeIndex =
@@ -259,6 +271,7 @@ function syncList(palette: Palette) {
   const command = currentCommand(palette)
 
   filterNavItems(palette.root, query.trim().toLowerCase())
+  hideEmptyNavGroups(palette.root)
   syncEggs(palette, query)
 
   const items = visibleItems(palette)

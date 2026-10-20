@@ -11,6 +11,7 @@ import {
   getHighlightedCommand,
   isPaletteBackKey,
   isSecretsShortcut,
+  toPaletteNavigationGroups,
 } from './utils.ts'
 
 function createActions() {
@@ -201,6 +202,52 @@ describe('isPaletteBackKey', () => {
     assert.equal(isPaletteBackKey(shortcutEvent({ key: 'Backspace' }), ''), true)
     assert.equal(isPaletteBackKey(shortcutEvent({ key: 'Backspace' }), 's'), false)
     assert.equal(isPaletteBackKey(shortcutEvent({ key: 'Enter' }), ''), false)
+  })
+})
+
+describe('toPaletteNavigationGroups', () => {
+  const groups = [
+    {
+      links: [
+        { href: '/resume', name: 'Resume' },
+        { href: '/work/cedaro', name: 'Cedaro' },
+        { href: '/work/audiotheme', name: 'AudioTheme' },
+      ],
+      name: 'Work',
+    },
+    {
+      links: [
+        { href: '/i-am-a/father', name: 'Father' },
+        { href: '/i-am-a/christian', name: 'Christian' },
+      ],
+      name: 'Live',
+    },
+  ]
+
+  test('keeps group order and sorts labels within each group', () => {
+    assert.deepEqual(toPaletteNavigationGroups(groups), [
+      {
+        links: [
+          { href: '/work/audiotheme', name: 'AudioTheme' },
+          { href: '/work/cedaro', name: 'Cedaro' },
+          { href: '/resume', name: 'Resume' },
+        ],
+        name: 'Work',
+      },
+      {
+        links: [
+          { href: '/i-am-a/christian', name: 'Christian' },
+          { href: '/i-am-a/father', name: 'Father' },
+        ],
+        name: 'Live',
+      },
+    ])
+  })
+
+  test('does not mutate the source groups', () => {
+    toPaletteNavigationGroups(groups)
+
+    assert.equal(groups[0]?.links[0]?.name, 'Resume')
   })
 })
 

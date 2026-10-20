@@ -20,19 +20,20 @@ const { experience } = Astro.props
 >
   <ul class="m-0! flex list-none flex-col gap-2 px-0">
     {experience.map((item) => {
-      const startDateFormatted = formatMonthYear(item.startDate)
-      const startDateLabel = startDateFormatted || item.startDate || 'Unknown'
       const endDateFormatted = formatMonthYear(item.endDate)
       const endDateLabel = endDateFormatted || item.endDate || 'Present'
+      const href = item.page ?? item.website
+      const startDateFormatted = formatMonthYear(item.startDate)
+      const startDateLabel = startDateFormatted || item.startDate || 'Unknown'
 
       return (
         <li class="p-0 first:mt-0 last:mb-0">
           <div>
             <h3 class="not-prose font-semibold text-primary-900 dark:text-primary-100">
-              {item.website ?
+              {href ?
                 <Link
-                  href={item.website}
                   class="font-inherit"
+                  href={href}
                 >
                   {item.company}
                 </Link>

@@ -56,6 +56,10 @@ export function toNavMenuId(name: string): string {
   return `nav-menu-${toTestIdSlug(name)}`
 }
 
+export function toPaletteNavGroupId(name: string): string {
+  return `command-palette-nav-${toTestIdSlug(name)}`
+}
+
 export function toTestIdSlug(value: string): string {
   return value
     .trim()

@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test'
 
 import { STORAGE_KEYS } from '../../src/utils/storage'
-import { commandPaletteEggTestId, TEST_ID } from '../constants'
+import { commandPaletteEggTestId, commandPaletteNavGroupTestId, TEST_ID } from '../constants'
 import { FontToggle } from './font-toggle'
 import { ThemeToggle } from './theme-toggle'
 
@@ -61,6 +61,10 @@ export class CommandPalette {
       },
       { eggIds: ids, key: STORAGE_KEYS.easterEggFound },
     )
+  }
+
+  navGroup(name: string) {
+    return this.page.getByTestId(commandPaletteNavGroupTestId(name))
   }
 
   async openSecretsWithKeyboard() {

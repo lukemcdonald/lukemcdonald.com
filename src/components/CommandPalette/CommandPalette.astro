@@ -1,5 +1,5 @@
 ---
-import type { CommandPaletteNavItem } from './types'
+import type { CommandPaletteNavGroup } from './types'
 
 import CheckIcon from '@lucide/astro/icons/check'
 import SearchIcon from '@lucide/astro/icons/search'
@@ -7,15 +7,20 @@ import SearchIcon from '@lucide/astro/icons/search'
 import { getEasterEggs } from '@/components/EasterEggs/easter-eggs'
 import Settings from '@/components/Settings/Settings.astro'
 import { HOVER_NAV_CUE_PROPS, TOGGLE_CUE_PROPS } from '@/components/Sound'
+import {
+  toHrefTestId,
+  toPaletteNavGroupId,
+  toTestIdSlug,
+} from '@/features/navigation/navigation.utils'
 
 import { PALETTE_CHROME } from './chrome'
 import { SECRETS_SHORTCUT_LABEL } from './utils'
 
 interface Props {
-  navigationItems?: CommandPaletteNavItem[]
+  navigationGroups?: CommandPaletteNavGroup[]
 }
 
-const { navigationItems = [] } = Astro.props
+const { navigationGroups = [] } = Astro.props
 const eggs = getEasterEggs()
 const itemClass = `-mx-2 block rounded-lg px-2 py-1.5 text-base transition-colors ${PALETTE_CHROME.ink} ${PALETTE_CHROME.hoverFill}`
 
@@ -91,32 +96,48 @@ function pageOptionId(href: string) {
         >
           <div data-palette-main>
             <div data-palette-nav-list>
-              <h2
-                class={`mb-2 text-xs font-medium tracking-wider uppercase ${PALETTE_CHROME.muted}`}
-                data-palette-nav-heading
-              >
-                Navigation
-              </h2>
               <div
                 aria-label="Pages"
+                class="flex flex-col gap-4"
                 data-palette-results
                 id="command-palette-results"
                 role="listbox"
               >
-                {navigationItems.map((item) => (
-                  <a
-                    class={itemClass}
-                    data-name={item.name.toLowerCase()}
-                    data-palette-nav
-                    href={item.href}
-                    id={pageOptionId(item.href)}
-                    role="option"
-                    tabindex="-1"
-                    {...HOVER_NAV_CUE_PROPS}
-                  >
-                    {item.name}
-                  </a>
-                ))}
+                {navigationGroups.map((group) => {
+                  const headingId = `command-palette-nav-heading-${toTestIdSlug(group.name)}`
+
+                  return (
+                    <div
+                      aria-labelledby={headingId}
+                      data-palette-nav-group
+                      data-testid={toPaletteNavGroupId(group.name)}
+                      role="group"
+                    >
+                      <h2
+                        class={`mb-2 text-xs font-medium tracking-wider uppercase ${PALETTE_CHROME.muted}`}
+                        data-palette-nav-heading
+                        id={headingId}
+                      >
+                        {group.name}
+                      </h2>
+                      {group.links.map((item) => (
+                        <a
+                          class={itemClass}
+                          data-name={item.name.toLowerCase()}
+                          data-palette-nav
+                          data-testid={toHrefTestId('command-palette-page', item.href)}
+                          href={item.href}
+                          id={pageOptionId(item.href)}
+                          role="option"
+                          tabindex="-1"
+                          {...HOVER_NAV_CUE_PROPS}
+                        >
+                          {item.name}
+                        </a>
+                      ))}
+                    </div>
+                  )
+                })}
               </div>
             </div>
             <p
