@@ -39,6 +39,8 @@ export const GLOBAL_CONFIG = {
     ],
     url: SITE_URLS.origin,
   } satisfies Author,
+  // Resolved --color-primary-50; the committed icon tiles sit on this fill.
+  backgroundColor: '#fafaf9',
   dir: 'ltr',
   lang: 'en',
   name: SITE_NAME,
