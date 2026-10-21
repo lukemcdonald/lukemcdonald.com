@@ -39,11 +39,12 @@ export const GLOBAL_CONFIG = {
     ],
     url: SITE_URLS.origin,
   } satisfies Author,
+  description:
+    "I'm Luke, a Christian, husband, father and wrestling coach living in beautiful Eastern Iowa. My tent making is as a full-stack developer with an eye for design.",
   dir: 'ltr',
   lang: 'en',
   name: SITE_NAME,
   site: SITE_URLS,
-  // Resolved --color-primary-900 from theme.css.
-  themeColor: '#021216',
+  themeColor: '#122023',
   timezone: 'America/Chicago',
 } as const

@@ -36,7 +36,6 @@ const { variant } = Astro.props
         aria-label={`Select ${THEME_LABELS[color]} theme`}
         aria-pressed="false"
         class={`relative h-11 w-14 shrink-0 rounded-lg p-1 transition-colors ${PALETTE_CHROME.focusRing} ${PALETTE_CHROME.hoverFill}`}
-        data-testid={`theme-swatch-${color}`}
         data-theme={color}
         data-theme-swatch
         title={THEME_LABELS[color]}
