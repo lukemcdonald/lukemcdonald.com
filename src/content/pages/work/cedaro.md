@@ -1,14 +1,14 @@
 ---
-description: >
-  WordPress product shop I built at Blazer Six, with themes on Creative Market and WordPress.com.
+description: "Blazer Six's WordPress theme shop for businesses."
+hideFromMenu: true
+image: '@/assets/images/icon-pattern-cedaro.png'
+imageAlt: 'Cedaro icon pattern'
 navGroup: work
 order: 3
 seo:
-  description: Cedaro is a WordPress product shop I built at Blazer Six. Themes are on Creative Market and WordPress.com; AudioTheme is the main product for music makers.
+  description: "Cedaro was Blazer Six's general-purpose WordPress theme shop for businesses. AudioTheme was a sister brand offering music themes and plugins for artists."
 subtitle: Work
 title: Cedaro
 ---
 
-Cedaro is a WordPress product shop from [Blazer Six](/work/blazer-six). Its chief outlet is [AudioTheme](/work/audiotheme), a site manager for music makers.
-
-[cedaro.com](https://www.cedaro.com/)
+Cedaro was [Blazer Six](/work/blazer-six)'s general-purpose WordPress theme shop for businesses, a sister brand to [AudioTheme](/work/audiotheme).
