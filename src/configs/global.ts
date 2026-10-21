@@ -39,8 +39,8 @@ export const GLOBAL_CONFIG = {
     ],
     url: SITE_URLS.origin,
   } satisfies Author,
-  description:
-    "I'm Luke, a Christian, husband, father and wrestling coach living in beautiful Eastern Iowa. My tent making is as a full-stack developer with an eye for design.",
+  // Resolved --color-primary-50; the committed icon tiles sit on this fill.
+  backgroundColor: '#fafaf9',
   dir: 'ltr',
   lang: 'en',
   name: SITE_NAME,

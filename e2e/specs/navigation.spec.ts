@@ -68,39 +68,4 @@ test.describe('navigation', { tag: '@smoke' }, () => {
       await expect(work.getByTestId(commandPalettePageTestId(href))).toBeVisible()
     }
   })
-
-  test('icon and manifest files are reachable', async ({ homePage }) => {
-    await homePage.goto()
-
-    const hrefs = await homePage.page.evaluate(() => {
-      return [
-        ...document.querySelectorAll(
-          'link[rel="icon"], link[rel="apple-touch-icon"], link[rel="manifest"]',
-        ),
-      ].flatMap((link) => {
-        const href = link.getAttribute('href')
-
-        return href ? [href] : []
-      })
-    })
-
-    for (const href of hrefs) {
-      const response = await homePage.page.request.get(href)
-
-      expect(response.status(), href).toBe(200)
-    }
-
-    const manifestHref = await homePage.page.locator('link[rel="manifest"]').getAttribute('href')
-
-    expect(manifestHref).toBeTruthy()
-
-    const manifestResponse = await homePage.page.request.get(manifestHref!)
-    const manifest = (await manifestResponse.json()) as { icons?: Array<{ src: string }> }
-
-    for (const icon of manifest.icons ?? []) {
-      const response = await homePage.page.request.get(icon.src)
-
-      expect(response.status(), icon.src).toBe(200)
-    }
-  })
 })

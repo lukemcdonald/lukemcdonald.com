@@ -1,13 +1,22 @@
 import type { APIRoute } from 'astro'
 
+import { getEntry } from 'astro:content'
+
 import { GLOBAL_CONFIG } from '@/configs/global'
+import { toPageSeo } from '@/features/pages/pages.utils'
 
 export const prerender = true
 
-export const GET: APIRoute = () => {
+export const GET: APIRoute = async () => {
+  const page = await getEntry('pages', 'index')
+
+  if (!page) {
+    return new Response(null, { status: 404 })
+  }
+
   const body = JSON.stringify({
-    background_color: GLOBAL_CONFIG.themeColor,
-    description: GLOBAL_CONFIG.description,
+    background_color: GLOBAL_CONFIG.backgroundColor,
+    description: toPageSeo(page).description,
     display: 'standalone',
     icons: [
       {
