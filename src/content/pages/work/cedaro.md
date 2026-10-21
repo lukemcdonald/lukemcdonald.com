@@ -1,5 +1,6 @@
 ---
 description: "Blazer Six's WordPress theme shop for businesses."
+hideFromMenu: true
 image: '@/assets/images/icon-pattern-cedaro.png'
 imageAlt: 'Cedaro icon pattern'
 navGroup: work
@@ -11,5 +12,3 @@ title: Cedaro
 ---
 
 Cedaro was [Blazer Six](/work/blazer-six)'s general-purpose WordPress theme shop for businesses, a sister brand to [AudioTheme](/work/audiotheme).
-
-[cedaro.com](https://www.cedaro.com/)

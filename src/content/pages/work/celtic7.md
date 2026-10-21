@@ -1,5 +1,6 @@
 ---
 description: A full-stack web studio I founded in Iowa.
+hideFromMenu: true
 navGroup: work
 order: 4
 seo:

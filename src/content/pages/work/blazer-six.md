@@ -1,5 +1,6 @@
 ---
 description: A friendly web studio I joined as a partner.
+hideFromMenu: true
 image: '@/assets/images/icon-pattern-blazer-six.png'
 imageAlt: 'Blazer Six icon pattern'
 navGroup: work
@@ -11,5 +12,3 @@ title: Blazer Six
 ---
 
 I became a partner at Blazer Six when it acquired [CELTIC7 Studio](/work/celtic7). We built web solutions for desktop, mobile, and anything in between, including [AudioTheme](/work/audiotheme) and [Cedaro](/work/cedaro).
-
-[blazersix.com](https://www.blazersix.com/)

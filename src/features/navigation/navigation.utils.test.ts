@@ -57,6 +57,42 @@ describe('buildNavigationGroups', () => {
       },
     )
   })
+
+  test('includes hideFromMenu pages by default', () => {
+    assert.deepEqual(
+      buildNavigationGroups([
+        ...pages,
+        {
+          data: { hideFromMenu: true, navGroup: 'work' as const, title: 'Cedaro' },
+          id: 'work/cedaro',
+        },
+      ])[0],
+      {
+        links: [RESUME_LINK, { href: '/work/cedaro', name: 'Cedaro' }],
+        name: 'Work',
+      },
+    )
+  })
+
+  test('omits hideFromMenu pages when building the menu', () => {
+    assert.deepEqual(
+      buildNavigationGroups(
+        [
+          ...pages,
+          {
+            data: { hideFromMenu: true, navGroup: 'work' as const, title: 'Cedaro' },
+            id: 'work/cedaro',
+          },
+          { data: { navGroup: 'work' as const, title: 'Consulting' }, id: 'consulting' },
+        ],
+        { forMenu: true },
+      )[0],
+      {
+        links: [RESUME_LINK, { href: '/consulting', name: 'Consulting' }],
+        name: 'Work',
+      },
+    )
+  })
 })
 
 describe('isExternalHref', () => {

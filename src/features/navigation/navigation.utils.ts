@@ -2,8 +2,13 @@ import type { MenuLinkItem, NavigationGroup } from './navigation.types'
 
 export const RESUME_LINK: MenuLinkItem = { href: '/resume', name: 'Resume' }
 
+type BuildNavigationOptions = {
+  forMenu?: boolean
+}
+
 type NavPage = {
   data: {
+    hideFromMenu?: boolean
     navGroup?: 'live' | 'play' | 'work'
     title: string
   }
@@ -17,19 +22,35 @@ function toPageLink(page: NavPage): MenuLinkItem {
   }
 }
 
-function linksForNavGroup(pages: NavPage[], navGroup: 'live' | 'play' | 'work'): MenuLinkItem[] {
+function isVisibleInNav(page: NavPage, forMenu?: boolean) {
+  return !forMenu || !page.data.hideFromMenu
+}
+
+function linksForNavGroup(
+  pages: NavPage[],
+  navGroup: 'live' | 'play' | 'work',
+  forMenu?: boolean,
+): MenuLinkItem[] {
   return pages
     .filter((page) => {
       return page.data.navGroup === navGroup
     })
+    .filter((page) => {
+      return isVisibleInNav(page, forMenu)
+    })
     .map(toPageLink)
 }
 
-export function buildNavigationGroups(pages: NavPage[]): NavigationGroup[] {
+export function buildNavigationGroups(
+  pages: NavPage[],
+  options: BuildNavigationOptions = {},
+): NavigationGroup[] {
+  const { forMenu } = options
+
   return [
-    { links: [RESUME_LINK, ...linksForNavGroup(pages, 'work')], name: 'Work' },
-    { links: linksForNavGroup(pages, 'play'), name: 'Play' },
-    { links: linksForNavGroup(pages, 'live'), name: 'Live' },
+    { links: [RESUME_LINK, ...linksForNavGroup(pages, 'work', forMenu)], name: 'Work' },
+    { links: linksForNavGroup(pages, 'play', forMenu), name: 'Play' },
+    { links: linksForNavGroup(pages, 'live', forMenu), name: 'Live' },
   ]
 }
 

@@ -46,4 +46,8 @@ export class SiteNav {
     await this.mobileMenuTrigger.click()
     await this.mobileAppearance.waitFor({ state: 'visible' })
   }
+
+  async openWorkMenu() {
+    await this.workMenuTrigger.click()
+  }
 }

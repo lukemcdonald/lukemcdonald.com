@@ -1,5 +1,6 @@
 ---
 description: Websites for people who make music.
+hideFromMenu: true
 image: '@/assets/images/icon-pattern-audiotheme.png'
 imageAlt: 'AudioTheme icon pattern'
 navGroup: work
@@ -11,5 +12,3 @@ title: AudioTheme
 ---
 
 I started AudioTheme as a partnership between [CELTIC7 Studio](/work/celtic7) and [Blazer Six](/work/blazer-six): WordPress music themes and plugins for bands, musicians, and labels, so independent artists can manage discography, gigs, videos, and more.
-
-[audiotheme.com](https://audiotheme.com/)

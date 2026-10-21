@@ -8,6 +8,7 @@ export function createPagesSchema(image: () => z.ZodType<ImageMetadata>) {
       date: z.coerce.date().optional(),
       description: z.string().optional(),
       draft: z.boolean().default(false),
+      hideFromMenu: z.boolean().optional(),
       image: image().optional(),
       imageAlt: z.string().optional(),
       navGroup: z.enum(['live', 'play', 'work']).optional(),
