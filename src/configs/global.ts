@@ -43,6 +43,7 @@ export const GLOBAL_CONFIG = {
   lang: 'en',
   name: SITE_NAME,
   site: SITE_URLS,
-  themeColor: '#122023',
+  // Resolved --color-primary-900 from theme.css.
+  themeColor: '#021216',
   timezone: 'America/Chicago',
 } as const

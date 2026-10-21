@@ -70,3 +70,7 @@ export function navMenuTestId(name: string): string {
 export function themeOptionTestId(mode: string): string {
   return `theme-option-${mode}`
 }
+
+export function themeSwatchTestId(color: string): string {
+  return `theme-swatch-${color}`
+}

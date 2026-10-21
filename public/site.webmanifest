@@ -1,0 +1,25 @@
+{
+  "background_color": "#fafaf9",
+  "display": "browser",
+  "icons": [
+    {
+      "sizes": "192x192",
+      "src": "/icons/icon-192.png",
+      "type": "image/png"
+    },
+    {
+      "sizes": "512x512",
+      "src": "/icons/icon-512.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "maskable",
+      "sizes": "512x512",
+      "src": "/icons/icon-512-maskable.png",
+      "type": "image/png"
+    }
+  ],
+  "name": "Luke McDonald",
+  "short_name": "Luke McDonald",
+  "theme_color": "#021216"
+}
