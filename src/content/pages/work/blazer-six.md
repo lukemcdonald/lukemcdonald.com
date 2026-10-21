@@ -1,8 +1,7 @@
 ---
-description: >
-  Independent web studio I co-founded. Product Engineering Lead from 2014 to the 2025 exit.
-image: '@/assets/images/logo-blazer-six.png'
-imageAlt: 'Blazer Six logo, a hexagon with a six'
+description: A friendly web studio I co-founded.
+image: '@/assets/images/icon-pattern-blazer-six.png'
+imageAlt: 'Blazer Six icon pattern'
 navGroup: work
 order: 1
 seo:
@@ -11,6 +10,6 @@ subtitle: Work
 title: Blazer Six
 ---
 
-Blazer Six built web solutions for desktop, mobile, and anything in between, including [AudioTheme](/work/audiotheme) and [Cedaro](/work/cedaro).
+I co-founded Blazer Six to build web solutions for desktop, mobile, and anything in between, including [AudioTheme](/work/audiotheme) and [Cedaro](/work/cedaro).
 
 [blazersix.com](https://www.blazersix.com/)
