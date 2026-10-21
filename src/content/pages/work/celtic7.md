@@ -8,4 +8,4 @@ subtitle: Work
 title: CELTIC7 Studio
 ---
 
-I founded CELTIC7 Studio in Iowa and ran it from 2008 to 2014, delivering custom APIs, WordPress platforms, and e-commerce for the University of Iowa, U.S. Olympic Trials, and NFL athletes.
+I founded CELTIC7 Studio in Iowa and ran it from 2008 to 2014, delivering custom APIs, WordPress platforms, and e-commerce for the University of Iowa, U.S. Olympic Trials, and NFL athletes, before [Blazer Six](/work/blazer-six) acquired it.

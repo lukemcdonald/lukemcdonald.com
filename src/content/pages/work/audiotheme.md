@@ -5,11 +5,11 @@ imageAlt: 'AudioTheme icon pattern'
 navGroup: work
 order: 2
 seo:
-  description: WordPress music themes and plugins I built at Blazer Six for bands, musicians, and labels. Artists use AudioTheme to manage discography, gigs, videos, and more.
+  description: Music themes and plugins for WordPress from a CELTIC7 Studio and Blazer Six partnership. Artists use AudioTheme to manage discography, gigs, videos, and more.
 subtitle: Work
 title: AudioTheme
 ---
 
-I built AudioTheme at [Blazer Six](/work/blazer-six) with [Cedaro](/work/cedaro): WordPress music themes and plugins for bands, musicians, and labels, so independent artists can manage discography, gigs, videos, and more.
+I started AudioTheme as a partnership between [CELTIC7 Studio](/work/celtic7) and [Blazer Six](/work/blazer-six): WordPress music themes and plugins for bands, musicians, and labels, so independent artists can manage discography, gigs, videos, and more.
 
 [audiotheme.com](https://audiotheme.com/)

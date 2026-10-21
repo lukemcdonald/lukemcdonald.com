@@ -1,15 +1,15 @@
 ---
-description: A digital product shop I built at Blazer Six.
+description: "Blazer Six's WordPress theme shop for businesses."
 image: '@/assets/images/icon-pattern-cedaro.png'
 imageAlt: 'Cedaro icon pattern'
 navGroup: work
 order: 3
 seo:
-  description: Cedaro was a digital product shop I built at Blazer Six, dealing in creative WordPress solutions. AudioTheme was the chief creative outlet for music makers.
+  description: "Cedaro was Blazer Six's general-purpose WordPress theme shop for businesses. AudioTheme was a sister brand offering music themes and plugins for artists."
 subtitle: Work
 title: Cedaro
 ---
 
-I built Cedaro at [Blazer Six](/work/blazer-six) as a digital product shop dealing in creative WordPress solutions. Its chief creative outlet was [AudioTheme](/work/audiotheme), a website management solution for music makers.
+Cedaro was [Blazer Six](/work/blazer-six)'s general-purpose WordPress theme shop for businesses, a sister brand to [AudioTheme](/work/audiotheme).
 
 [cedaro.com](https://www.cedaro.com/)
