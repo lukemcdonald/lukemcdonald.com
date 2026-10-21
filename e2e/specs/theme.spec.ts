@@ -32,22 +32,24 @@ test.describe('theme', { tag: '@smoke' }, () => {
     await expect.poll(() => homePage.storedThemeMode()).toBe('dark')
   })
 
-  test('color swatch keeps a single theme-color meta', { tag: ['@desktop', '@smoke'] }, async ({
-    homePage,
-  }) => {
-    await homePage.goto()
-    await homePage.header.commandPalette.openWithKeyboard()
-    await homePage.page.getByTestId(themeSwatchTestId('blue')).click()
+  test(
+    'color swatch keeps a single theme-color meta',
+    { tag: ['@desktop', '@smoke'] },
+    async ({ homePage }) => {
+      await homePage.goto()
+      await homePage.header.commandPalette.openWithKeyboard()
+      await homePage.page.getByTestId(themeSwatchTestId('blue')).click()
 
-    await expect
-      .poll(() => {
-        return homePage.page.locator('html').getAttribute('data-theme')
-      })
-      .toBe('blue')
+      await expect
+        .poll(() => {
+          return homePage.page.locator('html').getAttribute('data-theme')
+        })
+        .toBe('blue')
 
-    const themeColor = homePage.page.locator('meta[name="theme-color"]')
+      const themeColor = homePage.page.locator('meta[name="theme-color"]')
 
-    await expect(themeColor).toHaveCount(1)
-    await expect(themeColor).not.toHaveAttribute('media')
-  })
+      await expect(themeColor).toHaveCount(1)
+      await expect(themeColor).not.toHaveAttribute('media')
+    },
+  )
 })
