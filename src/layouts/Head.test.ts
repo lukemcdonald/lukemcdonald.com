@@ -28,11 +28,7 @@ function getIcoSizes(buffer: Buffer) {
   const count = buffer.readUInt16LE(4)
 
   return Array.from({ length: count }, (_, index) => {
-    const entry = 6 + index * 16
-    const height = buffer[entry + 1] || 256
-    const width = buffer[entry] || 256
-
-    return { height, width }
+    return buffer[6 + index * 16] || 256
   })
 }
 
@@ -71,13 +67,9 @@ describe('head icon links', () => {
   })
 
   test('linked ico contains 16, 32, and 48 px images', () => {
-    const sizes = getIcoSizes(readFileSync(publicPath('/favicon.ico')))
-      .map((size) => {
-        return size.width
-      })
-      .toSorted((left, right) => {
-        return left - right
-      })
+    const sizes = getIcoSizes(readFileSync(publicPath('/favicon.ico'))).toSorted((left, right) => {
+      return left - right
+    })
 
     assert.deepEqual(sizes, [16, 32, 48])
   })
