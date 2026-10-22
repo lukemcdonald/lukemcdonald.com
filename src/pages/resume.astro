@@ -16,22 +16,25 @@ const data = await loadResumeData()
 ---
 
 <ProseLayout
-  title="Resume"
-  description={`The resume of ${data.basics.name}, ${data.basics.label}.`}
   bodyClass="bg-white text-primary-900 dark:bg-primary-900 dark:text-primary-50"
+  description={`The resume of ${data.basics.name}, ${data.basics.label}.`}
+  proseClass="2xl:grid 2xl:max-w-none 2xl:grid-cols-[minmax(0,1fr)_minmax(0,70ch)_minmax(0,1fr)] 2xl:gap-x-8"
+  title="Resume"
 >
-  <McpWidget slot="before-prose" />
   <PrintButton
     slot="before-prose"
     class="fixed top-4 right-4 dark:shadow"
   />
 
-  <Header basics={data.basics} />
-  <Skills skills={data.skills} />
-  <Experience experience={data.experience} />
-  <Awards awards={data.awards} />
-  <Education education={data.education} />
-  <Community community={data.community} />
-  <Personal personal={data.personal} />
-  <Footer />
+  <McpWidget />
+  <div class="min-w-0 2xl:col-start-2">
+    <Header basics={data.basics} />
+    <Skills skills={data.skills} />
+    <Experience experience={data.experience} />
+    <Awards awards={data.awards} />
+    <Education education={data.education} />
+    <Community community={data.community} />
+    <Personal personal={data.personal} />
+    <Footer />
+  </div>
 </ProseLayout>

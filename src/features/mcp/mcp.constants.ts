@@ -18,7 +18,7 @@ export const MCP_PATH = '/mcp'
 
 export const MCP_URL = `${GLOBAL_CONFIG.site.origin}${MCP_PATH}`
 
-export const MCP_WIDGET_PROMPTS = ['How does he work?', 'What has he built?'] as const
+export const MCP_WIDGET_PROMPTS = ['How does Luke work?', 'What has Luke built?'] as const
 
 export const PAGE_SLUG_MAX = 200
 

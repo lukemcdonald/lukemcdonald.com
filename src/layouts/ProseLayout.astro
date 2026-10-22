@@ -3,7 +3,7 @@ import Prose from '@/components/Prose.astro'
 
 import Layout from './Layout.astro'
 
-const { description, title } = Astro.props
+const { description, proseClass, title } = Astro.props
 ---
 
 <Layout
@@ -20,7 +20,7 @@ const { description, title } = Astro.props
     <slot name="before-prose" />
     <Prose
       as="article"
-      class="mx-auto"
+      class:list={['mx-auto', proseClass]}
     >
       <slot />
     </Prose>
