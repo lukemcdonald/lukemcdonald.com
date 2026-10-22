@@ -6,6 +6,7 @@ import ExternalLinkIcon from '@lucide/astro/icons/external-link'
 
 import { HOVER_NAV_CUE_PROPS, TOGGLE_CUE_PROPS } from '@/components/Sound'
 import {
+  HEADER_TRIGGER_CLASS,
   toExternalLinkAttrs,
   toHrefTestId,
   toNavMenuId,
@@ -27,7 +28,7 @@ const popoverId = toNavMenuId(group.name)
     aria-controls={popoverId}
     aria-expanded="false"
     aria-haspopup="true"
-    class="inline-flex justify-center rounded-md bg-black/0 px-2.5 py-2 text-base font-semibold tracking-wide text-primary-900 uppercase focus-ring hover:bg-black/5 sm:px-3"
+    class:list={['inline-flex justify-center', HEADER_TRIGGER_CLASS]}
     data-nav-menu-trigger
     data-testid={popoverId}
     popovertarget={popoverId}

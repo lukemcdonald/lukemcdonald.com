@@ -1,0 +1,54 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+
+import { PRESS_CUE_PROPS } from '@/components/Sound'
+
+const sizes = {
+  lg: 'size-11',
+  md: 'size-8',
+  sm: 'size-6',
+}
+
+const variants = {
+  ghost: 'rounded-md bg-black/0 transition-colors hover:bg-black/5 motion-reduce:transition-none',
+  solid:
+    'rounded-md bg-primary-700 font-medium text-primary-50 shadow-sm transition-colors hover:bg-primary-700/80 motion-reduce:transition-none',
+}
+
+interface Props extends HTMLAttributes<'button'> {
+  label: string
+  size?: keyof typeof sizes
+  variant?: keyof typeof variants
+}
+
+const {
+  class: className,
+  label,
+  size = 'md',
+  type = 'button',
+  variant = 'ghost',
+  ...delegated
+} = Astro.props satisfies Props
+
+const hasCueOverride =
+  'data-cuelume-hover' in delegated ||
+  'data-cuelume-press' in delegated ||
+  'data-cuelume-release' in delegated ||
+  'data-cuelume-toggle' in delegated
+const cueProps = hasCueOverride ? {} : PRESS_CUE_PROPS
+---
+
+<button
+  aria-label={label}
+  class:list={[
+    'inline-flex shrink-0 items-center justify-center focus-ring',
+    sizes[size],
+    variants[variant],
+    className,
+  ]}
+  type={type}
+  {...cueProps}
+  {...delegated}
+>
+  <slot />
+</button>

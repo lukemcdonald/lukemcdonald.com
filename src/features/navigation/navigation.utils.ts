@@ -1,5 +1,8 @@
 import type { MenuLinkItem, NavigationGroup } from './navigation.types'
 
+export const HEADER_TRIGGER_CLASS =
+  'rounded-md bg-black/0 px-2.5 py-2 text-base font-semibold tracking-wide text-primary-900 uppercase focus-ring hover:bg-black/5 sm:px-3'
+
 export const RESUME_LINK: MenuLinkItem = { href: '/resume', name: 'Resume' }
 
 type BuildNavigationOptions = {

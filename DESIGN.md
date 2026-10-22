@@ -32,10 +32,12 @@ Reuse these; copy from the file instead of inventing variants.
 
 - Type: `Heading`, `Text`, `Link`, `Prose`.
 - Shell: `src/layouts/Main.astro` (home/page card), `src/layouts/ProseLayout.astro` (resume/long-form).
+- Icon-only controls: `IconButton` (`ghost`, `solid`). Do not add a general Button.
+- Header text triggers: `HEADER_TRIGGER_CLASS` in `src/features/navigation/navigation.utils.ts`.
 - Overlays and focus: `glass` / `glass-dialog` and `focus-ring` in `src/assets/styles/effects.css`.
 - Command palette chrome: `src/components/CommandPalette/chrome.ts`.
 - Forms: `MenuSelect`; keep control text on sans/UI.
-- Native `<dialog>` for the palette and mobile menu. Prefer existing button classes over a new button API.
+- Native `<dialog>` for the palette and mobile menu. Prefer `IconButton` and `HEADER_TRIGGER_CLASS` over a new button API.
 
 ## Do's and Don'ts
 
@@ -46,7 +48,7 @@ Reuse these; copy from the file instead of inventing variants.
 - Do use `focus-ring` and `glass` / `glass-dialog`. Don't invent a new focus outline or blur stack.
 - Do keep overlay chrome in `PALETTE_CHROME` (or the same class strings). Don't mix new hover fills when nav `hover:bg-black/5` or list `hover:bg-primary-900/8 dark:hover:bg-white/10` already exist.
 - Do respect reduced motion and `min-h-11` on pointer/touch controls. Don't add uncancellable animation or sub-44px tap targets on menu/palette controls.
-- Do prefer `Heading`, `Text`, `Link`, `Prose`, and existing button classes. Don't introduce a second type ramp or button API.
+- Do prefer `Heading`, `Text`, `Link`, `Prose`, and `IconButton`. Don't introduce a second type ramp or a do-everything Button.
 
 ## Updating this file
 
