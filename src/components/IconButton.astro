@@ -10,12 +10,14 @@ const sizes = {
 }
 
 const variants = {
-  ghost: 'rounded-md bg-black/0 transition-colors hover:bg-black/5 motion-reduce:transition-none',
+  ghost:
+    'rounded-md bg-black/0 transition-colors hover:bg-black/5 motion-reduce:transition-none dark:hover:bg-white/10',
   solid:
     'rounded-md bg-primary-700 px-3 py-2 font-medium text-primary-50 shadow-sm transition-colors hover:bg-primary-700/80 motion-reduce:transition-none',
 }
 
 interface Props extends HTMLAttributes<'button'> {
+  cue?: Record<string, boolean | string>
   label: string
   size?: keyof typeof sizes
   variant?: keyof typeof variants
@@ -23,19 +25,13 @@ interface Props extends HTMLAttributes<'button'> {
 
 const {
   class: className,
+  cue = PRESS_CUE_PROPS,
   label,
   size = 'md',
   type = 'button',
   variant = 'ghost',
   ...delegated
 } = Astro.props satisfies Props
-
-const hasCueOverride =
-  'data-cuelume-hover' in delegated ||
-  'data-cuelume-press' in delegated ||
-  'data-cuelume-release' in delegated ||
-  'data-cuelume-toggle' in delegated
-const cueProps = hasCueOverride ? {} : PRESS_CUE_PROPS
 ---
 
 <button
@@ -47,7 +43,7 @@ const cueProps = hasCueOverride ? {} : PRESS_CUE_PROPS
     className,
   ]}
   type={type}
-  {...cueProps}
+  {...cue}
   {...delegated}
 >
   <slot />
