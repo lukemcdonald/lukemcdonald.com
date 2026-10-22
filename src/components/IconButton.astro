@@ -12,7 +12,7 @@ const sizes = {
 const variants = {
   ghost: 'rounded-md bg-black/0 transition-colors hover:bg-black/5 motion-reduce:transition-none',
   solid:
-    'rounded-md bg-primary-700 font-medium text-primary-50 shadow-sm transition-colors hover:bg-primary-700/80 motion-reduce:transition-none',
+    'rounded-md bg-primary-700 px-3 py-2 font-medium text-primary-50 shadow-sm transition-colors hover:bg-primary-700/80 motion-reduce:transition-none',
 }
 
 interface Props extends HTMLAttributes<'button'> {
@@ -42,7 +42,7 @@ const cueProps = hasCueOverride ? {} : PRESS_CUE_PROPS
   aria-label={label}
   class:list={[
     'inline-flex shrink-0 items-center justify-center focus-ring',
-    sizes[size],
+    variant === 'ghost' && sizes[size],
     variants[variant],
     className,
   ]}
