@@ -1,0 +1,15 @@
+src/features/resume/components/McpWidget.astro
+  h_b34f5996212cca 54
+  467b8b819bb580c9 6-7,53,57-58,64
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "71bfcc25cbe12dfae12d5e389704a10e853286a4",
+  "prompts": {},
+  "humans": {
+    "h_b34f5996212cca": {
+      "author": "Luke McDonald <thelukemcdonald@gmail.com>"
+    }
+  }
+}
