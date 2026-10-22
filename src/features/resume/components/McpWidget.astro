@@ -3,7 +3,8 @@ import ChevronDown from '@lucide/astro/icons/chevron-down'
 import XIcon from '@lucide/astro/icons/x'
 
 import CopyButton from '@/components/CopyButton.astro'
-import { PRESS_CUE_PROPS, TOGGLE_CUE_PROPS } from '@/components/Sound'
+import IconButton from '@/components/IconButton.astro'
+import { TOGGLE_CUE_PROPS } from '@/components/Sound'
 import { MCP_URL } from '@/features/mcp/mcp.constants'
 import { STORAGE_KEYS } from '@/utils/storage'
 
@@ -49,19 +50,18 @@ const storageKey = STORAGE_KEYS.resumeMcpWidget
     <p class="hidden font-semibold text-pretty text-primary-950 2xl:block dark:text-primary-50">
       Ask your AI about me
     </p>
-    <button
-      aria-label="Dismiss AI assistant widget"
-      class="inline-flex size-11 shrink-0 items-center justify-center rounded-md text-primary-700 focus-ring hover:bg-primary-900/8 2xl:size-8 dark:text-primary-200 dark:hover:bg-white/10"
+    <IconButton
+      class="text-primary-700 2xl:size-8 dark:text-primary-200"
       data-resume-mcp-dismiss
       data-testid="resume-mcp-dismiss"
-      type="button"
-      {...PRESS_CUE_PROPS}
+      label="Dismiss AI assistant widget"
+      size="lg"
     >
       <XIcon
         aria-hidden="true"
         class="size-4"
       />
-    </button>
+    </IconButton>
   </div>
 
   <div
@@ -86,7 +86,6 @@ const storageKey = STORAGE_KEYS.resumeMcpWidget
         value={MCP_URL}
       />
     </div>
-    <p class="mt-4 mb-1.5 text-xs font-medium text-primary-700 dark:text-primary-200">Try asking</p>
   </div>
 </aside>
 
