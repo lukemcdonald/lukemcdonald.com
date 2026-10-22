@@ -8,10 +8,16 @@ import { TOGGLE_CUE_PROPS } from '@/components/Sound'
 import { MCP_URL } from '@/features/mcp/mcp.constants'
 import { STORAGE_KEYS } from '@/utils/storage'
 
+const HEADING = 'TL;AI'
+const INTRO = 'Too long? Let your AI read it.'
+const LABEL = 'Ask your AI about my resume'
 const storageKey = STORAGE_KEYS.resumeMcpWidget
 ---
 
-<script define:vars={{ storageKey }} is:inline>
+<script
+  define:vars={{ storageKey }}
+  is:inline
+>
   try {
     if (localStorage.getItem(storageKey)) {
       document.documentElement.dataset.resumeMcpHidden = ''
@@ -26,7 +32,7 @@ const storageKey = STORAGE_KEYS.resumeMcpWidget
 </style>
 
 <aside
-  aria-label="Ask your AI about me"
+  aria-label={LABEL}
   class="group not-prose mb-6 border-b border-primary-900/10 pb-1 text-sm text-primary-800 max-md:mr-14 2xl:sticky 2xl:top-6 2xl:col-start-1 2xl:mr-0 2xl:mb-0 2xl:w-72 2xl:self-start 2xl:justify-self-end 2xl:rounded-lg 2xl:border 2xl:border-primary-900/10 2xl:bg-white/90 2xl:p-4 2xl:pb-4 2xl:shadow-sm dark:border-white/10 dark:text-primary-100 dark:2xl:bg-primary-900/90 print:hidden"
   data-resume-mcp-widget
   data-testid="resume-mcp-widget"
@@ -41,14 +47,15 @@ const storageKey = STORAGE_KEYS.resumeMcpWidget
       type="button"
       {...TOGGLE_CUE_PROPS}
     >
-      Ask your AI about me
+      <span aria-hidden="true">{HEADING}</span>
+      <span class="sr-only">{LABEL}</span>
       <ChevronDown
         aria-hidden="true"
         class="size-3.5 shrink-0 transition-transform duration-150 group-aria-expanded:rotate-180 motion-reduce:transition-none"
       />
     </button>
     <p class="hidden font-semibold text-pretty text-primary-950 2xl:block dark:text-primary-50">
-      Ask your AI about me
+      {HEADING}
     </p>
     <IconButton
       class="text-primary-700 2xl:size-8 dark:text-primary-200"
@@ -69,12 +76,8 @@ const storageKey = STORAGE_KEYS.resumeMcpWidget
     data-resume-mcp-panel
     id="resume-mcp-panel"
   >
-    <p class="mt-2 mb-0 text-pretty text-primary-700 dark:text-primary-200">
-      Connect your AI assistant to ask about my experience and work.
-    </p>
-    <div
-      class="mt-3 inline-flex max-w-full items-center gap-1 rounded-sm bg-primary-900/8 py-0.5 pr-0.5 pl-1.5 font-mono text-xs text-primary-800 dark:bg-white/10 dark:text-primary-100"
-    >
+    <p class="mt-2 mb-0 text-pretty text-primary-700 dark:text-primary-200">{INTRO}</p>
+    <div class="mt-3 inline-flex max-w-full items-center gap-1 rounded-sm bg-primary-900/8 py-0.5 pr-0.5 pl-1.5 font-mono text-xs text-primary-800 dark:bg-white/10 dark:text-primary-100">
       <code
         class="bg-transparent p-0 text-inherit"
         data-testid="resume-mcp-url"
