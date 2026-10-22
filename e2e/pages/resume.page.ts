@@ -5,17 +5,30 @@ import { TEST_ID } from '../constants'
 import { BasePage } from './base.page'
 
 export class ResumePage extends BasePage {
-  readonly callout
   readonly copyButton
   readonly copyStatus
+  readonly dismissButton
   readonly mcpUrl
+  readonly toggle
+  readonly widget
 
   constructor(page: Page) {
     super(page, '/resume')
-    this.callout = page.getByTestId(TEST_ID.resumeMcpCallout)
-    this.copyButton = this.callout.getByRole('button', { name: 'Copy MCP URL' })
-    this.copyStatus = this.callout.locator('[data-copy-status]')
-    this.mcpUrl = this.callout.getByTestId(TEST_ID.resumeMcpUrl)
+
+    const widget = page.getByTestId(TEST_ID.resumeMcpWidget)
+
+    this.copyButton = widget.getByRole('button', { name: 'Copy MCP URL' })
+    this.copyStatus = widget.locator('[data-copy-status]')
+    this.dismissButton = widget.getByTestId(TEST_ID.resumeMcpDismiss)
+    this.mcpUrl = widget.getByTestId(TEST_ID.resumeMcpUrl)
+    this.toggle = widget.getByTestId(TEST_ID.resumeMcpToggle)
+    this.widget = widget
+  }
+
+  async expandIfCollapsed() {
+    if (await this.toggle.isVisible()) {
+      await this.toggle.click()
+    }
   }
 
   override async goto(options: { path?: string; theme?: SiteTheme } = {}) {
