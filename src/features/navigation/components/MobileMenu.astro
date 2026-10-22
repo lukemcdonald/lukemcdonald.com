@@ -2,6 +2,7 @@
 import MenuIcon from '@lucide/astro/icons/menu'
 import XIcon from '@lucide/astro/icons/x'
 
+import IconButton from '@/components/IconButton.astro'
 import Settings from '@/components/Settings/Settings.astro'
 import { HOVER_NAV_CUE_PROPS, TOGGLE_CUE_PROPS } from '@/components/Sound'
 import { toHrefTestId } from '@/features/navigation/navigation.utils'
@@ -29,16 +30,16 @@ const labelClass =
   data-mobile-menu
   data-testid="mobile-menu"
 >
-  <button
+  <IconButton
     aria-controls="mobile-menu-dialog"
     aria-expanded="false"
     aria-haspopup="dialog"
-    aria-label="Open menu"
-    class="group relative z-20 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md bg-black/0 text-primary-900 focus-ring transition-transform hover:bg-black/5 active:scale-[0.96]"
+    class="group relative z-20 text-primary-900 transition-transform active:scale-[0.96]"
+    cue={TOGGLE_CUE_PROPS}
     data-mobile-menu-trigger
     data-testid="mobile-menu-trigger"
-    type="button"
-    {...TOGGLE_CUE_PROPS}
+    label="Open menu"
+    size="lg"
   >
     <span class="relative h-6 w-6">
       <MenuIcon
@@ -50,7 +51,7 @@ const labelClass =
         class="absolute inset-0 h-6 w-6 opacity-0 transition-opacity duration-150 group-aria-expanded:opacity-100"
       />
     </span>
-  </button>
+  </IconButton>
 
   <!-- Sheet starts below the header logo: p-5 + h-16 + p-5 -->
   <dialog

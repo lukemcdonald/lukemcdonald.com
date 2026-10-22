@@ -2,7 +2,7 @@
 import CheckIcon from '@lucide/astro/icons/check'
 import CopyIcon from '@lucide/astro/icons/copy'
 
-import { PRESS_CUE_PROPS } from '@/components/Sound'
+import IconButton from '@/components/IconButton.astro'
 
 interface Props {
   class?: string
@@ -14,15 +14,11 @@ const { class: className, label, value } = Astro.props
 ---
 
 <span class="inline-flex items-center gap-1">
-  <button
-    aria-label={label}
-    class:list={[
-      'inline-flex size-6 shrink-0 items-center justify-center rounded-sm text-primary-700 focus-ring transition-colors hover:bg-primary-900/8 motion-reduce:transition-none dark:text-primary-200 dark:hover:bg-white/10',
-      className,
-    ]}
+  <IconButton
+    class:list={['text-primary-700 dark:text-primary-200', className]}
     data-copy={value}
-    type="button"
-    {...PRESS_CUE_PROPS}
+    label={label}
+    size="sm"
   >
     <CopyIcon
       aria-hidden="true"
@@ -34,7 +30,7 @@ const { class: className, label, value } = Astro.props
       class="hidden size-3.5"
       data-copy-done
     />
-  </button>
+  </IconButton>
   <span
     aria-live="polite"
     class="hidden pr-1 font-sans text-xs font-medium"
