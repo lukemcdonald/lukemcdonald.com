@@ -1,11 +1,12 @@
 import { MCP_URL } from '../../src/features/mcp/mcp.constants'
 import { expect, test } from '../fixtures'
 
-test.describe('resume MCP callout', { tag: '@smoke' }, () => {
+test.describe('resume MCP widget', { tag: '@smoke' }, () => {
   test('shows the MCP URL as plain text and copies it from the button', async ({ resumePage }) => {
     await resumePage.goto()
+    await resumePage.expandIfCollapsed()
 
-    await expect(resumePage.callout).toBeVisible()
+    await expect(resumePage.widget).toBeVisible()
     await expect(resumePage.mcpUrl).toHaveText(MCP_URL)
     await expect(resumePage.mcpUrl).not.toHaveAttribute('href')
     await expect(resumePage.copyButton).toHaveRole('button')
@@ -28,6 +29,7 @@ test.describe('resume MCP callout', { tag: '@smoke' }, () => {
 
   test('copy button is usable with the keyboard', async ({ resumePage }) => {
     await resumePage.goto()
+    await resumePage.expandIfCollapsed()
     await resumePage.copyButton.focus()
 
     await expect(resumePage.copyButton).toBeFocused()
@@ -40,10 +42,23 @@ test.describe('resume MCP callout', { tag: '@smoke' }, () => {
 
   test('is hidden in print media', async ({ resumePage }) => {
     await resumePage.goto()
-    await expect(resumePage.callout).toBeVisible()
+    await expect(resumePage.widget).toBeVisible()
 
     await resumePage.page.emulateMedia({ media: 'print' })
 
-    await expect(resumePage.callout).toBeHidden()
+    await expect(resumePage.widget).toBeHidden()
+  })
+
+  test('stays hidden after dismiss and reload', async ({ resumePage }) => {
+    await resumePage.goto()
+    await expect(resumePage.widget).toBeVisible()
+
+    await resumePage.dismissButton.click()
+
+    await expect(resumePage.widget).toBeHidden()
+
+    await resumePage.goto()
+
+    await expect(resumePage.widget).toBeHidden()
   })
 })

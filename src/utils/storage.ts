@@ -4,6 +4,7 @@ export const STORAGE_KEYS = {
   easterEggPrefix: 'easter-egg:',
   font: 'font-pairing',
   glass: 'glass-level',
+  resumeMcpWidget: 'resume-mcp-widget',
   sound: 'sound-enabled',
   themeColor: 'theme-color',
   themeMode: 'theme-mode',
