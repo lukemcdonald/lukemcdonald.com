@@ -105,7 +105,7 @@ For a CI failure, download the `playwright-report` artifact and open it with `pn
 
 ## CI
 
-`.github/workflows/ci.yml` runs on `pull_request` and `push` to `main` (validate, audit, E2E). `E2E_BROWSERS` is `pr` on pull requests and `full` on `main`. The check is `CI / E2E`.
+`.github/workflows/ci.yml` runs on `pull_request` and `push` to `main` (validate, audit, E2E). The E2E job uses `mcr.microsoft.com/playwright:v<@playwright/test>-noble` instead of `playwright install --with-deps`. `E2E_BROWSERS` is `pr` on pull requests and `full` on `main`. The check is `CI / E2E`.
 
 Manual runs use `.github/workflows/e2e.yml` (`workflow_dispatch`) with a separate concurrency group so they do not cancel CI.
 

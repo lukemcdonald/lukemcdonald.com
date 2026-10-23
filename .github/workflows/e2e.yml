@@ -19,33 +19,33 @@ jobs:
   e2e:
     env:
       E2E_BROWSERS: ${{ inputs.browsers }}
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     name: Playwright
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # Pin to the @playwright/test version in pnpm-lock.yaml. The version check fails if they drift.
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      options: --user 1001
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v7
+      - name: Trust workspace
+        run: git config --global --add safe.directory "${GITHUB_WORKSPACE}"
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
           cache: pnpm
           node-version-file: .nvmrc
       - run: pnpm install --frozen-lockfile
-      - name: Cache Playwright browsers
-        uses: actions/cache@v6
-        with:
-          key: playwright-${{ runner.os }}-${{ inputs.browsers }}-${{ hashFiles('pnpm-lock.yaml') }}
-          path: ~/.cache/ms-playwright
-          restore-keys: |
-            playwright-${{ runner.os }}-${{ inputs.browsers }}-
-            playwright-${{ runner.os }}-
-      - name: Install Playwright browsers
-        run: |
-          if [ "${E2E_BROWSERS}" = "full" ]; then
-            pnpm exec playwright install --with-deps
-          else
-            pnpm exec playwright install --with-deps chromium
-          fi
+      - name: Check Playwright version
+        run: node .github/scripts/check-playwright-version.mjs 1.64.1
       - run: pnpm test:e2e
+      - if: ${{ !cancelled() }}
+        name: Surface flaky tests
+        run: node .github/scripts/list-flaky-playwright-tests.mjs | tee -a "${GITHUB_STEP_SUMMARY}"
       - uses: actions/upload-artifact@v7
         if: failure()
         with:
