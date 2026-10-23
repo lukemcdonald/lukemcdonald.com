@@ -39,7 +39,11 @@ export default defineConfig({
     : [chromiumProject, mobileProject],
   reporter:
     isCI ?
-      [['github'], ['html', { open: 'never' }], ['json', { outputFile: 'test-results/results.json' }]]
+      [
+        ['github'],
+        ['html', { open: 'never' }],
+        ['json', { outputFile: 'test-results/results.json' }],
+      ]
     : [['html', { open: 'on-failure' }]],
   retries: isCI ? 1 : 0,
   testDir: './e2e',

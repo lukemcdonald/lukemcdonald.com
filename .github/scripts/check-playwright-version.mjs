@@ -19,4 +19,6 @@ if (installed !== expected) {
   process.exit(1)
 }
 
-console.log(`@playwright/test ${installed} matches mcr.microsoft.com/playwright:v${expected}-noble.`)
+console.log(
+  `@playwright/test ${installed} matches mcr.microsoft.com/playwright:v${expected}-noble.`,
+)
