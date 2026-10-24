@@ -1,4 +1,10 @@
-/** Add eggs/<id>.ts + eggs/<id>.css and one line in EGGS. Head.astro applies active-egg storage keys. */
+/**
+ * Add eggs/<id>.ts + eggs/<id>.css and one line in EGGS. Head.astro applies active-egg storage keys.
+ * Konami ↑↑↓↓←→←→BA cycles aurora, hyrule, lamp, then off.
+ * Hyrule ← ↓ A → ↑ → toggles hyrule.
+ * Lamp is cycle-only.
+ * Team: type `team` for the FCA camp video.
+ */
 import type { SoundName } from 'cuelume'
 
 import { playSound } from '@/components/Settings/Sound/utils'
