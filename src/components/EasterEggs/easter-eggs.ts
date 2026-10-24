@@ -13,6 +13,7 @@ import {
 import { auroraEgg } from './eggs/aurora'
 import { hyruleEgg } from './eggs/hyrule'
 import { lampEgg } from './eggs/lamp'
+import { teamEgg } from './eggs/team'
 
 type Egg = {
   dismissOnEscape?: boolean
@@ -27,10 +28,10 @@ type Egg = {
 }
 
 const ATTRIBUTE = 'data-easter-egg'
-const EGGS: readonly Egg[] = [auroraEgg, hyruleEgg, lampEgg]
+const EGGS: readonly Egg[] = [auroraEgg, hyruleEgg, lampEgg, teamEgg]
 const CYCLE_STEPS = EGGS.length + 1
 
-export const EASTER_EGG_IDS = [auroraEgg.id, hyruleEgg.id, lampEgg.id] as const
+export const EASTER_EGG_IDS = [auroraEgg.id, hyruleEgg.id, lampEgg.id, teamEgg.id] as const
 
 const IDLE_MS = 2500
 const STORAGE_ON = 'on'

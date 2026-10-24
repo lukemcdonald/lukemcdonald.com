@@ -28,6 +28,8 @@ export const TEST_ID = {
   siteHomeLink: 'site-home-link',
   siteNav: 'site-nav',
   skipLink: 'skip-link',
+  teamEggDialog: 'team-egg-dialog',
+  teamEggIframe: 'team-egg-iframe',
   themeToggle: 'theme-toggle',
   verse: 'verse',
   verseSkeleton: 'verse-skeleton',

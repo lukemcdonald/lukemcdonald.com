@@ -1,4 +1,7 @@
 ---
+import XIcon from '@lucide/astro/icons/x'
+
+import IconButton from '@/components/IconButton.astro'
 import { LOADING_VERSE_LABEL } from '@/features/verse/verse.constants'
 ---
 
@@ -69,6 +72,41 @@ import { LOADING_VERSE_LABEL } from '@/features/verse/verse.constants'
     </div>
   </div>
 </template>
+
+<dialog
+  aria-labelledby="team-egg-caption"
+  class="fixed inset-0 z-50 m-0 h-dvh max-h-dvh w-full max-w-none items-center justify-center border-0 bg-transparent p-4 backdrop:bg-transparent open:flex focus:outline-hidden sm:p-6"
+  closedby="any"
+  data-team-dialog
+  data-testid="team-egg-dialog"
+>
+  <div class="glass relative w-full max-w-lg overflow-hidden rounded-xl p-4 glass-dialog sm:p-5">
+    <div class="mb-3 flex justify-end">
+      <form method="dialog">
+        <IconButton
+          class="size-10 text-primary-700 dark:text-primary-200"
+          label="Close video"
+          type="submit"
+        >
+          <XIcon
+            aria-hidden="true"
+            class="size-4"
+          />
+        </IconButton>
+      </form>
+    </div>
+    <div
+      class="relative aspect-video overflow-hidden rounded-lg bg-primary-950"
+      data-team-embed
+    ></div>
+    <p
+      class="mt-3 text-center text-sm text-pretty text-primary-900 dark:text-white"
+      id="team-egg-caption"
+    >
+      Everyone has a place on God's team.
+    </p>
+  </div>
+</dialog>
 
 <script>
   import { initializeEasterEggs } from './easter-eggs'

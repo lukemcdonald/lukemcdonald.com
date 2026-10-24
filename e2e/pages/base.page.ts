@@ -4,6 +4,7 @@ import type { Page } from '@playwright/test'
 import { STORAGE_KEYS } from '../../src/utils/storage'
 import { SiteHeader } from '../components/site-header'
 import { SkipLink } from '../components/skip-link'
+import { TeamEgg } from '../components/team-egg'
 import { TEST_ID, THEME_SEED_LOCK_KEY } from '../constants'
 
 export class BasePage {
@@ -13,6 +14,7 @@ export class BasePage {
   readonly pageTitle
   readonly path: string
   readonly skipLink: SkipLink
+  readonly teamEgg: TeamEgg
 
   constructor(page: Page, path = '/') {
     this.header = new SiteHeader(page)
@@ -21,6 +23,7 @@ export class BasePage {
     this.pageTitle = page.getByTestId(TEST_ID.pageTitle)
     this.path = path
     this.skipLink = new SkipLink(page)
+    this.teamEgg = new TeamEgg(page)
   }
 
   async goto(options: { path?: string; theme?: SiteTheme } = {}) {
