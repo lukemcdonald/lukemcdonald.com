@@ -16,7 +16,6 @@ export function buildFcaEmbedSrc(reducedMotion = false) {
 }
 
 export const fcaEgg = {
-  cycle: false,
   dismissOnEscape: true,
   hint: 'Camp still keeps a seat for every athlete.',
   id: FCA_ID,

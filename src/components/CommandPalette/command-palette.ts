@@ -3,6 +3,7 @@ import type { CommandPaletteNavItem } from './types'
 import { navigate } from 'astro:transitions/client'
 
 import {
+  EASTER_EGG_SECRETS_EVENT,
   getActiveEasterEggId,
   getEasterEggs,
   getFoundEasterEggIds,
@@ -313,6 +314,18 @@ function openSecrets(palette: Palette) {
   palette.input.value = ''
   syncList(palette)
   palette.input.focus()
+}
+
+function openPaletteSecrets(palette: Palette) {
+  if (!isDesktop()) {
+    return
+  }
+
+  if (!palette.dialog.open) {
+    openPalette(palette)
+  }
+
+  openSecrets(palette)
 }
 
 function closePalette(palette: Palette, options?: CloseOptions) {
@@ -640,6 +653,7 @@ function bindPaletteEvents(palette: Palette, signal: AbortSignal) {
     capture: true,
     signal,
   })
+  document.addEventListener(EASTER_EGG_SECRETS_EVENT, () => openPaletteSecrets(palette), { signal })
 }
 
 function queryPalette(root: Element): Palette | undefined {

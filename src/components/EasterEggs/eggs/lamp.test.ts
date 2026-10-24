@@ -48,10 +48,10 @@ describe('applyLampVerse', () => {
 })
 
 describe('lampEgg', () => {
-  test('is cycle-only and dismisses on escape', () => {
+  test('has a word code and dismisses on escape', () => {
     assert.equal(lampEgg.dismissOnEscape, true)
     assert.equal(lampEgg.id, 'lamp')
-    assert.deepEqual(lampEgg.sequence, [])
+    assert.deepEqual(lampEgg.sequence, ['KeyS', 'KeyE', 'KeyL', 'KeyA', 'KeyH'])
   })
 })
 

@@ -1,5 +1,4 @@
 export const STORAGE_KEYS = {
-  easterEggCycle: 'easter-eggs:cycle',
   easterEggFound: 'easter-eggs:found',
   easterEggPrefix: 'easter-egg:',
   font: 'font-pairing',

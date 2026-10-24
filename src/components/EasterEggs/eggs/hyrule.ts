@@ -13,15 +13,15 @@ const JINGLE = [
   { delay: 180, duration: 0.14, frequency: 659.25 },
   { delay: 280, duration: 0.28, frequency: 830.61 },
 ] as const
-const MELODY = ['ArrowLeft', 'ArrowDown', 'KeyA', 'ArrowRight', 'ArrowUp', 'ArrowRight'] as const
+const SEQUENCE = ['KeyZ', 'KeyE', 'KeyL', 'KeyD', 'KeyA'] as const
 
 export const hyruleEgg = {
-  hint: 'A little song still sleeps in the keys.',
+  hint: 'The kingdom still answers to its name.',
   id: 'hyrule',
   onActivate: mountHyrule,
   onDismiss: unmountHyrule,
   onInit: logHint,
-  sequence: MELODY,
+  sequence: SEQUENCE,
 } as const
 
 let audioCtx: AudioContext | undefined
@@ -54,7 +54,7 @@ function logHint() {
 
   hinted = true
   // eslint-disable-next-line no-console -- intentional easter-egg hint
-  console.info('%cA little song still sleeps in the keys.', 'color:#3f6b46')
+  console.info(`%c${hyruleEgg.hint}`, 'color:#3f6b46')
 }
 
 function mountHud() {
