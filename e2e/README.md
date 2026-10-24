@@ -9,7 +9,7 @@ Playwright suite for browser-level behavior and accessibility. Unit tests stay i
 ```
 e2e/
   constants.ts
-  routes.ts                 Public routes and themes
+  routes.ts                 Public routes derived from site data
   fixtures/index.ts         test.extend: page objects + makeAxeBuilder
   components/               Shared UI objects
   pages/                    One object per route family
@@ -23,7 +23,7 @@ scripts/preview-static.mjs
 
 Specs import `test` and `expect` from `../fixtures`, never from `@playwright/test`.
 
-`test.extend` injects page objects (`homePage`, `sitePage`), component objects, and `makeAxeBuilder()` so every axe scan uses the same WCAG 2.x A/AA tags. Component objects are composed into `BasePage` so pages do not re-declare locators. Fixtures still expose components for tests that only need one piece of chrome.
+`test.extend` injects page objects (`homePage`, `resumePage`, `sitePage`) and `makeAxeBuilder()` so every axe scan uses the same WCAG 2.x A/AA tags. Each page and component object has one access path: fixtures expose pages; pages compose components. Do not also register those components as fixtures.
 
 ### Page Object Model
 
@@ -35,18 +35,18 @@ Specs import `test` and `expect` from `../fixtures`, never from `@playwright/tes
 
 ### Routes
 
-`e2e/routes.ts` lists every public page. Accessibility specs loop `ROUTES` × `THEMES`. Add a published page there; the axe sweep picks it up. Dev-only routes (`/dev/*`) stay out.
+`e2e/routes.ts` builds `ROUTES` from published files in `src/content/pages` (same draft rule as the pages collection) plus standalone routes that are not content pages (`/resume`, `/missing-page` for 404). Paths come from `toPagePath`. Accessibility specs loop `ROUTES` × `THEMES`. A new published page such as `/work/*` is axe-checked automatically. Dev-only routes (`/dev/*`) stay out.
 
 ## Locator convention
 
-Prefer `getByTestId` over copy-based locators because visible text changes.
+Find elements with `getByTestId` so copy, i18n, and experiment changes do not break E2E. Assert outcomes (navigation, state, visibility), not wording. Check text only when that exact content matters, such as a page title. Accessible roles and labels are covered by axe and unit tests, not E2E selectors.
 
-| Use                                                 | When                                                     |
-| --------------------------------------------------- | -------------------------------------------------------- |
-| `page.getByTestId('...')`                           | Clicking, filling, waiting on, or referencing an element |
-| `getByRole` / `toHaveRole` / `toHaveAccessibleName` | Asserting accessibility semantics                        |
-| `getByText` / CSS / XPath                           | Do not use                                               |
-| `data-testid` in `src/**/*.test.ts`                 | Do not use; unit tests stay implementation-focused       |
+| Use                                      | When                                                     |
+| ---------------------------------------- | -------------------------------------------------------- |
+| `page.getByTestId('...')`                | Clicking, filling, waiting on, or referencing an element |
+| `toHaveText` on a title or required line | Only when that exact content matters                     |
+| `getByRole` / `getByText` / CSS / XPath  | Do not use to find elements                              |
+| `data-testid` in `src/**/*.test.ts`      | Do not use; unit tests stay implementation-focused       |
 
 `playwright.config.ts` sets `testIdAttribute: 'data-testid'`.
 
@@ -66,15 +66,15 @@ Prefer web-first assertions (`toBeVisible`, `toBeFocused`, `toHaveURL`). Do not 
 Tags:
 
 - `@axe` — WCAG sweep. Chromium only.
-- `@desktop` — command palette (hover/fine pointer). Mobile skips via `grepInvert`.
-- `@a11y` — skip-link and visible-focus specs
+- `@desktop` — command palette. Mobile skips via `grepInvert`.
+- `@a11y` — skip-link specs
 - `@smoke` — navigation, theme, command palette
 
 Filter with `pnpm exec playwright test --grep @smoke`.
 
 ## Adding a page
 
-1. Add `{ id, path }` to `ROUTES`.
+1. Published content pages are picked up from `src/content/pages`. For a standalone route, add `{ id, path }` to `STANDALONE_ROUTES` in `e2e/routes.ts`.
 2. If the route has unique interactive chrome, add `e2e/pages/{name}.page.ts` extending `BasePage` and register it in `e2e/fixtures/index.ts`.
 3. Add `data-testid` only for elements the new tests click or reference.
 
@@ -99,7 +99,7 @@ pnpm exec playwright test --trace on
 
 Default and PR set (`E2E_BROWSERS=pr`): Chromium and Pixel 5. `E2E_BROWSERS=full` adds Firefox and WebKit (without axe). CI uses the same env.
 
-`reuseExistingServer` is on locally. The suite listens on `E2E_PORT` (default `4173`), not the Astro dev port (`4321`). If that URL is already served, the suite reuses it; otherwise `webServer` runs `pnpm build && pnpm preview:static`.
+The suite tests a local production build. `reuseExistingServer` is on locally. The suite listens on `E2E_PORT` (default `4173`), not the Astro dev port (`4321`). If that URL is already served, the suite reuses it; otherwise `webServer` runs `pnpm build && pnpm preview:static`. `PLAYWRIGHT_BASE_URL` overrides the origin and skips the local preview server.
 
 For a CI failure, download the `playwright-report` artifact and open it with `pnpm exec playwright show-report`.
 

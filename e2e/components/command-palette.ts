@@ -8,28 +8,20 @@ import { ThemeToggle } from './theme-toggle'
 export class CommandPalette {
   readonly dialog
   readonly fontToggle: FontToggle
-  readonly highlightedSecrets
   readonly host
   readonly input
-  readonly list
   readonly page: Page
   readonly secrets
-  readonly secretsFooter
   readonly themeToggle: ThemeToggle
   readonly trigger
 
   constructor(page: Page) {
     this.dialog = page.getByTestId(TEST_ID.commandPalette)
     this.fontToggle = new FontToggle(page)
-    this.highlightedSecrets = page
-      .getByTestId(TEST_ID.commandPaletteSecrets)
-      .locator('[data-palette-highlighted]')
     this.host = page.getByTestId(TEST_ID.commandPaletteDialog)
     this.input = page.getByTestId(TEST_ID.commandPaletteInput)
-    this.list = page.getByTestId(TEST_ID.commandPaletteList)
     this.page = page
     this.secrets = page.getByTestId(TEST_ID.commandPaletteSecrets)
-    this.secretsFooter = page.getByTestId(TEST_ID.commandPaletteSecretsFooter)
     this.themeToggle = new ThemeToggle(page)
     this.trigger = page.getByTestId(TEST_ID.commandPaletteTrigger)
   }
@@ -46,12 +38,6 @@ export class CommandPalette {
 
   egg(id: string) {
     return this.page.getByTestId(commandPaletteEggTestId(id))
-  }
-
-  async listHeight() {
-    return this.list.evaluate((el) => {
-      return Number.parseFloat(el.style.getPropertyValue('--palette-list-height')) || 0
-    })
   }
 
   async markEggFound(...ids: string[]) {

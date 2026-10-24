@@ -7,16 +7,19 @@ import IconButton from '@/components/IconButton.astro'
 interface Props {
   class?: string
   label: string
+  testId?: string
   value: string
 }
 
-const { class: className, label, value } = Astro.props
+const { class: className, label, testId, value } = Astro.props
+const statusTestId = testId ? `${testId}-status` : undefined
 ---
 
 <span class="inline-flex items-center gap-1">
   <IconButton
     class:list={['text-primary-700 dark:text-primary-200', className]}
     data-copy={value}
+    data-testid={testId}
     label={label}
     size="sm"
   >
@@ -35,6 +38,7 @@ const { class: className, label, value } = Astro.props
     aria-live="polite"
     class="hidden pr-1 font-sans text-xs font-medium"
     data-copy-status
+    data-testid={statusTestId}
   ></span>
 </span>
 

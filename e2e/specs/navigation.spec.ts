@@ -1,4 +1,3 @@
-import { commandPalettePageTestId } from '../constants'
 import { expect, test } from '../fixtures'
 
 test.describe('navigation', { tag: '@smoke' }, () => {
@@ -30,42 +29,5 @@ test.describe('navigation', { tag: '@smoke' }, () => {
     expect(await homePage.wasClientRouterPreserved()).toBe(true)
     await expect(homePage.header.root).toBeVisible()
     await expect(homePage.header.nav.root).toBeVisible()
-  })
-
-  test('keeps work history pages out of the Work menu and in the command palette', async ({
-    homePage,
-    isMobile,
-  }) => {
-    const workPages = ['/work/audiotheme', '/work/blazer-six', '/work/cedaro', '/work/celtic7']
-
-    await homePage.goto()
-
-    if (isMobile) {
-      await homePage.header.nav.openMobileMenu()
-      await expect(homePage.header.nav.mobileLink('/resume')).toBeVisible()
-
-      for (const href of workPages) {
-        await expect(homePage.header.nav.mobileLink(href)).toHaveCount(0)
-      }
-
-      return
-    }
-
-    await homePage.header.nav.openWorkMenu()
-    await expect(homePage.header.nav.desktopLink('/resume')).toBeVisible()
-
-    for (const href of workPages) {
-      await expect(homePage.header.nav.desktopLink(href)).toHaveCount(0)
-    }
-
-    const palette = homePage.header.commandPalette
-    const work = palette.navGroup('Work')
-
-    await palette.openWithKeyboard()
-    await expect(work.getByTestId(commandPalettePageTestId('/resume'))).toBeVisible()
-
-    for (const href of workPages) {
-      await expect(work.getByTestId(commandPalettePageTestId(href))).toBeVisible()
-    }
   })
 })

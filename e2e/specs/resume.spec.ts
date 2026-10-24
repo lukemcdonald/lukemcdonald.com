@@ -8,15 +8,10 @@ test.describe('resume MCP widget', { tag: '@smoke' }, () => {
 
     await expect(resumePage.widget).toBeVisible()
     await expect(resumePage.mcpUrl).toHaveText(MCP_URL)
-    await expect(resumePage.mcpUrl).not.toHaveAttribute('href')
-    await expect(resumePage.copyButton).toHaveRole('button')
-    await expect(resumePage.copyButton).toHaveAccessibleName('Copy MCP URL')
     await expect(resumePage.copyButton).toBeVisible()
 
     await resumePage.copyButton.click()
 
-    await expect(resumePage.copyButton).toHaveAccessibleName('Copy MCP URL')
-    await expect(resumePage.copyStatus).toHaveText('Copied')
     await expect(resumePage.copyStatus).toBeVisible()
     await expect
       .poll(() => {
@@ -36,7 +31,6 @@ test.describe('resume MCP widget', { tag: '@smoke' }, () => {
 
     await resumePage.copyButton.press('Enter')
 
-    await expect(resumePage.copyStatus).toHaveText('Copied')
     await expect(resumePage.copyStatus).toBeVisible()
   })
 

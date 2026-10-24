@@ -8,9 +8,7 @@ export const TEST_ID = {
   commandPalette: 'command-palette',
   commandPaletteDialog: 'command-palette-dialog',
   commandPaletteInput: 'command-palette-input',
-  commandPaletteList: 'command-palette-list',
   commandPaletteSecrets: 'command-palette-secrets',
-  commandPaletteSecretsFooter: 'command-palette-secrets-footer',
   commandPaletteTrigger: 'command-palette-trigger',
   desktopNav: 'desktop-nav',
   fontToggle: 'font-toggle',
@@ -19,6 +17,9 @@ export const TEST_ID = {
   mobileFont: 'mobile-font',
   mobileMenu: 'mobile-menu',
   mobileMenuTrigger: 'mobile-menu-trigger',
+  pageTitle: 'page-title',
+  resumeMcpCopy: 'resume-mcp-copy',
+  resumeMcpCopyStatus: 'resume-mcp-copy-status',
   resumeMcpDismiss: 'resume-mcp-dismiss',
   resumeMcpToggle: 'resume-mcp-toggle',
   resumeMcpUrl: 'resume-mcp-url',
@@ -28,6 +29,8 @@ export const TEST_ID = {
   siteNav: 'site-nav',
   skipLink: 'skip-link',
   themeToggle: 'theme-toggle',
+  verse: 'verse',
+  verseSkeleton: 'verse-skeleton',
 } as const
 
 export const THEME_SEED_LOCK_KEY = '__e2e-theme-seeded'
