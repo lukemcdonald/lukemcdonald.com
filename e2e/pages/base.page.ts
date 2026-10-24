@@ -2,11 +2,13 @@ import type { SiteTheme } from '../routes'
 import type { Page } from '@playwright/test'
 
 import { STORAGE_KEYS } from '../../src/utils/storage'
+import { FcaEgg } from '../components/fca-egg'
 import { SiteHeader } from '../components/site-header'
 import { SkipLink } from '../components/skip-link'
 import { TEST_ID, THEME_SEED_LOCK_KEY } from '../constants'
 
 export class BasePage {
+  readonly fcaEgg: FcaEgg
   readonly header: SiteHeader
   readonly main
   readonly page: Page
@@ -15,6 +17,7 @@ export class BasePage {
   readonly skipLink: SkipLink
 
   constructor(page: Page, path = '/') {
+    this.fcaEgg = new FcaEgg(page)
     this.header = new SiteHeader(page)
     this.main = page.getByTestId(TEST_ID.main)
     this.page = page

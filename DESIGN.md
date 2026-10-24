@@ -35,7 +35,7 @@ Reuse these; copy from the file instead of inventing variants.
 - Icon-only controls: `IconButton` (`ghost`, `solid`). Do not add a general Button.
 - Header text triggers: `HEADER_TRIGGER_CLASS` in `src/features/navigation/navigation.utils.ts`.
 - Overlays and focus: `glass` / `glass-dialog` and `focus-ring` in `src/assets/styles/effects.css`.
-- Command palette chrome: `src/components/CommandPalette/chrome.ts`.
+- Overlay chrome: `PALETTE_CHROME` in `src/components/CommandPalette/chrome.ts` (dialog, panel, kbd, and list).
 - Forms: `MenuSelect`; keep control text on sans/UI.
 - Native `<dialog>` for the palette and mobile menu. Prefer `IconButton` and `HEADER_TRIGGER_CLASS` over a new button API.
 

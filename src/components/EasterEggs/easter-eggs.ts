@@ -1,4 +1,10 @@
-/** Add eggs/<id>.ts + eggs/<id>.css and one line in EGGS. Head.astro applies active-egg storage keys. */
+/**
+ * Add eggs/<id>.ts + eggs/<id>.css and one line in EGGS. Head.astro applies active-egg storage keys.
+ * Konami ↑↑↓↓←→←→BA cycles aurora, hyrule, lamp, then off.
+ * Hyrule ← ↓ A → ↑ → toggles hyrule.
+ * Lamp is cycle-only.
+ * FCA: type `fca` for the camp video. Not in the Konami cycle.
+ */
 import type { SoundName } from 'cuelume'
 
 import { playSound } from '@/components/Settings/Sound/utils'
@@ -11,26 +17,32 @@ import {
 } from '@/utils/storage'
 
 import { auroraEgg } from './eggs/aurora'
+import { fcaEgg } from './eggs/fca'
 import { hyruleEgg } from './eggs/hyrule'
 import { lampEgg } from './eggs/lamp'
 
 type Egg = {
+  cycle?: boolean
   dismissOnEscape?: boolean
   hint: string
   id: string
-  onActivate?: (silent?: boolean) => void | Promise<void>
+  name?: string
+  onActivate?: (silent?: boolean, dismiss?: () => void) => void | Promise<void>
   onDismiss?: () => void
   onInit?: () => void
+  persist?: boolean
   sequence: readonly string[]
   soundOff?: SoundName
   soundOn?: SoundName
 }
 
 const ATTRIBUTE = 'data-easter-egg'
-const EGGS: readonly Egg[] = [auroraEgg, hyruleEgg, lampEgg]
-const CYCLE_STEPS = EGGS.length + 1
+const EGGS: readonly Egg[] = [auroraEgg, fcaEgg, hyruleEgg, lampEgg]
+const CYCLE_EGGS = EGGS.filter((egg) => egg.cycle !== false)
+const CYCLE_STEPS = CYCLE_EGGS.length + 1
 
-export const EASTER_EGG_IDS = [auroraEgg.id, hyruleEgg.id, lampEgg.id] as const
+export const CYCLE_EASTER_EGG_IDS = CYCLE_EGGS.map((egg) => egg.id)
+export const EASTER_EGG_IDS = [auroraEgg.id, fcaEgg.id, hyruleEgg.id, lampEgg.id] as const
 
 const IDLE_MS = 2500
 const STORAGE_ON = 'on'
@@ -60,7 +72,7 @@ export function getActiveEasterEggId() {
 export function getEasterEggs() {
   return EGGS.map((egg) => ({
     id: egg.id,
-    name: eggName(egg.id),
+    name: eggName(egg),
   }))
 }
 
@@ -68,7 +80,7 @@ export function getEasterEggCatalog() {
   return EGGS.map((egg) => ({
     hint: egg.hint,
     id: egg.id,
-    name: eggName(egg.id),
+    name: eggName(egg),
   }))
 }
 
@@ -94,7 +106,7 @@ export async function findEasterEgg(id: string) {
   return {
     alreadyActive,
     id: egg.id,
-    name: eggName(egg.id),
+    name: eggName(egg),
   }
 }
 
@@ -164,7 +176,7 @@ function currentEggId() {
 
 function cycleEgg() {
   const index = pickCycleIndex()
-  const egg = EGGS[index]
+  const egg = CYCLE_EGGS[index]
 
   writeCycleIndex(nextCycleIndex(index))
 
@@ -186,8 +198,8 @@ function dispatchCompleted(completed: readonly Egg[]) {
   toggleEgg(pickEgg(completed))
 }
 
-function eggName(id: string) {
-  return `${id.slice(0, 1).toUpperCase()}${id.slice(1)}`
+function eggName(egg: Egg) {
+  return egg.name ?? `${egg.id.slice(0, 1).toUpperCase()}${egg.id.slice(1)}`
 }
 
 function hasBlockingFlags(event: KeyboardEvent): boolean {
@@ -216,7 +228,7 @@ function hideEgg(silent = false) {
 }
 
 function isCurrentCycleStep(index: number) {
-  return EGGS[index]?.id === currentEggId()
+  return CYCLE_EGGS[index]?.id === currentEggId()
 }
 
 function isCycleTrigger(egg: Egg) {
@@ -373,6 +385,11 @@ function remountEgg() {
     return
   }
 
+  if (activeEgg.persist === false) {
+    hideEgg(true)
+    return
+  }
+
   const egg = activeEgg
 
   void loadEggStyles(egg.id).then(async () => {
@@ -381,7 +398,7 @@ function remountEgg() {
     }
 
     document.documentElement.setAttribute(ATTRIBUTE, egg.id)
-    await egg.onActivate?.(true)
+    await egg.onActivate?.(true, hideEgg)
   })
 }
 
@@ -394,7 +411,7 @@ function restoreEgg() {
   const storedId = storedEggId()
   const egg = EGGS.find((item) => item.id === storedId)
 
-  if (!egg) {
+  if (!egg || egg.persist === false) {
     document.documentElement.removeAttribute(ATTRIBUTE)
     clearStoredEggs()
     return
@@ -447,7 +464,11 @@ async function showEgg(egg: Egg, silent = false) {
   dismissOtherEgg(egg.id)
   activeEgg = egg
   clearStoredEggs()
-  setStorageItem(`${STORAGE_KEYS.easterEggPrefix}${egg.id}`, STORAGE_ON)
+
+  if (egg.persist !== false) {
+    setStorageItem(`${STORAGE_KEYS.easterEggPrefix}${egg.id}`, STORAGE_ON)
+  }
+
   await loadEggStyles(egg.id)
 
   if (activeEgg !== egg) {
@@ -455,7 +476,7 @@ async function showEgg(egg: Egg, silent = false) {
   }
 
   document.documentElement.setAttribute(ATTRIBUTE, egg.id)
-  await egg.onActivate?.(silent)
+  await egg.onActivate?.(silent, hideEgg)
   playEggSound(silent ? undefined : egg.soundOn)
 }
 
