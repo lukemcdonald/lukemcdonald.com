@@ -2,7 +2,8 @@ import { defineConfig, devices } from '@playwright/test'
 
 const e2eBrowsers = process.env.E2E_BROWSERS === 'full' ? 'full' : 'pr'
 const e2ePort = process.env.E2E_PORT || '4173'
-const baseURL = `http://127.0.0.1:${e2ePort}`
+const previewOrigin = `http://127.0.0.1:${e2ePort}`
+const baseURL = process.env.PLAYWRIGHT_BASE_URL || previewOrigin
 const isCI = Boolean(process.env.CI)
 
 const chromiumProject = {
@@ -54,11 +55,14 @@ export default defineConfig({
     testIdAttribute: 'data-testid',
     trace: 'on-first-retry',
   },
-  webServer: {
-    command: 'pnpm build && pnpm preview:static',
-    reuseExistingServer: !isCI,
-    timeout: 180 * 1000,
-    url: baseURL,
-  },
+  webServer:
+    process.env.PLAYWRIGHT_BASE_URL ?
+      undefined
+    : {
+        command: 'pnpm build && pnpm preview:static',
+        reuseExistingServer: !isCI,
+        timeout: 180 * 1000,
+        url: previewOrigin,
+      },
   workers: isCI ? 1 : undefined,
 })

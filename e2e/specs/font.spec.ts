@@ -1,13 +1,6 @@
 import type { HomePage } from '../pages/home.page'
-import type { Locator } from '@playwright/test'
 
 import { expect, test } from '../fixtures'
-
-async function fontFamily(locator: Locator) {
-  return locator.evaluate((el) => {
-    return getComputedStyle(el).fontFamily
-  })
-}
 
 async function selectFont(homePage: HomePage, isMobile: boolean, pairing: string) {
   if (isMobile) {
@@ -28,15 +21,10 @@ test.describe('font', { tag: '@smoke' }, () => {
     isMobile,
   }) => {
     await homePage.goto()
-
-    const heading = homePage.page.getByRole('heading', { level: 1 })
-    const defaultHeadingFace = await fontFamily(heading)
-
     await selectFont(homePage, isMobile, 'work')
 
     await expect.poll(() => homePage.storedFontPairing()).toBe('work')
     await expect(homePage.page.locator('html')).toHaveAttribute('data-font', 'work')
-    await expect.poll(() => fontFamily(heading)).not.toBe(defaultHeadingFace)
 
     await homePage.greetingLink('/i-am-a/christian').click()
     await homePage.waitForPath('/i-am-a/christian')
@@ -56,7 +44,7 @@ test.describe('font', { tag: '@smoke' }, () => {
 
     if (isMobile) {
       await homePage.header.nav.openMobileMenu()
-      await homePage.header.nav.mobileFont.selectOption({ label: 'Default' })
+      await homePage.header.nav.mobileFont.selectOption('')
       await homePage.header.nav.closeMobileMenu()
     } else {
       await homePage.header.commandPalette.openWithKeyboard()

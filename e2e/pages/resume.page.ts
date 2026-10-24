@@ -17,8 +17,8 @@ export class ResumePage extends BasePage {
 
     const widget = page.getByTestId(TEST_ID.resumeMcpWidget)
 
-    this.copyButton = widget.getByRole('button', { name: 'Copy MCP URL' })
-    this.copyStatus = widget.locator('[data-copy-status]')
+    this.copyButton = widget.getByTestId(TEST_ID.resumeMcpCopy)
+    this.copyStatus = widget.getByTestId(TEST_ID.resumeMcpCopyStatus)
     this.dismissButton = widget.getByTestId(TEST_ID.resumeMcpDismiss)
     this.mcpUrl = widget.getByTestId(TEST_ID.resumeMcpUrl)
     this.toggle = widget.getByTestId(TEST_ID.resumeMcpToggle)

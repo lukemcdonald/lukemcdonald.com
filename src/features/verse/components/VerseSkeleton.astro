@@ -2,7 +2,10 @@
 import { LOADING_VERSE_LABEL } from '../verse.constants'
 ---
 
-<span aria-busy="true">
+<span
+  aria-busy="true"
+  data-testid="verse-skeleton"
+>
   <span class="sr-only">{LOADING_VERSE_LABEL}</span>
   <span
     aria-hidden="true"
