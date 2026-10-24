@@ -36,10 +36,12 @@ test.describe('konami', { tag: ['@desktop'] }, () => {
     const palette = homePage.header.commandPalette
 
     await homePage.goto()
+    await palette.markEggFound('aurora')
     await palette.openSecretsWithKonami()
 
     await expect(palette.host).toBeVisible()
     await expect(palette.secrets).toBeVisible()
+    await expect(palette.egg('aurora')).toBeVisible()
     await expect(palette.input).toBeFocused()
   })
 })
