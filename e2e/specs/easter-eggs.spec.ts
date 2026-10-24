@@ -1,8 +1,8 @@
 import { expect, test } from '../fixtures'
 
-test.describe('team easter egg', () => {
+test.describe('fca easter egg', () => {
   test('opens the video lightbox from the code and unloads it on close', async ({ homePage }) => {
-    const egg = homePage.teamEgg
+    const egg = homePage.fcaEgg
 
     await homePage.goto()
     await expect(egg.iframe).toHaveCount(0)
@@ -29,12 +29,12 @@ test.describe('team easter egg', () => {
       const palette = homePage.header.commandPalette
 
       await homePage.goto()
-      await homePage.teamEgg.trigger()
-      await homePage.teamEgg.closeWithKeyboard()
+      await homePage.fcaEgg.trigger()
+      await homePage.fcaEgg.closeWithKeyboard()
       await palette.openWithKeyboard()
       await palette.openSecretsWithKeyboard()
 
-      await expect(palette.egg('team')).toBeVisible()
+      await expect(palette.egg('fca')).toBeVisible()
     },
   )
 })

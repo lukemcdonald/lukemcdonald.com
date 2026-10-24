@@ -72,24 +72,24 @@ import { LOADING_VERSE_LABEL } from '@/features/verse/verse.constants'
 </template>
 
 <dialog
-  aria-labelledby="team-egg-caption"
+  aria-labelledby="fca-egg-caption"
   class={PALETTE_CHROME.dialog}
   closedby="any"
-  data-team-dialog
-  data-testid="team-egg-dialog"
+  data-fca-dialog
+  data-testid="fca-egg-dialog"
   tabindex="-1"
 >
   <div class={PALETTE_CHROME.panel}>
     <div
       class="relative aspect-video bg-primary-950"
-      data-team-embed
+      data-fca-embed
     ></div>
     <div
       class={`${PALETTE_CHROME.footer} text-sm ${PALETTE_CHROME.border} ${PALETTE_CHROME.muted}`}
     >
       <p
         class="min-w-0 flex-1 text-pretty"
-        id="team-egg-caption"
+        id="fca-egg-caption"
       >
         Everyone has a place on God's team.
       </p>
@@ -97,7 +97,7 @@ import { LOADING_VERSE_LABEL } from '@/features/verse/verse.constants'
         <button
           aria-label="Close"
           class={`${PALETTE_CHROME.kbd} ${PALETTE_CHROME.border} bg-transparent`}
-          data-testid="team-egg-close"
+          data-testid="fca-egg-close"
           type="submit"
         >
           ESC

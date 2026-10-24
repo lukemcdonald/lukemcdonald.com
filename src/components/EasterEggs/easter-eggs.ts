@@ -3,7 +3,7 @@
  * Konami ↑↑↓↓←→←→BA cycles aurora, hyrule, lamp, then off.
  * Hyrule ← ↓ A → ↑ → toggles hyrule.
  * Lamp is cycle-only.
- * Team: type `team` for the FCA camp video. Not in the Konami cycle.
+ * FCA: type `fca` for the camp video. Not in the Konami cycle.
  */
 import type { SoundName } from 'cuelume'
 
@@ -17,9 +17,9 @@ import {
 } from '@/utils/storage'
 
 import { auroraEgg } from './eggs/aurora'
+import { fcaEgg } from './eggs/fca'
 import { hyruleEgg } from './eggs/hyrule'
 import { lampEgg } from './eggs/lamp'
-import { teamEgg } from './eggs/team'
 
 type Egg = {
   cycle?: boolean
@@ -36,12 +36,12 @@ type Egg = {
 }
 
 const ATTRIBUTE = 'data-easter-egg'
-const EGGS: readonly Egg[] = [auroraEgg, hyruleEgg, lampEgg, teamEgg]
+const EGGS: readonly Egg[] = [auroraEgg, fcaEgg, hyruleEgg, lampEgg]
 const CYCLE_EGGS = EGGS.filter((egg) => egg.cycle !== false)
 const CYCLE_STEPS = CYCLE_EGGS.length + 1
 
 export const CYCLE_EASTER_EGG_IDS = CYCLE_EGGS.map((egg) => egg.id)
-export const EASTER_EGG_IDS = [auroraEgg.id, hyruleEgg.id, lampEgg.id, teamEgg.id] as const
+export const EASTER_EGG_IDS = [auroraEgg.id, fcaEgg.id, hyruleEgg.id, lampEgg.id] as const
 
 const IDLE_MS = 2500
 const STORAGE_ON = 'on'

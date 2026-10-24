@@ -1,29 +1,29 @@
 import { bindDialogBackdropClose } from '@/utils/dialog'
 
-const DIALOG_ATTR = 'data-team-dialog'
-const EMBED_ATTR = 'data-team-embed'
+const DIALOG_ATTR = 'data-fca-dialog'
+const EMBED_ATTR = 'data-fca-embed'
 const EMBED_ORIGIN = 'https://www.youtube-nocookie.com/embed'
 const EMBED_TITLE = 'FCA All Abilities camp at Camp Courageous'
-const IFRAME_TEST_ID = 'team-egg-iframe'
-const SEQUENCE = ['KeyT', 'KeyE', 'KeyA', 'KeyM'] as const
-const TEAM_ID = 'team'
+const FCA_ID = 'fca'
+const IFRAME_TEST_ID = 'fca-egg-iframe'
+const SEQUENCE = ['KeyF', 'KeyC', 'KeyA'] as const
 const VIDEO_ID = 'wM0if-w6PEs'
 
-export function buildTeamEmbedSrc(reducedMotion = false) {
+export function buildFcaEmbedSrc(reducedMotion = false) {
   const params = reducedMotion ? 'playsinline=1&rel=0' : 'autoplay=1&playsinline=1&rel=0'
 
   return `${EMBED_ORIGIN}/${VIDEO_ID}?${params}`
 }
 
-export const teamEgg = {
+export const fcaEgg = {
   cycle: false,
   dismissOnEscape: true,
   hint: 'Camp still keeps a seat for every athlete.',
-  id: TEAM_ID,
+  id: FCA_ID,
   onActivate: (...args: [boolean?, (() => void)?]) => {
-    mountTeam(args[1])
+    mountFca(args[1])
   },
-  onDismiss: unmountTeam,
+  onDismiss: unmountFca,
   persist: false,
   sequence: SEQUENCE,
   soundOff: 'close',
@@ -31,7 +31,7 @@ export const teamEgg = {
 } as const
 
 let boundDialog: HTMLDialogElement | undefined
-let dismissTeam: (() => void) | undefined
+let dismissFca: (() => void) | undefined
 
 function bindDialog(dialog: HTMLDialogElement) {
   if (boundDialog === dialog) {
@@ -64,13 +64,13 @@ function injectIframe() {
   iframe.className = 'absolute inset-0 size-full border-0'
   iframe.dataset.testid = IFRAME_TEST_ID
   iframe.referrerPolicy = 'strict-origin-when-cross-origin'
-  iframe.src = buildTeamEmbedSrc(isReducedMotionPreferred())
+  iframe.src = buildFcaEmbedSrc(isReducedMotionPreferred())
   iframe.tabIndex = -1
   iframe.title = EMBED_TITLE
   iframe.addEventListener(
     'load',
     () => {
-      teamDialog()?.focus({ preventScroll: true })
+      fcaDialog()?.focus({ preventScroll: true })
     },
     { once: true },
   )
@@ -81,10 +81,10 @@ function isReducedMotionPreferred() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
-function mountTeam(dismiss?: () => void) {
-  const dialog = teamDialog()
+function mountFca(dismiss?: () => void) {
+  const dialog = fcaDialog()
 
-  dismissTeam = dismiss
+  dismissFca = dismiss
 
   if (!dialog) {
     return
@@ -102,19 +102,19 @@ function mountTeam(dismiss?: () => void) {
 
 function onDialogClose() {
   removeIframe()
-  dismissTeam?.()
+  dismissFca?.()
 }
 
 function removeIframe() {
   embedHost()?.querySelector('iframe')?.remove()
 }
 
-function teamDialog() {
+function fcaDialog() {
   return document.querySelector<HTMLDialogElement>(`[${DIALOG_ATTR}]`)
 }
 
-function unmountTeam() {
-  const dialog = teamDialog()
+function unmountFca() {
+  const dialog = fcaDialog()
 
   removeIframe()
 
