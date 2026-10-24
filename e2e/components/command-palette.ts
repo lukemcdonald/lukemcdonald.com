@@ -12,6 +12,7 @@ export class CommandPalette {
   readonly input
   readonly page: Page
   readonly secrets
+  readonly selectedOptions
   readonly themeToggle: ThemeToggle
   readonly trigger
 
@@ -22,6 +23,10 @@ export class CommandPalette {
     this.input = page.getByTestId(TEST_ID.commandPaletteInput)
     this.page = page
     this.secrets = page.getByTestId(TEST_ID.commandPaletteSecrets)
+    this.selectedOptions = page
+      .getByTestId(TEST_ID.commandPalette)
+      .getByTestId(/^command-palette-page-/)
+      .and(page.locator('[aria-selected="true"]'))
     this.themeToggle = new ThemeToggle(page)
     this.trigger = page.getByTestId(TEST_ID.commandPaletteTrigger)
   }
