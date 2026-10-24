@@ -37,7 +37,14 @@ export default defineConfig({
     e2eBrowsers === 'full' ?
       [chromiumProject, firefoxProject, webkitProject, mobileProject]
     : [chromiumProject, mobileProject],
-  reporter: isCI ? [['github'], ['html', { open: 'never' }]] : [['html', { open: 'on-failure' }]],
+  reporter:
+    isCI ?
+      [
+        ['github'],
+        ['html', { open: 'never' }],
+        ['json', { outputFile: 'test-results/results.json' }],
+      ]
+    : [['html', { open: 'on-failure' }]],
   retries: isCI ? 1 : 0,
   testDir: './e2e',
   testMatch: '**/*.spec.ts',
