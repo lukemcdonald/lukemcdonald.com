@@ -23,7 +23,8 @@ export function applySitemapLastmod<T extends SitemapItem>(item: T): T & { lastm
 }
 
 export function getFrontmatterLastmod(source: string) {
-  const block = source.startsWith('---') ? (source.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? '') : source
+  const block =
+    source.startsWith('---') ? (source.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? '') : source
   const updated = block.match(/^updated:\s*['"]?(\d{4}-\d{2}-\d{2})['"]?/m)?.[1]
 
   if (updated) {

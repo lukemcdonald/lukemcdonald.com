@@ -33,9 +33,14 @@ function sitemapUrl(pathname: string) {
 
 describe('getFrontmatterLastmod', () => {
   test('prefers updated over date in markdown frontmatter', () => {
-    const source = ['---', 'date: 2024-01-15', 'title: About', 'updated: 2026-03-02', '---', ''].join(
-      '\n',
-    )
+    const source = [
+      '---',
+      'date: 2024-01-15',
+      'title: About',
+      'updated: 2026-03-02',
+      '---',
+      '',
+    ].join('\n')
 
     assert.equal(getFrontmatterLastmod(source), '2026-03-02')
   })
