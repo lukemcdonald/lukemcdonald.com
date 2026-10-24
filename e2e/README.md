@@ -105,8 +105,8 @@ For a CI failure, download the `playwright-report` artifact and open it with `pn
 
 ## CI
 
-`.github/workflows/ci.yml` runs on `pull_request` and `push` to `main` (validate, audit, E2E). The E2E job uses `mcr.microsoft.com/playwright:v<@playwright/test>-noble` instead of `playwright install --with-deps`. `E2E_BROWSERS` is `pr` on pull requests and `full` on `main`. The check is `CI / E2E`.
+`.github/workflows/ci.yml` runs on `pull_request` and `push` to `main` (validate, audit, E2E). The E2E job lives in `.github/workflows/e2e.yml` and is reused via `workflow_call`. The Playwright image tag is the `playwright-version` input default in that file and must match `@playwright/test` in the lockfile. `E2E_BROWSERS` is `pr` on pull requests and `full` on `main`. GitHub nests reusable jobs, so the CI check is `CI / E2E / Playwright`.
 
-Manual runs use `.github/workflows/e2e.yml` (`workflow_dispatch`) with a separate concurrency group so they do not cancel CI.
+Manual runs use the same file (`workflow_dispatch`) as `End-to-end tests / Playwright`.
 
 `playwright.config.ts` treats `E2E_BROWSERS === 'full'` as the full project list and every other value as the PR set.

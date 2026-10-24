@@ -46,40 +46,7 @@ jobs:
           pnpm exec fallow audit --base "origin/${{ github.base_ref }}"
 
   e2e:
-    env:
-      E2E_BROWSERS: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'full' || 'pr' }}
-      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     name: E2E
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    # Pin to the @playwright/test version in pnpm-lock.yaml. The version check fails if they drift.
-    container:
-      image: mcr.microsoft.com/playwright:v1.64.1-noble
-      options: --user 1001
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - uses: actions/checkout@v7
-      - name: Trust workspace
-        run: git config --global --add safe.directory "${GITHUB_WORKSPACE}"
-      - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v7
-        with:
-          cache: pnpm
-          node-version-file: .nvmrc
-      - run: pnpm install --frozen-lockfile
-      - name: Check Playwright version
-        run: node .github/scripts/check-playwright-version.mjs 1.64.1
-      - run: pnpm test:e2e
-      - if: ${{ !cancelled() }}
-        name: Surface flaky tests
-        run: node .github/scripts/list-flaky-playwright-tests.mjs | tee -a "${GITHUB_STEP_SUMMARY}"
-      - uses: actions/upload-artifact@v7
-        if: failure()
-        with:
-          name: playwright-report
-          path: |
-            playwright-report/
-            test-results/
-          retention-days: 14
+    uses: ./.github/workflows/e2e.yml
+    with:
+      browsers: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'full' || 'pr' }}
