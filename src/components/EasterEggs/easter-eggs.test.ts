@@ -153,7 +153,7 @@ describe('getEasterEggCatalog', () => {
       catalog.some((secret) => secret.hint.length === 0),
       false,
     )
-    assert.equal(catalog.find((secret) => secret.id === 'fca')?.name, 'FCA')
+    assert.equal(catalog.find((secret) => secret.id === 'fca')?.name, 'FCA All Abilities')
   })
 })
 
