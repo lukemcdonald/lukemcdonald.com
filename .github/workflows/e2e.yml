@@ -8,8 +8,8 @@ on:
         description: Browser set. pr is Chromium and Pixel 5; full adds Firefox and WebKit.
         type: string
       playwright-version:
-        description: Override for PLAYWRIGHT_VERSION. Defaults to the workflow env.
-        required: false
+        default: '1.64.1'
+        description: '@playwright/test version. Must match pnpm-lock.yaml and the container tag.'
         type: string
   workflow_dispatch:
     inputs:
@@ -20,19 +20,19 @@ on:
           - full
           - pr
         type: choice
+      playwright-version:
+        default: '1.64.1'
+        description: '@playwright/test version. Must match pnpm-lock.yaml and the container tag.'
+        type: string
 
 concurrency:
   cancel-in-progress: true
   group: e2e-${{ github.event_name }}-${{ github.ref }}
 
-# Single source for the container tag and the version check. Must match pnpm-lock.yaml.
-env:
-  PLAYWRIGHT_VERSION: 1.64.1
-
 jobs:
   e2e:
     container:
-      image: mcr.microsoft.com/playwright:v${{ inputs.playwright-version || env.PLAYWRIGHT_VERSION }}-noble
+      image: mcr.microsoft.com/playwright:v${{ inputs.playwright-version }}-noble
       options: --user 1001
     defaults:
       run:
@@ -40,7 +40,6 @@ jobs:
     env:
       E2E_BROWSERS: ${{ inputs.browsers }}
       PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
-      PLAYWRIGHT_VERSION: ${{ inputs.playwright-version || env.PLAYWRIGHT_VERSION }}
     name: Playwright
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -58,10 +57,10 @@ jobs:
         run: |
           set -euo pipefail
           installed="$(node -p "require('@playwright/test/package.json').version")"
-          expected="${PLAYWRIGHT_VERSION}"
+          expected="${{ inputs.playwright-version }}"
           if [[ "${installed}" != "${expected}" ]]; then
             echo "Installed @playwright/test ${installed} does not match mcr.microsoft.com/playwright:v${expected}-noble."
-            echo "Update PLAYWRIGHT_VERSION in .github/workflows/e2e.yml to ${installed}."
+            echo "Update the playwright-version input default in .github/workflows/e2e.yml to ${installed}."
             exit 1
           fi
       - run: pnpm test:e2e

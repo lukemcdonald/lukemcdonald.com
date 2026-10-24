@@ -105,7 +105,7 @@ For a CI failure, download the `playwright-report` artifact and open it with `pn
 
 ## CI
 
-`.github/workflows/ci.yml` runs on `pull_request` and `push` to `main` (validate, audit, E2E). The E2E job lives in `.github/workflows/e2e.yml` and is reused via `workflow_call`. The Playwright image tag is `PLAYWRIGHT_VERSION` in that file and must match `@playwright/test` in the lockfile. `E2E_BROWSERS` is `pr` on pull requests and `full` on `main`. GitHub nests reusable jobs, so the CI check is `CI / E2E / Playwright`.
+`.github/workflows/ci.yml` runs on `pull_request` and `push` to `main` (validate, audit, E2E). The E2E job lives in `.github/workflows/e2e.yml` and is reused via `workflow_call`. The Playwright image tag is the `playwright-version` input default in that file and must match `@playwright/test` in the lockfile. `E2E_BROWSERS` is `pr` on pull requests and `full` on `main`. GitHub nests reusable jobs, so the CI check is `CI / E2E / Playwright`.
 
 Manual runs use the same file (`workflow_dispatch`) as `End-to-end tests / Playwright`.
 
