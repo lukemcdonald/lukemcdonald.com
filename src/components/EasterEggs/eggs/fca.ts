@@ -19,7 +19,7 @@ export const fcaEgg = {
   dismissOnEscape: true,
   hint: 'Camp still keeps a seat for every athlete.',
   id: FCA_ID,
-  name: 'FCA',
+  name: 'FCA All Abilities',
   onActivate: (...args: [boolean?, (() => void)?]) => {
     mountFca(args[1])
   },
