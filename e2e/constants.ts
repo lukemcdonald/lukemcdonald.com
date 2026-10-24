@@ -12,6 +12,7 @@ export const TEST_ID = {
   commandPaletteTrigger: 'command-palette-trigger',
   desktopNav: 'desktop-nav',
   fontToggle: 'font-toggle',
+  jsonLd: 'json-ld',
   main: 'main',
   mobileAppearance: 'mobile-appearance',
   mobileFont: 'mobile-font',

@@ -10,6 +10,12 @@ const CONTENT_TYPE_MAP: Record<SeoContentType, SchemaType> = {
   page: 'WebPage',
 } as const
 
+export type PersonSchemaFields = {
+  description?: string
+  image?: string
+  jobTitle?: string
+}
+
 function personId() {
   return `${GLOBAL_CONFIG.site.origin}/#person`
 }
@@ -18,11 +24,22 @@ function personRef() {
   return { '@id': personId() }
 }
 
-function buildPersonJsonLd() {
+function websiteId() {
+  return `${GLOBAL_CONFIG.site.origin}/#website`
+}
+
+function websiteRef() {
+  return { '@id': websiteId() }
+}
+
+function buildPersonJsonLd(person: PersonSchemaFields = {}) {
   return {
-    '@context': 'https://schema.org',
     '@id': personId(),
     '@type': 'Person',
+    ...(person.description && { description: person.description }),
+    email: GLOBAL_CONFIG.author.email,
+    ...(person.image && { image: person.image }),
+    ...(person.jobTitle && { jobTitle: person.jobTitle }),
     name: GLOBAL_CONFIG.author.name,
     sameAs: GLOBAL_CONFIG.author.profiles.map((profile) => {
       return profile.url
@@ -33,11 +50,11 @@ function buildPersonJsonLd() {
 
 function buildWebsiteJsonLd() {
   return {
-    '@context': 'https://schema.org',
-    '@id': GLOBAL_CONFIG.site.origin,
+    '@id': websiteId(),
     '@type': 'WebSite',
     alternateName: new URL(GLOBAL_CONFIG.site.origin).hostname,
     name: GLOBAL_CONFIG.name,
+    publisher: personRef(),
     url: GLOBAL_CONFIG.site.origin,
   }
 }
@@ -51,13 +68,12 @@ function buildPageJsonLd(meta: SeoMeta) {
   const url = canonicalUrl ? new URL(canonicalUrl, GLOBAL_CONFIG.site.origin).toString() : undefined
 
   const base = {
-    '@context': 'https://schema.org',
     '@type': type,
     ...(url && { '@id': url }),
     description,
     headline: title,
     inLanguage: meta.lang ?? GLOBAL_CONFIG.lang ?? 'en',
-    isPartOf: { '@id': GLOBAL_CONFIG.site.origin },
+    isPartOf: websiteRef(),
     name: title,
     url,
     ...(modDate && { dateModified: modDate.toISOString() }),
@@ -75,9 +91,9 @@ function buildPageJsonLd(meta: SeoMeta) {
   return { ...base, publisher: person }
 }
 
-export function buildGraphJsonLd(meta: SeoMeta) {
+export function buildGraphJsonLd(meta: SeoMeta, person: PersonSchemaFields = {}) {
   return {
     '@context': 'https://schema.org',
-    '@graph': [buildWebsiteJsonLd(), buildPageJsonLd(meta), buildPersonJsonLd()],
+    '@graph': [buildWebsiteJsonLd(), buildPageJsonLd(meta), buildPersonJsonLd(person)],
   }
 }

@@ -19,6 +19,7 @@ import { DEFAULT_THEME_MODE } from '@/components/Settings/ThemeMode/constants'
 import { CLOUDFLARE_WEB_ANALYTICS, createCloudflareBeaconConfig } from '@/configs/analytics'
 import { GLOBAL_CONFIG } from '@/configs/global'
 import { buildGraphJsonLd } from '@/utils/seo'
+import { loadPersonSchemaFields } from '@/utils/seo/schema.server'
 import { STORAGE_KEYS } from '@/utils/storage'
 import { stripHtmlAndTruncate } from '@/utils/text'
 
@@ -60,7 +61,8 @@ const pairingCss = fontPairingCss()
 const pairingFontCss = fontPairingFacesCss((cssVariable) => {
   return componentDataByCssVariable.get(cssVariable)?.css ?? ''
 })
-const structuredData = buildGraphJsonLd(metaForSeo)
+const person = await loadPersonSchemaFields()
+const structuredData = buildGraphJsonLd(metaForSeo, person)
 const themeColors = THEME_COLORS
 ---
 
@@ -266,6 +268,7 @@ const themeColors = THEME_COLORS
   />
 
   <script
+    data-testid="json-ld"
     type="application/ld+json"
     is:inline
     set:html={JSON.stringify(structuredData)}
