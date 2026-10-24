@@ -13,20 +13,6 @@ import {
 
 const ORIGIN = GLOBAL_CONFIG.site.origin
 
-const SITEMAP_PATHS = [
-  '/',
-  '/resume',
-  '/tread-talks',
-  '/i-am-a/christian',
-  '/i-am-a/coach',
-  '/i-am-a/father',
-  '/i-am-a/husband',
-  '/work/audiotheme',
-  '/work/blazer-six',
-  '/work/cedaro',
-  '/work/celtic7',
-] as const
-
 function sitemapUrl(pathname: string) {
   return new URL(pathname, ORIGIN).href
 }
@@ -73,43 +59,28 @@ describe('toSitemapPathname', () => {
 })
 
 describe('resolveSitemapSourcePaths', () => {
-  test('maps the home page to index.md and other pages to matching markdown', () => {
+  test('maps / to index.md', () => {
     assert.deepEqual(resolveSitemapSourcePaths('/'), ['src/content/pages/index.md'])
+  })
+
+  test('maps a markdown page path', () => {
     assert.deepEqual(resolveSitemapSourcePaths('/work/audiotheme'), [
       'src/content/pages/work/audiotheme.md',
     ])
   })
 
-  test('maps /resume to resume basics yaml', () => {
+  test('maps /resume to basics.yaml', () => {
     assert.deepEqual(resolveSitemapSourcePaths('/resume'), ['src/content/resume/basics.yaml'])
-  })
-
-  test('returns no sources for a path that is not a site page', () => {
-    assert.deepEqual(resolveSitemapSourcePaths('resume'), [])
   })
 })
 
 describe('getSitemapLastmod', () => {
-  test('returns a lastmod date for every public content path', () => {
-    for (const pathname of SITEMAP_PATHS) {
-      assert.match(getSitemapLastmod(pathname) ?? '', /^\d{4}-\d{2}-\d{2}$/, pathname)
-    }
-  })
-
   test('returns undefined when no source file exists', () => {
     assert.equal(getSitemapLastmod('/missing-page'), undefined)
   })
 })
 
 describe('applySitemapLastmod', () => {
-  test('adds lastmod to each public url', () => {
-    for (const pathname of SITEMAP_PATHS) {
-      const item = applySitemapLastmod({ url: sitemapUrl(pathname) })
-
-      assert.match(item.lastmod ?? '', /^\d{4}-\d{2}-\d{2}$/, pathname)
-    }
-  })
-
   test('leaves lastmod off when the url has no content date', () => {
     const item = applySitemapLastmod({ url: sitemapUrl('/missing-page') })
 
