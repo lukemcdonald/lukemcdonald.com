@@ -1,6 +1,16 @@
 name: End-to-end tests
 
 on:
+  workflow_call:
+    inputs:
+      browsers:
+        default: pr
+        description: Browser set. pr is Chromium and Pixel 5; full adds Firefox and WebKit.
+        type: string
+      playwright-version:
+        description: Override for PLAYWRIGHT_VERSION. Defaults to the workflow env.
+        required: false
+        type: string
   workflow_dispatch:
     inputs:
       browsers:
@@ -13,23 +23,27 @@ on:
 
 concurrency:
   cancel-in-progress: true
-  group: e2e-workflow_dispatch-${{ github.ref }}
+  group: e2e-${{ github.event_name }}-${{ github.ref }}
+
+# Single source for the container tag and the version check. Must match pnpm-lock.yaml.
+env:
+  PLAYWRIGHT_VERSION: 1.64.1
 
 jobs:
   e2e:
-    env:
-      E2E_BROWSERS: ${{ inputs.browsers }}
-      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
-    name: Playwright
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    # Pin to the @playwright/test version in pnpm-lock.yaml. The version check fails if they drift.
     container:
-      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      image: mcr.microsoft.com/playwright:v${{ inputs.playwright-version || env.PLAYWRIGHT_VERSION }}-noble
       options: --user 1001
     defaults:
       run:
         shell: bash
+    env:
+      E2E_BROWSERS: ${{ inputs.browsers }}
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+      PLAYWRIGHT_VERSION: ${{ inputs.playwright-version || env.PLAYWRIGHT_VERSION }}
+    name: Playwright
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
       - name: Trust workspace
@@ -41,11 +55,59 @@ jobs:
           node-version-file: .nvmrc
       - run: pnpm install --frozen-lockfile
       - name: Check Playwright version
-        run: node .github/scripts/check-playwright-version.mjs 1.64.1
+        run: |
+          set -euo pipefail
+          installed="$(node -p "require('@playwright/test/package.json').version")"
+          expected="${PLAYWRIGHT_VERSION}"
+          if [[ "${installed}" != "${expected}" ]]; then
+            echo "Installed @playwright/test ${installed} does not match mcr.microsoft.com/playwright:v${expected}-noble."
+            echo "Update PLAYWRIGHT_VERSION in .github/workflows/e2e.yml to ${installed}."
+            exit 1
+          fi
       - run: pnpm test:e2e
       - if: ${{ !cancelled() }}
         name: Surface flaky tests
-        run: node .github/scripts/list-flaky-playwright-tests.mjs | tee -a "${GITHUB_STEP_SUMMARY}"
+        run: |
+          set -euo pipefail
+          summary() {
+            echo '## Flaky tests'
+            echo
+            if [[ ! -f test-results/results.json ]]; then
+              echo 'No Playwright JSON report found.'
+              return 0
+            fi
+            if ! flakes="$(
+              node -e '
+                const report = JSON.parse(
+                  require("node:fs").readFileSync("test-results/results.json", "utf8")
+                );
+                const flakes = [];
+                const visit = (suite) => {
+                  for (const spec of suite.specs ?? []) {
+                    if (spec.tests?.some((test) => test.status === "flaky")) {
+                      flakes.push(`- ${spec.file}: ${spec.title}`);
+                    }
+                  }
+                  for (const child of suite.suites ?? []) {
+                    visit(child);
+                  }
+                };
+                for (const suite of report.suites ?? []) {
+                  visit(suite);
+                }
+                if (flakes.length === 0) {
+                  process.stdout.write("None. Every test passed on the first try.\n");
+                  process.exit(0);
+                }
+                process.stdout.write(`${flakes.join("\n")}\n`);
+              '
+            )"; then
+              echo 'Could not parse Playwright JSON report.'
+              return 0
+            fi
+            printf '%s\n' "${flakes}"
+          }
+          summary | tee -a "${GITHUB_STEP_SUMMARY}"
       - uses: actions/upload-artifact@v7
         if: failure()
         with:
