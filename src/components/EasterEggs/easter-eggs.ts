@@ -26,6 +26,7 @@ type Egg = {
   dismissOnEscape?: boolean
   hint: string
   id: string
+  name?: string
   onActivate?: (silent?: boolean, dismiss?: () => void) => void | Promise<void>
   onDismiss?: () => void
   onInit?: () => void
@@ -71,7 +72,7 @@ export function getActiveEasterEggId() {
 export function getEasterEggs() {
   return EGGS.map((egg) => ({
     id: egg.id,
-    name: eggName(egg.id),
+    name: eggName(egg),
   }))
 }
 
@@ -79,7 +80,7 @@ export function getEasterEggCatalog() {
   return EGGS.map((egg) => ({
     hint: egg.hint,
     id: egg.id,
-    name: eggName(egg.id),
+    name: eggName(egg),
   }))
 }
 
@@ -105,7 +106,7 @@ export async function findEasterEgg(id: string) {
   return {
     alreadyActive,
     id: egg.id,
-    name: eggName(egg.id),
+    name: eggName(egg),
   }
 }
 
@@ -197,8 +198,8 @@ function dispatchCompleted(completed: readonly Egg[]) {
   toggleEgg(pickEgg(completed))
 }
 
-function eggName(id: string) {
-  return `${id.slice(0, 1).toUpperCase()}${id.slice(1)}`
+function eggName(egg: Egg) {
+  return egg.name ?? `${egg.id.slice(0, 1).toUpperCase()}${egg.id.slice(1)}`
 }
 
 function hasBlockingFlags(event: KeyboardEvent): boolean {
