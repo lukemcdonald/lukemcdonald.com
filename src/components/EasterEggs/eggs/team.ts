@@ -35,6 +35,10 @@ function embedHost() {
   return document.querySelector<HTMLElement>(`[${EMBED_ATTR}]`)
 }
 
+function hasOpenDialog() {
+  return Boolean(document.querySelector('dialog[open], [role="dialog"]:not(dialog)'))
+}
+
 function injectIframe() {
   const host = embedHost()
 
@@ -87,13 +91,11 @@ function onDialogClick(event: MouseEvent) {
 function onDialogClose() {
   removeIframe()
 
-  if (!isTeamActive()) {
+  if (!isTeamActive() || hasOpenDialog()) {
     return
   }
 
-  void import('../easter-eggs').then(({ toggleEasterEgg }) => {
-    toggleEasterEgg(TEAM_ID)
-  })
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
 }
 
 function onDialogPointerDown(event: PointerEvent) {
