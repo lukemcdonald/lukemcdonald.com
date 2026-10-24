@@ -65,7 +65,15 @@ function injectIframe() {
   iframe.dataset.testid = IFRAME_TEST_ID
   iframe.referrerPolicy = 'strict-origin-when-cross-origin'
   iframe.src = buildTeamEmbedSrc(isReducedMotionPreferred())
+  iframe.tabIndex = -1
   iframe.title = EMBED_TITLE
+  iframe.addEventListener(
+    'load',
+    () => {
+      teamDialog()?.focus({ preventScroll: true })
+    },
+    { once: true },
+  )
   host.append(iframe)
 }
 
@@ -88,6 +96,8 @@ function mountTeam(dismiss?: () => void) {
   if (!dialog.open) {
     dialog.showModal()
   }
+
+  dialog.focus({ preventScroll: true })
 }
 
 function onDialogClose() {

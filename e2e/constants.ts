@@ -28,6 +28,7 @@ export const TEST_ID = {
   siteHomeLink: 'site-home-link',
   siteNav: 'site-nav',
   skipLink: 'skip-link',
+  teamEggClose: 'team-egg-close',
   teamEggDialog: 'team-egg-dialog',
   teamEggIframe: 'team-egg-iframe',
   themeToggle: 'theme-toggle',

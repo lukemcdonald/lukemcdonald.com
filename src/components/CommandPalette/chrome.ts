@@ -5,6 +5,7 @@ export const PALETTE_CHROME = {
     'fixed inset-0 z-50 m-0 h-dvh max-h-dvh w-full max-w-none items-center justify-center border-0 bg-transparent p-4 backdrop:bg-transparent open:flex focus:outline-hidden sm:p-6',
   focusFill: 'focus:bg-primary-900/8 dark:focus:bg-white/10',
   focusRing: 'focus-ring',
+  footer: 'flex items-center gap-2 border-t px-4 py-3',
   header: 'flex items-center border-b px-4',
   hoverFill: 'hover:bg-primary-900/8 dark:hover:bg-white/10',
   ink: 'text-primary-900 dark:text-white',

@@ -77,23 +77,33 @@ import { LOADING_VERSE_LABEL } from '@/features/verse/verse.constants'
   closedby="any"
   data-team-dialog
   data-testid="team-egg-dialog"
+  tabindex="-1"
 >
   <div class={PALETTE_CHROME.panel}>
-    <div class={`${PALETTE_CHROME.header} justify-end py-3 ${PALETTE_CHROME.border}`}>
-      <kbd class={`${PALETTE_CHROME.kbd} ${PALETTE_CHROME.border} ${PALETTE_CHROME.muted}`}>
-        ESC
-      </kbd>
-    </div>
     <div
       class="relative aspect-video bg-primary-950"
       data-team-embed
     ></div>
-    <p
-      class={`px-4 py-3 text-sm text-pretty ${PALETTE_CHROME.muted}`}
-      id="team-egg-caption"
+    <div
+      class={`${PALETTE_CHROME.footer} text-sm ${PALETTE_CHROME.border} ${PALETTE_CHROME.muted}`}
     >
-      Everyone has a place on God's team.
-    </p>
+      <p
+        class="min-w-0 flex-1 text-pretty"
+        id="team-egg-caption"
+      >
+        Everyone has a place on God's team.
+      </p>
+      <form method="dialog">
+        <button
+          aria-label="Close"
+          class={`${PALETTE_CHROME.kbd} ${PALETTE_CHROME.border} bg-transparent`}
+          data-testid="team-egg-close"
+          type="submit"
+        >
+          ESC
+        </button>
+      </form>
+    </div>
   </div>
 </dialog>
 
