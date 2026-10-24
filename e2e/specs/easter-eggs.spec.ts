@@ -18,6 +18,11 @@ test.describe('team easter egg', () => {
     await egg.closeWithKeyboard()
     await expect(egg.iframe).toHaveCount(0)
     await expect(egg.dialog).toBeHidden()
+
+    await homePage.page.reload()
+    await homePage.main.waitFor({ state: 'visible' })
+    await expect(egg.dialog).toBeHidden()
+    await expect(egg.iframe).toHaveCount(0)
   })
 
   test(

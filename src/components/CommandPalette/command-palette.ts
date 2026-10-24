@@ -18,6 +18,7 @@ import {
 import { playSound, toggleSoundPreference } from '@/components/Settings/Sound/utils'
 import { setThemeColor } from '@/components/Settings/ThemeColor/utils'
 import { setThemeMode } from '@/components/Settings/ThemeMode/utils'
+import { bindDialogBackdropClose } from '@/utils/dialog'
 import { toggleClasses } from '@/utils/toggle-classes'
 import { wrapIndex } from '@/utils/wrap-index'
 
@@ -592,28 +593,13 @@ function bindEggButton(palette: Palette, button: HTMLButtonElement, signal: Abor
   )
 }
 
-function isDialogTarget(event: Event, dialog: HTMLDialogElement) {
-  return event.target === dialog
-}
-
 function bindBackdropClose(palette: Palette, signal: AbortSignal) {
-  let pointerStartedOnDialog = false
-
-  palette.dialog.addEventListener(
-    'pointerdown',
-    (event) => {
-      pointerStartedOnDialog = isDialogTarget(event, palette.dialog)
+  bindDialogBackdropClose(
+    palette.dialog,
+    () => {
+      closePalette(palette)
     },
-    { signal },
-  )
-  palette.dialog.addEventListener(
-    'click',
-    (event) => {
-      if (pointerStartedOnDialog && isDialogTarget(event, palette.dialog)) {
-        closePalette(palette)
-      }
-    },
-    { signal },
+    signal,
   )
 }
 

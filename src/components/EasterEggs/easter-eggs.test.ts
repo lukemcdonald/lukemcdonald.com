@@ -1,7 +1,13 @@
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
-import { EASTER_EGG_IDS, getEasterEggCatalog } from './easter-eggs.ts'
+import { CYCLE_EASTER_EGG_IDS, EASTER_EGG_IDS, getEasterEggCatalog } from './easter-eggs.ts'
+
+describe('CYCLE_EASTER_EGG_IDS', () => {
+  test('cycles aurora, hyrule, and lamp only', () => {
+    assert.deepEqual(CYCLE_EASTER_EGG_IDS, ['aurora', 'hyrule', 'lamp'])
+  })
+})
 
 describe('getEasterEggCatalog', () => {
   test('returns names and hints without codes', () => {

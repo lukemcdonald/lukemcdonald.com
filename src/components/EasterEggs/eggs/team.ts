@@ -1,3 +1,5 @@
+import { bindDialogBackdropClose } from '@/utils/dialog'
+
 const DIALOG_ATTR = 'data-team-dialog'
 const EMBED_ATTR = 'data-team-embed'
 const EMBED_SRC = 'https://www.youtube-nocookie.com/embed/wM0if-w6PEs'
@@ -7,18 +9,22 @@ const SEQUENCE = ['KeyT', 'KeyE', 'KeyA', 'KeyM'] as const
 const TEAM_ID = 'team'
 
 export const teamEgg = {
+  cycle: false,
   dismissOnEscape: true,
   hint: 'Camp still keeps a seat for every athlete.',
   id: TEAM_ID,
-  onActivate: mountTeam,
+  onActivate: (...args: [boolean?, (() => void)?]) => {
+    mountTeam(args[1])
+  },
   onDismiss: unmountTeam,
+  persist: false,
   sequence: SEQUENCE,
   soundOff: 'close',
   soundOn: 'success',
 } as const
 
 let boundDialog: HTMLDialogElement | undefined
-let pointerStartedOnDialog = false
+let dismissTeam: (() => void) | undefined
 
 function bindDialog(dialog: HTMLDialogElement) {
   if (boundDialog === dialog) {
@@ -26,17 +32,14 @@ function bindDialog(dialog: HTMLDialogElement) {
   }
 
   boundDialog = dialog
-  dialog.addEventListener('click', onDialogClick)
+  bindDialogBackdropClose(dialog, () => {
+    dialog.close()
+  })
   dialog.addEventListener('close', onDialogClose)
-  dialog.addEventListener('pointerdown', onDialogPointerDown)
 }
 
 function embedHost() {
   return document.querySelector<HTMLElement>(`[${EMBED_ATTR}]`)
-}
-
-function hasOpenDialog() {
-  return Boolean(document.querySelector('dialog[open], [role="dialog"]:not(dialog)'))
 }
 
 function injectIframe() {
@@ -59,16 +62,10 @@ function injectIframe() {
   host.append(iframe)
 }
 
-function isDialogTarget(event: Event) {
-  return event.target === teamDialog()
-}
-
-function isTeamActive() {
-  return document.documentElement.getAttribute('data-easter-egg') === TEAM_ID
-}
-
-function mountTeam() {
+function mountTeam(dismiss?: () => void) {
   const dialog = teamDialog()
+
+  dismissTeam = dismiss
 
   if (!dialog) {
     return
@@ -82,24 +79,9 @@ function mountTeam() {
   }
 }
 
-function onDialogClick(event: MouseEvent) {
-  if (pointerStartedOnDialog && isDialogTarget(event)) {
-    teamDialog()?.close()
-  }
-}
-
 function onDialogClose() {
   removeIframe()
-
-  if (!isTeamActive() || hasOpenDialog()) {
-    return
-  }
-
-  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
-}
-
-function onDialogPointerDown(event: PointerEvent) {
-  pointerStartedOnDialog = isDialogTarget(event)
+  dismissTeam?.()
 }
 
 function removeIframe() {
