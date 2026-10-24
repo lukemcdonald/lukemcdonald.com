@@ -63,6 +63,27 @@ export class CommandPalette {
     await this.secrets.waitFor({ state: 'visible' })
   }
 
+  async openSecretsWithKonami() {
+    const keys = [
+      'ArrowUp',
+      'ArrowUp',
+      'ArrowDown',
+      'ArrowDown',
+      'ArrowLeft',
+      'ArrowRight',
+      'ArrowLeft',
+      'ArrowRight',
+      'b',
+      'a',
+    ] as const
+
+    for (const key of keys) {
+      await this.page.keyboard.press(key)
+    }
+
+    await this.secrets.waitFor({ state: 'visible' })
+  }
+
   async openWithKeyboard() {
     await this.page.keyboard.press('ControlOrMeta+k')
     await this.input.waitFor({ state: 'visible' })

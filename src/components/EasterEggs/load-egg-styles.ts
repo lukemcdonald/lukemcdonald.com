@@ -1,7 +1,10 @@
-const eggStyleUrls = import.meta.glob<string>('./eggs/*.css', {
-  import: 'default',
-  query: '?url',
-})
+const eggStyleUrls =
+  typeof import.meta.glob === 'function' ?
+    import.meta.glob<string>('./eggs/*.css', {
+      import: 'default',
+      query: '?url',
+    })
+  : {}
 
 export async function loadEggStyles(id: string) {
   const load = eggStyleUrls[`./eggs/${id}.css`]

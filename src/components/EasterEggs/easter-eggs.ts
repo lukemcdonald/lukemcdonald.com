@@ -1,9 +1,10 @@
 /**
  * Add eggs/<id>.ts + eggs/<id>.css and one line in EGGS. Head.astro applies active-egg storage keys.
- * Konami ↑↑↓↓←→←→BA cycles aurora, hyrule, lamp, then off.
- * Hyrule ← ↓ A → ↑ → toggles hyrule.
- * Lamp is cycle-only.
- * FCA: type `fca` for the camp video. Not in the Konami cycle.
+ * zelda → hyrule
+ * selah → lamp
+ * iowa → aurora
+ * fca → fca
+ * Konami ↑↑↓↓←→←→BA → Secrets
  */
 import type { SoundName } from 'cuelume'
 
@@ -22,7 +23,6 @@ import { hyruleEgg } from './eggs/hyrule'
 import { lampEgg } from './eggs/lamp'
 
 type Egg = {
-  cycle?: boolean
   dismissOnEscape?: boolean
   hint: string
   id: string
@@ -38,17 +38,29 @@ type Egg = {
 
 const ATTRIBUTE = 'data-easter-egg'
 const EGGS: readonly Egg[] = [auroraEgg, fcaEgg, hyruleEgg, lampEgg]
-const CYCLE_EGGS = EGGS.filter((egg) => egg.cycle !== false)
-const CYCLE_STEPS = CYCLE_EGGS.length + 1
-
-export const CYCLE_EASTER_EGG_IDS = CYCLE_EGGS.map((egg) => egg.id)
-export const EASTER_EGG_IDS = [auroraEgg.id, fcaEgg.id, hyruleEgg.id, lampEgg.id] as const
-
+const EGG_TEST_ID = 'easter-egg'
 const IDLE_MS = 2500
+const KONAMI_SEQUENCE = [
+  'ArrowUp',
+  'ArrowUp',
+  'ArrowDown',
+  'ArrowDown',
+  'ArrowLeft',
+  'ArrowRight',
+  'ArrowLeft',
+  'ArrowRight',
+  'KeyB',
+  'KeyA',
+] as const
+const SECRETS_ID = 'secrets'
+const STALE_CYCLE_KEY = 'easter-eggs:cycle'
 const STORAGE_ON = 'on'
+const TEST_ID = 'data-testid'
+
+export const EASTER_EGG_IDS = [auroraEgg.id, fcaEgg.id, hyruleEgg.id, lampEgg.id] as const
+export const EASTER_EGG_SECRETS_EVENT = 'easter-eggs:secrets'
 
 let activeEgg: Egg | undefined
-let cycleIndex = 0
 let idleTimer: ReturnType<typeof setTimeout> | undefined
 let progressById = new Map<string, number>()
 let started = false
@@ -63,6 +75,25 @@ export function initializeEasterEggs() {
   restoreEgg()
   document.addEventListener('keydown', onKeyDown)
   document.addEventListener('astro:after-swap', remountEgg)
+}
+
+export function applyEasterEggCode(code: string) {
+  const secretsReady = stepSequence(SECRETS_ID, code, KONAMI_SEQUENCE)
+  const completed = collectCompleted(code)
+
+  if (!secretsReady && completed.length === 0) {
+    scheduleIdleReset()
+    return
+  }
+
+  resetProgress()
+
+  if (secretsReady) {
+    requestSecrets()
+    return
+  }
+
+  void toggleEgg(completed[0])
 }
 
 export function getActiveEasterEggId() {
@@ -89,7 +120,7 @@ export function getFoundEasterEggIds() {
 }
 
 export async function findEasterEgg(id: string) {
-  const egg = EGGS.find((item) => item.id === id)
+  const egg = eggById(id)
 
   if (!egg) {
     throw new Error(`Unknown easter egg: ${id}`)
@@ -97,10 +128,8 @@ export async function findEasterEgg(id: string) {
 
   const alreadyActive = currentEggId() === egg.id
 
-  markFound(egg.id)
-
   if (!alreadyActive) {
-    await showEgg(egg)
+    await toggleEgg(egg)
   }
 
   return {
@@ -110,8 +139,18 @@ export async function findEasterEgg(id: string) {
   }
 }
 
+export function resetEasterEggs() {
+  resetProgress()
+
+  if (!activeEgg) {
+    return
+  }
+
+  hideEgg(true)
+}
+
 export function toggleEasterEgg(id: string) {
-  toggleEgg(EGGS.find((egg) => egg.id === id))
+  void toggleEgg(eggById(id))
 }
 
 function advanceProgress(progress: number, code: string, sequence: readonly string[]): number {
@@ -129,16 +168,9 @@ function advanceProgress(progress: number, code: string, sequence: readonly stri
   return 0
 }
 
-function applyCode(code: string) {
-  const completed = collectCompleted(code)
-
-  if (completed.length === 0) {
-    scheduleIdleReset()
-    return
-  }
-
-  resetProgress()
-  dispatchCompleted(completed)
+function clearEggAttribute() {
+  document.documentElement.removeAttribute(ATTRIBUTE)
+  document.documentElement.removeAttribute(TEST_ID)
 }
 
 function clearIdleTimer() {
@@ -162,7 +194,7 @@ function collectCompleted(code: string): Egg[] {
   const completed: Egg[] = []
 
   for (const egg of EGGS) {
-    if (stepEgg(egg, code)) {
+    if (stepSequence(egg.id, code, egg.sequence)) {
       completed.push(egg)
     }
   }
@@ -171,31 +203,11 @@ function collectCompleted(code: string): Egg[] {
 }
 
 function currentEggId() {
-  return storedEggId() ?? activeEgg?.id
+  return readStoredEggId() ?? activeEgg?.id
 }
 
-function cycleEgg() {
-  const index = pickCycleIndex()
-  const egg = CYCLE_EGGS[index]
-
-  writeCycleIndex(nextCycleIndex(index))
-
-  if (!egg) {
-    hideEgg()
-    return
-  }
-
-  markFound(egg.id)
-  void showEgg(egg)
-}
-
-function dispatchCompleted(completed: readonly Egg[]) {
-  if (completed.some(isCycleTrigger)) {
-    cycleEgg()
-    return
-  }
-
-  toggleEgg(pickEgg(completed))
+function eggById(id: string) {
+  return EGGS.find((egg) => egg.id === id)
 }
 
 function eggName(egg: Egg) {
@@ -217,22 +229,32 @@ function hasOpenDialog() {
   return Boolean(document.querySelector('dialog[open], [role="dialog"]:not(dialog)'))
 }
 
+function hasSequencePrefix(
+  attempted: string[],
+  length: number,
+  sequence: readonly string[],
+): boolean {
+  const suffix = attempted.slice(-length)
+
+  return suffix.every((item, index) => item === sequence[index])
+}
+
 function hideEgg(silent = false) {
   const egg = activeEgg
 
   activeEgg = undefined
-  document.documentElement.removeAttribute(ATTRIBUTE)
+  clearEggAttribute()
   clearStoredEggs()
   egg?.onDismiss?.()
   playEggSound(silent ? undefined : egg?.soundOff)
 }
 
-function isCurrentCycleStep(index: number) {
-  return CYCLE_EGGS[index]?.id === currentEggId()
-}
+function isIgnoredKeyEvent(event: KeyboardEvent): boolean {
+  if (hasBlockingFlags(event) || hasOpenDialog()) {
+    return true
+  }
 
-function isCycleTrigger(egg: Egg) {
-  return egg.id === auroraEgg.id
+  return isTypingTarget(event.target)
 }
 
 function isTypingTarget(target: EventTarget | null): boolean {
@@ -261,20 +283,6 @@ function markFound(id: string) {
   setStorageItem(STORAGE_KEYS.easterEggFound, JSON.stringify([...found, id]))
 }
 
-function hasSequencePrefix(
-  attempted: string[],
-  length: number,
-  sequence: readonly string[],
-): boolean {
-  const suffix = attempted.slice(-length)
-
-  return suffix.every((item, index) => item === sequence[index])
-}
-
-function nextCycleIndex(index: number) {
-  return (index + 1) % CYCLE_STEPS
-}
-
 function onEscape() {
   resetProgress()
 
@@ -293,17 +301,7 @@ function onKeyDown(event: KeyboardEvent) {
     return
   }
 
-  applyCode(event.code)
-}
-
-function parseCycleIndex(stored: string | null) {
-  const index = Number.parseInt(stored ?? '0', 10)
-
-  if (!Number.isFinite(index) || index < 0) {
-    return 0
-  }
-
-  return index % CYCLE_STEPS
+  applyEasterEggCode(event.code)
 }
 
 function parseFoundIds(raw: string | null) {
@@ -320,20 +318,6 @@ function parseFoundIds(raw: string | null) {
   return parsed.filter((id): id is string => typeof id === 'string')
 }
 
-function pickCycleIndex() {
-  const index = readCycleIndex()
-
-  if (isCurrentCycleStep(index)) {
-    return nextCycleIndex(index)
-  }
-
-  return index
-}
-
-function pickEgg(completed: readonly Egg[]): Egg | undefined {
-  return completed[0]
-}
-
 async function loadEggStyles(id: string) {
   const { loadEggStyles: load } = await import('./load-egg-styles')
 
@@ -346,12 +330,6 @@ function playEggSound(name: SoundName | undefined) {
   }
 
   playSound(name)
-}
-
-function readCycleIndex() {
-  cycleIndex = parseCycleIndex(getStorageItem(STORAGE_KEYS.easterEggCycle))
-
-  return cycleIndex
 }
 
 function readFoundIds() {
@@ -397,9 +375,13 @@ function remountEgg() {
       return
     }
 
-    document.documentElement.setAttribute(ATTRIBUTE, egg.id)
+    setEggAttribute(egg.id)
     await egg.onActivate?.(true, hideEgg)
   })
+}
+
+function requestSecrets() {
+  document.dispatchEvent(new Event(EASTER_EGG_SECRETS_EVENT))
 }
 
 function resetProgress() {
@@ -408,11 +390,11 @@ function resetProgress() {
 }
 
 function restoreEgg() {
-  const storedId = storedEggId()
-  const egg = EGGS.find((item) => item.id === storedId)
+  const storedId = readStoredEggId()
+  const egg = storedId ? eggById(storedId) : undefined
 
   if (!egg || egg.persist === false) {
-    document.documentElement.removeAttribute(ATTRIBUTE)
+    clearEggAttribute()
     clearStoredEggs()
     return
   }
@@ -429,6 +411,11 @@ function scheduleIdleReset() {
   }, IDLE_MS)
 }
 
+function setEggAttribute(id: string) {
+  document.documentElement.setAttribute(ATTRIBUTE, id)
+  document.documentElement.setAttribute(TEST_ID, EGG_TEST_ID)
+}
+
 function setProgress(id: string, next: number) {
   if (next === 0) {
     progressById.delete(id)
@@ -438,15 +425,9 @@ function setProgress(id: string, next: number) {
   progressById.set(id, next)
 }
 
-function isIgnoredKeyEvent(event: KeyboardEvent): boolean {
-  if (hasBlockingFlags(event) || hasOpenDialog()) {
-    return true
-  }
-
-  return isTypingTarget(event.target)
-}
-
 function startEggs() {
+  removeStorageItem(STALE_CYCLE_KEY)
+
   for (const egg of EGGS) {
     egg.onInit?.()
   }
@@ -475,32 +456,28 @@ async function showEgg(egg: Egg, silent = false) {
     return
   }
 
-  document.documentElement.setAttribute(ATTRIBUTE, egg.id)
+  setEggAttribute(egg.id)
   await egg.onActivate?.(silent, hideEgg)
   playEggSound(silent ? undefined : egg.soundOn)
 }
 
-function stepEgg(egg: Egg, code: string): boolean {
-  if (egg.sequence.length === 0) {
+function stepSequence(id: string, code: string, sequence: readonly string[]): boolean {
+  if (sequence.length === 0) {
     return false
   }
 
-  const next = advanceProgress(progressById.get(egg.id) ?? 0, code, egg.sequence)
+  const next = advanceProgress(progressById.get(id) ?? 0, code, sequence)
 
-  if (next >= egg.sequence.length) {
-    progressById.delete(egg.id)
+  if (next >= sequence.length) {
+    progressById.delete(id)
     return true
   }
 
-  setProgress(egg.id, next)
+  setProgress(id, next)
   return false
 }
 
-function storedEggId(): string | undefined {
-  return readStoredEggId()
-}
-
-function toggleEgg(egg: Egg | undefined) {
+async function toggleEgg(egg: Egg | undefined) {
   if (!egg) {
     return
   }
@@ -512,10 +489,5 @@ function toggleEgg(egg: Egg | undefined) {
     return
   }
 
-  void showEgg(egg)
-}
-
-function writeCycleIndex(index: number) {
-  cycleIndex = index
-  setStorageItem(STORAGE_KEYS.easterEggCycle, String(index))
+  await showEgg(egg)
 }

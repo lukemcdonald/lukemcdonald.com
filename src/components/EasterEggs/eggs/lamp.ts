@@ -5,15 +5,16 @@ import { isVerse } from '@/features/verse/verse.utils'
 
 const LAMP_ATTR = 'data-lamp'
 const POS_VAR = '--lamp-pos'
+const SEQUENCE = ['KeyS', 'KeyE', 'KeyL', 'KeyA', 'KeyH'] as const
 const TEMPLATE_ATTR = 'data-lamp-template'
 
 export const lampEgg = {
   dismissOnEscape: true,
-  hint: 'After the first light, keep cycling; a verse waits in the dark.',
+  hint: 'A verse waits in the dark.',
   id: 'lamp',
   onActivate: mountLamp,
   onDismiss: unmountLamp,
-  sequence: [],
+  sequence: SEQUENCE,
   soundOff: 'close',
   soundOn: 'success',
 } as const

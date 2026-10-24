@@ -85,7 +85,7 @@ Filter with `pnpm exec playwright test --grep @smoke`.
 3. Drive the UI through page/component objects.
 4. Tag with `@axe`, `@a11y`, `@desktop`, or `@smoke` when it fits.
 
-Do not cover the Konami / aurora easter eggs.
+Word codes and Konami (Secrets) live in `e2e/specs/easter-eggs.spec.ts`.
 
 ## Running and debugging
 

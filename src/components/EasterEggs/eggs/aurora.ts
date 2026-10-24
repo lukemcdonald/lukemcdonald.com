@@ -8,25 +8,14 @@ const FIREFLIES = [
   { blink: '3.4s', delay: '1.1s', left: '81%', path: 'b', top: '91%' },
 ] as const
 
-const KONAMI_SEQUENCE = [
-  'ArrowUp',
-  'ArrowUp',
-  'ArrowDown',
-  'ArrowDown',
-  'ArrowLeft',
-  'ArrowRight',
-  'ArrowLeft',
-  'ArrowRight',
-  'KeyB',
-  'KeyA',
-] as const
+const SEQUENCE = ['KeyI', 'KeyO', 'KeyW', 'KeyA'] as const
 
 export const auroraEgg = {
-  hint: 'An old arcade handshake still lights the night.',
+  hint: 'Night still gathers over the farm.',
   id: 'aurora',
   onActivate: mountAuroraFireflies,
   onDismiss: unmountAuroraFireflies,
-  sequence: KONAMI_SEQUENCE,
+  sequence: SEQUENCE,
   soundOff: 'close',
   soundOn: 'success',
 } as const

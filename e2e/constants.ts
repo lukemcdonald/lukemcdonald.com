@@ -11,6 +11,7 @@ export const TEST_ID = {
   commandPaletteSecrets: 'command-palette-secrets',
   commandPaletteTrigger: 'command-palette-trigger',
   desktopNav: 'desktop-nav',
+  easterEgg: 'easter-egg',
   fcaEggClose: 'fca-egg-close',
   fcaEggDialog: 'fca-egg-dialog',
   fcaEggIframe: 'fca-egg-iframe',
