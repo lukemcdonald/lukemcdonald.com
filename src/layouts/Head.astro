@@ -2,6 +2,7 @@
 import type { SeoMeta } from '@/utils/seo'
 
 import OgMeta from 'astro-og-kit/OgMeta.astro'
+import { getEntry } from 'astro:content'
 import { CLOUDFLARE_ANALYTICS_TOKEN, GOOGLE_SITE_VERIFICATION } from 'astro:env/client'
 import { CONTEXT } from 'astro:env/server'
 import { ClientRouter } from 'astro:transitions'
@@ -18,8 +19,9 @@ import { DEFAULT_THEME_COLOR, THEME_COLORS } from '@/components/Settings/ThemeCo
 import { DEFAULT_THEME_MODE } from '@/components/Settings/ThemeMode/constants'
 import { CLOUDFLARE_WEB_ANALYTICS, createCloudflareBeaconConfig } from '@/configs/analytics'
 import { GLOBAL_CONFIG } from '@/configs/global'
+import { toPageSeo } from '@/features/pages/pages.utils'
+import { loadResumeData } from '@/features/resume/resume.server'
 import { buildGraphJsonLd } from '@/utils/seo'
-import { loadPersonSchemaFields } from '@/utils/seo/schema.server'
 import { STORAGE_KEYS } from '@/utils/storage'
 import { stripHtmlAndTruncate } from '@/utils/text'
 
@@ -61,8 +63,14 @@ const pairingCss = fontPairingCss()
 const pairingFontCss = fontPairingFacesCss((cssVariable) => {
   return componentDataByCssVariable.get(cssVariable)?.css ?? ''
 })
-const person = await loadPersonSchemaFields()
-const structuredData = buildGraphJsonLd(metaForSeo, person)
+const home = await getEntry('pages', 'index')
+const homeImageSrc = home?.data.image?.src
+const resume = await loadResumeData()
+const structuredData = buildGraphJsonLd(metaForSeo, {
+  description: (home ? toPageSeo(home).description : undefined) || resume.basics.intro,
+  image: homeImageSrc ? new URL(homeImageSrc, GLOBAL_CONFIG.site.origin).href : undefined,
+  jobTitle: resume.basics.label,
+})
 const themeColors = THEME_COLORS
 ---
 
