@@ -10,6 +10,7 @@ export class BasePage {
   readonly header: SiteHeader
   readonly main
   readonly page: Page
+  readonly pageTitle
   readonly path: string
   readonly skipLink: SkipLink
 
@@ -17,6 +18,7 @@ export class BasePage {
     this.header = new SiteHeader(page)
     this.main = page.getByTestId(TEST_ID.main)
     this.page = page
+    this.pageTitle = page.getByTestId(TEST_ID.pageTitle)
     this.path = path
     this.skipLink = new SkipLink(page)
   }

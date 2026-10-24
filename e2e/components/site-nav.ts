@@ -11,7 +11,6 @@ export class SiteNav {
   readonly mobileMenuTrigger
   readonly page: Page
   readonly root
-  readonly workMenuTrigger
 
   constructor(page: Page) {
     this.desktopNav = page.getByTestId(TEST_ID.desktopNav)
@@ -22,7 +21,6 @@ export class SiteNav {
     this.mobileMenuTrigger = this.mobileMenu.getByTestId(TEST_ID.mobileMenuTrigger)
     this.page = page
     this.root = page.getByTestId(TEST_ID.siteNav)
-    this.workMenuTrigger = this.desktopNav.getByTestId(navMenuTestId('Work'))
   }
 
   async closeMobileMenu() {
@@ -45,9 +43,5 @@ export class SiteNav {
   async openMobileMenu() {
     await this.mobileMenuTrigger.click()
     await this.mobileAppearance.waitFor({ state: 'visible' })
-  }
-
-  async openWorkMenu() {
-    await this.workMenuTrigger.click()
   }
 }
