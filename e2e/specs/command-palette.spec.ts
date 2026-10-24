@@ -42,6 +42,8 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
     await expect.poll(() => homePage.storedFontPairing()).toBe('work')
 
     await fontToggle.root.click()
+    await expect(fontToggle.option('work')).toBeFocused()
+
     await homePage.page.keyboard.press('ArrowDown')
     await expect(fontToggle.option('play')).toBeFocused()
 
