@@ -14,6 +14,25 @@ test.describe('command palette', { tag: ['@desktop', '@smoke'] }, () => {
     await expect(homePage.header.commandPalette.dialog).toBeHidden()
   })
 
+  test('arrow keys highlight exactly one option at a time', async ({ homePage }) => {
+    const palette = homePage.header.commandPalette
+
+    await homePage.goto()
+    await palette.openWithKeyboard()
+    await homePage.page.keyboard.press('ArrowDown')
+
+    await expect(palette.selectedOptions).toHaveCount(1)
+
+    const firstSelected = await palette.selectedOptions.getAttribute('data-testid')
+
+    expect(firstSelected).toBeTruthy()
+
+    await homePage.page.keyboard.press('ArrowDown')
+
+    await expect(palette.selectedOptions).toHaveCount(1)
+    await expect(palette.selectedOptions).not.toHaveAttribute('data-testid', firstSelected ?? '')
+  })
+
   test('hides unmatched pages and empty groups while filtering', async ({ homePage }) => {
     const palette = homePage.header.commandPalette
     const work = palette.navGroup('Work')
