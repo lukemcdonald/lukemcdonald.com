@@ -10,6 +10,7 @@ import { FONT_SOURCE_FAMILIES } from './src/components/Settings/Font/pairings.js
 import { ENV_SCHEMA } from './src/configs/env.js'
 import { GLOBAL_CONFIG } from './src/configs/global.js'
 import { og } from './src/og.js'
+import { applySitemapLastmod } from './src/utils/seo/sitemap.js'
 
 const SITEMAP_EXCLUSIONS = new Set([`${GLOBAL_CONFIG.site.origin}/index`])
 
@@ -53,6 +54,9 @@ export default defineConfig({
           return false
         }
         return true
+      },
+      serialize(item) {
+        return applySitemapLastmod(item)
       },
     }),
   ],

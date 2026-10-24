@@ -16,6 +16,7 @@ export const TEST_ID = {
   fcaEggDialog: 'fca-egg-dialog',
   fcaEggIframe: 'fca-egg-iframe',
   fontToggle: 'font-toggle',
+  jsonLd: 'json-ld',
   main: 'main',
   mobileAppearance: 'mobile-appearance',
   mobileFont: 'mobile-font',

@@ -7,6 +7,20 @@ import { GLOBAL_CONFIG } from '@/configs/global'
 
 import { buildGraphJsonLd } from './schema.ts'
 
+type GraphNode = Record<string, unknown>
+
+type PersonJsonLd = {
+  '@id'?: string
+  '@type'?: string
+  description?: string
+  email?: string
+  image?: string
+  jobTitle?: string
+  name?: string
+  sameAs?: string[]
+  url?: string
+}
+
 type PageJsonLd = {
   '@id'?: string
   '@type'?: string
@@ -22,8 +36,45 @@ type PageJsonLd = {
   url?: string
 }
 
-function graph(meta: SeoMeta) {
-  return buildGraphJsonLd(meta)
+function collectDefinedIds(nodes: GraphNode[]) {
+  return new Set(
+    nodes.flatMap((node) => {
+      return typeof node['@id'] === 'string' ? [node['@id']] : []
+    }),
+  )
+}
+
+function collectIdRefs(value: unknown, refs: string[] = []) {
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      collectIdRefs(item, refs)
+    }
+
+    return refs
+  }
+
+  if (!value || typeof value !== 'object') {
+    return refs
+  }
+
+  const record = value as GraphNode
+  const keys = Object.keys(record)
+
+  if (keys.length === 1 && keys[0] === '@id' && typeof record['@id'] === 'string') {
+    refs.push(record['@id'])
+
+    return refs
+  }
+
+  for (const nested of Object.values(record)) {
+    collectIdRefs(nested, refs)
+  }
+
+  return refs
+}
+
+function graph(meta: SeoMeta, person?: Parameters<typeof buildGraphJsonLd>[1]) {
+  return buildGraphJsonLd(meta, person)
 }
 
 function meta(overrides: Partial<SeoMeta> = {}): SeoMeta {
@@ -46,12 +97,16 @@ function personId() {
   return `${origin()}/#person`
 }
 
-function personNode(meta: SeoMeta) {
-  return graph(meta)['@graph'][2]
+function personNode(meta: SeoMeta, person?: Parameters<typeof buildGraphJsonLd>[1]) {
+  return graph(meta, person)['@graph'][2] as PersonJsonLd
 }
 
 function personRef() {
   return { '@id': personId() }
+}
+
+function websiteId() {
+  return `${origin()}/#website`
 }
 
 function websiteNode(meta: SeoMeta) {
@@ -70,34 +125,78 @@ describe('buildGraphJsonLd', () => {
     assert.equal(person['@type'], 'Person')
   })
 
-  test('website node uses the site origin and name', () => {
+  test('keeps @context on the graph only', () => {
+    const jsonLd = graph(meta())
+
+    assert.equal(jsonLd['@context'], 'https://schema.org')
+
+    for (const node of jsonLd['@graph']) {
+      assert.equal('@context' in node, false)
+    }
+  })
+
+  test('every @id reference resolves within the graph', () => {
+    const jsonLd = graph(meta())
+    const nodes = jsonLd['@graph'] as GraphNode[]
+    const defined = collectDefinedIds(nodes)
+    const refs = collectIdRefs(nodes)
+
+    assert.ok(refs.length > 0)
+
+    for (const id of refs) {
+      assert.ok(defined.has(id), id)
+    }
+  })
+
+  test('website node uses a distinct @id and points publisher at Person', () => {
     const website = websiteNode(meta())
 
     assert.deepEqual(website, {
-      '@context': 'https://schema.org',
-      '@id': origin(),
+      '@id': websiteId(),
       '@type': 'WebSite',
       alternateName: new URL(origin()).hostname,
       name: GLOBAL_CONFIG.name,
+      publisher: personRef(),
       url: origin(),
     })
   })
 })
 
 describe('Person JSON-LD', () => {
-  test('describes Luke McDonald with profile sameAs links', () => {
+  test('describes Luke McDonald from site data', () => {
     const person = personNode(meta())
 
     assert.deepEqual(person, {
-      '@context': 'https://schema.org',
       '@id': personId(),
       '@type': 'Person',
+      email: GLOBAL_CONFIG.author.email,
       name: GLOBAL_CONFIG.author.name,
       sameAs: GLOBAL_CONFIG.author.profiles.map((profile) => {
         return profile.url
       }),
       url: origin(),
     })
+  })
+
+  test('includes jobTitle, image, and description when provided', () => {
+    const fields = {
+      description: 'A short summary.',
+      image: `${origin()}/headshot.jpg`,
+      jobTitle: 'Engineer',
+    }
+    const person = personNode(meta(), fields)
+
+    assert.equal(person.description, fields.description)
+    assert.equal(person.image, fields.image)
+    assert.equal(person.jobTitle, fields.jobTitle)
+  })
+
+  test('omits jobTitle, image, and description when they are not provided', () => {
+    const person = personNode(meta())
+
+    assert.equal('description' in person, false)
+    assert.equal('image' in person, false)
+    assert.equal('jobTitle' in person, false)
   })
 })
 
@@ -224,10 +323,10 @@ describe('page JSON-LD', () => {
     assert.equal(page.inLanguage, GLOBAL_CONFIG.lang)
   })
 
-  test('marks the page as part of the website', () => {
+  test('marks the page as part of the website node', () => {
     const page = pageNode(meta())
 
-    assert.deepEqual(page.isPartOf, { '@id': origin() })
+    assert.deepEqual(page.isPartOf, { '@id': websiteId() })
   })
 
   test('builds resume page metadata as a WebPage', () => {

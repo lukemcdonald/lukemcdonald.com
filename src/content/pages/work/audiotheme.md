@@ -9,6 +9,7 @@ seo:
   description: Music themes and plugins for WordPress from a CELTIC7 Studio and Blazer Six partnership. Artists use AudioTheme to manage discography, gigs, videos, and more.
 subtitle: Work
 title: AudioTheme
+updated: 2026-10-21
 ---
 
 I started AudioTheme as a partnership between [CELTIC7 Studio](/work/celtic7) and [Blazer Six](/work/blazer-six): WordPress music themes and plugins for bands, musicians, and labels, so independent artists can manage discography, gigs, videos, and more.
