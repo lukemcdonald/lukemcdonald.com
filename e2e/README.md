@@ -41,12 +41,12 @@ Specs import `test` and `expect` from `../fixtures`, never from `@playwright/tes
 
 Find elements with `getByTestId` so copy, i18n, and experiment changes do not break E2E. Assert outcomes (navigation, state, visibility), not wording. Check text only when that exact content matters, such as a page title. Accessible roles and labels are covered by axe and unit tests, not E2E selectors.
 
-| Use                                                 | When                                                     |
-| --------------------------------------------------- | -------------------------------------------------------- |
-| `page.getByTestId('...')`                           | Clicking, filling, waiting on, or referencing an element |
-| `toHaveText` on a title or required line            | Only when that exact content matters                     |
-| `getByRole` / `getByText` / CSS / XPath             | Do not use to find elements                              |
-| `data-testid` in `src/**/*.test.ts`                 | Do not use; unit tests stay implementation-focused       |
+| Use                                      | When                                                     |
+| ---------------------------------------- | -------------------------------------------------------- |
+| `page.getByTestId('...')`                | Clicking, filling, waiting on, or referencing an element |
+| `toHaveText` on a title or required line | Only when that exact content matters                     |
+| `getByRole` / `getByText` / CSS / XPath  | Do not use to find elements                              |
+| `data-testid` in `src/**/*.test.ts`      | Do not use; unit tests stay implementation-focused       |
 
 `playwright.config.ts` sets `testIdAttribute: 'data-testid'`.
 

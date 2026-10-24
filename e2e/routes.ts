@@ -46,4 +46,6 @@ function compareRoutes(a: SiteRoute, b: SiteRoute) {
   return a.path.localeCompare(b.path)
 }
 
-export const ROUTES: SiteRoute[] = [...loadContentRoutes(), ...STANDALONE_ROUTES].sort(compareRoutes)
+export const ROUTES: SiteRoute[] = [...loadContentRoutes(), ...STANDALONE_ROUTES].sort(
+  compareRoutes,
+)
