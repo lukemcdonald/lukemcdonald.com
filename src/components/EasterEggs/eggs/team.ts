@@ -2,11 +2,18 @@ import { bindDialogBackdropClose } from '@/utils/dialog'
 
 const DIALOG_ATTR = 'data-team-dialog'
 const EMBED_ATTR = 'data-team-embed'
-const EMBED_SRC = 'https://www.youtube-nocookie.com/embed/wM0if-w6PEs'
+const EMBED_ORIGIN = 'https://www.youtube-nocookie.com/embed'
 const EMBED_TITLE = 'FCA All Abilities camp at Camp Courageous'
 const IFRAME_TEST_ID = 'team-egg-iframe'
 const SEQUENCE = ['KeyT', 'KeyE', 'KeyA', 'KeyM'] as const
 const TEAM_ID = 'team'
+const VIDEO_ID = 'wM0if-w6PEs'
+
+export function buildTeamEmbedSrc(reducedMotion = false) {
+  const params = reducedMotion ? 'playsinline=1&rel=0' : 'autoplay=1&playsinline=1&rel=0'
+
+  return `${EMBED_ORIGIN}/${VIDEO_ID}?${params}`
+}
 
 export const teamEgg = {
   cycle: false,
@@ -57,9 +64,13 @@ function injectIframe() {
   iframe.className = 'absolute inset-0 size-full border-0'
   iframe.dataset.testid = IFRAME_TEST_ID
   iframe.referrerPolicy = 'strict-origin-when-cross-origin'
-  iframe.src = EMBED_SRC
+  iframe.src = buildTeamEmbedSrc(isReducedMotionPreferred())
   iframe.title = EMBED_TITLE
   host.append(iframe)
+}
+
+function isReducedMotionPreferred() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
 function mountTeam(dismiss?: () => void) {

@@ -10,10 +10,7 @@ test.describe('team easter egg', () => {
     await egg.trigger()
     await expect(egg.dialog).toBeVisible()
     await expect(egg.iframe).toBeVisible()
-    await expect(egg.iframe).toHaveAttribute(
-      'src',
-      'https://www.youtube-nocookie.com/embed/wM0if-w6PEs',
-    )
+    await expect(egg.iframe).toHaveAttribute('src', /wM0if-w6PEs/)
 
     await egg.closeWithKeyboard()
     await expect(egg.iframe).toHaveCount(0)

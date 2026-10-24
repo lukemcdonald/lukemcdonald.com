@@ -54,17 +54,17 @@ function pageOptionId(href: string) {
 
   <dialog
     aria-label="Site navigation and preferences"
-    class="fixed inset-0 z-50 m-0 h-dvh max-h-dvh w-full max-w-none items-center justify-center border-0 bg-transparent p-4 backdrop:bg-transparent open:flex focus:outline-hidden sm:p-6"
+    class={PALETTE_CHROME.dialog}
     closedby="any"
     data-command-palette-dialog
     data-testid="command-palette-dialog"
     id="command-palette-dialog"
   >
     <div
-      class="glass relative w-full max-w-2xl overflow-hidden rounded-xl glass-dialog"
+      class={PALETTE_CHROME.panel}
       data-testid="command-palette"
     >
-      <div class={`flex items-center border-b px-4 ${PALETTE_CHROME.border}`}>
+      <div class={`${PALETTE_CHROME.header} ${PALETTE_CHROME.border}`}>
         <SearchIcon
           aria-hidden="true"
           class={`h-5 w-5 ${PALETTE_CHROME.muted}`}
@@ -83,7 +83,9 @@ function pageOptionId(href: string) {
           role="combobox"
           type="text"
         />
-        <kbd class={`${PALETTE_CHROME.kbd} ${PALETTE_CHROME.border} ${PALETTE_CHROME.muted}`}>
+        <kbd
+          class={`${PALETTE_CHROME.kbd} ${PALETTE_CHROME.kbdDesktop} ${PALETTE_CHROME.border} ${PALETTE_CHROME.muted}`}
+        >
           ESC
         </kbd>
       </div>
@@ -208,7 +210,7 @@ function pageOptionId(href: string) {
       >
         <span data-palette-secrets-footer-label>Secrets 0/{eggs.length}</span>
         <kbd
-          class={`${PALETTE_CHROME.kbd} ${PALETTE_CHROME.border}`}
+          class={`${PALETTE_CHROME.kbd} ${PALETTE_CHROME.kbdDesktop} ${PALETTE_CHROME.border}`}
           data-palette-secrets-footer-kbd
         >
           {SECRETS_SHORTCUT_LABEL}
