@@ -43,6 +43,7 @@ test.describe('konami', { tag: ['@desktop'] }, () => {
     await expect(palette.secrets).toBeVisible()
     await expect(palette.egg('aurora')).toBeVisible()
     await expect(palette.input).toBeFocused()
+    await expect(palette.input).toHaveValue('')
   })
 })
 

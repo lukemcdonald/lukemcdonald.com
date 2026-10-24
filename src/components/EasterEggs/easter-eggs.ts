@@ -83,17 +83,18 @@ export function applyEasterEggCode(code: string) {
 
   if (!secretsReady && completed.length === 0) {
     scheduleIdleReset()
-    return
+    return false
   }
 
   resetProgress()
 
   if (secretsReady) {
     requestSecrets()
-    return
+    return true
   }
 
   void toggleEgg(completed[0])
+  return true
 }
 
 export function getActiveEasterEggId() {
@@ -301,7 +302,9 @@ function onKeyDown(event: KeyboardEvent) {
     return
   }
 
-  applyEasterEggCode(event.code)
+  if (applyEasterEggCode(event.code)) {
+    event.preventDefault()
+  }
 }
 
 function parseFoundIds(raw: string | null) {
