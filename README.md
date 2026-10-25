@@ -22,8 +22,7 @@ Read-only MCP at `/mcp`. LLM summary at `/llms.txt`.
 pnpm install
 ```
 
-2. Copy `.env.example` to `.env`. Only needed for production analytics.
-3. Start local development:
+2. Start local development:
 
 ```bash
 pnpm dev

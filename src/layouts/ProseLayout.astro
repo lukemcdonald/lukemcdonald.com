@@ -3,13 +3,14 @@ import Prose from '@/components/Prose.astro'
 
 import Layout from './Layout.astro'
 
-const { description, proseClass, title } = Astro.props
+const { description, proseClass, robots, title } = Astro.props
 ---
 
 <Layout
-  title={title}
-  description={description}
   bodyClass="bg-white text-primary-900 dark:bg-primary-900 dark:text-primary-50"
+  description={description}
+  robots={robots}
+  title={title}
 >
   <main
     class="px-4 py-6"

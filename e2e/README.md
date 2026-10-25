@@ -99,7 +99,7 @@ pnpm exec playwright test --trace on
 
 Default and PR set (`E2E_BROWSERS=pr`): Chromium and Pixel 5. `E2E_BROWSERS=full` adds Firefox and WebKit (without axe). CI uses the same env.
 
-The suite tests a local production build. `reuseExistingServer` is on locally. The suite listens on `E2E_PORT` (default `4173`), not the Astro dev port (`4321`). If that URL is already served, the suite reuses it; otherwise `webServer` runs `pnpm build && pnpm preview:static`. `PLAYWRIGHT_BASE_URL` overrides the origin and skips the local preview server.
+The suite tests a local production build. `reuseExistingServer` is on locally. The suite listens on `E2E_PORT` (default `4173`), not the Astro dev port (`3000`). If that URL is already served, the suite reuses it; otherwise `webServer` runs `pnpm build && pnpm preview:static`. `PLAYWRIGHT_BASE_URL` overrides the origin and skips the local preview server.
 
 For a CI failure, download the `playwright-report` artifact and open it with `pnpm exec playwright show-report`.
 

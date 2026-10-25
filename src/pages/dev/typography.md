@@ -1,7 +1,8 @@
 ---
-layout: '@/layouts/ProseLayout.astro'
-title: Typography
 description: All the things to test tailwindcss typography styles.
+layout: '@/layouts/ProseLayout.astro'
+robots: noindex
+title: Typography
 ---
 
 # Tyopgraphy

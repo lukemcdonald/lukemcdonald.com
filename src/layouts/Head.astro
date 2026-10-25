@@ -41,8 +41,11 @@ const {
   ogImage,
   photo,
   pubDate,
+  robots: inRobots,
   title: inTitle,
 } = meta
+const googlebot = inRobots ?? 'index, follow'
+const robots = inRobots ?? 'index, follow, max-image-preview:large'
 const ogType = contentType === 'article' || contentType === 'blog' ? 'article' : 'website'
 
 const siteNameLower = GLOBAL_CONFIG.name.trim().toLowerCase()
@@ -189,11 +192,11 @@ const themeColors = THEME_COLORS
   ></style>
   <meta
     name="googlebot"
-    content="index, follow"
+    content={googlebot}
   />
   <meta
     name="robots"
-    content="index, follow, max-image-preview:large"
+    content={robots}
   />
 
   {GOOGLE_SITE_VERIFICATION && (
