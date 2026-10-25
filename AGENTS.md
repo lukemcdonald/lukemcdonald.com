@@ -2,6 +2,15 @@
 
 Keep changes focused and match existing patterns.
 
+## Workflow
+
+- Before marking any task complete: run `pnpm validate` and `pnpm typecheck`
+- After meaningful TypeScript or JavaScript changes, run `pnpm run audit:code`
+- Before opening a PR, run `pnpm exec fallow audit --base origin/main`
+- Start the dev server with `pnpm dev --background`. Check it with `pnpm astro dev status`. Stop it with `pnpm astro dev stop` when done.
+
+Use the Fallow skill for deeper audit and debug workflows.
+
 ## Conventions
 
 - No emojis anywhere: code, commits, descriptions, PR titles

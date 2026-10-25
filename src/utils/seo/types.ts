@@ -17,6 +17,5 @@ export interface SeoMeta {
   ogImage?: string
   photo?: ImageMetadata
   pubDate?: Date
-  robots?: string
   title: string
 }

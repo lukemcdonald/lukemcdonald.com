@@ -41,12 +41,11 @@ const {
   ogImage,
   photo,
   pubDate,
-  robots: inRobots,
   title: inTitle,
 } = meta
 const isDevRoute = Astro.url.pathname.startsWith('/dev/')
-const googlebot = inRobots ?? (isDevRoute ? 'noindex' : 'index, follow')
-const robots = inRobots ?? (isDevRoute ? 'noindex' : 'index, follow, max-image-preview:large')
+const googlebot = isDevRoute ? 'noindex' : 'index, follow'
+const robots = isDevRoute ? 'noindex' : 'index, follow, max-image-preview:large'
 const ogType = contentType === 'article' || contentType === 'blog' ? 'article' : 'website'
 
 const siteNameLower = GLOBAL_CONFIG.name.trim().toLowerCase()

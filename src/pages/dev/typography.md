@@ -1,11 +1,10 @@
 ---
-description: All the things to test tailwindcss typography styles.
 layout: '@/layouts/ProseLayout.astro'
-robots: noindex
 title: Typography
+description: All the things to test tailwindcss typography styles.
 ---
 
-# Tyopgraphy
+# Typography
 
 <p className="lead">
   Until now, trying to style an article, document, or blog post with Tailwind has been a tedious task that required a keen eye for typography and a lot of complex custom CSS.
