@@ -73,13 +73,13 @@ export function initializeEasterEggs() {
   started = true
   startEggs()
   restoreEgg()
-  document.addEventListener('keydown', onKeyDown)
+  document.addEventListener('keydown', handleKeydown)
   document.addEventListener('astro:after-swap', remountEgg)
 }
 
 export function applyEasterEggCode(code: string) {
   const secretsReady = stepSequence(SECRETS_ID, code, KONAMI_SEQUENCE)
-  const completed = collectCompleted(code)
+  const completed = getCompletedEggs(code)
 
   if (!secretsReady && completed.length === 0) {
     scheduleIdleReset()
@@ -98,13 +98,13 @@ export function applyEasterEggCode(code: string) {
 }
 
 export function getActiveEasterEggId() {
-  return currentEggId()
+  return getCurrentEggId()
 }
 
 export function getEasterEggs() {
   return EGGS.map((egg) => ({
     id: egg.id,
-    name: eggName(egg),
+    name: getEggName(egg),
   }))
 }
 
@@ -112,22 +112,22 @@ export function getEasterEggCatalog() {
   return EGGS.map((egg) => ({
     hint: egg.hint,
     id: egg.id,
-    name: eggName(egg),
+    name: getEggName(egg),
   }))
 }
 
 export function getFoundEasterEggIds() {
-  return readFoundIds()
+  return getFoundIds()
 }
 
 export async function findEasterEgg(id: string) {
-  const egg = eggById(id)
+  const egg = getEggById(id)
 
   if (!egg) {
     throw new Error(`Unknown easter egg: ${id}`)
   }
 
-  const alreadyActive = currentEggId() === egg.id
+  const alreadyActive = getCurrentEggId() === egg.id
 
   if (!alreadyActive) {
     await toggleEgg(egg)
@@ -136,7 +136,7 @@ export async function findEasterEgg(id: string) {
   return {
     alreadyActive,
     id: egg.id,
-    name: eggName(egg),
+    name: getEggName(egg),
   }
 }
 
@@ -151,7 +151,7 @@ export function resetEasterEggs() {
 }
 
 export function toggleEasterEgg(id: string) {
-  void toggleEgg(eggById(id))
+  void toggleEgg(getEggById(id))
 }
 
 function advanceProgress(progress: number, code: string, sequence: readonly string[]): number {
@@ -167,6 +167,11 @@ function advanceProgress(progress: number, code: string, sequence: readonly stri
   }
 
   return 0
+}
+
+function activateEgg(egg: Egg, silent: boolean) {
+  setEggAttribute(egg.id)
+  return egg.onActivate?.(silent, hideEgg)
 }
 
 function clearEggAttribute() {
@@ -191,7 +196,7 @@ function clearStoredEggs() {
   }
 }
 
-function collectCompleted(code: string): Egg[] {
+function getCompletedEggs(code: string): Egg[] {
   const completed: Egg[] = []
 
   for (const egg of EGGS) {
@@ -203,15 +208,15 @@ function collectCompleted(code: string): Egg[] {
   return completed
 }
 
-function currentEggId() {
-  return readStoredEggId() ?? activeEgg?.id
+function getCurrentEggId() {
+  return getStoredEggId() ?? activeEgg?.id
 }
 
-function eggById(id: string) {
+function getEggById(id: string) {
   return EGGS.find((egg) => egg.id === id)
 }
 
-function eggName(egg: Egg) {
+function getEggName(egg: Egg) {
   return egg.name ?? `${egg.id.slice(0, 1).toUpperCase()}${egg.id.slice(1)}`
 }
 
@@ -250,6 +255,18 @@ function hideEgg(silent = false) {
   playEggSound(silent ? undefined : egg?.soundOff)
 }
 
+function isDialogTarget(target: Element) {
+  return Boolean(target.closest('dialog, [role="dialog"]'))
+}
+
+function isEditableTarget(target: Element) {
+  if (target.closest('[contenteditable]:not([contenteditable="false"])')) {
+    return true
+  }
+
+  return Boolean(target.closest('input, select, textarea'))
+}
+
 function isIgnoredKeyEvent(event: KeyboardEvent): boolean {
   if (hasBlockingFlags(event) || hasOpenDialog()) {
     return true
@@ -258,24 +275,20 @@ function isIgnoredKeyEvent(event: KeyboardEvent): boolean {
   return isTypingTarget(event.target)
 }
 
+function isPersistedEgg(egg: Egg) {
+  return egg.persist !== false
+}
+
 function isTypingTarget(target: EventTarget | null): boolean {
   if (!(target instanceof Element)) {
     return false
   }
 
-  if (target.closest('dialog, [role="dialog"]')) {
-    return true
-  }
-
-  if (target.closest('[contenteditable]:not([contenteditable="false"])')) {
-    return true
-  }
-
-  return Boolean(target.closest('input, select, textarea'))
+  return isDialogTarget(target) || isEditableTarget(target)
 }
 
 function markFound(id: string) {
-  const found = readFoundIds()
+  const found = getFoundIds()
 
   if (found.includes(id)) {
     return
@@ -284,7 +297,7 @@ function markFound(id: string) {
   setStorageItem(STORAGE_KEYS.easterEggFound, JSON.stringify([...found, id]))
 }
 
-function onEscape() {
+function handleEscape() {
   resetProgress()
 
   if (activeEgg?.dismissOnEscape) {
@@ -292,13 +305,13 @@ function onEscape() {
   }
 }
 
-function onKeyDown(event: KeyboardEvent) {
+function handleKeydown(event: KeyboardEvent) {
   if (isIgnoredKeyEvent(event)) {
     return
   }
 
   if (event.key === 'Escape') {
-    onEscape()
+    handleEscape()
     return
   }
 
@@ -327,6 +340,14 @@ async function loadEggStyles(id: string) {
   return load(id)
 }
 
+function persistEgg(egg: Egg) {
+  if (!isPersistedEgg(egg)) {
+    return
+  }
+
+  setStorageItem(`${STORAGE_KEYS.easterEggPrefix}${egg.id}`, STORAGE_ON)
+}
+
 function playEggSound(name: SoundName | undefined) {
   if (!name) {
     return
@@ -335,9 +356,13 @@ function playEggSound(name: SoundName | undefined) {
   playSound(name)
 }
 
-function readFoundIds() {
+function getKnownEggIds() {
+  return new Set(EGGS.map((egg) => egg.id))
+}
+
+function getFoundIds() {
   try {
-    const known = new Set(EGGS.map((egg) => egg.id))
+    const known = getKnownEggIds()
 
     return parseFoundIds(getStorageItem(STORAGE_KEYS.easterEggFound)).filter((id) => known.has(id))
   } catch {
@@ -345,7 +370,7 @@ function readFoundIds() {
   }
 }
 
-function readStoredEggId(): string | undefined {
+function getStoredEggId(): string | undefined {
   for (const key of getStorageKeys()) {
     if (!key.startsWith(STORAGE_KEYS.easterEggPrefix)) {
       continue
@@ -366,7 +391,7 @@ function remountEgg() {
     return
   }
 
-  if (activeEgg.persist === false) {
+  if (!isPersistedEgg(activeEgg)) {
     hideEgg(true)
     return
   }
@@ -378,8 +403,7 @@ function remountEgg() {
       return
     }
 
-    setEggAttribute(egg.id)
-    await egg.onActivate?.(true, hideEgg)
+    await activateEgg(egg, true)
   })
 }
 
@@ -393,10 +417,10 @@ function resetProgress() {
 }
 
 function restoreEgg() {
-  const storedId = readStoredEggId()
-  const egg = storedId ? eggById(storedId) : undefined
+  const storedId = getStoredEggId()
+  const egg = storedId ? getEggById(storedId) : undefined
 
-  if (!egg || egg.persist === false) {
+  if (!egg || !isPersistedEgg(egg)) {
     clearEggAttribute()
     clearStoredEggs()
     return
@@ -448,19 +472,14 @@ async function showEgg(egg: Egg, silent = false) {
   dismissOtherEgg(egg.id)
   activeEgg = egg
   clearStoredEggs()
-
-  if (egg.persist !== false) {
-    setStorageItem(`${STORAGE_KEYS.easterEggPrefix}${egg.id}`, STORAGE_ON)
-  }
-
+  persistEgg(egg)
   await loadEggStyles(egg.id)
 
   if (activeEgg !== egg) {
     return
   }
 
-  setEggAttribute(egg.id)
-  await egg.onActivate?.(silent, hideEgg)
+  await activateEgg(egg, silent)
   playEggSound(silent ? undefined : egg.soundOn)
 }
 
@@ -487,7 +506,7 @@ async function toggleEgg(egg: Egg | undefined) {
 
   markFound(egg.id)
 
-  if (currentEggId() === egg.id) {
+  if (getCurrentEggId() === egg.id) {
     hideEgg()
     return
   }

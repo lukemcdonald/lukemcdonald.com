@@ -8,6 +8,7 @@ import { SkipLink } from '../components/skip-link'
 import { TEST_ID, THEME_SEED_LOCK_KEY } from '../constants'
 
 export class BasePage {
+  readonly easterEgg
   readonly fcaEgg: FcaEgg
   readonly header: SiteHeader
   readonly main
@@ -17,6 +18,7 @@ export class BasePage {
   readonly skipLink: SkipLink
 
   constructor(page: Page, path = '/') {
+    this.easterEgg = page.getByTestId(TEST_ID.easterEgg)
     this.fcaEgg = new FcaEgg(page)
     this.header = new SiteHeader(page)
     this.main = page.getByTestId(TEST_ID.main)
