@@ -1,5 +1,4 @@
 import type { CommandPaletteNavItem } from './types'
-import type { HighlightedCommand } from './utils'
 
 import { navigate } from 'astro:transitions/client'
 
@@ -32,6 +31,7 @@ import {
   formatSecretsProgressLabel,
   getFoundEggs,
   getHighlightedCommand,
+  type HighlightedCommand,
   isPaletteBackKey,
   isSecretsShortcut,
   SECRETS_PAGE,
@@ -315,14 +315,6 @@ function showPalettePage(palette: Palette, page?: string) {
   palette.input.focus()
 }
 
-function showMain(palette: Palette) {
-  showPalettePage(palette)
-}
-
-function openSecrets(palette: Palette) {
-  showPalettePage(palette, SECRETS_PAGE)
-}
-
 function openPaletteSecrets(palette: Palette) {
   if (!isDesktop()) {
     return
@@ -332,7 +324,7 @@ function openPaletteSecrets(palette: Palette) {
     openPalette(palette)
   }
 
-  openSecrets(palette)
+  showPalettePage(palette, SECRETS_PAGE)
 }
 
 function closePalette(palette: Palette, options?: CloseOptions) {
@@ -384,19 +376,6 @@ function playPreferenceCue(command: HighlightedCommand | undefined) {
   }
 }
 
-function createCommandActions(palette: Palette) {
-  return {
-    close: () => closePalette(palette, { silent: true }),
-    navigate: (href: string) => {
-      navigate(href)
-    },
-    onPreferenceApplied: () => syncList(palette),
-    setThemeColor,
-    setThemeMode,
-    toggleSound: toggleSoundPreference,
-  }
-}
-
 function selectActive(palette: Palette) {
   if (selectListItem(palette)) {
     return
@@ -405,7 +384,19 @@ function selectActive(palette: Palette) {
   const command = getHighlightedCommand(palette.navItems, palette.input.value)
 
   playPreferenceCue(command)
-  applyHighlightedCommand(createCommandActions(palette), command)
+  applyHighlightedCommand(
+    {
+      close: () => closePalette(palette, { silent: true }),
+      navigate: (href: string) => {
+        navigate(href)
+      },
+      onPreferenceApplied: () => syncList(palette),
+      setThemeColor,
+      setThemeMode,
+      toggleSound: toggleSoundPreference,
+    },
+    command,
+  )
 }
 
 function activateItem(palette: Palette, item: HTMLElement) {
@@ -447,16 +438,7 @@ function handleDialogCancel(event: Event, palette: Palette) {
   }
 
   event.preventDefault()
-  showMain(palette)
-}
-
-function playCloseSound(palette: Palette) {
-  if (palette.state.skipCloseSound) {
-    palette.state.skipCloseSound = false
-    return
-  }
-
-  playSound('close')
+  showPalettePage(palette)
 }
 
 function handleDialogClose(palette: Palette) {
@@ -465,7 +447,13 @@ function handleDialogClose(palette: Palette) {
   resetPaletteQuery(palette)
   palette.trigger.setAttribute('aria-expanded', 'false')
   syncList(palette)
-  playCloseSound(palette)
+
+  if (palette.state.skipCloseSound) {
+    palette.state.skipCloseSound = false
+    return
+  }
+
+  playSound('close')
 }
 
 function handleSearchNavKey(event: KeyboardEvent, palette: Palette) {
@@ -523,9 +511,9 @@ function handleSecretsShortcut(event: KeyboardEvent, palette: Palette) {
   event.preventDefault()
 
   if (isSecretsPage(palette)) {
-    showMain(palette)
+    showPalettePage(palette)
   } else {
-    openSecrets(palette)
+    showPalettePage(palette, SECRETS_PAGE)
   }
 
   return true
@@ -542,7 +530,7 @@ function handleSecretsBack(event: KeyboardEvent, palette: Palette) {
 
   event.preventDefault()
   event.stopPropagation()
-  showMain(palette)
+  showPalettePage(palette)
   return true
 }
 
@@ -570,41 +558,16 @@ function handleDocumentKeydown(event: KeyboardEvent, palette: Palette) {
   handleOpenPaletteKeys(event, palette)
 }
 
-function handleNavItemClick(event: MouseEvent, palette: Palette) {
-  if (event.button !== 0 || event.defaultPrevented) {
-    return
-  }
-
-  closePalette(palette, { silent: true })
-}
-
-function handleEggClick(palette: Palette, button: HTMLButtonElement) {
-  const id = button.dataset.paletteEgg
-
-  if (!id) {
-    return
-  }
-
-  toggleEasterEgg(id)
-  syncList(palette)
-  palette.input.focus()
-}
-
-function handleEggPointerEnter(palette: Palette, button: HTMLButtonElement) {
-  activateItem(palette, button)
-}
-
-function handlePaletteInput(palette: Palette) {
-  palette.state.arrowOverride = false
-  syncList(palette)
-}
-
 function bindNavAndEggs(palette: Palette, signal: AbortSignal) {
   palette.root.querySelectorAll<HTMLAnchorElement>('[data-palette-nav]').forEach((item) => {
     item.addEventListener(
       'click',
       (event) => {
-        handleNavItemClick(event, palette)
+        if (event.button !== 0 || event.defaultPrevented) {
+          return
+        }
+
+        closePalette(palette, { silent: true })
       },
       { signal },
     )
@@ -619,14 +582,22 @@ function bindEggButton(palette: Palette, button: HTMLButtonElement, signal: Abor
   button.addEventListener(
     'click',
     () => {
-      handleEggClick(palette, button)
+      const id = button.dataset.paletteEgg
+
+      if (!id) {
+        return
+      }
+
+      toggleEasterEgg(id)
+      syncList(palette)
+      palette.input.focus()
     },
     { signal },
   )
   button.addEventListener(
     'pointerenter',
     () => {
-      handleEggPointerEnter(palette, button)
+      activateItem(palette, button)
     },
     { signal },
   )
@@ -655,63 +626,35 @@ function bindListHeight(palette: Palette, signal: AbortSignal) {
   signal.addEventListener('abort', () => observer.disconnect())
 }
 
-function bindPaletteDialog(palette: Palette, signal: AbortSignal) {
+function bindPaletteEvents(palette: Palette, signal: AbortSignal) {
+  palette.trigger.addEventListener('click', () => openPalette(palette), { signal })
   bindBackdropClose(palette, signal)
   palette.dialog.addEventListener('cancel', (event) => handleDialogCancel(event, palette), {
     signal,
   })
   palette.dialog.addEventListener('close', () => handleDialogClose(palette), { signal })
-}
-
-function bindPaletteInput(palette: Palette, signal: AbortSignal) {
   palette.input.addEventListener(
     'input',
     () => {
-      handlePaletteInput(palette)
+      palette.state.arrowOverride = false
+      syncList(palette)
     },
     { signal },
   )
   palette.input.addEventListener('keydown', (event) => handleSearchKeydown(event, palette), {
     signal,
   })
-}
-
-function bindPaletteShortcuts(palette: Palette, signal: AbortSignal) {
-  document.addEventListener('keydown', (event) => handleDocumentKeydown(event, palette), {
-    capture: true,
-    signal,
-  })
-  document.addEventListener(EASTER_EGG_SECRETS_EVENT, () => openPaletteSecrets(palette), { signal })
-}
-
-function bindPaletteEvents(palette: Palette, signal: AbortSignal) {
-  palette.trigger.addEventListener('click', () => openPalette(palette), { signal })
-  bindPaletteDialog(palette, signal)
-  bindPaletteInput(palette, signal)
   bindSettings(palette.root, {
     onChange: () => syncList(palette),
     signal,
   })
   bindListHeight(palette, signal)
   bindNavAndEggs(palette, signal)
-  bindPaletteShortcuts(palette, signal)
-}
-
-function getPaletteNavItems(root: Element): CommandPaletteNavItem[] {
-  return [...root.querySelectorAll<HTMLAnchorElement>('[data-palette-nav]')].map((item) => {
-    return {
-      href: item.getAttribute('href') ?? '',
-      name: item.textContent?.trim() ?? '',
-    }
+  document.addEventListener('keydown', (event) => handleDocumentKeydown(event, palette), {
+    capture: true,
+    signal,
   })
-}
-
-function createPaletteState(): Palette['state'] {
-  return {
-    activeIndex: -1,
-    arrowOverride: false,
-    skipCloseSound: false,
-  }
+  document.addEventListener(EASTER_EGG_SECRETS_EVENT, () => openPaletteSecrets(palette), { signal })
 }
 
 function queryPalette(root: Element): Palette | undefined {
@@ -733,12 +676,19 @@ function queryPalette(root: Element): Palette | undefined {
     list: root.querySelector('[data-palette-list]'),
     listSizer: root.querySelector('[data-palette-list-sizer]'),
     main: root.querySelector('[data-palette-main]'),
-    navItems: getPaletteNavItems(root),
+    navItems: [...root.querySelectorAll<HTMLAnchorElement>('[data-palette-nav]')].map((item) => ({
+      href: item.getAttribute('href') ?? '',
+      name: item.textContent?.trim() ?? '',
+    })),
     navList: root.querySelector('[data-palette-nav-list]'),
     root,
     secrets: root.querySelector('[data-palette-secrets]'),
     secretsTitle: root.querySelector('[data-palette-secrets-title]'),
-    state: createPaletteState(),
+    state: {
+      activeIndex: -1,
+      arrowOverride: false,
+      skipCloseSound: false,
+    },
     trigger,
   }
 }

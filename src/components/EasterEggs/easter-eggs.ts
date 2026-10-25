@@ -255,18 +255,6 @@ function hideEgg(silent = false) {
   playEggSound(silent ? undefined : egg?.soundOff)
 }
 
-function isDialogTarget(target: Element) {
-  return Boolean(target.closest('dialog, [role="dialog"]'))
-}
-
-function isEditableTarget(target: Element) {
-  if (target.closest('[contenteditable]:not([contenteditable="false"])')) {
-    return true
-  }
-
-  return Boolean(target.closest('input, select, textarea'))
-}
-
 function isIgnoredKeyEvent(event: KeyboardEvent): boolean {
   if (hasBlockingFlags(event) || hasOpenDialog()) {
     return true
@@ -284,7 +272,15 @@ function isTypingTarget(target: EventTarget | null): boolean {
     return false
   }
 
-  return isDialogTarget(target) || isEditableTarget(target)
+  if (target.closest('dialog, [role="dialog"]')) {
+    return true
+  }
+
+  if (target.closest('[contenteditable]:not([contenteditable="false"])')) {
+    return true
+  }
+
+  return Boolean(target.closest('input, select, textarea'))
 }
 
 function markFound(id: string) {
@@ -341,11 +337,9 @@ async function loadEggStyles(id: string) {
 }
 
 function persistEgg(egg: Egg) {
-  if (!isPersistedEgg(egg)) {
-    return
+  if (isPersistedEgg(egg)) {
+    setStorageItem(`${STORAGE_KEYS.easterEggPrefix}${egg.id}`, STORAGE_ON)
   }
-
-  setStorageItem(`${STORAGE_KEYS.easterEggPrefix}${egg.id}`, STORAGE_ON)
 }
 
 function playEggSound(name: SoundName | undefined) {
@@ -356,13 +350,9 @@ function playEggSound(name: SoundName | undefined) {
   playSound(name)
 }
 
-function getKnownEggIds() {
-  return new Set(EGGS.map((egg) => egg.id))
-}
-
 function getFoundIds() {
   try {
-    const known = getKnownEggIds()
+    const known = new Set(EGGS.map((egg) => egg.id))
 
     return parseFoundIds(getStorageItem(STORAGE_KEYS.easterEggFound)).filter((id) => known.has(id))
   } catch {
