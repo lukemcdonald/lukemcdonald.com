@@ -1,4 +1,3 @@
-import { TEST_ID } from '../constants'
 import { expect, test } from '../fixtures'
 
 test.describe('easter egg codes', () => {
@@ -6,13 +5,10 @@ test.describe('easter egg codes', () => {
     await homePage.goto()
     await homePage.page.keyboard.type('iowa')
 
-    await expect(homePage.page.getByTestId(TEST_ID.easterEgg)).toHaveAttribute(
-      'data-easter-egg',
-      'aurora',
-    )
+    await expect(homePage.easterEgg).toHaveAttribute('data-easter-egg', 'aurora')
 
     await homePage.page.keyboard.type('iowa')
-    await expect(homePage.page.getByTestId(TEST_ID.easterEgg)).toHaveCount(0)
+    await expect(homePage.easterEgg).toHaveCount(0)
   })
 
   test(
@@ -25,7 +21,7 @@ test.describe('easter egg codes', () => {
       await palette.openWithKeyboard()
       await palette.input.pressSequentially('iowa')
 
-      await expect(homePage.page.getByTestId(TEST_ID.easterEgg)).toHaveCount(0)
+      await expect(homePage.easterEgg).toHaveCount(0)
       await expect(palette.input).toHaveValue('iowa')
     },
   )

@@ -1,6 +1,12 @@
 ---
 import { PALETTE_CHROME } from '@/components/CommandPalette/chrome'
 import { LOADING_VERSE_LABEL } from '@/features/verse/verse.constants'
+
+const AURORA_FIREFLY_COUNT = 10
+const AURORA_FIREFLY_PATHS = ['a', 'b', 'c'] as const
+const AURORA_FIREFLIES = Array.from({ length: AURORA_FIREFLY_COUNT }, (_, index) => {
+  return AURORA_FIREFLY_PATHS[index % AURORA_FIREFLY_PATHS.length]
+})
 ---
 
 <template data-lamp-template>
@@ -11,16 +17,9 @@ import { LOADING_VERSE_LABEL } from '@/features/verse/verse.constants'
       aria-hidden="true"
       data-lamp-fireflies
     >
-      <span data-aurora-firefly="a"></span>
-      <span data-aurora-firefly="b"></span>
-      <span data-aurora-firefly="c"></span>
-      <span data-aurora-firefly="a"></span>
-      <span data-aurora-firefly="b"></span>
-      <span data-aurora-firefly="c"></span>
-      <span data-aurora-firefly="a"></span>
-      <span data-aurora-firefly="b"></span>
-      <span data-aurora-firefly="c"></span>
-      <span data-aurora-firefly="a"></span>
+      {AURORA_FIREFLIES.map((path) => {
+        return <span data-aurora-firefly={path}></span>
+      })}
     </div>
     <div
       aria-busy="true"
