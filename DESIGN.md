@@ -21,7 +21,7 @@ Restyle through existing Tailwind theme utilities and CSS variables; do not add 
 
 Runtime attributes on `<html>` remap the same CSS variables. Do not invent a second token set.
 
-- **Color** (`data-theme`: `default`, `blue`, `emerald`, `orange`, `purple`, `yellow`): rewrites `--color-primary-*` and `--color-secondary-base`. Default removes `data-theme` so the `:root` tokens apply; `[data-theme='default']` shares those declarations for local swatches. Use `bg-primary-*`, `text-primary-*`, `decoration-primary-500`.
+- **Color** (`data-theme`: `default`, `blue`, `emerald`, `orange`, `purple`, `yellow`): rewrites `--color-primary-*` and `--color-secondary-base`. Default removes `data-theme` so `@theme` values apply. Use `bg-primary-*`, `text-primary-*`, `decoration-primary-500`.
 - **Appearance** (`.dark` class on `<html>`): pick shades with `dark:`. Default mode is `system`. Home `.site` stays white; `ProseLayout` inverts.
 - **Font** (`data-font`: Work, Play, Live from `src/components/Settings/Font/pairings.ts`): sets `--font-heading`, `--font-sans`, and `--font-ui`. Unset `data-font` is the default. Headings use `--font-heading`; `.site-header` and `footer` use `--font-ui`; `button`, `input`, `select`, `textarea`, and `kbd` inherit sans/UI, not the heading face.
 - **Glass** (`data-glass`: `clear`, `tinted`, `solid`): changes `--glass-*` used by the `glass` utility. Default is tinted.
