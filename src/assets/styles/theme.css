@@ -39,6 +39,7 @@
 
 /* `[data-theme]` (not `html[data-theme]`) so tokens can also be scoped locally, e.g. a swatch preview. */
 [data-theme='default'] {
+  /* fallow-ignore-next-line code-duplication -- [data-theme='default'] intentionally repeats the @theme defaults so a local swatch can reset tokens inside another theme. */
   --color-primary-50: oklch(98.4% 0.001 106);
   --color-primary-100: oklch(96.9% 0.001 106);
   --color-primary-200: oklch(92.3% 0.002 480);

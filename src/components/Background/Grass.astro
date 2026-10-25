@@ -1,5 +1,6 @@
 ---
 import type { GrassId } from '@/components/Background/utils'
+import type { ImageMetadata } from 'astro'
 
 import { Image } from 'astro:assets'
 
@@ -17,22 +18,14 @@ export type Props = {
 
 const { alt, class: className, id, position, ...delegated } = Astro.props
 
-function getLeafSrc(requestedId: string) {
-  switch (requestedId) {
-    case '1':
-      return leaf1
-    case '2':
-      return leaf2
-    case '3':
-      return leaf3
-    case '4':
-      return leaf4
-    default:
-      return leaf1
-  }
+const LEAF_SRC: Record<GrassId, ImageMetadata> = {
+  '1': leaf1,
+  '2': leaf2,
+  '3': leaf3,
+  '4': leaf4,
 }
 
-const selectedSrc = getLeafSrc(String(id))
+const selectedSrc = LEAF_SRC[id]
 
 const positionClasses = {
   left: '-left-[20%] 2xl:-left-[10%] 3xl:-left-[2%]',
