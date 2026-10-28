@@ -8,8 +8,12 @@ import { DEFAULT_SOUND_PREFERENCE } from './constants'
 
 type Cuelume = typeof import('cuelume')
 
+const CUE_SELECTOR =
+  '[data-cuelume-hover], [data-cuelume-press], [data-cuelume-release], [data-cuelume-toggle]'
+
 let cuelume: Cuelume | undefined
 let cuelumePromise: Promise<Cuelume> | undefined
+let listeningForFirstCue = false
 let started = false
 
 export function getSoundPreference(): SoundPreference {
@@ -31,7 +35,7 @@ export function initializeSound(): void {
     return
   }
 
-  void startCuelume()
+  listenForFirstCue()
 }
 
 export function playPageArrival(): void {
@@ -84,6 +88,54 @@ export function toggleSoundPreference(): SoundPreference {
   return setSoundPreference(enabled)
 }
 
+function disarmFirstCue() {
+  if (!listeningForFirstCue) {
+    return
+  }
+
+  listeningForFirstCue = false
+  document.removeEventListener('pointerdown', onFirstCue, true)
+  document.removeEventListener('pointerover', onFirstCue, true)
+}
+
+function getCueName(target: EventTarget | null) {
+  if (!(target instanceof Element)) {
+    return
+  }
+
+  const hover = target.closest('[data-cuelume-hover]')?.getAttribute('data-cuelume-hover')
+
+  if (hover) {
+    return hover
+  }
+
+  if (target.closest('[data-cuelume-toggle]')) {
+    return 'toggle'
+  }
+
+  if (target.closest('[data-cuelume-press], [data-cuelume-release]')) {
+    return 'tap'
+  }
+}
+
+function isCueTarget(target: EventTarget | null) {
+  return target instanceof Element && Boolean(target.closest(CUE_SELECTOR))
+}
+
+function isSoundEnabled() {
+  return SOUND_CONFIG.enableSounds && getSoundPreference() === 'on'
+}
+
+function listenForFirstCue() {
+  if (listeningForFirstCue || started) {
+    return
+  }
+
+  listeningForFirstCue = true
+  document.addEventListener('pointerdown', onFirstCue, { capture: true })
+  document.addEventListener('pointerover', onFirstCue, { capture: true })
+}
+
 function loadCuelume() {
   cuelumePromise ??= import('cuelume').then((mod) => {
     cuelume = mod
@@ -93,11 +145,24 @@ function loadCuelume() {
   return cuelumePromise
 }
 
-function isSoundEnabled() {
-  return SOUND_CONFIG.enableSounds && getSoundPreference() === 'on'
+function onFirstCue(event: Event) {
+  if (getSoundPreference() !== 'on' || !isCueTarget(event.target)) {
+    return
+  }
+
+  const name = getCueName(event.target)
+
+  disarmFirstCue()
+  void startCuelume().then((mod) => {
+    if (name) {
+      mod.play(name as SoundName)
+    }
+  })
 }
 
 async function startCuelume() {
+  disarmFirstCue()
+
   const mod = await loadCuelume()
 
   if (!started) {

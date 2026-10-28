@@ -162,20 +162,33 @@ const webmcpPages = await loadWebMcpPages()
       type="application/json"
     ></script>
     <script>
-      import { navigate } from 'astro:transitions/client'
+      function hasModelContext() {
+        if (!('modelContext' in document)) {
+          return false
+        }
 
-      import {
-        createWebMcpDeps,
-        readWebMcpPages,
-        registerWebMcpTools,
-      } from '@/features/webmcp/webmcp'
+        const { modelContext } = document
 
-      void registerWebMcpTools(
-        createWebMcpDeps({
-          navigate,
-          pages: readWebMcpPages(),
-        }),
-      )
+        return Boolean(modelContext && typeof modelContext.registerTool === 'function')
+      }
+
+      async function loadWebMcp() {
+        const [{ navigate }, webmcp] = await Promise.all([
+          import('astro:transitions/client'),
+          import('@/features/webmcp/webmcp'),
+        ])
+
+        await webmcp.registerWebMcpTools(
+          webmcp.createWebMcpDeps({
+            navigate,
+            pages: webmcp.readWebMcpPages(),
+          }),
+        )
+      }
+
+      if (hasModelContext()) {
+        void loadWebMcp()
+      }
     </script>
   </body>
 </html>

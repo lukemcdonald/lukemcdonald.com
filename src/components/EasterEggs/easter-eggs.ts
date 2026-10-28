@@ -21,6 +21,7 @@ import { auroraEgg } from './eggs/aurora'
 import { fcaEgg } from './eggs/fca'
 import { hyruleEgg } from './eggs/hyrule'
 import { lampEgg } from './eggs/lamp'
+import { isIgnoredEggKey } from './keys'
 
 type Egg = {
   dismissOnEscape?: boolean
@@ -220,21 +221,6 @@ function getEggName(egg: Egg) {
   return egg.name ?? `${egg.id.slice(0, 1).toUpperCase()}${egg.id.slice(1)}`
 }
 
-function hasBlockingFlags(event: KeyboardEvent): boolean {
-  return [
-    event.altKey,
-    event.ctrlKey,
-    event.defaultPrevented,
-    event.isComposing,
-    event.metaKey,
-    event.repeat,
-  ].some(Boolean)
-}
-
-function hasOpenDialog() {
-  return Boolean(document.querySelector('dialog[open], [role="dialog"]:not(dialog)'))
-}
-
 function hasSequencePrefix(
   attempted: string[],
   length: number,
@@ -255,32 +241,8 @@ function hideEgg(silent = false) {
   playEggSound(silent ? undefined : egg?.soundOff)
 }
 
-function isIgnoredKeyEvent(event: KeyboardEvent): boolean {
-  if (hasBlockingFlags(event) || hasOpenDialog()) {
-    return true
-  }
-
-  return isTypingTarget(event.target)
-}
-
 function isPersistedEgg(egg: Egg) {
   return egg.persist !== false
-}
-
-function isTypingTarget(target: EventTarget | null): boolean {
-  if (!(target instanceof Element)) {
-    return false
-  }
-
-  if (target.closest('dialog, [role="dialog"]')) {
-    return true
-  }
-
-  if (target.closest('[contenteditable]:not([contenteditable="false"])')) {
-    return true
-  }
-
-  return Boolean(target.closest('input, select, textarea'))
 }
 
 function markFound(id: string) {
@@ -302,7 +264,7 @@ function handleEscape() {
 }
 
 function handleKeydown(event: KeyboardEvent) {
-  if (isIgnoredKeyEvent(event)) {
+  if (isIgnoredEggKey(event)) {
     return
   }
 

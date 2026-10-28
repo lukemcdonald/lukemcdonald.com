@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
 
 import { formatSoundToggleLabel } from './sound.ts'
-import { playSound } from './utils.ts'
+import { initializeSound, playSound } from './utils.ts'
 
 describe('formatSoundToggleLabel', () => {
   test('describes the next action and current state', () => {
@@ -15,6 +15,14 @@ describe('formatSoundToggleLabel', () => {
       label: 'Sounds on',
       pressed: 'true',
       toggle: 'Disable interaction sounds',
+    })
+  })
+})
+
+describe('initializeSound', () => {
+  test('no-ops without a window', () => {
+    assert.doesNotThrow(() => {
+      initializeSound()
     })
   })
 })
