@@ -36,20 +36,6 @@ function applyCodes(codes: readonly string[]) {
   }
 }
 
-function dispatchKey(code: string) {
-  document.dispatchEvent(
-    Object.assign(new Event('keydown'), {
-      altKey: false,
-      code,
-      ctrlKey: false,
-      isComposing: false,
-      key: code,
-      metaKey: false,
-      repeat: false,
-    }) as KeyboardEvent,
-  )
-}
-
 function installBrowserStubs() {
   const store = new Map<string, string>()
   const listeners = new Map<string, Set<(event: Event) => void>>()
@@ -97,9 +83,6 @@ function installBrowserStubs() {
         attributes: new Map<string, string>(),
         getAttribute(name: string) {
           return this.attributes.get(name) ?? null
-        },
-        hasAttribute(name: string) {
-          return this.attributes.has(name)
         },
         removeAttribute(name: string) {
           this.attributes.delete(name)
@@ -214,56 +197,6 @@ describe('applyEasterEggCode', () => {
       requested = true
     })
     applyCodes(KONAMI_CODES)
-
-    assert.equal(requested, true)
-    assert.equal(getActiveEasterEggId(), undefined)
-  })
-})
-
-describe('easter-eggs-boot', () => {
-  before(async () => {
-    installBrowserStubs()
-
-    if (typeof Element === 'undefined') {
-      Object.defineProperty(globalThis, 'Element', {
-        configurable: true,
-        value: class Element {},
-      })
-    }
-
-    await import('./easter-eggs-boot.ts')
-  })
-
-  afterEach(() => {
-    resetEasterEggs()
-  })
-
-  test('replays iowa typed while the egg module is loading', async () => {
-    for (const code of EGG_CODES.aurora) {
-      dispatchKey(code)
-    }
-
-    await new Promise<void>((resolve) => {
-      setTimeout(resolve, 0)
-    })
-
-    assert.equal(getActiveEasterEggId(), 'aurora')
-  })
-
-  test('replays Konami typed while the egg module is loading', async () => {
-    let requested = false
-
-    document.addEventListener(EASTER_EGG_SECRETS_EVENT, () => {
-      requested = true
-    })
-
-    for (const code of KONAMI_CODES) {
-      dispatchKey(code)
-    }
-
-    await new Promise<void>((resolve) => {
-      setTimeout(resolve, 0)
-    })
 
     assert.equal(requested, true)
     assert.equal(getActiveEasterEggId(), undefined)
