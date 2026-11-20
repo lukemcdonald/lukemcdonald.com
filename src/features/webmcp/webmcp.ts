@@ -66,8 +66,9 @@ export async function registerWebMcpTools(deps: WebMcpToolDeps) {
   registration = controller
 
   const { signal } = controller
+  const tools: WebMCP.ModelContextTool[] = createWebMcpTools(deps)
 
-  for (const tool of createWebMcpTools(deps)) {
+  for (const tool of tools) {
     await modelContext.registerTool(tool, { signal })
   }
 }
