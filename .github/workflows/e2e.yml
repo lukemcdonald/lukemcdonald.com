@@ -7,10 +7,6 @@ on:
         default: pr
         description: Browser set. pr is Chromium and Pixel 5; full adds Firefox and WebKit.
         type: string
-      playwright-version:
-        default: '1.64.1'
-        description: '@playwright/test version. Must match pnpm-lock.yaml and the container tag.'
-        type: string
   workflow_dispatch:
     inputs:
       browsers:
@@ -20,19 +16,36 @@ on:
           - full
           - pr
         type: choice
-      playwright-version:
-        default: '1.64.1'
-        description: '@playwright/test version. Must match pnpm-lock.yaml and the container tag.'
-        type: string
 
 concurrency:
   cancel-in-progress: true
   group: e2e-${{ github.event_name }}-${{ github.ref }}
 
 jobs:
+  playwright-version:
+    name: Playwright version
+    outputs:
+      version: ${{ steps.lockfile.outputs.version }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          sparse-checkout: pnpm-lock.yaml
+          sparse-checkout-cone-mode: false
+      - id: lockfile
+        name: Read @playwright/test from lockfile
+        run: |
+          set -euo pipefail
+          version="$(grep -A2 "^      '@playwright/test':$" pnpm-lock.yaml | awk '/version:/ { sub(/\(.*/, "", $2); print $2; exit }')"
+          if [[ -z "${version}" ]]; then
+            echo 'Could not find @playwright/test in pnpm-lock.yaml.'
+            exit 1
+          fi
+          echo "version=${version}" >> "${GITHUB_OUTPUT}"
+
   e2e:
     container:
-      image: mcr.microsoft.com/playwright:v${{ inputs.playwright-version }}-noble
+      image: mcr.microsoft.com/playwright:v${{ needs.playwright-version.outputs.version }}-noble
       options: --user 1001
     defaults:
       run:
@@ -41,6 +54,7 @@ jobs:
       E2E_BROWSERS: ${{ inputs.browsers }}
       PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     name: Playwright
+    needs: playwright-version
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -53,16 +67,6 @@ jobs:
           cache: pnpm
           node-version-file: .nvmrc
       - run: pnpm install --frozen-lockfile
-      - name: Check Playwright version
-        run: |
-          set -euo pipefail
-          installed="$(node -p "require('@playwright/test/package.json').version")"
-          expected="${{ inputs.playwright-version }}"
-          if [[ "${installed}" != "${expected}" ]]; then
-            echo "Installed @playwright/test ${installed} does not match mcr.microsoft.com/playwright:v${expected}-noble."
-            echo "Update the playwright-version input default in .github/workflows/e2e.yml to ${installed}."
-            exit 1
-          fi
       - run: pnpm test:e2e
       - if: ${{ !cancelled() }}
         name: Surface flaky tests
