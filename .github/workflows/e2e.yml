@@ -22,51 +22,22 @@ concurrency:
   group: e2e-${{ github.event_name }}-${{ github.ref }}
 
 jobs:
-  playwright-version:
-    name: Playwright version
-    outputs:
-      version: ${{ steps.lockfile.outputs.version }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          sparse-checkout: pnpm-lock.yaml
-          sparse-checkout-cone-mode: false
-      - id: lockfile
-        name: Read @playwright/test from lockfile
-        run: |
-          set -euo pipefail
-          version="$(grep -A2 "^      '@playwright/test':$" pnpm-lock.yaml | awk '/version:/ { sub(/\(.*/, "", $2); print $2; exit }')"
-          if [[ -z "${version}" ]]; then
-            echo 'Could not find @playwright/test in pnpm-lock.yaml.'
-            exit 1
-          fi
-          echo "version=${version}" >> "${GITHUB_OUTPUT}"
-
   e2e:
-    container:
-      image: mcr.microsoft.com/playwright:v${{ needs.playwright-version.outputs.version }}-noble
-      options: --user 1001
-    defaults:
-      run:
-        shell: bash
     env:
       E2E_BROWSERS: ${{ inputs.browsers }}
-      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     name: Playwright
-    needs: playwright-version
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
-      - name: Trust workspace
-        run: git config --global --add safe.directory "${GITHUB_WORKSPACE}"
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
           cache: pnpm
           node-version-file: .nvmrc
       - run: pnpm install --frozen-lockfile
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps --only-shell chromium ${{ inputs.browsers == 'full' && 'firefox webkit' || '' }}
       - run: pnpm test:e2e
       - if: ${{ !cancelled() }}
         name: Surface flaky tests
