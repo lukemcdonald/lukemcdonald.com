@@ -5,6 +5,7 @@ User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /dev/
+Disallow: /mcp
 
 Sitemap: ${sitemapURL.href}
 `
